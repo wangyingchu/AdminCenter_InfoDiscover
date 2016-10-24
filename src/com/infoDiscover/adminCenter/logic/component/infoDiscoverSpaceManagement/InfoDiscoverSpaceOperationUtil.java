@@ -545,6 +545,32 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
+    public static boolean createFact(String spaceName, String factTypeName,List<PropertyValueVO> factProperties){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            if(!targetSpace.hasFactType(factTypeName)){
+                return false;
+            }else{
+                Fact targetFact=DiscoverEngineComponentFactory.createFact(factTypeName);
+                setMeasurableInitProperties(targetFact,factProperties);
+                Fact resultFact=targetSpace.addFact(targetFact);
+                if(resultFact!=null){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+    }
+
     private static void setMeasurableInitProperties(Measurable measurable,List<PropertyValueVO> properties){
         for(PropertyValueVO currentPropertyValueVO:properties){
             String propertyName=currentPropertyValueVO.getPropertyName();

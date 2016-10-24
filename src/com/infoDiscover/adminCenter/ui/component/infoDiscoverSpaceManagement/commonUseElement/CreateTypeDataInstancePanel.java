@@ -181,7 +181,6 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
                     }
                 }
             }
-
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
             this.addNewTypeDataInstanceSectionTitle.setValue("创建事实数据");
@@ -189,6 +188,22 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
             this.addButton.setCaption("创建事实数据");
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.DATABASE.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataFieldActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
+
+            List<PropertyTypeVO> factTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
+            if(factTypePropertiesList!=null){
+                for(PropertyTypeVO currentPropertyTypeVO:factTypePropertiesList){
+                    this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
+                    if(currentPropertyTypeVO.isMandatory()){
+                        addTypePropertyEditUI(currentPropertyTypeVO.getPropertyName());
+                    }else{
+                        if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
+                        }else{
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -387,11 +402,10 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
                     createTypePropertyResult=InfoDiscoverSpaceOperationUtil.createDimension(getDiscoverSpaceName(), getDataInstanceTypeName(),dataProperties);
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
-                    createTypePropertyResult=true;
+                    createTypePropertyResult=InfoDiscoverSpaceOperationUtil.createFact(getDiscoverSpaceName(), getDataInstanceTypeName(),dataProperties);
                 }
                 if(createTypePropertyResult){
                     getContainerDialog().close();
-
                     //getCreateTypePropertyPanelInvoker().createTypePropertyActionFinish(createTypePropertyResult);
                     Notification resultNotification = new Notification("添加数据操作成功",
                             "创建"+dataTypeMessageStr+"成功", Notification.Type.HUMANIZED_MESSAGE);

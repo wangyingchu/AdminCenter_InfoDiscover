@@ -33,9 +33,6 @@ public class DimensionTypeDataInstancesInfoChart extends VerticalLayout {
         this.pieConfiguration = new ChartConfiguration();
         this.pieConfiguration.setChartType(ChartType.PIE);
         this.pieConfiguration.setBackgroundColor(Colors.WHITE);
-
-
-
     }
 
     public void renderDimensionTypeDataInstancesInfoChart(String discoverSpaceName,String dimensionTypeName,DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){

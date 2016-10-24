@@ -21,6 +21,7 @@ public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
     private InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail;
     private FactsRuntimeGeneralInfoPanel factsRuntimeGeneralInfoPanel;
     private FactTypesManagementPanel factTypesManagementPanel;
+    private FactInstancesManagementPanel factInstancesManagementPane;
 
     public InfoDiscoverSpaceFactsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -38,8 +39,8 @@ public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
         TabSheet.Tab factTypesManagementPanelLayoutTab =tabs.addTab(this.factTypesManagementPanel, "事实类型管理");
         factTypesManagementPanelLayoutTab.setIcon(FontAwesome.TASKS);
 
-        VerticalLayout VerticalLayout3=new VerticalLayout();
-        TabSheet.Tab factInstancesManagementLayoutTab =tabs.addTab(VerticalLayout3, "事实数据管理");
+        this.factInstancesManagementPane=new FactInstancesManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab factInstancesManagementLayoutTab =tabs.addTab(this.factInstancesManagementPane, "事实数据管理");
         factInstancesManagementLayoutTab.setIcon(FontAwesome.SQUARE_O);
 
         HorizontalLayout actionButtonsPlacementLayout=new HorizontalLayout();
@@ -73,8 +74,8 @@ public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
         this.factsRuntimeGeneralInfoPanel.renderFactsRuntimeGeneralInfo(discoverSpaceStatisticMetrics);
         this.factTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.factTypesManagementPanel.renderFactTypesManagementInfo(discoverSpaceStatisticMetrics);
-        //this.dimensionInstancesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
-        //this.dimensionInstancesManagementPanel.renderDimensionInstancesManagementInfo(discoverSpaceStatisticMetrics);
+        this.factInstancesManagementPane.setDiscoverSpaceName(this.discoverSpaceName);
+        this.factInstancesManagementPane.renderFactInstancesManagementInfo(discoverSpaceStatisticMetrics);
     }
 
     public void setDiscoverSpaceName(String discoverSpaceName) {
