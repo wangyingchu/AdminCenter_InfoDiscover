@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.InfoDiscoverSpaceRelationsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.runtimeInfo.InfoDiscoverSpaceRuntimeGeneralInfo;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
@@ -26,6 +27,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
     private InfoDiscoverSpaceRuntimeGeneralInfo infoDiscoverSpaceRuntimeGeneralInfo;
     private InfoDiscoverSpaceDimensionsInfo infoDiscoverSpaceDimensionsInfo;
     private InfoDiscoverSpaceFactsInfo infoDiscoverSpaceFactsInfo;
+    private InfoDiscoverSpaceRelationsInfo infoDiscoverSpaceRelationsInfo;
 
     public InfoDiscoverSpaceDetail(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -55,16 +57,18 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
         discoverSpaceDimensionsInfoLayout.addComponent(infoDiscoverSpaceDimensionsInfo);
 
         VerticalLayout discoverSpaceFactsInfoLayout=new VerticalLayout();
-        TabSheet.Tab discoverSpaceRuntimeInfoLayoutTab3 =tabs.addTab(discoverSpaceFactsInfoLayout, "空间事实管理");
-        discoverSpaceRuntimeInfoLayoutTab3.setIcon(FontAwesome.CLONE);
+        TabSheet.Tab discoverSpaceFactsInfoLayoutTab =tabs.addTab(discoverSpaceFactsInfoLayout, "空间事实管理");
+        discoverSpaceFactsInfoLayoutTab.setIcon(FontAwesome.CLONE);
         infoDiscoverSpaceFactsInfo=new InfoDiscoverSpaceFactsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceFactsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceFactsInfoLayout.addComponent(infoDiscoverSpaceFactsInfo);
 
         VerticalLayout discoverSpaceRuntimeInfoLayout4=new VerticalLayout();
-        TabSheet.Tab discoverSpaceRuntimeInfoLayoutTab4 =tabs.addTab(discoverSpaceRuntimeInfoLayout4, "空间关系管理");
-        discoverSpaceRuntimeInfoLayoutTab4.setIcon(FontAwesome.SHARE_ALT);
-
+        TabSheet.Tab discoverSpaceRelationsInfoLayoutTab =tabs.addTab(discoverSpaceRuntimeInfoLayout4, "空间关系管理");
+        discoverSpaceRelationsInfoLayoutTab.setIcon(FontAwesome.SHARE_ALT);
+        infoDiscoverSpaceRelationsInfo=new InfoDiscoverSpaceRelationsInfo(this.currentUserClientInfo);
+        infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
+        discoverSpaceRuntimeInfoLayout4.addComponent(infoDiscoverSpaceRelationsInfo);
     }
 
     @Override
@@ -84,6 +88,9 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
 
         this.infoDiscoverSpaceFactsInfo.setDiscoverSpaceName(this.discoverSpaceName);
         this.infoDiscoverSpaceFactsInfo.renderFactsInfo(discoverSpaceStatisticMetrics);
+
+        this.infoDiscoverSpaceRelationsInfo.setDiscoverSpaceName(this.discoverSpaceName);
+        this.infoDiscoverSpaceRelationsInfo.renderRelationsInfo(discoverSpaceStatisticMetrics);
     }
 
     public void deleteCurrentDiscoverSpace(){
