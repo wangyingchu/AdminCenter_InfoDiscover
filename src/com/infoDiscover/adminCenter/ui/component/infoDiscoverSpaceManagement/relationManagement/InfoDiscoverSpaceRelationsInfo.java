@@ -83,6 +83,6 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
         this.relationTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.relationTypesManagementPanel.renderRelationTypesManagementInfo(discoverSpaceStatisticMetrics);
         this.relationInstancesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
-        this.relationInstancesManagementPanel.renderDimensionInstancesManagementInfo(discoverSpaceStatisticMetrics);
+        this.relationInstancesManagementPanel.renderRelationInstancesManagementInfo(discoverSpaceStatisticMetrics);
     }
 }

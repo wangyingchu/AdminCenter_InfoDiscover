@@ -24,17 +24,17 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
     private VerticalLayout rightSideUIElementsContainer;
-    private HierarchicalContainer dimensionTypesInfoContainer;
-    private TreeTable dimensionTypesTreeTable;
-    private Label dimensionTypeNameLabel;
-    private Label dimensionCountLabel;
+    private HierarchicalContainer relationTypesInfoContainer;
+    private TreeTable relationTypesTreeTable;
+    private Label relationTypeNameLabel;
+    private Label relationCountLabel;
     private String NAME_PROPERTY="关系类型名称";
     private DiscoverSpaceStatisticMetrics currentDiscoverSpaceStatisticMetrics;
-    private String currentSelectedDimensionTypeName;
-    private RelationTypeDataInstancesInfoChart dimensionTypeDataInstancesInfoChart;
-    private MenuBar.Command searchDimensionInstanceMenuItemCommand;
-    private MenuBar.MenuItem searchDimensionInstanceMenuItem;
-    private FormLayout dimensionTypeDataInstanceCountInfoForm;
+    private String currentSelectedRelationTypeName;
+    private RelationTypeDataInstancesInfoChart relationTypeDataInstancesInfoChart;
+    private MenuBar.Command searchRelationInstanceMenuItemCommand;
+    private MenuBar.MenuItem searchRelationInstanceMenuItem;
+    private FormLayout relationTypeDataInstanceCountInfoForm;
 
     private VerticalLayout rightSideUIPromptBox;
     private VerticalLayout rightSideUIElementsBox;
@@ -47,7 +47,7 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         addComponent(elementPlacementLayout);
 
         int screenHeight=this.currentUserClientInfo.getUserWebBrowserInfo().getScreenHeight();
-        int dimensionTypesTreeHeight=screenHeight-520;
+        int relationTypesTreeHeight=screenHeight-520;
         int dataCountFormPanelHeight=screenHeight-660;
 
         //left side elements
@@ -62,28 +62,28 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         leftSideTitle.addStyleName("ui_appSectionLightDiv");
         leftSideUIElementsContainer.addComponent(leftSideTitle);
 
-        this.dimensionTypesInfoContainer=new HierarchicalContainer();
-        this.dimensionTypesInfoContainer.addContainerProperty(NAME_PROPERTY, String.class, "");
+        this.relationTypesInfoContainer =new HierarchicalContainer();
+        this.relationTypesInfoContainer.addContainerProperty(NAME_PROPERTY, String.class, "");
 
-        this.dimensionTypesTreeTable = new TreeTable();
-        this.dimensionTypesTreeTable.setSizeFull();
-        this.dimensionTypesTreeTable.setSelectable(true);
-        this.dimensionTypesTreeTable.setMultiSelect(false);
-        this.dimensionTypesTreeTable.setImmediate(true);
-        this.dimensionTypesTreeTable.setNullSelectionAllowed(false);
-        this.dimensionTypesTreeTable.setContainerDataSource(this.dimensionTypesInfoContainer);
-        this.dimensionTypesTreeTable.setItemCaptionPropertyId(NAME_PROPERTY);
-        this.dimensionTypesTreeTable.addStyleName(ValoTheme.TABLE_COMPACT);
-        this.dimensionTypesTreeTable.addStyleName(ValoTheme.TABLE_BORDERLESS);
-        this.dimensionTypesTreeTable.setHeight(dimensionTypesTreeHeight, Unit.PIXELS);
-        this.dimensionTypesTreeTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+        this.relationTypesTreeTable = new TreeTable();
+        this.relationTypesTreeTable.setSizeFull();
+        this.relationTypesTreeTable.setSelectable(true);
+        this.relationTypesTreeTable.setMultiSelect(false);
+        this.relationTypesTreeTable.setImmediate(true);
+        this.relationTypesTreeTable.setNullSelectionAllowed(false);
+        this.relationTypesTreeTable.setContainerDataSource(this.relationTypesInfoContainer);
+        this.relationTypesTreeTable.setItemCaptionPropertyId(NAME_PROPERTY);
+        this.relationTypesTreeTable.addStyleName(ValoTheme.TABLE_COMPACT);
+        this.relationTypesTreeTable.addStyleName(ValoTheme.TABLE_BORDERLESS);
+        this.relationTypesTreeTable.setHeight(relationTypesTreeHeight, Unit.PIXELS);
+        this.relationTypesTreeTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
-                String selectedDimensionTypeName=itemClickEvent.getItem().getItemProperty(NAME_PROPERTY).getValue().toString();
-                renderDimensionTypeSelectedUIElements(selectedDimensionTypeName);
+                String selectedRelationTypeName=itemClickEvent.getItem().getItemProperty(NAME_PROPERTY).getValue().toString();
+                renderRelationTypeSelectedUIElements(selectedRelationTypeName);
             }
         });
-        leftSideUIElementsContainer.addComponent(this.dimensionTypesTreeTable);
+        leftSideUIElementsContainer.addComponent(this.relationTypesTreeTable);
         leftSideUIElementsContainer.addStyleName("ui_appElementRightSideSpacing");
 
         //right side elements
@@ -112,108 +112,108 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         rightSideTitle.addStyleName("ui_appSectionLightDiv");
         this.rightSideUIElementsBox.addComponent(rightSideTitle);
 
-        HorizontalLayout dimensionTypeInfoLayout=new HorizontalLayout();
-        dimensionTypeInfoLayout.setWidth("100%");
-        dimensionTypeInfoLayout.addStyleName("ui_appStandaloneElementPadding");
-        dimensionTypeInfoLayout.addStyleName("ui_appSectionLightDiv");
-        this.rightSideUIElementsBox.addComponent(dimensionTypeInfoLayout);
+        HorizontalLayout relationTypeInfoLayout=new HorizontalLayout();
+        relationTypeInfoLayout.setWidth("100%");
+        relationTypeInfoLayout.addStyleName("ui_appStandaloneElementPadding");
+        relationTypeInfoLayout.addStyleName("ui_appSectionLightDiv");
+        this.rightSideUIElementsBox.addComponent(relationTypeInfoLayout);
 
-        HorizontalLayout dimensionTypeDetailContainerLayout=new HorizontalLayout();
-        dimensionTypeInfoLayout.addComponent(dimensionTypeDetailContainerLayout);
+        HorizontalLayout relationTypeDetailContainerLayout=new HorizontalLayout();
+        relationTypeInfoLayout.addComponent(relationTypeDetailContainerLayout);
 
-        Label dimensionTypeLabel = new Label( FontAwesome.CODE_FORK.getHtml()+" 关系类型名称:", ContentMode.HTML);
-        dimensionTypeLabel.addStyleName(ValoTheme.LABEL_TINY);
-        dimensionTypeDetailContainerLayout.addComponent(dimensionTypeLabel);
+        Label relationTypeLabel = new Label( FontAwesome.EXCHANGE.getHtml()+" 关系类型名称:", ContentMode.HTML);
+        relationTypeLabel.addStyleName(ValoTheme.LABEL_TINY);
+        relationTypeDetailContainerLayout.addComponent(relationTypeLabel);
 
         HorizontalLayout spacingDivLayout1=new HorizontalLayout();
         spacingDivLayout1.setWidth(10,Unit.PIXELS);
-        dimensionTypeDetailContainerLayout.addComponent(spacingDivLayout1);
+        relationTypeDetailContainerLayout.addComponent(spacingDivLayout1);
 
-        dimensionTypeDetailContainerLayout.setComponentAlignment(dimensionTypeLabel,Alignment.MIDDLE_LEFT);
+        relationTypeDetailContainerLayout.setComponentAlignment(relationTypeLabel, Alignment.MIDDLE_LEFT);
 
-        this.dimensionTypeNameLabel=new Label("-");
-        //this.dimensionTypeNameLabel.addStyleName(ValoTheme.LABEL_COLORED);
-        this.dimensionTypeNameLabel.addStyleName("ui_appFriendlyElement");
-        this.dimensionTypeNameLabel.addStyleName(ValoTheme.LABEL_H2);
-        this.dimensionTypeNameLabel.addStyleName(ValoTheme.LABEL_BOLD);
-        this.dimensionTypeNameLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        dimensionTypeDetailContainerLayout.addComponent(this.dimensionTypeNameLabel);
+        this.relationTypeNameLabel =new Label("-");
+        //this.relationTypeNameLabel.addStyleName(ValoTheme.LABEL_COLORED);
+        this.relationTypeNameLabel.addStyleName("ui_appFriendlyElement");
+        this.relationTypeNameLabel.addStyleName(ValoTheme.LABEL_H2);
+        this.relationTypeNameLabel.addStyleName(ValoTheme.LABEL_BOLD);
+        this.relationTypeNameLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+        relationTypeDetailContainerLayout.addComponent(this.relationTypeNameLabel);
 
         HorizontalLayout spacingDivLayout2=new HorizontalLayout();
         spacingDivLayout2.setWidth(10,Unit.PIXELS);
-        dimensionTypeDetailContainerLayout.addComponent(spacingDivLayout2);
+        relationTypeDetailContainerLayout.addComponent(spacingDivLayout2);
 
-        Label dimensionNumberLabel = new Label( " 类型数据总量:");
-        dimensionNumberLabel.addStyleName(ValoTheme.LABEL_TINY);
-        dimensionTypeDetailContainerLayout.addComponent(dimensionNumberLabel);
-        dimensionTypeDetailContainerLayout.setComponentAlignment(dimensionNumberLabel,Alignment.MIDDLE_LEFT);
+        Label relationNumberLabel = new Label( " 类型数据总量:");
+        relationNumberLabel.addStyleName(ValoTheme.LABEL_TINY);
+        relationTypeDetailContainerLayout.addComponent(relationNumberLabel);
+        relationTypeDetailContainerLayout.setComponentAlignment(relationNumberLabel, Alignment.MIDDLE_LEFT);
 
         HorizontalLayout spacingDivLayout3=new HorizontalLayout();
         spacingDivLayout3.setWidth(10,Unit.PIXELS);
-        dimensionTypeDetailContainerLayout.addComponent(spacingDivLayout3);
+        relationTypeDetailContainerLayout.addComponent(spacingDivLayout3);
 
-        this.dimensionCountLabel=new Label("");
-        //this.dimensionCountLabel.addStyleName(ValoTheme.LABEL_COLORED);
-        this.dimensionCountLabel.addStyleName("ui_appFriendlyElement");
-        this.dimensionCountLabel.addStyleName(ValoTheme.LABEL_H2);
-        this.dimensionCountLabel.addStyleName(ValoTheme.LABEL_BOLD);
-        this.dimensionCountLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        dimensionTypeDetailContainerLayout.addComponent(this.dimensionCountLabel);
+        this.relationCountLabel =new Label("");
+        //this.relationCountLabel.addStyleName(ValoTheme.LABEL_COLORED);
+        this.relationCountLabel.addStyleName("ui_appFriendlyElement");
+        this.relationCountLabel.addStyleName(ValoTheme.LABEL_H2);
+        this.relationCountLabel.addStyleName(ValoTheme.LABEL_BOLD);
+        this.relationCountLabel.addStyleName(ValoTheme.LABEL_NO_MARGIN);
+        relationTypeDetailContainerLayout.addComponent(this.relationCountLabel);
 
-        HorizontalLayout dimensionDataOperationContainerLayout=new HorizontalLayout();
-        this.rightSideUIElementsBox.addComponent(dimensionDataOperationContainerLayout);
+        HorizontalLayout relationDataOperationContainerLayout=new HorizontalLayout();
+        this.rightSideUIElementsBox.addComponent(relationDataOperationContainerLayout);
 
-        HorizontalLayout dimensionDataOperationContainerSpaceDivLayout=new HorizontalLayout();
-        dimensionDataOperationContainerSpaceDivLayout.setWidth("10px");
-        dimensionDataOperationContainerLayout.addComponent(dimensionDataOperationContainerSpaceDivLayout);
+        HorizontalLayout relationDataOperationContainerSpaceDivLayout=new HorizontalLayout();
+        relationDataOperationContainerSpaceDivLayout.setWidth("10px");
+        relationDataOperationContainerLayout.addComponent(relationDataOperationContainerSpaceDivLayout);
 
-        MenuBar dimensionInstanceOperationMenuBar = new MenuBar();
-        dimensionInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
-        //dimensionInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
-        dimensionDataOperationContainerLayout.addComponent(dimensionInstanceOperationMenuBar);
+        MenuBar relationInstanceOperationMenuBar = new MenuBar();
+        relationInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        //relationInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+        relationDataOperationContainerLayout.addComponent(relationInstanceOperationMenuBar);
 
 
-        // Define a common menu command for all the search dimension menu items
-        this.searchDimensionInstanceMenuItemCommand = new MenuBar.Command() {
+        // Define a common menu command for all the search relation menu items
+        this.searchRelationInstanceMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
-                String selectedDimensionTypeName=selectedItem.getText();
-                executeSearchDimensionTypeOperation(selectedDimensionTypeName);
+                String selectedRelationTypeName=selectedItem.getText();
+                executeSearchRelationTypeOperation(selectedRelationTypeName);
             }
         };
 
         // Put operation items in the menu
-        this.searchDimensionInstanceMenuItem = dimensionInstanceOperationMenuBar.addItem("查询关系数据", FontAwesome.SEARCH, null);
+        this.searchRelationInstanceMenuItem = relationInstanceOperationMenuBar.addItem("查询关系数据", FontAwesome.SEARCH, null);
 
-        HorizontalLayout dimensionTypeDataInstanceInfoContainerLayout=new HorizontalLayout();
-        dimensionTypeDataInstanceInfoContainerLayout.setWidth(700,Unit.PIXELS);
-        this.rightSideUIElementsBox.addComponent(dimensionTypeDataInstanceInfoContainerLayout);
+        HorizontalLayout relationTypeDataInstanceInfoContainerLayout=new HorizontalLayout();
+        relationTypeDataInstanceInfoContainerLayout.setWidth(700, Unit.PIXELS);
+        this.rightSideUIElementsBox.addComponent(relationTypeDataInstanceInfoContainerLayout);
 
-        VerticalLayout dimensionTypeSummaryInfo=new VerticalLayout();
-        dimensionTypeSummaryInfo.setWidth("100%");
-        dimensionTypeDataInstanceInfoContainerLayout.addComponent(dimensionTypeSummaryInfo);
+        VerticalLayout relationTypeSummaryInfo=new VerticalLayout();
+        relationTypeSummaryInfo.setWidth("100%");
+        relationTypeDataInstanceInfoContainerLayout.addComponent(relationTypeSummaryInfo);
 
-        Label dimensionDataCountLabel=new Label("关系类型数据量");
-        dimensionDataCountLabel.setWidth("100%");
-        dimensionDataCountLabel.addStyleName("h4");
-        dimensionDataCountLabel.addStyleName("ui_appSectionDiv");
-        dimensionDataCountLabel.addStyleName("ui_appFadeMargin");
-        dimensionTypeSummaryInfo.addComponent(dimensionDataCountLabel);
+        Label relationDataCountLabel=new Label("关系类型数据量");
+        relationDataCountLabel.setWidth("100%");
+        relationDataCountLabel.addStyleName("h4");
+        relationDataCountLabel.addStyleName("ui_appSectionDiv");
+        relationDataCountLabel.addStyleName("ui_appFadeMargin");
+        relationTypeSummaryInfo.addComponent(relationDataCountLabel);
 
-        this.dimensionTypeDataInstanceCountInfoForm = new FormLayout();
-        this.dimensionTypeDataInstanceCountInfoForm.setMargin(false);
-        this.dimensionTypeDataInstanceCountInfoForm.setWidth("100%");
-        this.dimensionTypeDataInstanceCountInfoForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        this.relationTypeDataInstanceCountInfoForm = new FormLayout();
+        this.relationTypeDataInstanceCountInfoForm.setMargin(false);
+        this.relationTypeDataInstanceCountInfoForm.setWidth("100%");
+        this.relationTypeDataInstanceCountInfoForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         Panel dataCountFormContainerPanel = new Panel();
         dataCountFormContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
         dataCountFormContainerPanel.setWidth("100%");
         dataCountFormContainerPanel.setHeight(dataCountFormPanelHeight,Unit.PIXELS);
-        dataCountFormContainerPanel.setContent(this.dimensionTypeDataInstanceCountInfoForm);
-        dimensionTypeSummaryInfo.addComponent(dataCountFormContainerPanel);
+        dataCountFormContainerPanel.setContent(this.relationTypeDataInstanceCountInfoForm);
+        relationTypeSummaryInfo.addComponent(dataCountFormContainerPanel);
 
-        this.dimensionTypeDataInstancesInfoChart=new RelationTypeDataInstancesInfoChart(this.currentUserClientInfo);
-        dimensionTypeDataInstanceInfoContainerLayout.addComponent(this.dimensionTypeDataInstancesInfoChart);
-        dimensionTypeDataInstanceInfoContainerLayout.setComponentAlignment(this.dimensionTypeDataInstancesInfoChart,Alignment.TOP_LEFT);
+        this.relationTypeDataInstancesInfoChart =new RelationTypeDataInstancesInfoChart(this.currentUserClientInfo);
+        relationTypeDataInstanceInfoContainerLayout.addComponent(this.relationTypeDataInstancesInfoChart);
+        relationTypeDataInstanceInfoContainerLayout.setComponentAlignment(this.relationTypeDataInstancesInfoChart, Alignment.TOP_LEFT);
     }
 
     public String getDiscoverSpaceName() {
@@ -224,115 +224,115 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         this.discoverSpaceName = discoverSpaceName;
     }
 
-    public void renderDimensionInstancesManagementInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
-        this.dimensionTypeNameLabel.setValue("-");
-        this.dimensionCountLabel.setValue("-");
-        this.searchDimensionInstanceMenuItem.removeChildren();
-        this.dimensionTypeDataInstanceCountInfoForm.removeAllComponents();
-        this.dimensionTypesInfoContainer.removeAllItems();
-        this.dimensionTypeDataInstancesInfoChart.cleanChartDisplay();
+    public void renderRelationInstancesManagementInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
+        this.relationTypeNameLabel.setValue("-");
+        this.relationCountLabel.setValue("-");
+        this.searchRelationInstanceMenuItem.removeChildren();
+        this.relationTypeDataInstanceCountInfoForm.removeAllComponents();
+        this.relationTypesInfoContainer.removeAllItems();
+        this.relationTypeDataInstancesInfoChart.cleanChartDisplay();
         this.currentDiscoverSpaceStatisticMetrics=discoverSpaceStatisticMetrics;
         this.rightSideUIElementsContainer.removeComponent(this.rightSideUIElementsBox);
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIPromptBox);
-        RelationTypeVO rootDimensionTypeVO= InfoDiscoverSpaceOperationUtil.retrieveRootRelationTypeRuntimeInfo(this.discoverSpaceName, discoverSpaceStatisticMetrics);
-        String rootDimensionTypeItemId="RELATION_TYPE_ID";
-        Item rootDimensionTypeItem =  this.dimensionTypesInfoContainer.addItem(rootDimensionTypeItemId);
-        rootDimensionTypeItem.getItemProperty(NAME_PROPERTY).setValue(rootDimensionTypeVO.getTypeName());
-        List<RelationTypeVO> childDimensionTypesList= rootDimensionTypeVO.getChildRelationTypesVOList();
-        for(int i=0;i<childDimensionTypesList.size();i++){
-            RelationTypeVO currentChildDimensionType=childDimensionTypesList.get(i);
-            setDimensionTypesTreeTableData(rootDimensionTypeItemId,i,currentChildDimensionType);
+        RelationTypeVO rootRelationTypeVO= InfoDiscoverSpaceOperationUtil.retrieveRootRelationTypeRuntimeInfo(this.discoverSpaceName, discoverSpaceStatisticMetrics);
+        String rootRelationTypeItemId="RELATION_TYPE_ID";
+        Item rootRelationTypeItem =  this.relationTypesInfoContainer.addItem(rootRelationTypeItemId);
+        rootRelationTypeItem.getItemProperty(NAME_PROPERTY).setValue(rootRelationTypeVO.getTypeName());
+        List<RelationTypeVO> childRelationTypesList= rootRelationTypeVO.getChildRelationTypesVOList();
+        for(int i=0;i<childRelationTypesList.size();i++){
+            RelationTypeVO currentChildRelationType=childRelationTypesList.get(i);
+            setRelationTypesTreeTableData(rootRelationTypeItemId, i, currentChildRelationType);
         }
-        this.dimensionTypesTreeTable.setCollapsed(rootDimensionTypeItemId, false);
-        this.dimensionTypesTreeTable.select(null);
+        this.relationTypesTreeTable.setCollapsed(rootRelationTypeItemId, false);
+        this.relationTypesTreeTable.select(null);
     }
 
-    private void setDimensionTypesTreeTableData(String parentDataKey,int currentDataIndex,RelationTypeVO currentDimensionTypeVO){
+    private void setRelationTypesTreeTableData(String parentDataKey, int currentDataIndex, RelationTypeVO currentRelationTypeVO){
         String currentDataId=parentDataKey+currentDataIndex;
-        Item currentDimensionTypeItem =  this.dimensionTypesInfoContainer.addItem(currentDataId);
-        currentDimensionTypeItem.getItemProperty(NAME_PROPERTY).setValue(currentDimensionTypeVO.getTypeName());
-        this.dimensionTypesInfoContainer.setParent(currentDataId,parentDataKey);
-        List<RelationTypeVO> childDimensionTypesList= currentDimensionTypeVO.getChildRelationTypesVOList();
-        if(childDimensionTypesList.size()==0){
-            this.dimensionTypesTreeTable.setChildrenAllowed(currentDataId,false);
-            this.dimensionTypesTreeTable.setColumnCollapsible(currentDataId,false);
+        Item currentRelationTypeItem =  this.relationTypesInfoContainer.addItem(currentDataId);
+        currentRelationTypeItem.getItemProperty(NAME_PROPERTY).setValue(currentRelationTypeVO.getTypeName());
+        this.relationTypesInfoContainer.setParent(currentDataId, parentDataKey);
+        List<RelationTypeVO> childRelationTypesList= currentRelationTypeVO.getChildRelationTypesVOList();
+        if(childRelationTypesList.size()==0){
+            this.relationTypesTreeTable.setChildrenAllowed(currentDataId, false);
+            this.relationTypesTreeTable.setColumnCollapsible(currentDataId, false);
         }
-        for(int i=0;i<childDimensionTypesList.size();i++){
-            RelationTypeVO currentChildDimensionType=childDimensionTypesList.get(i);
-            setDimensionTypesTreeTableData(currentDataId,i,currentChildDimensionType);
+        for(int i=0;i<childRelationTypesList.size();i++){
+            RelationTypeVO currentChildRelationType=childRelationTypesList.get(i);
+            setRelationTypesTreeTableData(currentDataId, i, currentChildRelationType);
         }
     }
 
-    private void renderDimensionTypeSelectedUIElements(String dimensionTypeName){
-        this.currentSelectedDimensionTypeName = dimensionTypeName;
-        this.dimensionTypeNameLabel.setValue(dimensionTypeName);
+    private void renderRelationTypeSelectedUIElements(String relationTypeName){
+        this.currentSelectedRelationTypeName = relationTypeName;
+        this.relationTypeNameLabel.setValue(relationTypeName);
         this.rightSideUIElementsContainer.removeComponent(this.rightSideUIPromptBox);
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIElementsBox);
-        if(dimensionTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
-            this.dimensionCountLabel.setValue(""+this.currentDiscoverSpaceStatisticMetrics.getSpaceRelationDataCount());
+        if(relationTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
+            this.relationCountLabel.setValue("" + this.currentDiscoverSpaceStatisticMetrics.getSpaceRelationDataCount());
         }else{
-            DataTypeStatisticMetrics dataTypeStatisticMetrics=getDimensionTypeStatisticMetrics(dimensionTypeName);
-            this.dimensionCountLabel.setValue(""+dataTypeStatisticMetrics.getTypeDataCount());
+            DataTypeStatisticMetrics dataTypeStatisticMetrics= getRelationTypeStatisticMetrics(relationTypeName);
+            this.relationCountLabel.setValue("" + dataTypeStatisticMetrics.getTypeDataCount());
         }
-        this.setDimensionInstanceOperationsUIElements();
-        this.dimensionTypeDataInstancesInfoChart.renderRelationTypeDataInstancesInfoChart(this.discoverSpaceName, dimensionTypeName, this.currentDiscoverSpaceStatisticMetrics);
+        this.setRelationInstanceOperationsUIElements();
+        this.relationTypeDataInstancesInfoChart.renderRelationTypeDataInstancesInfoChart(this.discoverSpaceName, relationTypeName, this.currentDiscoverSpaceStatisticMetrics);
     }
 
-    private DataTypeStatisticMetrics getDimensionTypeStatisticMetrics(String dimensionTypeName){
-        List<DataTypeStatisticMetrics> dimensionTypesStatisticMetrics=this.currentDiscoverSpaceStatisticMetrics.getRelationsStatisticMetrics();
-        for(DataTypeStatisticMetrics currentDataTypeStatisticMetrics:dimensionTypesStatisticMetrics){
-            String currentDimensionTypeName=currentDataTypeStatisticMetrics.getDataTypeName().replaceFirst(InfoDiscoverEngineConstant.CLASSPERFIX_RELATION,"");
-            if(currentDimensionTypeName.equals(dimensionTypeName)) {
+    private DataTypeStatisticMetrics getRelationTypeStatisticMetrics(String relationTypeName){
+        List<DataTypeStatisticMetrics> relationTypesStatisticMetrics=this.currentDiscoverSpaceStatisticMetrics.getRelationsStatisticMetrics();
+        for(DataTypeStatisticMetrics currentDataTypeStatisticMetrics:relationTypesStatisticMetrics){
+            String currentRelationTypeName=currentDataTypeStatisticMetrics.getDataTypeName().replaceFirst(InfoDiscoverEngineConstant.CLASSPERFIX_RELATION,"");
+            if(currentRelationTypeName.equals(relationTypeName)) {
                 return currentDataTypeStatisticMetrics;
             }
         }
         return null;
     }
 
-    private void setDimensionInstanceOperationsUIElements(){
-        this.searchDimensionInstanceMenuItem.removeChildren();
-        if(this.currentSelectedDimensionTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
-            RelationTypeVO currentDimensionTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRootRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentDiscoverSpaceStatisticMetrics);
-            setDimensionInstanceCountInfo(currentDimensionTypeVO);
+    private void setRelationInstanceOperationsUIElements(){
+        this.searchRelationInstanceMenuItem.removeChildren();
+        if(this.currentSelectedRelationTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
+            RelationTypeVO currentRelationTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRootRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentDiscoverSpaceStatisticMetrics);
+            setRelationInstanceCountInfo(currentRelationTypeVO);
         }else{
-            RelationTypeVO currentDimensionTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentSelectedDimensionTypeName, this.currentDiscoverSpaceStatisticMetrics);
-            setDimensionInstanceCountInfo(currentDimensionTypeVO);
+            RelationTypeVO currentRelationTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentSelectedRelationTypeName, this.currentDiscoverSpaceStatisticMetrics);
+            setRelationInstanceCountInfo(currentRelationTypeVO);
         }
     }
 
-    private void setDimensionInstanceCountInfo(RelationTypeVO targetDimensionTypeVO){
-        this.dimensionTypeDataInstanceCountInfoForm.removeAllComponents();
-        if(targetDimensionTypeVO.getTypeName().equals(InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME)){
-            List<RelationTypeVO> childTypeVOList=targetDimensionTypeVO.getChildRelationTypesVOList();
+    private void setRelationInstanceCountInfo(RelationTypeVO targetRelationTypeVO){
+        this.relationTypeDataInstanceCountInfoForm.removeAllComponents();
+        if(targetRelationTypeVO.getTypeName().equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
+            List<RelationTypeVO> childTypeVOList=targetRelationTypeVO.getChildRelationTypesVOList();
             if(childTypeVOList!=null){
-                for(RelationTypeVO currentDimensionTypeVO:childTypeVOList){
-                    TextField currentDimensionTypeDataSize = new TextField(currentDimensionTypeVO.getTypeName());
-                    currentDimensionTypeDataSize.setValue(""+currentDimensionTypeVO.getTypeDataRecordCount());
-                    currentDimensionTypeDataSize.setRequired(false);
-                    currentDimensionTypeDataSize.setReadOnly(true);
-                    this.dimensionTypeDataInstanceCountInfoForm.addComponent(currentDimensionTypeDataSize);
+                for(RelationTypeVO currentRelationTypeVO:childTypeVOList){
+                    TextField currentRelationTypeDataSize = new TextField(currentRelationTypeVO.getTypeName());
+                    currentRelationTypeDataSize.setValue("" + currentRelationTypeVO.getTypeDataRecordCount());
+                    currentRelationTypeDataSize.setRequired(false);
+                    currentRelationTypeDataSize.setReadOnly(true);
+                    this.relationTypeDataInstanceCountInfoForm.addComponent(currentRelationTypeDataSize);
                 }
             }
         }else{
-            long parentDimensionTypeTotalCount=targetDimensionTypeVO.getTypeDataRecordCount();
-            List<RelationTypeVO> childTypeVOList=targetDimensionTypeVO.getChildRelationTypesVOList();
+            long parentRelationTypeTotalCount=targetRelationTypeVO.getTypeDataRecordCount();
+            List<RelationTypeVO> childTypeVOList=targetRelationTypeVO.getChildRelationTypesVOList();
             if(childTypeVOList!=null){
-                for(RelationTypeVO currentDimensionTypeVO:childTypeVOList){
-                    TextField currentDimensionTypeDataSize = new TextField(currentDimensionTypeVO.getTypeName());
-                    currentDimensionTypeDataSize.setValue(""+currentDimensionTypeVO.getTypeDataRecordCount());
-                    currentDimensionTypeDataSize.setRequired(false);
-                    currentDimensionTypeDataSize.setReadOnly(true);
-                    this.dimensionTypeDataInstanceCountInfoForm.addComponent(currentDimensionTypeDataSize);
-                    parentDimensionTypeTotalCount=parentDimensionTypeTotalCount-currentDimensionTypeVO.getTypeDataRecordCount();
+                for(RelationTypeVO currentRelationTypeVO:childTypeVOList){
+                    TextField currentRelationTypeDataSize = new TextField(currentRelationTypeVO.getTypeName());
+                    currentRelationTypeDataSize.setValue("" + currentRelationTypeVO.getTypeDataRecordCount());
+                    currentRelationTypeDataSize.setRequired(false);
+                    currentRelationTypeDataSize.setReadOnly(true);
+                    this.relationTypeDataInstanceCountInfoForm.addComponent(currentRelationTypeDataSize);
+                    parentRelationTypeTotalCount=parentRelationTypeTotalCount-currentRelationTypeVO.getTypeDataRecordCount();
                 }
             }
-            TextField currentDimensionTypeDataSize = new TextField(targetDimensionTypeVO.getTypeName());
-            currentDimensionTypeDataSize.setValue(""+parentDimensionTypeTotalCount);
-            currentDimensionTypeDataSize.setRequired(false);
-            currentDimensionTypeDataSize.setReadOnly(true);
-            this.dimensionTypeDataInstanceCountInfoForm.addComponent(currentDimensionTypeDataSize);
+            TextField currentRelationTypeDataSize = new TextField(targetRelationTypeVO.getTypeName());
+            currentRelationTypeDataSize.setValue("" + parentRelationTypeTotalCount);
+            currentRelationTypeDataSize.setRequired(false);
+            currentRelationTypeDataSize.setReadOnly(true);
+            this.relationTypeDataInstanceCountInfoForm.addComponent(currentRelationTypeDataSize);
         }
     }
 
-    private void executeSearchDimensionTypeOperation(String dimensionType){}
+    private void executeSearchRelationTypeOperation(String relationType){}
 }
