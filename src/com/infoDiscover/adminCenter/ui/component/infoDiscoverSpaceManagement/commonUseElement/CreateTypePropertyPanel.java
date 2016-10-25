@@ -125,6 +125,9 @@ public class CreateTypePropertyPanel extends VerticalLayout {
         if(this.getPropertyTypeKind().equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
             sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.CLONE.getHtml()+" "+this.getTypeName() , ContentMode.HTML);
         }
+        if(this.getPropertyTypeKind().equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+            sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+this.getTypeName() , ContentMode.HTML);
+        }
         dataFieldActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
     }
 

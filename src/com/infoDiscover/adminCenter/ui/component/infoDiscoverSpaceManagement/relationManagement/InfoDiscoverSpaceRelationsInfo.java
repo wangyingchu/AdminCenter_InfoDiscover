@@ -20,6 +20,9 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
     private String discoverSpaceName;
     private SecondarySectionTitle mainSectionTitle;
     private InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail;
+    private RelationsRuntimeGeneralInfoPanel relationsRuntimeGeneralInfoPanel;
+    private RelationTypesManagementPanel relationTypesManagementPanel;
+    private RelationInstancesManagementPanel relationInstancesManagementPanel;
 
     public InfoDiscoverSpaceRelationsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -29,17 +32,17 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
         TabSheet tabs=new TabSheet();
         addComponent(tabs);
 
-        VerticalLayout _VerticalLayout1 =new VerticalLayout();
-        TabSheet.Tab dimensionsRuntimeGeneralInfoLayoutTab =tabs.addTab(_VerticalLayout1, "关系数据运行时信息");
-        dimensionsRuntimeGeneralInfoLayoutTab.setIcon(FontAwesome.INFO_CIRCLE);
+        this.relationsRuntimeGeneralInfoPanel =new RelationsRuntimeGeneralInfoPanel(this.currentUserClientInfo);
+        TabSheet.Tab relationsRuntimeGeneralInfoLayoutTab =tabs.addTab(this.relationsRuntimeGeneralInfoPanel, "关系数据运行时信息");
+        relationsRuntimeGeneralInfoLayoutTab.setIcon(FontAwesome.INFO_CIRCLE);
 
-        VerticalLayout _VerticalLayout2 =new VerticalLayout();
-        TabSheet.Tab dimensionTypesManagementPanelLayoutTab =tabs.addTab(_VerticalLayout2, "关系类型管理");
-        dimensionTypesManagementPanelLayoutTab.setIcon(FontAwesome.EXCHANGE);
+        this.relationTypesManagementPanel =new RelationTypesManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab relationTypesManagementPanelLayoutTab =tabs.addTab(this.relationTypesManagementPanel, "关系类型管理");
+        relationTypesManagementPanelLayoutTab.setIcon(FontAwesome.EXCHANGE);
 
-        VerticalLayout _VerticalLayout3 =new VerticalLayout();
-        TabSheet.Tab dimensionInstancesManagementLayoutTab =tabs.addTab(_VerticalLayout3, "关系数据管理");
-        dimensionInstancesManagementLayoutTab.setIcon(FontAwesome.SHARE_ALT_SQUARE);
+        this.relationInstancesManagementPanel =new RelationInstancesManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab relationInstancesManagementLayoutTab =tabs.addTab(this.relationInstancesManagementPanel, "关系数据管理");
+        relationInstancesManagementLayoutTab.setIcon(FontAwesome.SHARE_ALT_SQUARE);
 
         HorizontalLayout actionButtonsPlacementLayout=new HorizontalLayout();
         addComponent(actionButtonsPlacementLayout);
@@ -76,5 +79,10 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
 
     public void renderRelationsInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
         this.mainSectionTitle.setValue(this.discoverSpaceName);
+        this.relationsRuntimeGeneralInfoPanel.renderRelationsRuntimeGeneralInfo(discoverSpaceStatisticMetrics);
+        this.relationTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        this.relationTypesManagementPanel.renderRelationTypesManagementInfo(discoverSpaceStatisticMetrics);
+        this.relationInstancesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        this.relationInstancesManagementPanel.renderDimensionInstancesManagementInfo(discoverSpaceStatisticMetrics);
     }
 }
