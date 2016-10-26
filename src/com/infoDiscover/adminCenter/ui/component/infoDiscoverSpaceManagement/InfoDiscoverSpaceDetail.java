@@ -3,6 +3,8 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.InfoDiscoverSpaceRelationsInfo;
@@ -20,7 +22,7 @@ import com.vaadin.ui.*;
 /**
  * Created by wangychu on 10/1/16.
  */
-public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
+public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -33,6 +35,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
         this.currentUserClientInfo=currentUserClientInfo;
         setSpacing(true);
         setMargin(true);
+        this.currentUserClientInfo.getEventBlackBoard().addListener(this);
         VerticalLayout viewContentContainer = new VerticalLayout();
         viewContentContainer.setMargin(false);
         viewContentContainer.setSpacing(false);
@@ -125,5 +128,37 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View {
         };
         deleteDiscoverSpaceConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(deleteDiscoverSpaceConfirmDialog);
+    }
+
+    @Override
+    public void receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent(DiscoverSpaceTypeDataInstanceQueryRequiredEvent event) {
+        System.out.println("receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent");
+        System.out.println(event.getDiscoverSpaceName());
+        System.out.println(event.getDataInstanceTypeKind());
+        System.out.println(event.getDataInstanceTypeName());
+        System.out.println("======================================");
+
+
+        QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
+        queryTypeDataInstancePanel.setDiscoverSpaceName(event.getDiscoverSpaceName());
+        queryTypeDataInstancePanel.setDataInstanceTypeName((event.getDataInstanceTypeName()));
+        queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+        final Window window = new Window();
+        window.setResizable(true);
+        window.setDraggable(true);
+        //window.setWindowMode(WindowMode.MAXIMIZED);
+        //window.setSizeFull();
+
+
+        window.setWidth(80, Unit.PERCENTAGE);
+        window.setHeight(80, Unit.PERCENTAGE);
+
+
+        window.center();
+        window.setModal(true);
+        window.setContent(queryTypeDataInstancePanel);
+        queryTypeDataInstancePanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
+
     }
 }

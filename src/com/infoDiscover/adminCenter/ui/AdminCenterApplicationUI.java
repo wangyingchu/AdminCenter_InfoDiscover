@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -51,6 +52,8 @@ public class AdminCenterApplicationUI extends UI {
                 DiscoverSpaceCreatedEvent.class);
         BLACKBOARD.register(DiscoverSpaceDeletedEvent.DiscoverSpaceDeletedListener.class,
                 DiscoverSpaceDeletedEvent.class);
+        BLACKBOARD.register(DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener.class,
+                DiscoverSpaceTypeDataInstanceQueryRequiredEvent.class);
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 
         if (browserCantRenderFontsConsistently()) {

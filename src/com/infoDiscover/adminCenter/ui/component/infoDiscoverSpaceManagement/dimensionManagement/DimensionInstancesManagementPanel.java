@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.di
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.DimensionTypeVO;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
@@ -307,11 +308,12 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
             DimensionTypeVO currentDimensionTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRootDimensionTypeRuntimeInfo(this.discoverSpaceName,this.currentDiscoverSpaceStatisticMetrics);
             setDimensionInstanceCountInfo(currentDimensionTypeVO);
             List<DimensionTypeVO> childDimensionTypeVOsList=currentDimensionTypeVO.getChildDimensionTypesVOList();
+            MenuBar.MenuItem rootSearchDimensionTypeItem = searchDimensionInstanceMenuItem.addItem(this.currentSelectedDimensionTypeName, null, searchDimensionInstanceMenuItemCommand);
             if(childDimensionTypeVOsList!=null){
                 for(DimensionTypeVO currentDimensionType:childDimensionTypeVOsList){
                     MenuBar.MenuItem currentCreateDimensionTypeItem = createDimensionInstanceMenuItem.addItem(currentDimensionType.getTypeName(), null, createDimensionInstanceMenuItemCommand);
                     setChildMenuItem(currentCreateDimensionTypeItem,currentDimensionType,createDimensionInstanceMenuItemCommand);
-                    MenuBar.MenuItem currentSearchDimensionTypeItem = searchDimensionInstanceMenuItem.addItem(currentDimensionType.getTypeName(), null, searchDimensionInstanceMenuItemCommand);
+                    MenuBar.MenuItem currentSearchDimensionTypeItem = rootSearchDimensionTypeItem.addItem(currentDimensionType.getTypeName(), null, searchDimensionInstanceMenuItemCommand);
                     setChildMenuItem(currentSearchDimensionTypeItem,currentDimensionType,searchDimensionInstanceMenuItemCommand);
                 }
             }
@@ -384,5 +386,11 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
         UI.getCurrent().addWindow(window);
     }
 
-    private void executeSearchDimensionTypeOperation(String dimensionType){}
+    private void executeSearchDimensionTypeOperation(String dimensionType){
+        DiscoverSpaceTypeDataInstanceQueryRequiredEvent currentQueryEvent=new DiscoverSpaceTypeDataInstanceQueryRequiredEvent();
+        currentQueryEvent.setDiscoverSpaceName(this.getDiscoverSpaceName());
+        currentQueryEvent.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+        currentQueryEvent.setDataInstanceTypeName(dimensionType);
+        this.currentUserClientInfo.getEventBlackBoard().fire(currentQueryEvent);
+    }
 }
