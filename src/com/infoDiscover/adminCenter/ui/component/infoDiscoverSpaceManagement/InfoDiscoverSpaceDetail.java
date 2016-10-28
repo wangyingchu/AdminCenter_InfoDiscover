@@ -72,6 +72,31 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         infoDiscoverSpaceRelationsInfo=new InfoDiscoverSpaceRelationsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceRuntimeInfoLayout4.addComponent(infoDiscoverSpaceRelationsInfo);
+
+
+
+
+
+        QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
+        queryTypeDataInstancePanel.setDiscoverSpaceName("DiscoverSpaceName");
+        queryTypeDataInstancePanel.setDataInstanceTypeName(("getDataInstanceTypeName"));
+        queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+        final Window window = new Window();
+        window.setResizable(true);
+        window.setDraggable(true);
+        //window.setWindowMode(WindowMode.MAXIMIZED);
+        //window.setSizeFull();
+        window.setWidth(80, Unit.PERCENTAGE);
+        window.setHeight(80, Unit.PERCENTAGE);
+        window.center();
+        window.setModal(true);
+        window.setContent(queryTypeDataInstancePanel);
+        queryTypeDataInstancePanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
+
+
+
+
     }
 
     @Override
