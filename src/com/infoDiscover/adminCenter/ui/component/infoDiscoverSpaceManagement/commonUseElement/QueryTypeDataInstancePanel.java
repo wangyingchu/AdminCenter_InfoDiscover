@@ -2,27 +2,29 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.pvv.criteriabuilder.CriteriaBuilder;
 import com.pvv.criteriabuilder.CriteriaField;
 import com.vaadin.addon.modeltable.ModelTable;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangychu on 10/26/16.
  */
-public class QueryTypeDataInstancePanel extends VerticalLayout {
+public class QueryTypeDataInstancePanel extends VerticalLayout implements InputPropertyNamePanelInvoker{
     private UserClientInfo currentUserClientInfo;
     private Window containerDialog;
     private String discoverSpaceName;
@@ -37,57 +39,47 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
     private Button queryButton;
     private VerticalLayout queryConditionItemsContainerLayout;
 
+    private Panel queryConditionInputContainerPanel;
+    private Map<String,QueryConditionItem> queryConditionItemMap;
+    private List<QueryConditionItem> queryConditionItemList;
+    private Map<String,PropertyTypeVO> typePropertiesInfoMap;
+
+
+    private MenuBar.Command queryTypePropertyMenuItemCommand;
+    private MenuBar.Command queryCustomPropertyMenuItemCommand;
+
+
+
+
+
+
+
+
+
 
 
     public static Map<Integer, Item> itemFieldMap = new HashMap<>();
-
 
     public QueryTypeDataInstancePanel(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
         setSpacing(true);
         setMargin(true);
+        this.typePropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
+        this.queryConditionItemMap=new HashMap<String,QueryConditionItem>();
+        this.queryConditionItemList=new ArrayList<QueryConditionItem>();
         this.queryTypeDataInstanceSectionTitle = new MainSectionTitle("---");
         addComponent(this.queryTypeDataInstanceSectionTitle);
         dataTypeNoticeActionsBar = new SectionActionsBar(new Label("---", ContentMode.HTML));
         addComponent(dataTypeNoticeActionsBar);
-
-
 
         HorizontalSplitPanel typeDataInstanceQuerySplitPanel = new HorizontalSplitPanel();
         typeDataInstanceQuerySplitPanel.setSizeFull();
         typeDataInstanceQuerySplitPanel.setSplitPosition(420, Unit.PIXELS);
         addComponent(typeDataInstanceQuerySplitPanel);
 
-
-
-
-
-
-       // HorizontalLayout typeDataInstanceQueryContainerLayout=new HorizontalLayout();
-        //typeDataInstanceQueryContainerLayout.setWidth(100,Unit.PERCENTAGE);
-        //addComponent(typeDataInstanceQueryContainerLayout);
-
-
-
-
-
-
-
-
-
-
         VerticalLayout queryConditionInputContainerLayout=new VerticalLayout();
-       // queryConditionInputContainerLayout.setWidth(350,Unit.PIXELS);
-        //queryConditionInputContainerLayout.setWidth(480,Unit.PIXELS);
-
-
-
-
         queryConditionInputContainerLayout.addStyleName("ui_appElementRightSideSpacing");
-       // typeDataInstanceQueryContainerLayout.addComponent(queryConditionInputContainerLayout);
         typeDataInstanceQuerySplitPanel.setFirstComponent(queryConditionInputContainerLayout);
-
-
 
         this.operationTitle = new Label(FontAwesome.LIST_UL.getHtml() + " ---", ContentMode.HTML);
         this.operationTitle.addStyleName(ValoTheme.LABEL_SMALL);
@@ -99,38 +91,45 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
         dimensionInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         dimensionInstanceOperationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
 
+        this.queryTypePropertyMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedTypePropertyName=selectedItem.getText();
+                addTypePropertyQueryInputUI(selectedTypePropertyName);
+            }
+        };
+
+        this.queryCustomPropertyMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedPropertyDataType=selectedItem.getText();
+                addCustomPropertyQueryInputUI(selectedPropertyDataType);
+            }
+        };
+
         this.queryTypeDefinedPropertyMenuItem = dimensionInstanceOperationMenuBar.addItem("类型预定义属性", FontAwesome.FILTER, null);
-        this.queryTypeDefinedPropertyMenuItem.addItem("类型预定义属性", FontAwesome.CODE_FORK, null);
-
-
-
-
         this.queryCustomPropertyMenuItem = dimensionInstanceOperationMenuBar.addItem("自定义属性", FontAwesome.FILTER, null);
-        this.queryCustomPropertyMenuItem.addItem("类型预定义属性", FontAwesome.CODE_FORK, null);
-
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_STRING, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_BOOLEAN, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_DATE, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_INT, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_LONG, FontAwesome.CIRCLE_O,this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_DOUBLE, FontAwesome.CIRCLE_O,this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_FLOAT, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+        this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_SHORT, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
         queryConditionInputContainerLayout.addComponent(dimensionInstanceOperationMenuBar);
-
 
         this.queryConditionItemsContainerLayout=new VerticalLayout();
         this.queryConditionItemsContainerLayout.setWidth(100,Unit.PERCENTAGE);
 
-
-
-        for(int i=0;i<3;i++) {
-            QueryConditionItem queryConditionItem = new QueryConditionItem(this.currentUserClientInfo);
+        for(int i=0;i<0;i++) {
+            QueryConditionItem queryConditionItem = new QueryConditionItem(this.currentUserClientInfo,null);
             this.queryConditionItemsContainerLayout.addComponent(queryConditionItem);
         }
 
-        Panel queryConditionInputContainerPanel=new Panel();
-
+        queryConditionInputContainerPanel=new Panel();
         queryConditionInputContainerLayout.addComponent(queryConditionInputContainerPanel);
-
         queryConditionInputContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        queryConditionInputContainerPanel.setHeight(450,Unit.PIXELS);
+        //queryConditionInputContainerPanel.setHeight(450,Unit.PIXELS);
         queryConditionInputContainerPanel.setContent(this.queryConditionItemsContainerLayout);
-
-
-
 
         VerticalLayout spacingLayout0=new VerticalLayout();
         spacingLayout0.setWidth(100,Unit.PERCENTAGE);
@@ -150,36 +149,12 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
         queryConditionInputContainerLayout.addComponent(this.queryButton);
         queryConditionInputContainerLayout.setComponentAlignment(this.queryButton,Alignment.MIDDLE_CENTER);
 
-
         VerticalLayout spacingLayout1=new VerticalLayout();
         queryConditionInputContainerLayout.addComponent(spacingLayout1);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         VerticalLayout queryResultContainerLayout=new VerticalLayout();
         queryResultContainerLayout.setWidth(100,Unit.PERCENTAGE);
-        //typeDataInstanceQueryContainerLayout.addComponent(queryResultContainerLayout);
-        //typeDataInstanceQueryContainerLayout.setExpandRatio(queryResultContainerLayout,1.0f);
         typeDataInstanceQuerySplitPanel.setSecondComponent(queryResultContainerLayout);
-
-
-
-
 
         Label operationResultTitle = new Label(FontAwesome.DATABASE.getHtml() + " 查询结果", ContentMode.HTML);
         operationResultTitle.addStyleName(ValoTheme.LABEL_SMALL);
@@ -220,10 +195,12 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
 
 
 
-
-
     }
 
+    @Override
+    public void inputPropertyNameActionFinish(String propertyNameValue) {
+
+    }
 
 
     public class Item implements Serializable {
@@ -357,6 +334,18 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.TAGS.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
             this.queryButton.setCaption("查询维度数据");
+
+            List<PropertyTypeVO> dimensionTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
+            if(dimensionTypePropertiesList!=null){
+                for(PropertyTypeVO currentPropertyTypeVO:dimensionTypePropertiesList){
+                    this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
+                    if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
+                        this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.queryTypePropertyMenuItemCommand);
+                    }else{
+                        this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.queryTypePropertyMenuItemCommand);
+                    }
+                }
+            }
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
             this.queryTypeDataInstanceSectionTitle.setValue("查询事实数据");
@@ -372,6 +361,67 @@ public class QueryTypeDataInstancePanel extends VerticalLayout {
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
             this.queryButton.setCaption("查询关系数据");
         }
+
+        Window containerWindow=this.getContainerDialog();
+        containerWindow.addWindowModeChangeListener(new Window.WindowModeChangeListener() {
+            @Override
+            public void windowModeChanged(Window.WindowModeChangeEvent windowModeChangeEvent) {
+                setUIElementsSizeForWindowSizeChange();
+            }
+        });
+        setUIElementsSizeForWindowSizeChange();
+    }
+
+    private void setUIElementsSizeForWindowSizeChange(){
+        Window containerDialog=this.getContainerDialog();
+        int screenHeight=this.currentUserClientInfo.getUserWebBrowserInfo().getScreenHeight();
+        int windowsHeight=0;
+        int queryConditionInputContainerPanelHeight=0;
+        if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
+            windowsHeight=screenHeight;
+            queryConditionInputContainerPanelHeight=windowsHeight-435;
+        }else{
+            windowsHeight=(int)(containerDialog.getHeight()/100*screenHeight);
+            queryConditionInputContainerPanelHeight=windowsHeight-403;
+        }
+        queryConditionInputContainerPanel.setHeight(queryConditionInputContainerPanelHeight,Unit.PIXELS);
+    }
+
+    private void addTypePropertyQueryInputUI(String propertyName){
+        if(this.queryConditionItemMap.get(propertyName)!=null){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "已添加过查询属性 "+propertyName, Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        PropertyTypeVO currentPropertyTypeInfo=this.typePropertiesInfoMap.get(propertyName);
+        QueryConditionItem currentQueryConditionItem=new QueryConditionItem(this.currentUserClientInfo,currentPropertyTypeInfo);
+        currentQueryConditionItem.setDataInstanceTypeName(this.getDataInstanceTypeName());
+        if(this.queryConditionItemList.size()==0){
+            currentQueryConditionItem.setIsFirstQueryCondition(true);
+        }
+        this.queryConditionItemList.add(currentQueryConditionItem);
+        this.queryConditionItemMap.put(propertyName,currentQueryConditionItem);
+        this.queryConditionItemsContainerLayout.addComponent(currentQueryConditionItem);
+    }
+
+    private void addCustomPropertyQueryInputUI(String propertyName){
+
+
+        InputPropertyNamePanel inputPropertyNamePanel=new InputPropertyNamePanel(this.currentUserClientInfo);
+        final Window window = new Window();
+        window.setWidth(450.0f, Unit.PIXELS);
+        window.setResizable(false);
+        window.center();
+        window.setModal(true);
+        window.setContent(inputPropertyNamePanel);
+        inputPropertyNamePanel.setContainerDialog(window);
+        inputPropertyNamePanel.setInputPropertyNamePanelInvoker(this);
+        UI.getCurrent().addWindow(window);
+
+
     }
 }
 

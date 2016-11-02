@@ -78,14 +78,12 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
 
 
         QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
-        queryTypeDataInstancePanel.setDiscoverSpaceName("DiscoverSpaceName");
-        queryTypeDataInstancePanel.setDataInstanceTypeName(("getDataInstanceTypeName"));
+        queryTypeDataInstancePanel.setDiscoverSpaceName("testSpace002");
+        queryTypeDataInstancePanel.setDataInstanceTypeName(("DT001"));
         queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
         final Window window = new Window();
         window.setResizable(true);
         window.setDraggable(true);
-        //window.setWindowMode(WindowMode.MAXIMIZED);
-        //window.setSizeFull();
         window.setWidth(80, Unit.PERCENTAGE);
         window.setHeight(80, Unit.PERCENTAGE);
         window.center();
@@ -93,10 +91,6 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         window.setContent(queryTypeDataInstancePanel);
         queryTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
-
-
-
-
     }
 
     @Override
