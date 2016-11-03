@@ -36,6 +36,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private MenuBar.MenuItem queryTypeDefinedPropertyMenuItem;
     private MenuBar.MenuItem queryCustomPropertyMenuItem;
+    private MenuBar.MenuItem removeQueryPropertyMenuItem;
     private Button queryButton;
     private VerticalLayout queryConditionItemsContainerLayout;
 
@@ -47,7 +48,8 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private MenuBar.Command queryTypePropertyMenuItemCommand;
     private MenuBar.Command queryCustomPropertyMenuItemCommand;
-
+    private MenuBar.Command removeQueryPropertyMenuItemCommand;
+    private String currentTempCustomPropertyDataType;
 
 
 
@@ -105,7 +107,14 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             }
         };
 
+        this.removeQueryPropertyMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                removeQueryPropertyConditionItem(selectedItem);
+            }
+        };
+
         this.queryTypeDefinedPropertyMenuItem = dimensionInstanceOperationMenuBar.addItem("类型预定义属性", FontAwesome.FILTER, null);
+
         this.queryCustomPropertyMenuItem = dimensionInstanceOperationMenuBar.addItem("自定义属性", FontAwesome.FILTER, null);
         this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_STRING, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
         this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_BOOLEAN, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
@@ -115,6 +124,9 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_DOUBLE, FontAwesome.CIRCLE_O,this.queryCustomPropertyMenuItemCommand);
         this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_FLOAT, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
         this.queryCustomPropertyMenuItem.addItem(ApplicationConstant.DataFieldType_SHORT, FontAwesome.CIRCLE_O, this.queryCustomPropertyMenuItemCommand);
+
+        this.removeQueryPropertyMenuItem=dimensionInstanceOperationMenuBar.addItem("删除查询条件", FontAwesome.TRASH_O, null);
+
         queryConditionInputContainerLayout.addComponent(dimensionInstanceOperationMenuBar);
 
         this.queryConditionItemsContainerLayout=new VerticalLayout();
@@ -197,10 +209,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     }
 
-    @Override
-    public void inputPropertyNameActionFinish(String propertyNameValue) {
 
-    }
 
 
     public class Item implements Serializable {
@@ -405,11 +414,11 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.queryConditionItemList.add(currentQueryConditionItem);
         this.queryConditionItemMap.put(propertyName,currentQueryConditionItem);
         this.queryConditionItemsContainerLayout.addComponent(currentQueryConditionItem);
+        this.removeQueryPropertyMenuItem.addItem(propertyName, FontAwesome.SEARCH_MINUS, this.removeQueryPropertyMenuItemCommand);
     }
 
     private void addCustomPropertyQueryInputUI(String propertyName){
-
-
+        this.currentTempCustomPropertyDataType=propertyName;
         InputPropertyNamePanel inputPropertyNamePanel=new InputPropertyNamePanel(this.currentUserClientInfo);
         final Window window = new Window();
         window.setWidth(450.0f, Unit.PIXELS);
@@ -420,8 +429,51 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         inputPropertyNamePanel.setContainerDialog(window);
         inputPropertyNamePanel.setInputPropertyNamePanelInvoker(this);
         UI.getCurrent().addWindow(window);
+    }
 
+    private void removeQueryPropertyConditionItem(MenuBar.MenuItem selectedItem){
+        String propertyName=selectedItem.getText();
+        QueryConditionItem targetItem=this.queryConditionItemMap.get(propertyName);
+        if(targetItem!=null){
+            this.queryConditionItemsContainerLayout.removeComponent(targetItem);
+            this.queryConditionItemList.remove(targetItem);
+            this.queryConditionItemMap.remove(propertyName);
+            this.removeQueryPropertyMenuItem.removeChild(selectedItem);
+        }
+        if(this.queryConditionItemList.size()>0){
+            QueryConditionItem baseQueryConditionItem=this.queryConditionItemList.get(0);
+            baseQueryConditionItem.setIsFirstQueryCondition(true);
+        }
+    }
 
+    @Override
+    public void inputPropertyNameActionFinish(String propertyNameValue) {
+        if(this.queryConditionItemMap.get(propertyNameValue)!=null){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "已添加过查询属性 "+propertyNameValue, Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        if(this.currentTempCustomPropertyDataType!=null){
+            PropertyTypeVO customPropertyTypeInfo=new PropertyTypeVO();
+            customPropertyTypeInfo.setPropertyType(this.currentTempCustomPropertyDataType);
+            customPropertyTypeInfo.setPropertyName(propertyNameValue);
+            customPropertyTypeInfo.setPropertySourceOwner(this.getDataInstanceTypeName());
+            customPropertyTypeInfo.setReadOnly(false);
+            customPropertyTypeInfo.setNullable(false);
+            customPropertyTypeInfo.setMandatory(false);
+            QueryConditionItem currentQueryConditionItem=new QueryConditionItem(this.currentUserClientInfo,customPropertyTypeInfo);
+            currentQueryConditionItem.setDataInstanceTypeName(this.getDataInstanceTypeName());
+            if(this.queryConditionItemList.size()==0){
+                currentQueryConditionItem.setIsFirstQueryCondition(true);
+            }
+            this.queryConditionItemList.add(currentQueryConditionItem);
+            this.queryConditionItemMap.put(propertyNameValue,currentQueryConditionItem);
+            this.queryConditionItemsContainerLayout.addComponent(currentQueryConditionItem);
+            this.removeQueryPropertyMenuItem.addItem(propertyNameValue, FontAwesome.SEARCH_MINUS, this.removeQueryPropertyMenuItemCommand);
+        }
     }
 }
 
