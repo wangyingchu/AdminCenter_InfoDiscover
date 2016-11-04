@@ -7,6 +7,9 @@ import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.infoDiscover.infoDiscoverEngine.dataMart.Dimension;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.FilteringItem;
 import com.pvv.criteriabuilder.CriteriaBuilder;
 import com.pvv.criteriabuilder.CriteriaField;
 import com.vaadin.addon.modeltable.ModelTable;
@@ -132,11 +135,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.queryConditionItemsContainerLayout=new VerticalLayout();
         this.queryConditionItemsContainerLayout.setWidth(100,Unit.PERCENTAGE);
 
-        for(int i=0;i<0;i++) {
-            QueryConditionItem queryConditionItem = new QueryConditionItem(this.currentUserClientInfo,null);
-            this.queryConditionItemsContainerLayout.addComponent(queryConditionItem);
-        }
-
         queryConditionInputContainerPanel=new Panel();
         queryConditionInputContainerLayout.addComponent(queryConditionInputContainerPanel);
         queryConditionInputContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -152,7 +150,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 /* Do add new data logic */
-                //addNewTypeData();
+                executeDataInstanceQuery();
             }
         });
         this.queryButton.setIcon(FontAwesome.SEARCH);
@@ -474,6 +472,25 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             this.queryConditionItemsContainerLayout.addComponent(currentQueryConditionItem);
             this.removeQueryPropertyMenuItem.addItem(propertyNameValue, FontAwesome.SEARCH_MINUS, this.removeQueryPropertyMenuItemCommand);
         }
+    }
+
+    private void executeDataInstanceQuery(){
+        ExploreParameters exploreParameters=new ExploreParameters();
+        exploreParameters.setType(this.getDataInstanceTypeName());
+        if(this.queryConditionItemList.size()>0){
+            QueryConditionItem firstCondition=this.queryConditionItemList.get(0);
+            FilteringItem defaultFilteringItem= firstCondition.getFilteringItem();
+            exploreParameters.setDefaultFilteringItem(defaultFilteringItem);
+            for(int i=1;i<this.queryConditionItemList.size();i++){
+                QueryConditionItem currentQueryConditionItem=this.queryConditionItemList.get(i);
+                FilteringItem currentFilteringItem= currentQueryConditionItem.getFilteringItem();
+                exploreParameters.addFilteringItem(currentFilteringItem,currentQueryConditionItem.getFilteringLogic());
+            }
+        }
+
+        //List<Dimension> resultDimensionsList=
+                InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName,exploreParameters);
+
     }
 }
 

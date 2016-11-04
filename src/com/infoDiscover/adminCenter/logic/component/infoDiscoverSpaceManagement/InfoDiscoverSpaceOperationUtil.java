@@ -6,10 +6,13 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationTypeVO;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverAdminSpace;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverSpace;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineDataMartException;
+import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRuntimeException;
 import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentFactory;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
@@ -847,6 +850,25 @@ public class InfoDiscoverSpaceOperationUtil {
                     measurable.setInitProperty(propertyName,binaryValue);
                     break;
                 }
+            }
+        }
+    }
+
+    public static void queryDimensions(String spaceName,ExploreParameters exploreParameters){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            List<Dimension> resultDimensionsList=ie.discoverDimensions(exploreParameters);
+            System.out.println(resultDimensionsList);
+            System.out.println(resultDimensionsList.size());
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
             }
         }
     }
