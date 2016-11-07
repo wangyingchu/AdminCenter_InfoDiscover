@@ -2,14 +2,17 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
-import com.infoDiscover.infoDiscoverEngine.dataMart.Dimension;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.FilteringItem;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationType;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.SQLBuilder;
+import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.pvv.criteriabuilder.CriteriaBuilder;
 import com.pvv.criteriabuilder.CriteriaField;
 import com.vaadin.addon.modeltable.ModelTable;
@@ -48,18 +51,17 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     private List<QueryConditionItem> queryConditionItemList;
     private Map<String,PropertyTypeVO> typePropertiesInfoMap;
 
-
     private MenuBar.Command queryTypePropertyMenuItemCommand;
     private MenuBar.Command queryCustomPropertyMenuItemCommand;
     private MenuBar.Command removeQueryPropertyMenuItemCommand;
     private String currentTempCustomPropertyDataType;
 
+    private int queryPageSize=50;
+    private int queryStartPage=1;
+    private int queryEndPage=100;
 
 
-
-
-
-
+    private TypeDataInstanceList typeDataInstanceList;
 
 
 
@@ -146,21 +148,49 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         queryConditionInputContainerLayout.addComponent(spacingLayout0);
         spacingLayout0.addStyleName("ui_appSectionLightDiv");
 
+        HorizontalLayout queryButtonsContainerLayout=new HorizontalLayout();
+        queryConditionInputContainerLayout.addComponent(queryButtonsContainerLayout);
+        queryConditionInputContainerLayout.setComponentAlignment(queryButtonsContainerLayout,Alignment.MIDDLE_CENTER);
+
         this.queryButton=new Button("---", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                /* Do add new data logic */
                 executeDataInstanceQuery();
             }
         });
         this.queryButton.setIcon(FontAwesome.SEARCH);
         this.queryButton.addStyleName("primary");
         this.queryButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        queryConditionInputContainerLayout.addComponent(this.queryButton);
-        queryConditionInputContainerLayout.setComponentAlignment(this.queryButton,Alignment.MIDDLE_CENTER);
+        queryButtonsContainerLayout.addComponent(this.queryButton);
+
+        HorizontalLayout queryButtonsSpaceDiv=new HorizontalLayout();
+        queryButtonsSpaceDiv.setWidth(10,Unit.PIXELS);
+        queryButtonsContainerLayout.addComponent(queryButtonsSpaceDiv);
+
+        Button queryConfigButton=new Button("设置查询结果集参数");
+        queryConfigButton.setIcon(FontAwesome.COG);
+        queryConfigButton.addStyleName(ValoTheme.BUTTON_TINY);
+        queryConfigButton.addStyleName(ValoTheme.BUTTON_LINK);
+        queryConfigButton.addStyleName(ValoTheme.BUTTON_QUIET);
+        queryConfigButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+               showQueryExploreParametersConfigInput();
+            }
+        });
+        queryButtonsContainerLayout.addComponent(queryConfigButton);
 
         VerticalLayout spacingLayout1=new VerticalLayout();
         queryConditionInputContainerLayout.addComponent(spacingLayout1);
+
+
+
+
+
+
+
+
+
 
         VerticalLayout queryResultContainerLayout=new VerticalLayout();
         queryResultContainerLayout.setWidth(100,Unit.PERCENTAGE);
@@ -171,6 +201,19 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         operationResultTitle.addStyleName("ui_appStandaloneElementPadding");
         operationResultTitle.addStyleName("ui_appSectionLightDiv");
         queryResultContainerLayout.addComponent(operationResultTitle);
+
+
+
+        this.typeDataInstanceList=new TypeDataInstanceList(this.currentUserClientInfo);
+
+        queryResultContainerLayout.addComponent(this.typeDataInstanceList);
+
+
+
+
+
+
+
 
 
 
@@ -480,17 +523,72 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         if(this.queryConditionItemList.size()>0){
             QueryConditionItem firstCondition=this.queryConditionItemList.get(0);
             FilteringItem defaultFilteringItem= firstCondition.getFilteringItem();
+            if(defaultFilteringItem==null){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "未设定合法的查询约束条件", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             exploreParameters.setDefaultFilteringItem(defaultFilteringItem);
             for(int i=1;i<this.queryConditionItemList.size();i++){
                 QueryConditionItem currentQueryConditionItem=this.queryConditionItemList.get(i);
                 FilteringItem currentFilteringItem= currentQueryConditionItem.getFilteringItem();
+                if(currentFilteringItem==null){
+                    Notification errorNotification = new Notification("数据校验错误",
+                            "未设定合法的查询约束条件", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                    return;
+                }
                 exploreParameters.addFilteringItem(currentFilteringItem,currentQueryConditionItem.getFilteringLogic());
             }
         }
+        List<MeasurableValueVO> resultDimensionValuesList= InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName, exploreParameters);
 
-        //List<Dimension> resultDimensionsList=
-                InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName,exploreParameters);
 
+        try {
+            String sql= SQLBuilder.buildQuerySQL(InformationType.DIMENSION, exploreParameters);
+
+this.typeDataInstanceList.setQuerySQL(sql);
+           // System.out.println("SQL+.."+sql);
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        }
+
+        renderQueryResultsGrid(this.queryConditionItemList,resultDimensionValuesList);
+    }
+
+    private void renderQueryResultsGrid(List<QueryConditionItem> queryConditions,List<MeasurableValueVO> queryResults){
+        this.typeDataInstanceList.setDiscoverSpaceName(this.getDiscoverSpaceName());
+        this.typeDataInstanceList.setDataInstanceTypeName(this.getDataInstanceTypeName());
+        this.typeDataInstanceList.setDataInstanceTypeKind(this.getDataInstanceTypeKind());
+
+        List<PropertyTypeVO> queryParameterList=new ArrayList<PropertyTypeVO>();
+        for(QueryConditionItem currentQueryConditionItem:queryConditions){
+            String propertyName=currentQueryConditionItem.getPropertyTypeVO().getPropertyName();
+            String propertyType=currentQueryConditionItem.getPropertyTypeVO().getPropertyType();
+            queryParameterList.add(currentQueryConditionItem.getPropertyTypeVO());
+        }
+        this.typeDataInstanceList.renderTypeDataInstanceList(queryParameterList,queryResults);
+    }
+
+    private void showQueryExploreParametersConfigInput(){
+        QueryExploreParametersConfigInput queryExploreParametersConfigInput=new QueryExploreParametersConfigInput(this.currentUserClientInfo);
+        queryExploreParametersConfigInput.setPageSize(this.queryPageSize);
+        queryExploreParametersConfigInput.setStartPage(this.queryStartPage);
+        queryExploreParametersConfigInput.setEndPage(this.queryEndPage);
+
+        final Window window = new Window();
+        window.setWidth(320.0f, Unit.PIXELS);
+        window.setResizable(false);
+        window.center();
+        window.setModal(true);
+        window.setContent(queryExploreParametersConfigInput);
+        queryExploreParametersConfigInput.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
     }
 }
 

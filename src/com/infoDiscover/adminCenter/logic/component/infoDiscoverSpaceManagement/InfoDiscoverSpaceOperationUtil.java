@@ -1,9 +1,6 @@
 package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement;
 
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.DimensionTypeVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationTypeVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
@@ -854,14 +851,37 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
-    public static void queryDimensions(String spaceName,ExploreParameters exploreParameters){
+    public static List<MeasurableValueVO> queryDimensions(String spaceName,ExploreParameters exploreParameters){
+        List<MeasurableValueVO> measurableValueList=new ArrayList<MeasurableValueVO>();
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
             InformationExplorer ie=targetSpace.getInformationExplorer();
             List<Dimension> resultDimensionsList=ie.discoverDimensions(exploreParameters);
-            System.out.println(resultDimensionsList);
-            System.out.println(resultDimensionsList.size());
+            if(resultDimensionsList!=null) {
+                for (Dimension currentDimension : resultDimensionsList) {
+                    MeasurableValueVO currentMeasurableValueVO=new MeasurableValueVO();
+                    measurableValueList.add(currentMeasurableValueVO);
+                    currentMeasurableValueVO.setId(currentDimension.getId());
+                    currentMeasurableValueVO.setMeasurableTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+                    currentMeasurableValueVO.setMeasurableTypeName(currentDimension.getType());
+                    currentMeasurableValueVO.setPropertyNames(currentDimension.getPropertyNames());
+                    List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+                    currentMeasurableValueVO.setProperties(propertyValueVOList);
+                    List<Property> propertiesList=currentDimension.getProperties();
+                    if(propertiesList!=null){
+                        for(Property currentProperty:propertiesList){
+                            PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                            currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                            if(currentProperty.getPropertyType()!=null) {
+                                currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                                currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                            }
+                            propertyValueVOList.add(currentPropertyValueVO);
+                        }
+                    }
+                }
+            }
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
         } catch (InfoDiscoveryEngineInfoExploreException e) {
@@ -871,5 +891,6 @@ public class InfoDiscoverSpaceOperationUtil {
                 targetSpace.closeSpace();
             }
         }
+        return measurableValueList;
     }
 }

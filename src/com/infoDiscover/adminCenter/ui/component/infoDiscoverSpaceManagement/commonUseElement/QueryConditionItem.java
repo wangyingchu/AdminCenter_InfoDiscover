@@ -392,11 +392,6 @@ public class QueryConditionItem extends VerticalLayout {
             this.similarToMatchingTypeSelector.discard();
             this.similarToMatchingTypeSelector =null;
         }
-
-
-
-
-
         switch(filteringItemType){
             case FilteringItemType_Equal:
                 this.filteringItemTypeSelection.setWidth(155,Unit.PIXELS);
@@ -579,29 +574,66 @@ public class QueryConditionItem extends VerticalLayout {
 
     public FilteringItem getFilteringItem(){
         FilteringItem targetFilteringItem=null;
-        if(this.currentSelectedFilteringItemType==null){}
+        if(this.currentSelectedFilteringItemType==null){
+            /*
+            Notification errorNotification = new Notification("数据校验错误",
+                    "查询属性 "+this.propertyTypeVO.getPropertyName()+" 未设定约束条件", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            */
+            return null;
+        }
         switch(this.currentSelectedFilteringItemType){
             case FilteringItemType_Equal:
-                targetFilteringItem=new EqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new EqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_NotEqual:
-                targetFilteringItem=new NotEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new NotEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_RegularMatch:
-                targetFilteringItem=new RegularMatchFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField).toString());
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new RegularMatchFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField).toString());
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_GreatThan:
-                targetFilteringItem=new GreaterThanFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new GreaterThanFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_GreatThanEqual:
-                targetFilteringItem=new GreaterThanEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new GreaterThanEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_LessThan:
-                targetFilteringItem=new LessThanFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new LessThanFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_LessThanEqual:
-                targetFilteringItem=new LessThanEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
-                break;
+                if(this.singleQueryValueTextField.isValid()&&this.singleQueryValueTextField.getValue()!=null){
+                    targetFilteringItem=new LessThanEqualFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.singleQueryValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_SimilarTo:
                 SimilarFilteringItem.MatchingType matchingType=null;
                 String matchingTypeValue=this.similarToMatchingTypeSelector.getValue().toString();
@@ -614,15 +646,26 @@ public class QueryConditionItem extends VerticalLayout {
                 if(matchingTypeValue.equals(SimilarToMatchingType_Contain)){
                     matchingType= SimilarFilteringItem.MatchingType.Contain;
                 }
-                targetFilteringItem=new SimilarFilteringItem(this.getPropertyTypeVO().getPropertyName(), this.similarToConditionValueTextField.getValue().toString(),matchingType);
-                break;
+                if(this.similarToConditionValueTextField.isValid()&&this.similarToConditionValueTextField.getValue()!=null){
+                    targetFilteringItem=new SimilarFilteringItem(this.getPropertyTypeVO().getPropertyName(), this.similarToConditionValueTextField.getValue().toString(),matchingType);
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_Between:
-                targetFilteringItem=new BetweenFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.betweenQueryFromValueTextField),getConditionValue(this.betweenQueryToValueTextField));
-                break;
-
+                if(this.betweenQueryFromValueTextField.isValid()&&this.betweenQueryFromValueTextField.getValue()!=null&&this.betweenQueryToValueTextField.isValid()&&this.betweenQueryToValueTextField.getValue()!=null){
+                    targetFilteringItem=new BetweenFilteringItem(this.getPropertyTypeVO().getPropertyName(),getConditionValue(this.betweenQueryFromValueTextField),getConditionValue(this.betweenQueryToValueTextField));
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_InValue:
-                targetFilteringItem=new InValueFilteringItem(this.getPropertyTypeVO().getPropertyName(),this.multiValuePropertyInput.getMultiValueList());
-                break;
+                if(this.multiValuePropertyInput.getMultiValueList()!=null&&this.multiValuePropertyInput.getMultiValueList().size()>0){
+                    targetFilteringItem=new InValueFilteringItem(this.getPropertyTypeVO().getPropertyName(),this.multiValuePropertyInput.getMultiValueList());
+                    break;
+                }else{
+                    return null;
+                }
             case FilteringItemType_NullValue:
                 targetFilteringItem=new NullValueFilteringItem(this.getPropertyTypeVO().getPropertyName());
                 break;
