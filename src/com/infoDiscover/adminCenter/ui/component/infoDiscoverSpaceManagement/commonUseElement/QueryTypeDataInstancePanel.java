@@ -78,7 +78,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         addComponent(this.queryTypeDataInstanceSectionTitle);
         dataTypeNoticeActionsBar = new SectionActionsBar(new Label("---", ContentMode.HTML));
         addComponent(dataTypeNoticeActionsBar);
-
+        //left side
         HorizontalSplitPanel typeDataInstanceQuerySplitPanel = new HorizontalSplitPanel();
         typeDataInstanceQuerySplitPanel.setSizeFull();
         typeDataInstanceQuerySplitPanel.setSplitPosition(420, Unit.PIXELS);
@@ -180,18 +180,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         });
         queryButtonsContainerLayout.addComponent(queryConfigButton);
 
-        VerticalLayout spacingLayout1=new VerticalLayout();
-        queryConditionInputContainerLayout.addComponent(spacingLayout1);
-
-
-
-
-
-
-
-
-
-
+        //right side
         VerticalLayout queryResultContainerLayout=new VerticalLayout();
         queryResultContainerLayout.setWidth(100,Unit.PERCENTAGE);
         typeDataInstanceQuerySplitPanel.setSecondComponent(queryResultContainerLayout);
@@ -202,25 +191,13 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         operationResultTitle.addStyleName("ui_appSectionLightDiv");
         queryResultContainerLayout.addComponent(operationResultTitle);
 
-
-
         this.typeDataInstanceList=new TypeDataInstanceList(this.currentUserClientInfo);
-
         queryResultContainerLayout.addComponent(this.typeDataInstanceList);
 
-
-
-
-
-
-
-
-
-
+        /*
         ModelTable<Item> table1 = buildModelTable(0);
         table1.setTitleCaption("Direction.RIGHT [ ColumnSize: " + 3 + "]");
         table1.setItemDirection(ModelTable.Direction.RIGHT, 3);
-
 
         Item item0=new Item();
         item0.setField01("fdwefwf f");
@@ -230,7 +207,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         item0.setField05("fdwefwf f");
 
         table1.setItem(item0);
-
 
         queryResultContainerLayout.addComponent(table1);
 
@@ -242,7 +218,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         fields.add(new CriteriaField("city", "City"));
         CriteriaBuilder criteriaBuilder = new CriteriaBuilder(fields);
         queryResultContainerLayout.addComponent(criteriaBuilder);
-
+        */
 
 
 
@@ -305,8 +281,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     private ModelTable<Item> buildModelTable(final int dataIndex) {
         final Item item = itemFieldMap.get(dataIndex);
         final ModelTable<Item> modelTable = new ModelTable<>(Item.class);
-
-
         modelTable.setItem(item);
         modelTable.addMenuItem("Edit", FontAwesome.EDIT, new MenuBar.Command() {
             @Override
@@ -323,25 +297,8 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
                 modelTable.removeItem();
             }
         });
-
-
         return modelTable;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public Window getContainerDialog() {
         return containerDialog;
@@ -427,14 +384,19 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         int screenHeight=this.currentUserClientInfo.getUserWebBrowserInfo().getScreenHeight();
         int windowsHeight=0;
         int queryConditionInputContainerPanelHeight=0;
+        int typeDataInstanceListHeight=0;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             windowsHeight=screenHeight;
             queryConditionInputContainerPanelHeight=windowsHeight-435;
+            typeDataInstanceListHeight=windowsHeight-405;
+
         }else{
             windowsHeight=(int)(containerDialog.getHeight()/100*screenHeight);
             queryConditionInputContainerPanelHeight=windowsHeight-403;
+            typeDataInstanceListHeight=windowsHeight-373;
         }
         queryConditionInputContainerPanel.setHeight(queryConditionInputContainerPanelHeight,Unit.PIXELS);
+        this.typeDataInstanceList.setTypeDataInstanceListHeight(typeDataInstanceListHeight);
     }
 
     private void addTypePropertyQueryInputUI(String propertyName){
@@ -547,13 +509,9 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             }
         }
         List<MeasurableValueVO> resultDimensionValuesList= InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName, exploreParameters);
-
-
         try {
             String sql= SQLBuilder.buildQuerySQL(InformationType.DIMENSION, exploreParameters);
-
-this.typeDataInstanceList.setQuerySQL(sql);
-           // System.out.println("SQL+.."+sql);
+            this.typeDataInstanceList.setQuerySQL(sql);
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         }
@@ -565,11 +523,8 @@ this.typeDataInstanceList.setQuerySQL(sql);
         this.typeDataInstanceList.setDiscoverSpaceName(this.getDiscoverSpaceName());
         this.typeDataInstanceList.setDataInstanceTypeName(this.getDataInstanceTypeName());
         this.typeDataInstanceList.setDataInstanceTypeKind(this.getDataInstanceTypeKind());
-
         List<PropertyTypeVO> queryParameterList=new ArrayList<PropertyTypeVO>();
         for(QueryConditionItem currentQueryConditionItem:queryConditions){
-            String propertyName=currentQueryConditionItem.getPropertyTypeVO().getPropertyName();
-            String propertyType=currentQueryConditionItem.getPropertyTypeVO().getPropertyType();
             queryParameterList.add(currentQueryConditionItem.getPropertyTypeVO());
         }
         this.typeDataInstanceList.renderTypeDataInstanceList(queryParameterList,queryResults);

@@ -7,16 +7,16 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalLayout;
+
+import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
 
 /**
  * Created by wangychu on 11/7/16.
@@ -24,46 +24,71 @@ import java.util.List;
 public class TypeDataInstanceList extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
-
-    private Label querySqlLabel;
-
+    private Label queryResultCountLabel;
+    private Button querySQLButton;
     private Table typeDataInstanceTable;
     private String dataInstanceTypeKind;
     private String dataInstanceTypeName;
     private String discoverSpaceName;
+    private String querySQL="";
+    private SimpleDateFormat dateTypePropertyFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
         this.setWidth(100,Unit.PERCENTAGE);
         setSpacing(true);
         setMargin(true);
-        this.querySqlLabel=new Label();
-        this.querySqlLabel.addStyleName(ValoTheme.LABEL_TINY);
-        //this.querySqlLabel.addStyleName(ValoTheme.LABEL_LIGHT);
-        //this.querySqlLabel.addStyleName(ValoTheme.LABEL_COLORED);
 
-        addComponent(this.querySqlLabel);
+        HorizontalLayout queryResultSummaryInfoContainerLayout=new HorizontalLayout();
+        addComponent(queryResultSummaryInfoContainerLayout);
+        Label queryResultCountInfo=new Label(FontAwesome.LIST_OL.getHtml()+" 类型数据总量: ", ContentMode.HTML);
+        queryResultCountInfo.addStyleName(ValoTheme.LABEL_TINY);
+        queryResultSummaryInfoContainerLayout.addComponent(queryResultCountInfo);
+        queryResultSummaryInfoContainerLayout.setComponentAlignment(queryResultCountInfo,Alignment.MIDDLE_LEFT);
+        this.queryResultCountLabel=new Label("--");
+        this.queryResultCountLabel.addStyleName("ui_appFriendlyElement");
+        queryResultSummaryInfoContainerLayout.addComponent(this.queryResultCountLabel);
+        queryResultSummaryInfoContainerLayout.setComponentAlignment(this.queryResultCountLabel,Alignment.MIDDLE_LEFT);
+        this.querySQLButton=new Button("查询条件 SQL");
+        this.querySQLButton.setIcon(FontAwesome.FILE_TEXT_O);
+        this.querySQLButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.querySQLButton.addStyleName(ValoTheme.BUTTON_LINK);
+        this.querySQLButton.setEnabled(false);
+        this.querySQLButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                showQuerySQL();
+            }
+        });
+        queryResultSummaryInfoContainerLayout.addComponent(this.querySQLButton);
 
         this.typeDataInstanceTable=new Table();
-
-        this.typeDataInstanceTable.setHeight(400,Unit.PIXELS);
         this.typeDataInstanceTable.setWidth(100, Unit.PERCENTAGE);
-
-        this.typeDataInstanceTable.addStyleName(ValoTheme.TABLE_COMPACT);
+        //this.typeDataInstanceTable.addStyleName(ValoTheme.TABLE_COMPACT);
         this.typeDataInstanceTable.addStyleName(ValoTheme.TABLE_SMALL);
-        addComponent(this.typeDataInstanceTable);
 
+
+        this.typeDataInstanceTable.setFooterVisible(true);
+
+
+
+
+
+        addComponent(this.typeDataInstanceTable);
     }
 
     public void setQuerySQL(String querySQL){
+        this.querySQL=querySQL;
+    }
 
-        this.querySqlLabel.setValue(querySQL);
-
+    public void setTypeDataInstanceListHeight(int tableHeight){
+        this.typeDataInstanceTable.setHeight(tableHeight,Unit.PIXELS);
     }
 
     public void renderTypeDataInstanceList(List<PropertyTypeVO> queryParameters,List<MeasurableValueVO> queryResults){
-        System.out.println(this.getDataInstanceTypeName());
-        System.out.println(this.getDataInstanceTypeKind());
+        this.querySQLButton.setEnabled(true);
+        this.queryResultCountLabel.setValue(""+queryResults.size());
+
         List<PropertyTypeVO> typePropertiesInfoList=null;
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(getDataInstanceTypeKind())){
             typePropertiesInfoList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(getDiscoverSpaceName(),getDataInstanceTypeName());
@@ -74,72 +99,61 @@ public class TypeDataInstanceList extends VerticalLayout {
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(getDataInstanceTypeKind())){
             typePropertiesInfoList=InfoDiscoverSpaceOperationUtil.retrieveRelationTypePropertiesInfo(getDiscoverSpaceName(),getDataInstanceTypeName());
         }
+        if(queryParameters!=null) {
+            setAdditionalQueryParams(typePropertiesInfoList, queryParameters);
+        }
 
         Container dataContainer=this.typeDataInstanceTable.getContainerDataSource();
         dataContainer.removeAllItems();
-        Collection containerPropertiesId=dataContainer.getContainerPropertyIds();
-        Iterator propertyKeyIterator=containerPropertiesId.iterator();
-        this.typeDataInstanceTable.clear();
-        while(propertyKeyIterator.hasNext()){
-            //this.typeDataInstanceTable.removeContainerProperty(propertyKeyIterator.next());
-        }
 
-
+        Container queryResultDataContainer = new IndexedContainer();
+        this.typeDataInstanceTable.setContainerDataSource(queryResultDataContainer);
         if(typePropertiesInfoList!=null){
             for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
                 this.typeDataInstanceTable.addContainerProperty(currentPropertyTypeVO.getPropertyName(), String.class, "");
             }
         }
+        this.typeDataInstanceTable.addContainerProperty("操作",TypeDataInstanceTableRowActions.class,null);
+
+        this.typeDataInstanceTable.setColumnIcon("操作",FontAwesome.ADN);
+
 
         if(queryResults!=null){
-
             for(int i=0;i<queryResults.size();i++){
-
                 MeasurableValueVO currentMeasurableValueVO=queryResults.get(i);
-                Item newRecord=this.typeDataInstanceTable.addItem("index_"+i);
-
-
+                Item newRecord=this.typeDataInstanceTable.addItem("typeInstance_index_"+i);
                 for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
-
-                   /// Property property=new Property();
-
-
-                    PropertyValueVO vooo=currentMeasurableValueVO.getPropertyValue(currentPropertyTypeVO.getPropertyName());
-                    if(vooo!=null) {
-
-                        newRecord.getItemProperty(currentPropertyTypeVO.getPropertyName()).setValue("" +vooo.getPropertyValue());
+                    PropertyValueVO currentPropertyValueVO=currentMeasurableValueVO.getPropertyValue(currentPropertyTypeVO.getPropertyName());
+                    if(currentPropertyValueVO!=null&&currentPropertyValueVO.getPropertyValue()!=null) {
+                        Object propertyValue=currentPropertyValueVO.getPropertyValue();
+                        if(propertyValue instanceof Date){
+                            String dateValue=dateTypePropertyFormat.format(propertyValue);
+                            newRecord.getItemProperty(currentPropertyTypeVO.getPropertyName()).setValue(dateValue);
+                        }else{
+                            newRecord.getItemProperty(currentPropertyTypeVO.getPropertyName()).setValue(""+propertyValue);
+                        }
                     }
-                   // this.typeDataInstanceTable.getContainerDataSource().
-
-
-
-                  //  newRecord.addItemProperty(""+currentMeasurableValueVO.getPropertyValue(currentPropertyTypeVO.getPropertyName()),this.typeDataInstanceTable.getContainerProperty("index_"+i,currentPropertyTypeVO.getPropertyName()));
-
-
-
-
-
                 }
-
-
-
-
+                TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
+                typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
+                newRecord.getItemProperty("操作").setValue(typeDataInstanceTableRowActions);
             }
-
-
-
         }
-
-
-
-
-        //this.typeDataInstanceTable.getContainerDataSource().removeAllItems();
-
-        //this.typeDataInstanceTable.get
-
-
     }
 
+    private void setAdditionalQueryParams(List<PropertyTypeVO> typePropertiesInfoList,List<PropertyTypeVO> additionalQueryParameters){
+        for(PropertyTypeVO currentAdditionalQueryParam:additionalQueryParameters){
+            boolean isExistParam=false;
+            for(PropertyTypeVO currentTypeProperty:typePropertiesInfoList){
+                if(currentTypeProperty.getPropertyName().equals(currentAdditionalQueryParam.getPropertyName())){
+                    isExistParam=true;
+                }
+            }
+            if(!isExistParam){
+                typePropertiesInfoList.add(currentAdditionalQueryParam);
+            }
+        }
+    }
 
     public String getDataInstanceTypeKind() {
         return dataInstanceTypeKind;
@@ -163,5 +177,28 @@ public class TypeDataInstanceList extends VerticalLayout {
 
     public void setDiscoverSpaceName(String discoverSpaceName) {
         this.discoverSpaceName = discoverSpaceName;
+    }
+
+    private void showQuerySQL(){
+        final Window window = new Window();
+        window.setCaption(" 查询条件 SQL");
+        window.setIcon(FontAwesome.FILE_TEXT_O);
+        VerticalLayout containerLayout=new VerticalLayout();
+        containerLayout.setSpacing(true);
+        containerLayout.setMargin(true);
+        Panel sqlTextPanel=new Panel();
+        sqlTextPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        sqlTextPanel.setWidth(300,Unit.PIXELS);
+        sqlTextPanel.setHeight(200,Unit.PIXELS);
+        Label querySqlLabel=new Label();
+        querySqlLabel.addStyleName(ValoTheme.LABEL_COLORED);
+        querySqlLabel.setValue(this.querySQL);
+        sqlTextPanel.setContent(querySqlLabel);
+        containerLayout.addComponent(sqlTextPanel);
+        window.setWidth(320.0f, Unit.PIXELS);
+        window.setResizable(false);
+        window.setModal(true);
+        window.setContent(containerLayout);
+        UI.getCurrent().addWindow(window);
     }
 }
