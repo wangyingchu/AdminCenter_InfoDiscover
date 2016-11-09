@@ -13,8 +13,7 @@ import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.Fi
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationType;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.SQLBuilder;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
-import com.pvv.criteriabuilder.CriteriaBuilder;
-import com.pvv.criteriabuilder.CriteriaField;
+
 import com.vaadin.addon.modeltable.ModelTable;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -58,11 +57,11 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private int queryPageSize=50;
     private int queryStartPage=1;
-    private int queryEndPage=100;
-
+    private int queryEndPage=101;
+    private long maxResultNumber=0;
+    private boolean queryDistinctMode=true;
 
     private TypeDataInstanceList typeDataInstanceList;
-
 
 
     public static Map<Integer, Item> itemFieldMap = new HashMap<>();
@@ -192,24 +191,21 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         queryResultContainerLayout.addComponent(operationResultTitle);
 
         this.typeDataInstanceList=new TypeDataInstanceList(this.currentUserClientInfo);
+        this.typeDataInstanceList.setTablePageSize(this.queryPageSize);
         queryResultContainerLayout.addComponent(this.typeDataInstanceList);
 
         /*
         ModelTable<Item> table1 = buildModelTable(0);
         table1.setTitleCaption("Direction.RIGHT [ ColumnSize: " + 3 + "]");
         table1.setItemDirection(ModelTable.Direction.RIGHT, 3);
-
         Item item0=new Item();
         item0.setField01("fdwefwf f");
         item0.setField02("fdwefwf fv");
         item0.setField03("fdwefwfw");
         item0.setField04("fdwefwf3");
         item0.setField05("fdwefwf f");
-
         table1.setItem(item0);
-
         queryResultContainerLayout.addComponent(table1);
-
         final Collection<CriteriaField> fields = new HashSet<CriteriaField>();
         fields.add(new CriteriaField("name", "Name"));
         fields.add(new CriteriaField("code", "Code", CriteriaField.ClassField.INTEGER));
@@ -219,14 +215,47 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         CriteriaBuilder criteriaBuilder = new CriteriaBuilder(fields);
         queryResultContainerLayout.addComponent(criteriaBuilder);
         */
-
-
-
-
-
     }
 
+    public int getQueryPageSize() {
+        return queryPageSize;
+    }
 
+    public void setQueryPageSize(int queryPageSize) {
+        this.queryPageSize = queryPageSize;
+    }
+
+    public int getQueryStartPage() {
+        return queryStartPage;
+    }
+
+    public void setQueryStartPage(int queryStartPage) {
+        this.queryStartPage = queryStartPage;
+    }
+
+    public int getQueryEndPage() {
+        return queryEndPage;
+    }
+
+    public void setQueryEndPage(int queryEndPage) {
+        this.queryEndPage = queryEndPage;
+    }
+
+    public long getMaxResultNumber() {
+        return maxResultNumber;
+    }
+
+    public void setMaxResultNumber(long maxResultNumber) {
+        this.maxResultNumber = maxResultNumber;
+    }
+
+    public boolean getQueryDistinctMode() {
+        return queryDistinctMode;
+    }
+
+    public void setQueryDistinctMode(boolean queryDistinctMode) {
+        this.queryDistinctMode = queryDistinctMode;
+    }
 
 
     public class Item implements Serializable {
@@ -388,12 +417,11 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             windowsHeight=screenHeight;
             queryConditionInputContainerPanelHeight=windowsHeight-435;
-            typeDataInstanceListHeight=windowsHeight-405;
-
+            typeDataInstanceListHeight=windowsHeight-455;
         }else{
             windowsHeight=(int)(containerDialog.getHeight()/100*screenHeight);
             queryConditionInputContainerPanelHeight=windowsHeight-403;
-            typeDataInstanceListHeight=windowsHeight-373;
+            typeDataInstanceListHeight=windowsHeight-423;
         }
         queryConditionInputContainerPanel.setHeight(queryConditionInputContainerPanelHeight,Unit.PIXELS);
         this.typeDataInstanceList.setTypeDataInstanceListHeight(typeDataInstanceListHeight);
@@ -508,6 +536,15 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
                 exploreParameters.addFilteringItem(currentFilteringItem,currentQueryConditionItem.getFilteringLogic());
             }
         }
+        if(this.getMaxResultNumber()!=0){
+            exploreParameters.setResultNumber((int) this.getMaxResultNumber());
+        }else{
+            exploreParameters.setPageSize(this.getQueryPageSize());
+            exploreParameters.setStartPage(this.getQueryStartPage());
+            exploreParameters.setEndPage(this.getQueryEndPage());
+        }
+        exploreParameters.setDistinctMode(this.getQueryDistinctMode());
+
         List<MeasurableValueVO> resultDimensionValuesList= InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName, exploreParameters);
         try {
             String sql= SQLBuilder.buildQuerySQL(InformationType.DIMENSION, exploreParameters);
@@ -515,7 +552,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         }
-
         renderQueryResultsGrid(this.queryConditionItemList,resultDimensionValuesList);
     }
 
@@ -532,12 +568,16 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private void showQueryExploreParametersConfigInput(){
         QueryExploreParametersConfigInput queryExploreParametersConfigInput=new QueryExploreParametersConfigInput(this.currentUserClientInfo);
-        queryExploreParametersConfigInput.setPageSize(this.queryPageSize);
-        queryExploreParametersConfigInput.setStartPage(this.queryStartPage);
-        queryExploreParametersConfigInput.setEndPage(this.queryEndPage);
-
+        queryExploreParametersConfigInput.setContainerQueryTypeDataInstancePanel(this);
+        queryExploreParametersConfigInput.setPageSize(this.getQueryPageSize());
+        queryExploreParametersConfigInput.setStartPage(this.getQueryStartPage());
+        queryExploreParametersConfigInput.setEndPage(this.getQueryEndPage());
+        if(this.getMaxResultNumber() !=0){
+            queryExploreParametersConfigInput.setResultNumber(this.getMaxResultNumber());
+        }
+        queryExploreParametersConfigInput.setDistinctMode(this.getQueryDistinctMode());
         final Window window = new Window();
-        window.setWidth(320.0f, Unit.PIXELS);
+        window.setWidth(350.0f, Unit.PIXELS);
         window.setResizable(false);
         window.center();
         window.setModal(true);

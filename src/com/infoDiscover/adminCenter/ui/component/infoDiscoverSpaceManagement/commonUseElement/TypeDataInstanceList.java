@@ -5,6 +5,9 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.addon.pagination.Pagination;
+import com.vaadin.addon.pagination.PaginationChangeListener;
+import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 
@@ -32,6 +35,8 @@ public class TypeDataInstanceList extends VerticalLayout {
     private String discoverSpaceName;
     private String querySQL="";
     private SimpleDateFormat dateTypePropertyFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private HorizontalLayout paginationContainerLayout;
+    private int tablePageSize=20;
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
@@ -64,17 +69,13 @@ public class TypeDataInstanceList extends VerticalLayout {
 
         this.typeDataInstanceTable=new Table();
         this.typeDataInstanceTable.setWidth(100, Unit.PERCENTAGE);
-        //this.typeDataInstanceTable.addStyleName(ValoTheme.TABLE_COMPACT);
-        this.typeDataInstanceTable.addStyleName(ValoTheme.TABLE_SMALL);
-
-
-        this.typeDataInstanceTable.setFooterVisible(true);
-
-
-
-
-
+        this.typeDataInstanceTable.setSelectable(true);
+        this.typeDataInstanceTable.setRowHeaderMode(Table.RowHeaderMode.INDEX);
         addComponent(this.typeDataInstanceTable);
+
+        this.paginationContainerLayout=new HorizontalLayout();
+        this.paginationContainerLayout.setWidth(100,Unit.PERCENTAGE);
+        addComponent(this.paginationContainerLayout);
     }
 
     public void setQuerySQL(String querySQL){
@@ -105,23 +106,38 @@ public class TypeDataInstanceList extends VerticalLayout {
 
         Container dataContainer=this.typeDataInstanceTable.getContainerDataSource();
         dataContainer.removeAllItems();
-
         Container queryResultDataContainer = new IndexedContainer();
         this.typeDataInstanceTable.setContainerDataSource(queryResultDataContainer);
+        this.typeDataInstanceTable.addContainerProperty(" ID",String.class,"");
+        this.typeDataInstanceTable.setColumnIcon(" ID",FontAwesome.KEY);
         if(typePropertiesInfoList!=null){
             for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
                 this.typeDataInstanceTable.addContainerProperty(currentPropertyTypeVO.getPropertyName(), String.class, "");
             }
         }
-        this.typeDataInstanceTable.addContainerProperty("操作",TypeDataInstanceTableRowActions.class,null);
+        this.typeDataInstanceTable.addContainerProperty(" 操作",TypeDataInstanceTableRowActions.class,null);
+        this.typeDataInstanceTable.setColumnIcon(" 操作",FontAwesome.WRENCH);
+        this.typeDataInstanceTable.setColumnWidth(" 操作", 130);
+        typeDataInstanceTable.setPageLength(this.getTablePageSize());
 
-        this.typeDataInstanceTable.setColumnIcon("操作",FontAwesome.ADN);
+        this.paginationContainerLayout.removeAllComponents();
+        int startPage=queryResults.size()>0?1:0;
+        Pagination typeDataInstancePagination=createPagination(queryResults.size(), startPage);
+        typeDataInstancePagination.setItemsPerPageVisible(false);
+        typeDataInstancePagination.addPageChangeListener(new PaginationChangeListener() {
+            @Override
+            public void changed(PaginationResource event) {
+                //typeDataInstanceTable.setPageLength(event.limit());
+                typeDataInstanceTable.setCurrentPageFirstItemIndex(event.offset());
+            }
+        });
+        this.paginationContainerLayout.addComponent(typeDataInstancePagination);
 
-
-        if(queryResults!=null){
+        if (queryResults!=null){
             for(int i=0;i<queryResults.size();i++){
                 MeasurableValueVO currentMeasurableValueVO=queryResults.get(i);
                 Item newRecord=this.typeDataInstanceTable.addItem("typeInstance_index_"+i);
+                newRecord.getItemProperty(" ID").setValue(currentMeasurableValueVO.getId());
                 for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
                     PropertyValueVO currentPropertyValueVO=currentMeasurableValueVO.getPropertyValue(currentPropertyTypeVO.getPropertyName());
                     if(currentPropertyValueVO!=null&&currentPropertyValueVO.getPropertyValue()!=null) {
@@ -136,7 +152,7 @@ public class TypeDataInstanceList extends VerticalLayout {
                 }
                 TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
                 typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
-                newRecord.getItemProperty("操作").setValue(typeDataInstanceTableRowActions);
+                newRecord.getItemProperty(" 操作").setValue(typeDataInstanceTableRowActions);
             }
         }
     }
@@ -200,5 +216,19 @@ public class TypeDataInstanceList extends VerticalLayout {
         window.setModal(true);
         window.setContent(containerLayout);
         UI.getCurrent().addWindow(window);
+    }
+
+    private Pagination createPagination(long totalData, int initPageNumber) {
+        final PaginationResource paginationResource = PaginationResource.newBuilder().setTotal(totalData).setPage(initPageNumber).setLimit(this.getTablePageSize()).build();
+        final Pagination pagination = new Pagination(paginationResource);
+        return pagination;
+    }
+
+    public int getTablePageSize() {
+        return tablePageSize;
+    }
+
+    public void setTablePageSize(int tablePageSize) {
+        this.tablePageSize = tablePageSize;
     }
 }
