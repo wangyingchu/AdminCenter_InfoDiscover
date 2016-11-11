@@ -862,6 +862,7 @@ public class InfoDiscoverSpaceOperationUtil {
                 for (Dimension currentDimension : resultDimensionsList) {
                     MeasurableValueVO currentMeasurableValueVO=new MeasurableValueVO();
                     measurableValueList.add(currentMeasurableValueVO);
+                    currentMeasurableValueVO.setDiscoverSpaceName(spaceName);
                     currentMeasurableValueVO.setId(currentDimension.getId());
                     currentMeasurableValueVO.setMeasurableTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
                     currentMeasurableValueVO.setMeasurableTypeName(currentDimension.getType());

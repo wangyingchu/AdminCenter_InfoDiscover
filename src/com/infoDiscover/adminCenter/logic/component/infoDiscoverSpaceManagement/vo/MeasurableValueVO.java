@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class MeasurableValueVO {
     private String id;
+    private String discoverSpaceName;
     private String measurableTypeName;
     private String measurableTypeKind;
     private List<String> propertyNames;
@@ -63,5 +64,13 @@ public class MeasurableValueVO {
         }else{
             return null;
         }
+    }
+
+    public String getDiscoverSpaceName() {
+        return discoverSpaceName;
+    }
+
+    public void setDiscoverSpaceName(String discoverSpaceName) {
+        this.discoverSpaceName = discoverSpaceName;
     }
 }

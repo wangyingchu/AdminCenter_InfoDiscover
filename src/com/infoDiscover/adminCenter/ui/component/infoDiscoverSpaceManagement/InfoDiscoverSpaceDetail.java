@@ -87,7 +87,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         window.setWidth(80, Unit.PERCENTAGE);
         window.setHeight(80, Unit.PERCENTAGE);
         window.center();
-        window.setModal(true);
+        //window.setModal(true);
         window.setContent(queryTypeDataInstancePanel);
         queryTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
@@ -151,13 +151,6 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
 
     @Override
     public void receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent(DiscoverSpaceTypeDataInstanceQueryRequiredEvent event) {
-        System.out.println("receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent");
-        System.out.println(event.getDiscoverSpaceName());
-        System.out.println(event.getDataInstanceTypeKind());
-        System.out.println(event.getDataInstanceTypeName());
-        System.out.println("======================================");
-
-
         QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
         queryTypeDataInstancePanel.setDiscoverSpaceName(event.getDiscoverSpaceName());
         queryTypeDataInstancePanel.setDataInstanceTypeName((event.getDataInstanceTypeName()));
@@ -165,19 +158,12 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         final Window window = new Window();
         window.setResizable(true);
         window.setDraggable(true);
-        //window.setWindowMode(WindowMode.MAXIMIZED);
-        //window.setSizeFull();
-
-
         window.setWidth(80, Unit.PERCENTAGE);
         window.setHeight(80, Unit.PERCENTAGE);
-
-
         window.center();
-        window.setModal(true);
+        //window.setModal(true);
         window.setContent(queryTypeDataInstancePanel);
         queryTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
-
     }
 }

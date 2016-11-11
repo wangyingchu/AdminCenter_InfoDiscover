@@ -37,10 +37,12 @@ public class TypeDataInstanceList extends VerticalLayout {
     private SimpleDateFormat dateTypePropertyFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private HorizontalLayout paginationContainerLayout;
     private int tablePageSize=20;
+    private int subWindowsPositionOffset;
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
         this.setWidth(100,Unit.PERCENTAGE);
+        this.setSubWindowsPositionOffset(20);
         setSpacing(true);
         setMargin(true);
 
@@ -152,6 +154,7 @@ public class TypeDataInstanceList extends VerticalLayout {
                 }
                 TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
                 typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
+                typeDataInstanceTableRowActions.setContainerTypeDataInstanceList(this);
                 newRecord.getItemProperty(" 操作").setValue(typeDataInstanceTableRowActions);
             }
         }
@@ -204,14 +207,14 @@ public class TypeDataInstanceList extends VerticalLayout {
         containerLayout.setMargin(true);
         Panel sqlTextPanel=new Panel();
         sqlTextPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        sqlTextPanel.setWidth(300,Unit.PIXELS);
+        sqlTextPanel.setWidth(380,Unit.PIXELS);
         sqlTextPanel.setHeight(200,Unit.PIXELS);
         Label querySqlLabel=new Label();
         querySqlLabel.addStyleName(ValoTheme.LABEL_COLORED);
         querySqlLabel.setValue(this.querySQL);
         sqlTextPanel.setContent(querySqlLabel);
         containerLayout.addComponent(sqlTextPanel);
-        window.setWidth(320.0f, Unit.PIXELS);
+        window.setWidth(400.0f, Unit.PIXELS);
         window.setResizable(false);
         window.setModal(true);
         window.setContent(containerLayout);
@@ -230,5 +233,13 @@ public class TypeDataInstanceList extends VerticalLayout {
 
     public void setTablePageSize(int tablePageSize) {
         this.tablePageSize = tablePageSize;
+    }
+
+    public int getSubWindowsPositionOffset() {
+        return subWindowsPositionOffset;
+    }
+
+    public void setSubWindowsPositionOffset(int subWindowsPositionOffset) {
+        this.subWindowsPositionOffset = subWindowsPositionOffset;
     }
 }

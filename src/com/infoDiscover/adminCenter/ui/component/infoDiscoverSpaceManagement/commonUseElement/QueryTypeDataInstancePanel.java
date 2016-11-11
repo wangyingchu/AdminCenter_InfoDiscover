@@ -1,11 +1,10 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
-
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
-import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
@@ -36,9 +35,8 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     private String dataInstanceTypeKind;
     private String dataInstanceTypeName;
     private Label operationTitle;
-    private MainSectionTitle queryTypeDataInstanceSectionTitle;
-    private SectionActionsBar dataTypeNoticeActionsBar;
 
+    private SectionActionsBar dataTypeNoticeActionsBar;
     private MenuBar.MenuItem queryTypeDefinedPropertyMenuItem;
     private MenuBar.MenuItem queryCustomPropertyMenuItem;
     private MenuBar.MenuItem removeQueryPropertyMenuItem;
@@ -73,8 +71,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.typePropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
         this.queryConditionItemMap=new HashMap<String,QueryConditionItem>();
         this.queryConditionItemList=new ArrayList<QueryConditionItem>();
-        this.queryTypeDataInstanceSectionTitle = new MainSectionTitle("---");
-        addComponent(this.queryTypeDataInstanceSectionTitle);
         dataTypeNoticeActionsBar = new SectionActionsBar(new Label("---", ContentMode.HTML));
         addComponent(dataTypeNoticeActionsBar);
         //left side
@@ -365,7 +361,10 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     public void attach() {
         super.attach();
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(getDataInstanceTypeKind())){
-            this.queryTypeDataInstanceSectionTitle.setValue("查询维度数据");
+            if(this.getContainerDialog()!=null){
+                this.getContainerDialog().setCaptionAsHtml(true);
+                this.getContainerDialog().setCaption(UICommonElementsUtil.generateMovableWindowTitleWithFormat("查询维度数据"));
+            }
             this.operationTitle.setValue(FontAwesome.LIST_UL.getHtml() +" 查询条件 ( 维度属性 ) :");
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.TAGS.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
@@ -384,14 +383,20 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             }
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
-            this.queryTypeDataInstanceSectionTitle.setValue("查询事实数据");
+            if(this.getContainerDialog()!=null){
+                this.getContainerDialog().setCaptionAsHtml(true);
+                this.getContainerDialog().setCaption(UICommonElementsUtil.generateMovableWindowTitleWithFormat("查询事实数据"));
+            }
             this.operationTitle.setValue(FontAwesome.LIST_UL.getHtml() +" 查询条件 ( 事实属性 ) :");
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.CLONE.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
             this.queryButton.setCaption("查询事实数据");
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(getDataInstanceTypeKind())){
-            this.queryTypeDataInstanceSectionTitle.setValue("查询关系数据");
+            if(this.getContainerDialog()!=null){
+                this.getContainerDialog().setCaptionAsHtml(true);
+                this.getContainerDialog().setCaption(UICommonElementsUtil.generateMovableWindowTitleWithFormat("查询关系数据"));
+            }
             this.operationTitle.setValue(FontAwesome.LIST_UL.getHtml() +" 查询条件 ( 关系属性 ) :");
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
@@ -416,12 +421,12 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         int typeDataInstanceListHeight=0;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             windowsHeight=screenHeight;
-            queryConditionInputContainerPanelHeight=windowsHeight-435;
-            typeDataInstanceListHeight=windowsHeight-455;
+            queryConditionInputContainerPanelHeight=windowsHeight-395;
+            typeDataInstanceListHeight=windowsHeight-415;
         }else{
             windowsHeight=(int)(containerDialog.getHeight()/100*screenHeight);
-            queryConditionInputContainerPanelHeight=windowsHeight-403;
-            typeDataInstanceListHeight=windowsHeight-423;
+            queryConditionInputContainerPanelHeight=windowsHeight-363;
+            typeDataInstanceListHeight=windowsHeight-383;
         }
         queryConditionInputContainerPanel.setHeight(queryConditionInputContainerPanelHeight,Unit.PIXELS);
         this.typeDataInstanceList.setTypeDataInstanceListHeight(typeDataInstanceListHeight);
@@ -559,6 +564,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.typeDataInstanceList.setDiscoverSpaceName(this.getDiscoverSpaceName());
         this.typeDataInstanceList.setDataInstanceTypeName(this.getDataInstanceTypeName());
         this.typeDataInstanceList.setDataInstanceTypeKind(this.getDataInstanceTypeKind());
+        this.typeDataInstanceList.setTablePageSize(this.getQueryPageSize());
         List<PropertyTypeVO> queryParameterList=new ArrayList<PropertyTypeVO>();
         for(QueryConditionItem currentQueryConditionItem:queryConditions){
             queryParameterList.add(currentQueryConditionItem.getPropertyTypeVO());
