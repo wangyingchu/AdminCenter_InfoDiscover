@@ -872,13 +872,13 @@ public class InfoDiscoverSpaceOperationUtil {
                     List<Property> propertiesList=currentDimension.getProperties();
                     if(propertiesList!=null){
                         for(Property currentProperty:propertiesList){
-                            PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
-                            currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
-                            if(currentProperty.getPropertyType()!=null) {
+                            if(currentProperty.getPropertyType()!=null){
+                                PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                                currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
                                 currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
                                 currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                                propertyValueVOList.add(currentPropertyValueVO);
                             }
-                            propertyValueVOList.add(currentPropertyValueVO);
                         }
                     }
                 }

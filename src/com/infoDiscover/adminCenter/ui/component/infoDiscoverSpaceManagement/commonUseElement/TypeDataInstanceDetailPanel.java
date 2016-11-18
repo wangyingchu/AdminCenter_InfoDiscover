@@ -40,12 +40,12 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
 
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.TAGS.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
-            propertiesNoticeText="维度属性";
+            propertiesNoticeText="维度数据属性";
         }else if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.CLONE.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
-            propertiesNoticeText="事实属性";
+            propertiesNoticeText="事实数据属性";
         }else if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(dataTypeKind)){
-            propertiesNoticeText="关系属性";
+            propertiesNoticeText="关系数据属性";
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
         }else{
             propertiesNoticeText="数据属性";
@@ -62,6 +62,19 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         addComponent(dataPropertyTitle);
 
 
+
+
+
+
+        TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
+        addComponent(typeDataInstancePropertiesEditorPanel);
+
+        CreateTypeDataInstancePanel createTypeDataInstancePanel=new CreateTypeDataInstancePanel(this.currentUserClientInfo);
+        createTypeDataInstancePanel.setDiscoverSpaceName(this.measurableValue.getDiscoverSpaceName());
+        createTypeDataInstancePanel.setDataInstanceTypeName(this.measurableValue.getMeasurableTypeName());
+        createTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+
+        addComponent(createTypeDataInstancePanel);
     }
 
     public void setContainerDialog(Window containerDialog) {

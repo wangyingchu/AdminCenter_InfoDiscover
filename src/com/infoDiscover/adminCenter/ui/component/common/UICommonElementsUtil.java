@@ -8,7 +8,7 @@ import org.vaadin.teemu.VaadinIcons;
 public class UICommonElementsUtil {
 
     public static String generateMovableWindowTitleWithFormat(String titleText){
-        String resultTitle= VaadinIcons.MODAL.getHtml()+"<span style='font-weight:200;color:#197de1;font-size:20px'>"+" "+titleText.trim()+"</span>";
+        String resultTitle= VaadinIcons.MODAL.getHtml()+"<span style='font-weight:160;color:#197de1;font-size:17px'>"+" "+titleText.trim()+"</span>";
         return resultTitle;
     }
 }

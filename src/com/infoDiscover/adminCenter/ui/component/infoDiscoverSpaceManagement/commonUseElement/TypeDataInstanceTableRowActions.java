@@ -95,15 +95,22 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
         window.setContent(typeDataInstanceDetailPanel);
         typeDataInstanceDetailPanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
-        int currentSubWindowPositionOffset=getContainerTypeDataInstanceList().getSubWindowsPositionOffset();
-        window.setPosition(currentSubWindowPositionOffset,currentSubWindowPositionOffset);
+        int currentSubWindowXPositionOffset=getContainerTypeDataInstanceList().getSubWindowsXPositionOffset();
+        int currentSubWindowYPositionOffset=getContainerTypeDataInstanceList().getSubWindowsYPositionOffset();
+
+        window.setPosition(currentSubWindowXPositionOffset,currentSubWindowYPositionOffset);
         window.addCloseListener(new Window.CloseListener() {
             @Override
             public void windowClose(Window.CloseEvent closeEvent) {
                 showTypeDataDetailButton.setEnabled(true);
             }
         });
-        getContainerTypeDataInstanceList().setSubWindowsPositionOffset(currentSubWindowPositionOffset+50);
+        getContainerTypeDataInstanceList().setSubWindowsXPositionOffset(currentSubWindowXPositionOffset + 50);
+        if(currentSubWindowYPositionOffset<=450){
+            getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(currentSubWindowYPositionOffset + 50);
+        }else{
+            getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(20);
+        }
     }
 
     private void processAddToProcessingList(){}

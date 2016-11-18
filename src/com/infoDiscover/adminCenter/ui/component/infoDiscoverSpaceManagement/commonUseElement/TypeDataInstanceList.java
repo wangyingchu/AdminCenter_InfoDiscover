@@ -37,12 +37,14 @@ public class TypeDataInstanceList extends VerticalLayout {
     private SimpleDateFormat dateTypePropertyFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private HorizontalLayout paginationContainerLayout;
     private int tablePageSize=20;
-    private int subWindowsPositionOffset;
+    private int subWindowsXPositionOffset;
+    private int subWindowsYPositionOffset;
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
         this.setWidth(100,Unit.PERCENTAGE);
-        this.setSubWindowsPositionOffset(20);
+        this.setSubWindowsYPositionOffset(20);
+        this.setSubWindowsYPositionOffset(20);
         setSpacing(true);
         setMargin(true);
 
@@ -235,11 +237,19 @@ public class TypeDataInstanceList extends VerticalLayout {
         this.tablePageSize = tablePageSize;
     }
 
-    public int getSubWindowsPositionOffset() {
-        return subWindowsPositionOffset;
+    public int getSubWindowsYPositionOffset() {
+        return subWindowsYPositionOffset;
     }
 
-    public void setSubWindowsPositionOffset(int subWindowsPositionOffset) {
-        this.subWindowsPositionOffset = subWindowsPositionOffset;
+    public void setSubWindowsYPositionOffset(int subWindowsYPositionOffset) {
+        this.subWindowsYPositionOffset = subWindowsYPositionOffset;
+    }
+
+    public int getSubWindowsXPositionOffset() {
+        return subWindowsXPositionOffset;
+    }
+
+    public void setSubWindowsXPositionOffset(int subWindowsXPositionOffset) {
+        this.subWindowsXPositionOffset = subWindowsXPositionOffset;
     }
 }
