@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.fa
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -75,6 +76,15 @@ public class CreateFactTypePanel extends VerticalLayout {
         if(factTypeNameStr==null||factTypeNameStr.trim().equals("")){
             Notification errorNotification = new Notification("数据校验错误",
                     "请输入事实类型名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(factTypeNameStr);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入事实类型名称 "+factTypeNameStr+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);

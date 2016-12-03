@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.di
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.vaadin.server.FontAwesome;
@@ -85,6 +86,15 @@ public class CreateDimensionTypePanel extends VerticalLayout {
         if(dimensionTypeNameStr==null||dimensionTypeNameStr.trim().equals("")){
             Notification errorNotification = new Notification("数据校验错误",
                     "请输入维度类型名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean isSingleByteString=UICommonElementsUtil.checkIsSingleByteString(dimensionTypeNameStr);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入维度类型名称 "+dimensionTypeNameStr+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);

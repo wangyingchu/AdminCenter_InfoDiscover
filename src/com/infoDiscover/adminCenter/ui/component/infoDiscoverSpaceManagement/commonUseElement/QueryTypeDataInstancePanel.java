@@ -484,6 +484,15 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     @Override
     public void inputPropertyNameActionFinish(String propertyNameValue) {
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(propertyNameValue);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入查询属性名称 "+propertyNameValue+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         if(this.queryConditionItemMap.get(propertyNameValue)!=null){
             Notification errorNotification = new Notification("数据校验错误",
                     "已添加过查询属性 "+propertyNameValue, Notification.Type.ERROR_MESSAGE);

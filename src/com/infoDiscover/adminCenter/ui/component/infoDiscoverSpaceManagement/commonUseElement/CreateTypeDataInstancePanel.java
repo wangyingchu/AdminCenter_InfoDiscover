@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 
@@ -209,6 +210,15 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
 
     private void addTypePropertyEditUI(String properTyName){
         Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(properTyName);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+properTyName+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         if(propertyEditor!=null){
             Notification errorNotification = new Notification("数据校验错误",
                     "属性 "+properTyName+" 已存在", Notification.Type.ERROR_MESSAGE);
