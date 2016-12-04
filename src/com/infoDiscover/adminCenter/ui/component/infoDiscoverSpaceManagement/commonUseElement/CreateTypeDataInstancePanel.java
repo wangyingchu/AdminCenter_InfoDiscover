@@ -219,6 +219,15 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(properTyName);
+        if(containsSpecialChars){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+properTyName+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         if(propertyEditor!=null){
             Notification errorNotification = new Notification("数据校验错误",
                     "属性 "+properTyName+" 已存在", Notification.Type.ERROR_MESSAGE);

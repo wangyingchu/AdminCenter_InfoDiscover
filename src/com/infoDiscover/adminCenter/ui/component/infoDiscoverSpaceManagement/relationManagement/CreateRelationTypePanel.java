@@ -101,6 +101,15 @@ public class CreateRelationTypePanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(relationTypeNameStr);
+        if(containsSpecialChars){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入关系类型名称 "+relationTypeNameStr+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         boolean isExistRelationTypeName= InfoDiscoverSpaceOperationUtil.checkRelationTypeExistence(getDiscoverSpaceName(), relationTypeNameStr);
         if(isExistRelationTypeName){
             Notification errorNotification = new Notification("数据校验错误",

@@ -12,6 +12,23 @@ public class UICommonElementsUtil {
         return resultTitle;
     }
 
+    public static boolean checkContainsSpecialChars(String checkValue){
+        if(checkValue.contains("`")){return true;}
+        if(checkValue.contains("=")){return true;}
+        if(checkValue.contains(",")){return true;}
+        if(checkValue.contains(";")){return true;}
+        if(checkValue.contains(":")){return true;}
+        if(checkValue.contains("\"")){return true;}
+        if(checkValue.contains("'")){return true;}
+        if(checkValue.contains(".")){return true;}
+        if(checkValue.contains("<")){return true;}
+        if(checkValue.contains(">")){return true;}
+        if(checkValue.contains("[")){return true;}
+        if(checkValue.contains("]")){return true;}
+        if(checkValue.contains(" ")){return true;}
+        return false;
+    }
+
     public static boolean checkIsSingleByteString(String str) {
         boolean isSingleByteString=true;
         if (str != null) {
