@@ -33,11 +33,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         String discoverSpaceName=this.measurableValue.getDiscoverSpaceName();
         String dataId=this.measurableValue.getId();
         String dataInstanceBasicInfoNoticeText;
-
-
         String propertiesNoticeText;
-
-
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.TAGS.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
             propertiesNoticeText="维度数据属性";
@@ -60,11 +56,6 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
         addComponent(dataPropertyTitle);
-
-
-
-
-
 
         TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
         addComponent(typeDataInstancePropertiesEditorPanel);

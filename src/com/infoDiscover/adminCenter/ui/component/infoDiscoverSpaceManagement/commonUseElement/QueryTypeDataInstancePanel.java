@@ -11,6 +11,7 @@ import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.FilteringItem;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationType;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.SQLBuilder;
+import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 
 import com.vaadin.addon.modeltable.ModelTable;
@@ -60,7 +61,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     private boolean queryDistinctMode=true;
 
     private TypeDataInstanceList typeDataInstanceList;
-
 
     public static Map<Integer, Item> itemFieldMap = new HashMap<>();
 
@@ -532,7 +532,13 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private void executeDataInstanceQuery(){
         ExploreParameters exploreParameters=new ExploreParameters();
-        exploreParameters.setType(this.getDataInstanceTypeName());
+        if(InfoDiscoverEngineConstant.FACT_ROOTCLASSNAME.equals(this.getDataInstanceTypeName())||
+                InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME.equals(this.getDataInstanceTypeName())||
+                InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME.equals(this.getDataInstanceTypeName())){
+            exploreParameters.setType(null);
+        }else{
+            exploreParameters.setType(this.getDataInstanceTypeName());
+        }
         if(this.queryConditionItemList.size()>0){
             QueryConditionItem firstCondition=this.queryConditionItemList.get(0);
             FilteringItem defaultFilteringItem= firstCondition.getFilteringItem();

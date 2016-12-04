@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.validator.*;
@@ -35,36 +36,28 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
     private MenuBar.Command removeDataPropertyMenuItemCommand;
     private FormLayout propertiesEditForm;
     private Button editPropertiesButton;
-
     private Button cancelEditButton;
     private HorizontalLayout editorFormFooter;
-
     private String editPropertiesButtonCaption="---";
-
-
     private String currentTempCustomPropertyDataType;
+    private List<String> propertiesToDeleteList;
 
     public TypeDataInstancePropertiesEditorPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue){
         this.currentUserClientInfo=userClientInfo;
         this.measurableValue=measurableValue;
         this.typePropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
         this.dataPropertiesEditorMap =new HashMap<String,Field>();
+        this.propertiesToDeleteList=new ArrayList<String>();
         MenuBar addRecordOperationMenuBar = new MenuBar();
         addRecordOperationMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addRecordOperationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
         this.createTypeDefinedPropertyMenuItem = addRecordOperationMenuBar.addItem("添加类型预定义属性", FontAwesome.CODE_FORK, null);
-
-
-
         this.createDataCustomPropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedPropertyDataType=selectedItem.getText();
                 addDataCustomPropertyEditUI(selectedPropertyDataType);
             }
         };
-
-
-
         this.createDataCustomMenuItem = addRecordOperationMenuBar.addItem("添加自定义属性", FontAwesome.TAG, null);
         this.createDataCustomMenuItem.addItem(ApplicationConstant.DataFieldType_STRING, FontAwesome.CIRCLE_O, this.createDataCustomPropertyMenuItemCommand);
         this.createDataCustomMenuItem.addItem(ApplicationConstant.DataFieldType_BOOLEAN, FontAwesome.CIRCLE_O, this.createDataCustomPropertyMenuItemCommand);
@@ -115,7 +108,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         this.createTypePropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedTypePropertyName=selectedItem.getText();
-                //addTypePropertyEditUI(selectedTypePropertyName);
+                addTypePropertyEditUI(selectedTypePropertyName,null);
             }
         };
 
@@ -129,7 +122,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         this.removeDataPropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedPropertyName=selectedItem.getText();
-                //removeDataProperty(selectedPropertyName,selectedItem);
+                removeDataProperty(selectedPropertyName,selectedItem);
             }
         };
     }
@@ -239,6 +232,8 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         setDisableFormEditableStatue(false);
         this.dataPropertiesEditorMap.clear();
         this.propertiesEditForm.removeAllComponents();
+        this.removeDataPropertyMenuItem.removeChildren();
+        this.propertiesToDeleteList.clear();
         List<String> dataInstanceProperties=this.measurableValue.getPropertyNames();
         if(dataInstanceProperties!=null){
             for(String currentPropertyName:dataInstanceProperties){
@@ -265,7 +260,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         if(this.editPropertiesButton.getCaption().equals(this.editPropertiesButtonCaption)){
             setDisableFormEditableStatue(false);
         }else{
-System.out.println("dddd");
+            System.out.println("dddd");
         }
     }
 
@@ -404,15 +399,8 @@ System.out.println("dddd");
         UI.getCurrent().addWindow(window);
     }
 
-
     @Override
     public void inputPropertyNameActionFinish(String propertyNameValue) {
-        System.out.println(propertyNameValue);
-        System.out.println(propertyNameValue);
-        System.out.println(propertyNameValue);
-        System.out.println(propertyNameValue);
-
-
         String dataTypeStr="---";
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(this.measurableValue.getMeasurableTypeKind())){
             dataTypeStr="维度";
@@ -423,10 +411,24 @@ System.out.println("dddd");
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(this.measurableValue.getMeasurableTypeKind())){
             dataTypeStr="关系";
         }
-
-
-
-
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(propertyNameValue);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+propertyNameValue+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(propertyNameValue);
+        if(containsSpecialChars){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+propertyNameValue+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         if(this.currentTempCustomPropertyDataType!=null){
             Field propertyEditor=this.dataPropertiesEditorMap.get(propertyNameValue);
             if(propertyEditor!=null){
@@ -446,7 +448,6 @@ System.out.println("dddd");
                 errorNotification.setIcon(FontAwesome.WARNING);
                 return;
             }
-
             PropertyTypeVO dataCustomPropertyTypeVO=new PropertyTypeVO();
             dataCustomPropertyTypeVO.setPropertySourceOwner(this.measurableValue.getMeasurableTypeName());
             dataCustomPropertyTypeVO.setReadOnly(false);
@@ -454,16 +455,23 @@ System.out.println("dddd");
             dataCustomPropertyTypeVO.setMandatory(false);
             dataCustomPropertyTypeVO.setPropertyName(propertyNameValue);
             dataCustomPropertyTypeVO.setPropertyType(this.currentTempCustomPropertyDataType);
-
             this.typePropertiesInfoMap.put(propertyNameValue,dataCustomPropertyTypeVO);
             this.addTypePropertyEditUI(propertyNameValue,null);
         }
+    }
+
+
+    private void removeDataProperty(String properTyName,MenuBar.MenuItem propertyMenuItem){
+        Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
+        this.propertiesEditForm.removeComponent(propertyEditor);
+        this.dataPropertiesEditorMap.remove(properTyName);
+        this.typePropertiesInfoMap.remove(properTyName);
+        propertyEditor.discard();
+        this.removeDataPropertyMenuItem.removeChild(propertyMenuItem);
+        this.propertiesToDeleteList.add(properTyName);
 
 
 
-
-
-
-
+        this.dataPropertiesEditorMap.remove(properTyName);
     }
 }
