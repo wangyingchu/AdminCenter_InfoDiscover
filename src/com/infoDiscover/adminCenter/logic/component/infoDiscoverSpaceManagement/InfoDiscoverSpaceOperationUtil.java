@@ -894,4 +894,171 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return measurableValueList;
     }
+
+
+    public static boolean updateMeasurableProperties(String spaceName,String measurableId,List<PropertyValueVO> propertiesValue){
+        if(propertiesValue==null){
+            return false;
+        }
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            Measurable targetMeasurable = targetSpace.getMeasurableById(measurableId);
+            if(targetMeasurable==null){
+                return false;
+            }
+            List<String> currentPropertiesNameList= targetMeasurable.getPropertyNames();
+            //remove properties not contained in new PropertyValue List
+            if(currentPropertiesNameList!=null){
+                for(String currentPropertyName:currentPropertiesNameList){
+                    if(!propertyContainedInPropertyValueList(currentPropertyName,propertiesValue)){
+                        boolean resultPropertyResult=targetMeasurable.removeProperty(currentPropertyName);
+                        if(!resultPropertyResult){
+                            return false;
+                        }
+                    }
+                }
+            }
+            for(PropertyValueVO currentNewPropertyValue:propertiesValue){
+                String propertyName=currentNewPropertyValue.getPropertyName();
+                if(!targetMeasurable.hasProperty(propertyName)){
+                    //add new property value
+                    addMeasurableProperty(targetMeasurable,currentNewPropertyValue);
+                }else{
+                    //update existing property value
+                    updateMeasurableProperty(targetMeasurable,currentNewPropertyValue);
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return true;
+    }
+
+    private static boolean propertyContainedInPropertyValueList(String propertyName,List<PropertyValueVO> propertiesValue){
+        if(propertiesValue==null){
+            return false;
+        }
+        for(PropertyValueVO currentPropertyValue:propertiesValue){
+            if(currentPropertyValue.getPropertyName().equals(propertyName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void addMeasurableProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
+        String propertyName=currentPropertyValueVO.getPropertyName();
+        String propertyType=currentPropertyValueVO.getPropertyType();
+        Object propertyValue=currentPropertyValueVO.getPropertyValue();
+        if(propertyValue!=null){
+            switch(propertyType){
+                case ApplicationConstant.DataFieldType_STRING:
+                    String stringValue=propertyValue.toString();
+                    measurable.addProperty(propertyName,stringValue);
+                    break;
+                case ApplicationConstant.DataFieldType_BOOLEAN:
+                    String valueText=propertyValue.toString();
+                    boolean booleanValue=Boolean.parseBoolean(valueText);
+                    measurable.addProperty(propertyName,booleanValue);
+                    break;
+                case ApplicationConstant.DataFieldType_DATE:
+                    Date dateValue=(Date)propertyValue;
+                    measurable.addProperty(propertyName,dateValue);
+                    break;
+                case ApplicationConstant.DataFieldType_INT:
+                    int intValue=((Integer)propertyValue).intValue();
+                    measurable.addProperty(propertyName,intValue);
+                    break;
+                case ApplicationConstant.DataFieldType_LONG:
+                    long longValue=((Long)propertyValue).longValue();
+                    measurable.addProperty(propertyName,longValue);
+                    break;
+                case ApplicationConstant.DataFieldType_DOUBLE:
+                    double doubleValue=((Double)propertyValue).doubleValue();
+                    measurable.addProperty(propertyName,doubleValue);
+                    break;
+                case ApplicationConstant.DataFieldType_FLOAT:
+                    float floatValue=((Float)propertyValue).floatValue();
+                    measurable.addProperty(propertyName,floatValue);
+                    break;
+                case ApplicationConstant.DataFieldType_SHORT:
+                    short shortValue=((Short)propertyValue).shortValue();
+                    measurable.addProperty(propertyName,shortValue);
+                    break;
+                case ApplicationConstant.DataFieldType_BYTE:
+                    byte byteValue=((Byte)propertyValue).byteValue();
+                    measurable.addProperty(propertyName,byteValue);
+                    break;
+                case ApplicationConstant.DataFieldType_BINARY:
+                    byte[] binaryValue=(byte[])propertyValue;
+                    measurable.addProperty(propertyName,binaryValue);
+                    break;
+            }
+        }
+    }
+
+    private static void updateMeasurableProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
+        String propertyName=currentPropertyValueVO.getPropertyName();
+        String propertyType=currentPropertyValueVO.getPropertyType();
+        Object propertyValue=currentPropertyValueVO.getPropertyValue();
+
+        Property measurableCurrentProperty=measurable.getProperty(propertyName);
+        PropertyType currentPropertyType=measurableCurrentProperty.getPropertyType();
+
+        if(!currentPropertyType.toString().equals(propertyType)){
+            measurable.removeProperty(propertyName);
+            addMeasurableProperty(measurable,currentPropertyValueVO);
+        }else{
+            if(propertyValue!=null){
+                switch(propertyType){
+                    case ApplicationConstant.DataFieldType_STRING:
+                        String stringValue=propertyValue.toString();
+                        measurable.updateProperty(propertyName,stringValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_BOOLEAN:
+                        String valueText=propertyValue.toString();
+                        boolean booleanValue=Boolean.parseBoolean(valueText);
+                        measurable.updateProperty(propertyName,booleanValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_DATE:
+                        Date dateValue=(Date)propertyValue;
+                        measurable.updateProperty(propertyName,dateValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_INT:
+                        int intValue=((Integer)propertyValue).intValue();
+                        measurable.updateProperty(propertyName,intValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_LONG:
+                        long longValue=((Long)propertyValue).longValue();
+                        measurable.updateProperty(propertyName,longValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_DOUBLE:
+                        double doubleValue=((Double)propertyValue).doubleValue();
+                        measurable.updateProperty(propertyName,doubleValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_FLOAT:
+                        float floatValue=((Float)propertyValue).floatValue();
+                        measurable.updateProperty(propertyName,floatValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_SHORT:
+                        short shortValue=((Short)propertyValue).shortValue();
+                        measurable.updateProperty(propertyName,shortValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_BYTE:
+                        byte byteValue=((Byte)propertyValue).byteValue();
+                        measurable.updateProperty(propertyName,byteValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_BINARY:
+                        byte[] binaryValue=(byte[])propertyValue;
+                        measurable.updateProperty(propertyName,binaryValue);
+                        break;
+                }
+            }
+        }
+    }
 }

@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -13,6 +14,7 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -40,18 +42,18 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
     private HorizontalLayout editorFormFooter;
     private String editPropertiesButtonCaption="---";
     private String currentTempCustomPropertyDataType;
-    private List<String> propertiesToDeleteList;
 
     public TypeDataInstancePropertiesEditorPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue){
         this.currentUserClientInfo=userClientInfo;
         this.measurableValue=measurableValue;
         this.typePropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
         this.dataPropertiesEditorMap =new HashMap<String,Field>();
-        this.propertiesToDeleteList=new ArrayList<String>();
+
         MenuBar addRecordOperationMenuBar = new MenuBar();
         addRecordOperationMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         addRecordOperationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
         this.createTypeDefinedPropertyMenuItem = addRecordOperationMenuBar.addItem("添加类型预定义属性", FontAwesome.CODE_FORK, null);
+
         this.createDataCustomPropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedPropertyDataType=selectedItem.getText();
@@ -112,13 +114,6 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             }
         };
 
-        this.createDataCustomPropertyMenuItemCommand = new MenuBar.Command() {
-            public void menuSelected(MenuBar.MenuItem selectedItem) {
-                String selectedPropertyDataType=selectedItem.getText();
-                //addDataCustomPropertyEditUI(selectedPropertyDataType);
-            }
-        };
-
         this.removeDataPropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedPropertyName=selectedItem.getText();
@@ -136,10 +131,12 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             if(dimensionTypePropertiesList!=null){
                 for(PropertyTypeVO currentPropertyTypeVO:dimensionTypePropertiesList){
                     this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
-                    }else{
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                    if(!currentPropertyTypeVO.isMandatory()) {
+                        if (this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())) {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
+                        } else {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                        }
                     }
                 }
             }
@@ -150,10 +147,12 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             if(factTypePropertiesList!=null){
                 for(PropertyTypeVO currentPropertyTypeVO:factTypePropertiesList){
                     this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
-                    }else{
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                    if(!currentPropertyTypeVO.isMandatory()) {
+                        if (this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())) {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
+                        } else {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                        }
                     }
                 }
             }
@@ -164,31 +163,51 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             if(factTypePropertiesList!=null){
                 for(PropertyTypeVO currentPropertyTypeVO:factTypePropertiesList){
                     this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
-                    }else{
-                        this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                    if(!currentPropertyTypeVO.isMandatory()) {
+                        if (this.measurableValue.getMeasurableTypeName().equals(currentPropertyTypeVO.getPropertySourceOwner())) {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
+                        } else {
+                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
+                        }
                     }
                 }
             }
         }
         this.editPropertiesButton.setCaption(this.editPropertiesButtonCaption);
         List<String> dataInstanceProperties=this.measurableValue.getPropertyNames();
+
+        Set<String> typePropertiesNameSet=this.typePropertiesInfoMap.keySet();
+        Iterator<String> nameIterator=typePropertiesNameSet.iterator();
+        while(nameIterator.hasNext()){
+            String currentName=nameIterator.next();
+            PropertyTypeVO currentPropertyTypeVO=this.typePropertiesInfoMap.get(currentName);
+            if(currentPropertyTypeVO.isMandatory()){
+                PropertyValueVO currentMandatoryPropertyValueVO=this.measurableValue.getPropertyValue(currentName);
+                if(currentMandatoryPropertyValueVO!=null){
+                    addTypePropertyEditUI(currentName,currentMandatoryPropertyValueVO.getPropertyValue());
+                }else{
+                    addTypePropertyEditUI(currentPropertyTypeVO.getPropertyName(),null);
+                }
+            }
+        }
+
         if(dataInstanceProperties!=null){
             for(String currentPropertyName:dataInstanceProperties){
-                PropertyValueVO currentPropertyValueVO=this.measurableValue.getPropertyValue(currentPropertyName);
-                if(currentPropertyValueVO!=null){
-                    if(this.typePropertiesInfoMap.get(currentPropertyName)==null){
-                        PropertyTypeVO currentPropertyTypeVO=new PropertyTypeVO();
-                        currentPropertyTypeVO.setPropertyName(currentPropertyValueVO.getPropertyName());
-                        currentPropertyTypeVO.setPropertyType(currentPropertyValueVO.getPropertyType());
-                        currentPropertyTypeVO.setReadOnly(false);
-                        currentPropertyTypeVO.setNullable(false);
-                        currentPropertyTypeVO.setMandatory(false);
-                        currentPropertyTypeVO.setPropertySourceOwner(this.measurableValue.getMeasurableTypeName());
-                        this.typePropertiesInfoMap.put(currentPropertyValueVO.getPropertyName(), currentPropertyTypeVO);
+                if(this.dataPropertiesEditorMap.get(currentPropertyName)==null){
+                    PropertyValueVO currentPropertyValueVO=this.measurableValue.getPropertyValue(currentPropertyName);
+                    if(currentPropertyValueVO!=null){
+                        if(this.typePropertiesInfoMap.get(currentPropertyName)==null){
+                            PropertyTypeVO currentPropertyTypeVO=new PropertyTypeVO();
+                            currentPropertyTypeVO.setPropertyName(currentPropertyValueVO.getPropertyName());
+                            currentPropertyTypeVO.setPropertyType(currentPropertyValueVO.getPropertyType());
+                            currentPropertyTypeVO.setReadOnly(false);
+                            currentPropertyTypeVO.setNullable(false);
+                            currentPropertyTypeVO.setMandatory(false);
+                            currentPropertyTypeVO.setPropertySourceOwner(this.measurableValue.getMeasurableTypeName());
+                            this.typePropertiesInfoMap.put(currentPropertyValueVO.getPropertyName(), currentPropertyTypeVO);
+                        }
+                        addTypePropertyEditUI(currentPropertyName,currentPropertyValueVO.getPropertyValue());
                     }
-                    addTypePropertyEditUI(currentPropertyName,this.measurableValue.getPropertyValue(currentPropertyName).getPropertyValue());
                 }
             }
         }
@@ -201,7 +220,9 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         while(keyIterator.hasNext()){
             Field currentField=this.dataPropertiesEditorMap.get(keyIterator.next());
             if(currentField!=null){
-                currentField.setReadOnly(status);
+                currentField.setEnabled(!status);
+                //if use setReadOnly will lead to a defect that the date field can not input time value
+                //currentField.setReadOnly(status);
             }
         }
     }
@@ -233,7 +254,6 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         this.dataPropertiesEditorMap.clear();
         this.propertiesEditForm.removeAllComponents();
         this.removeDataPropertyMenuItem.removeChildren();
-        this.propertiesToDeleteList.clear();
         List<String> dataInstanceProperties=this.measurableValue.getPropertyNames();
         if(dataInstanceProperties!=null){
             for(String currentPropertyName:dataInstanceProperties){
@@ -260,7 +280,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         if(this.editPropertiesButton.getCaption().equals(this.editPropertiesButtonCaption)){
             setDisableFormEditableStatue(false);
         }else{
-            System.out.println("dddd");
+            updateDataInstanceProperties();
         }
     }
 
@@ -297,26 +317,31 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_INT+"] "+propertyName);
                     ((TextField)currentPropertyEditor).setConverter(Integer.class);
                     currentPropertyEditor.addValidator(new IntegerRangeValidator("该项属性值必须为INT类型", null,null));
+                    ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_LONG:
                     currentPropertyEditor=new TextField("["+ ApplicationConstant.DataFieldType_LONG+"] "+propertyName);
                     ((TextField)currentPropertyEditor).setConverter(Long.class);
                     currentPropertyEditor.addValidator(new LongRangeValidator("该项属性值必须为LONG类型", null,null));
+                    ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_DOUBLE:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_DOUBLE+"] "+propertyName);
                     ((TextField)currentPropertyEditor).setConverter(Double.class);
                     currentPropertyEditor.addValidator(new DoubleRangeValidator("该项属性值必须为DOUBLE类型", null,null));
+                    ((TextField)currentPropertyEditor).setValue("0.0");
                     break;
                 case ApplicationConstant.DataFieldType_FLOAT:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_FLOAT+"] "+propertyName);
                     ((TextField)currentPropertyEditor).setConverter(Float.class);
                     currentPropertyEditor.addValidator(new FloatRangeValidator("该项属性值必须为FLOAT类型", null,null));
+                    ((TextField)currentPropertyEditor).setValue("0.0");
                     break;
                 case ApplicationConstant.DataFieldType_SHORT:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_SHORT+"] "+propertyName);
                     ((TextField)currentPropertyEditor).setConverter(Short.class);
                     currentPropertyEditor.addValidator(new ShortRangeValidator("该项属性值必须为SHORT类型", null,null));
+                    ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_BYTE:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BYTE+"] "+propertyName);
@@ -361,7 +386,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
                 propertyEditor.setValue(((Boolean) propertyValue).toString());
                 break;
             case ApplicationConstant.DataFieldType_DATE:
-                propertyEditor.setValue(((Date) propertyValue));
+                propertyEditor.setValue(( propertyValue));
                 break;
             case ApplicationConstant.DataFieldType_INT:
                 ((TextField)propertyEditor).setValue(propertyValue.toString());
@@ -460,18 +485,134 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         }
     }
 
-
     private void removeDataProperty(String properTyName,MenuBar.MenuItem propertyMenuItem){
         Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
         this.propertiesEditForm.removeComponent(propertyEditor);
         this.dataPropertiesEditorMap.remove(properTyName);
-        this.typePropertiesInfoMap.remove(properTyName);
         propertyEditor.discard();
         this.removeDataPropertyMenuItem.removeChild(propertyMenuItem);
-        this.propertiesToDeleteList.add(properTyName);
+    }
 
+    private void updateDataInstanceProperties(){
+        Set<String> editorMapKeySet=this.dataPropertiesEditorMap.keySet();
+        Iterator<String> keyIterator=editorMapKeySet.iterator();
+        while(keyIterator.hasNext()){
+            String currentKey=keyIterator.next();
+            boolean currentEditorValidateResult=this.dataPropertiesEditorMap.get(currentKey).isValid();
+            if(!currentEditorValidateResult){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "属性 "+currentKey+" 当前输入值非法", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+        }
+        String dataTypeForConfirm ="数据";
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(this.measurableValue.getMeasurableTypeKind())){
+            dataTypeForConfirm ="维度数据";
+        }
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(this.measurableValue.getMeasurableTypeKind())){
+            dataTypeForConfirm ="事实数据";
+        }
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(this.measurableValue.getMeasurableTypeKind())){
+            dataTypeForConfirm ="关系数据";
+        }
 
+        String confirmMessageString=" 请确认更新当前"+dataTypeForConfirm+" "+this.measurableValue.getMeasurableTypeName()+"/"+this.measurableValue.getId()+" 的属性";
+        Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
 
-        this.dataPropertiesEditorMap.remove(properTyName);
+        final ConfirmDialog updateDataPropertiesConfirmDialog = new ConfirmDialog();
+        updateDataPropertiesConfirmDialog.setConfirmMessage(confirmMessage);
+
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                updateDataPropertiesConfirmDialog.close();
+                List<PropertyValueVO> dataProperties=retrievePropertyValueObjects();
+
+                InfoDiscoverSpaceOperationUtil.updateMeasurableProperties(measurableValue.getDiscoverSpaceName(),measurableValue.getId(),dataProperties);
+
+                /*
+                boolean createTypePropertyResult=false;
+                if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(measurableValue.getMeasurableTypeKind())){
+                    createTypePropertyResult=InfoDiscoverSpaceOperationUtil.createDimension(getDiscoverSpaceName(), getDataInstanceTypeName(),dataProperties);
+                }
+                if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(measurableValue.getMeasurableTypeKind())){
+                    createTypePropertyResult=InfoDiscoverSpaceOperationUtil.createFact(getDiscoverSpaceName(), getDataInstanceTypeName(),dataProperties);
+                }
+                if(createTypePropertyResult){
+                    Notification resultNotification = new Notification("添加数据操作成功",
+                            "创建"+dataTypeMessageStr+"成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                }else{
+                    Notification errorNotification = new Notification("创建"+dataTypeMessageStr+"错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+                */
+
+            }
+        };
+        updateDataPropertiesConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(updateDataPropertiesConfirmDialog);
+    }
+
+    private List<PropertyValueVO> retrievePropertyValueObjects(){
+        List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+
+        Set<String> editorMapKeySet=this.dataPropertiesEditorMap.keySet();
+        Iterator<String> keyIterator=editorMapKeySet.iterator();
+        while(keyIterator.hasNext()){
+            String currentKey=keyIterator.next();
+            Field currentField=this.dataPropertiesEditorMap.get(currentKey);
+            PropertyTypeVO currentPropertyTypeVO=this.typePropertiesInfoMap.get(currentKey);
+            String currentPropertyDataType=currentPropertyTypeVO.getPropertyType();
+
+            PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+            currentPropertyValueVO.setPropertyType(currentPropertyDataType);
+            currentPropertyValueVO.setPropertyName(currentKey);
+            propertyValueVOList.add(currentPropertyValueVO);
+            Object propertyValueObj=null;
+            switch(currentPropertyDataType){
+                case ApplicationConstant.DataFieldType_STRING:
+                    propertyValueObj=((TextField)currentField).getValue();
+                    break;
+                case ApplicationConstant.DataFieldType_BOOLEAN:
+                    propertyValueObj=((ComboBox)currentField).getValue();
+                    break;
+                case ApplicationConstant.DataFieldType_DATE:
+                    propertyValueObj=((PopupDateField)currentField).getValue();
+                    break;
+                case ApplicationConstant.DataFieldType_INT:
+                    propertyValueObj=((TextField)currentField).getConvertedValue();
+                    break;
+                case ApplicationConstant.DataFieldType_LONG:
+                    propertyValueObj=((TextField)currentField).getConvertedValue();
+                    break;
+                case ApplicationConstant.DataFieldType_DOUBLE:
+                    propertyValueObj=((TextField)currentField).getConvertedValue();
+                    break;
+                case ApplicationConstant.DataFieldType_FLOAT:
+                    propertyValueObj=((TextField)currentField).getConvertedValue();
+                    break;
+                case ApplicationConstant.DataFieldType_SHORT:
+                    propertyValueObj=((TextField)currentField).getConvertedValue();
+                    break;
+                /*
+                case ApplicationConstant.DataFieldType_BYTE:
+                    break;
+                case ApplicationConstant.DataFieldType_BINARY:
+                    break;
+                */
+            }
+            currentPropertyValueVO.setPropertyValue(propertyValueObj);
+        }
+        return propertyValueVOList;
     }
 }

@@ -319,7 +319,6 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
         this.propertiesEditForm.removeComponent(propertyEditor);
         this.dataPropertiesEditorMap.remove(properTyName);
-        this.typePropertiesInfoMap.remove(properTyName);
         propertyEditor.discard();
         this.removeDataPropertyMenuItem.removeChild(propertyMenuItem);
     }
