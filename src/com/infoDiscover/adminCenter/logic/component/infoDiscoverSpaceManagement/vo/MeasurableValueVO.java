@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,6 @@ public class MeasurableValueVO {
     private String discoverSpaceName;
     private String measurableTypeName;
     private String measurableTypeKind;
-    private List<String> propertyNames;
     private List<PropertyValueVO> properties;
 
     public String getId() {
@@ -22,11 +22,13 @@ public class MeasurableValueVO {
     }
 
     public List<String> getPropertyNames() {
-        return propertyNames;
-    }
-
-    public void setPropertyNames(List<String> propertyNames) {
-        this.propertyNames = propertyNames;
+        List<String> propertiesNameList=new ArrayList<String>();
+        if(getProperties()!=null){
+            for(PropertyValueVO propertyValueVO:getProperties()){
+                propertiesNameList.add(propertyValueVO.getPropertyName());
+            }
+        }
+        return propertiesNameList;
     }
 
     public List<PropertyValueVO> getProperties() {

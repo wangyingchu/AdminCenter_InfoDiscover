@@ -41,6 +41,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
     private MenuBar.Command createDataCustomPropertyMenuItemCommand;
     private MenuBar.Command removeDataPropertyMenuItemCommand;
     private Map<String,PropertyTypeVO> typePropertiesInfoMap;
+    private Map<String,PropertyTypeVO> dataPropertiesInfoMap;
     private Map<String,Field> dataPropertiesEditorMap;
     private String currentTempCustomPropertyDataType;
     private MainSectionTitle addNewTypeDataInstanceSectionTitle;
@@ -50,6 +51,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
     public CreateTypeDataInstancePanel(UserClientInfo userClientInfo){
         this.currentUserClientInfo=userClientInfo;
         this.typePropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
+        this.dataPropertiesInfoMap=new HashMap<String,PropertyTypeVO>();
         this.dataPropertiesEditorMap =new HashMap<String,Field>();
         setSpacing(true);
         setMargin(true);
@@ -76,7 +78,6 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         this.propertiesEditForm.setMargin(false);
         this.propertiesEditForm.setWidth("100%");
         this.propertiesEditForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        addComponent(this.propertiesEditForm);
 
         Panel dataCountFormContainerPanel = new Panel();
         dataCountFormContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -105,7 +106,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         this.createTypePropertyMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
                 String selectedTypePropertyName=selectedItem.getText();
-                addTypePropertyEditUI(selectedTypePropertyName);
+                addTypePropertyEditUI(typePropertiesInfoMap.get(selectedTypePropertyName));
             }
         };
 
@@ -169,18 +170,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
 
             List<PropertyTypeVO> dimensionTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
             if(dimensionTypePropertiesList!=null){
-                for(PropertyTypeVO currentPropertyTypeVO:dimensionTypePropertiesList){
-                    this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(currentPropertyTypeVO.isMandatory()){
-                        addTypePropertyEditUI(currentPropertyTypeVO.getPropertyName());
-                    }else{
-                        if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
-                        }else{
-                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
-                        }
-                    }
-                }
+                generateTypePropertiesEditUIElements(dimensionTypePropertiesList);
             }
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
@@ -192,42 +182,29 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
 
             List<PropertyTypeVO> factTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
             if(factTypePropertiesList!=null){
-                for(PropertyTypeVO currentPropertyTypeVO:factTypePropertiesList){
-                    this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(currentPropertyTypeVO.isMandatory()){
-                        addTypePropertyEditUI(currentPropertyTypeVO.getPropertyName());
-                    }else{
-                        if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
-                        }else{
-                            this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
-                        }
-                    }
+                generateTypePropertiesEditUIElements(factTypePropertiesList);
+            }
+        }
+    }
+
+    private void generateTypePropertiesEditUIElements(List<PropertyTypeVO> typePropertiesList){
+        for(PropertyTypeVO currentPropertyTypeVO:typePropertiesList){
+            this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
+            if(currentPropertyTypeVO.isMandatory()){
+                addTypePropertyEditUI(currentPropertyTypeVO);
+            }else{
+                if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
+                    this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.createTypePropertyMenuItemCommand);
+                }else{
+                    this.createTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.createTypePropertyMenuItemCommand);
                 }
             }
         }
     }
 
-    private void addTypePropertyEditUI(String properTyName){
+    private void addTypePropertyEditUI(PropertyTypeVO dataCustomPropertyType){
+        String properTyName=dataCustomPropertyType.getPropertyName();
         Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
-        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(properTyName);
-        if(!isSingleByteString){
-            Notification errorNotification = new Notification("数据校验错误",
-                    "当前输入属性名称 "+properTyName+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
-            errorNotification.setPosition(Position.MIDDLE_CENTER);
-            errorNotification.show(Page.getCurrent());
-            errorNotification.setIcon(FontAwesome.WARNING);
-            return;
-        }
-        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(properTyName);
-        if(containsSpecialChars){
-            Notification errorNotification = new Notification("数据校验错误",
-                    "当前输入属性名称 "+properTyName+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
-            errorNotification.setPosition(Position.MIDDLE_CENTER);
-            errorNotification.show(Page.getCurrent());
-            errorNotification.setIcon(FontAwesome.WARNING);
-            return;
-        }
         if(propertyEditor!=null){
             Notification errorNotification = new Notification("数据校验错误",
                     "属性 "+properTyName+" 已存在", Notification.Type.ERROR_MESSAGE);
@@ -236,10 +213,9 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        PropertyTypeVO propertyType=this.typePropertiesInfoMap.get(properTyName);
-        if(propertyType!=null){
-            String propertyName=propertyType.getPropertyName();
-            String propertyDataType=propertyType.getPropertyType();
+        if(dataCustomPropertyType!=null){
+            String propertyName=dataCustomPropertyType.getPropertyName();
+            String propertyDataType=dataCustomPropertyType.getPropertyType();
             Field currentPropertyEditor=null;
             switch(propertyDataType){
                 case ApplicationConstant.DataFieldType_STRING:
@@ -293,23 +269,25 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
                     break;
             }
             if(currentPropertyEditor!=null){
-                if(propertyType.isMandatory()){
+                if(dataCustomPropertyType.isMandatory()){
                     currentPropertyEditor.setRequired(true);
                 }
-                if(propertyType.isReadOnly()){
+                if(dataCustomPropertyType.isReadOnly()){
                     currentPropertyEditor.setReadOnly(true);
                 }
-                if(!propertyType.isNullable()){
+                if(!dataCustomPropertyType.isNullable()){
                     currentPropertyEditor.addValidator(new NullValidator("该项属性值不允许为空", false));
                 }
             }
+
+            this.dataPropertiesInfoMap.put(properTyName,dataCustomPropertyType);
             this.dataPropertiesEditorMap.put(properTyName, currentPropertyEditor);
             this.propertiesEditForm.addComponent(currentPropertyEditor);
-            if(!propertyType.isMandatory()) {
-                if (dataInstanceTypeName.equals(propertyType.getPropertySourceOwner())) {
-                    this.removeDataPropertyMenuItem.addItem(propertyType.getPropertyName(), FontAwesome.CIRCLE_O, this.removeDataPropertyMenuItemCommand);
+            if(!dataCustomPropertyType.isMandatory()) {
+                if (dataInstanceTypeName.equals(dataCustomPropertyType.getPropertySourceOwner())) {
+                    this.removeDataPropertyMenuItem.addItem(dataCustomPropertyType.getPropertyName(), FontAwesome.CIRCLE_O, this.removeDataPropertyMenuItemCommand);
                 } else {
-                    this.removeDataPropertyMenuItem.addItem(propertyType.getPropertyName(), FontAwesome.REPLY_ALL, this.removeDataPropertyMenuItemCommand);
+                    this.removeDataPropertyMenuItem.addItem(dataCustomPropertyType.getPropertyName(), FontAwesome.REPLY_ALL, this.removeDataPropertyMenuItemCommand);
                 }
             }
         }
@@ -319,6 +297,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         Field propertyEditor=this.dataPropertiesEditorMap.get(properTyName);
         this.propertiesEditForm.removeComponent(propertyEditor);
         this.dataPropertiesEditorMap.remove(properTyName);
+        this.dataPropertiesInfoMap.remove(properTyName);
         propertyEditor.discard();
         this.removeDataPropertyMenuItem.removeChild(propertyMenuItem);
     }
@@ -346,6 +325,24 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
             dataTypeStr="事实";
         }
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(propertyNameValue);
+        if(!isSingleByteString){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+propertyNameValue+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(propertyNameValue);
+        if(containsSpecialChars){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入属性名称 "+propertyNameValue+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         if(this.currentTempCustomPropertyDataType!=null){
             Field propertyEditor=this.dataPropertiesEditorMap.get(propertyNameValue);
             if(propertyEditor!=null){
@@ -365,7 +362,6 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
                 errorNotification.setIcon(FontAwesome.WARNING);
                 return;
             }
-
             PropertyTypeVO dataCustomPropertyTypeVO=new PropertyTypeVO();
             dataCustomPropertyTypeVO.setPropertySourceOwner(this.getDataInstanceTypeName());
             dataCustomPropertyTypeVO.setReadOnly(false);
@@ -374,8 +370,8 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
             dataCustomPropertyTypeVO.setPropertyName(propertyNameValue);
             dataCustomPropertyTypeVO.setPropertyType(this.currentTempCustomPropertyDataType);
 
-            this.typePropertiesInfoMap.put(propertyNameValue,dataCustomPropertyTypeVO);
-            this.addTypePropertyEditUI(propertyNameValue);
+            this.dataPropertiesInfoMap.put(propertyNameValue,dataCustomPropertyTypeVO);
+            this.addTypePropertyEditUI(dataCustomPropertyTypeVO);
         }
     }
 
@@ -459,7 +455,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
         while(keyIterator.hasNext()){
             String currentKey=keyIterator.next();
             Field currentField=this.dataPropertiesEditorMap.get(currentKey);
-            PropertyTypeVO currentPropertyTypeVO=this.typePropertiesInfoMap.get(currentKey);
+            PropertyTypeVO currentPropertyTypeVO=this.dataPropertiesInfoMap.get(currentKey);
             String currentPropertyDataType=currentPropertyTypeVO.getPropertyType();
 
             PropertyValueVO currentPropertyValueVO=new PropertyValueVO();

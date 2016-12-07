@@ -59,13 +59,6 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
 
         TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
         addComponent(typeDataInstancePropertiesEditorPanel);
-
-        CreateTypeDataInstancePanel createTypeDataInstancePanel=new CreateTypeDataInstancePanel(this.currentUserClientInfo);
-        createTypeDataInstancePanel.setDiscoverSpaceName(this.measurableValue.getDiscoverSpaceName());
-        createTypeDataInstancePanel.setDataInstanceTypeName(this.measurableValue.getMeasurableTypeName());
-        createTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
-
-        addComponent(createTypeDataInstancePanel);
     }
 
     public void setContainerDialog(Window containerDialog) {

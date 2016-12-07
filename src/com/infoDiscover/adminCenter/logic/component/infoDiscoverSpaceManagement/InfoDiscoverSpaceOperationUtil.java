@@ -16,9 +16,7 @@ import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wangychu on 9/30/16.
@@ -866,7 +864,6 @@ public class InfoDiscoverSpaceOperationUtil {
                     currentMeasurableValueVO.setId(currentDimension.getId());
                     currentMeasurableValueVO.setMeasurableTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
                     currentMeasurableValueVO.setMeasurableTypeName(currentDimension.getType());
-                    currentMeasurableValueVO.setPropertyNames(currentDimension.getPropertyNames());
                     List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
                     currentMeasurableValueVO.setProperties(propertyValueVOList);
                     List<Property> propertiesList=currentDimension.getProperties();
@@ -895,7 +892,6 @@ public class InfoDiscoverSpaceOperationUtil {
         return measurableValueList;
     }
 
-
     public static boolean updateMeasurableProperties(String spaceName,String measurableId,List<PropertyValueVO> propertiesValue){
         if(propertiesValue==null){
             return false;
@@ -919,16 +915,31 @@ public class InfoDiscoverSpaceOperationUtil {
                     }
                 }
             }
+
+            Map<String, Object> propertiesNeedAddMap=new HashMap<String, Object>();
+            Map<String, Object> propertiesNeedAddUpdate=new HashMap<String, Object>();
+
             for(PropertyValueVO currentNewPropertyValue:propertiesValue){
                 String propertyName=currentNewPropertyValue.getPropertyName();
                 if(!targetMeasurable.hasProperty(propertyName)){
                     //add new property value
-                    addMeasurableProperty(targetMeasurable,currentNewPropertyValue);
+                    propertiesNeedAddMap.put(propertyName,getMeasurablePropertyValue(currentNewPropertyValue));
                 }else{
                     //update existing property value
-                    updateMeasurableProperty(targetMeasurable,currentNewPropertyValue);
+                    String propertyType=currentNewPropertyValue.getPropertyType();
+                    Property measurableCurrentProperty=targetMeasurable.getProperty(propertyName);
+                    PropertyType currentPropertyType=measurableCurrentProperty.getPropertyType();
+                    if(!currentPropertyType.toString().equals(propertyType)){
+                        targetMeasurable.removeProperty(propertyName);
+                        propertiesNeedAddMap.put(propertyName,getMeasurablePropertyValue(currentNewPropertyValue));
+                    }else{
+                        propertiesNeedAddUpdate.put(propertyName,getMeasurablePropertyValue(currentNewPropertyValue));
+                    }
                 }
             }
+            targetMeasurable.addProperties(propertiesNeedAddMap);
+            targetMeasurable.updateProperties(propertiesNeedAddUpdate);
+
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
         } finally {
@@ -951,7 +962,49 @@ public class InfoDiscoverSpaceOperationUtil {
         return false;
     }
 
-    private static void addMeasurableProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
+    private static Object getMeasurablePropertyValue(PropertyValueVO currentPropertyValueVO){
+        String propertyType=currentPropertyValueVO.getPropertyType();
+        Object propertyValue=currentPropertyValueVO.getPropertyValue();
+        Object measurablePropertyValue=null;
+        if(propertyValue!=null){
+            switch(propertyType){
+                case ApplicationConstant.DataFieldType_STRING:
+                    measurablePropertyValue=propertyValue.toString();
+                    break;
+                case ApplicationConstant.DataFieldType_BOOLEAN:
+                    String valueText=propertyValue.toString();
+                    measurablePropertyValue=Boolean.parseBoolean(valueText);
+                    break;
+                case ApplicationConstant.DataFieldType_DATE:
+                    measurablePropertyValue=(Date)propertyValue;
+                    break;
+                case ApplicationConstant.DataFieldType_INT:
+                    measurablePropertyValue=((Integer)propertyValue).intValue();
+                    break;
+                case ApplicationConstant.DataFieldType_LONG:
+                    measurablePropertyValue=((Long)propertyValue).longValue();
+                    break;
+                case ApplicationConstant.DataFieldType_DOUBLE:
+                    measurablePropertyValue=((Double)propertyValue).doubleValue();
+                    break;
+                case ApplicationConstant.DataFieldType_FLOAT:
+                    measurablePropertyValue=((Float)propertyValue).floatValue();
+                    break;
+                case ApplicationConstant.DataFieldType_SHORT:
+                    measurablePropertyValue=((Short)propertyValue).shortValue();
+                    break;
+                case ApplicationConstant.DataFieldType_BYTE:
+                    measurablePropertyValue=((Byte)propertyValue).byteValue();
+                    break;
+                case ApplicationConstant.DataFieldType_BINARY:
+                    measurablePropertyValue=(byte[])propertyValue;
+                    break;
+            }
+        }
+        return measurablePropertyValue;
+    }
+
+    public static void addMeasurableSingleProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
         String propertyName=currentPropertyValueVO.getPropertyName();
         String propertyType=currentPropertyValueVO.getPropertyType();
         Object propertyValue=currentPropertyValueVO.getPropertyValue();
@@ -1002,7 +1055,7 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
-    private static void updateMeasurableProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
+    public static void updateMeasurableSingleProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
         String propertyName=currentPropertyValueVO.getPropertyName();
         String propertyType=currentPropertyValueVO.getPropertyType();
         Object propertyValue=currentPropertyValueVO.getPropertyValue();
@@ -1012,7 +1065,7 @@ public class InfoDiscoverSpaceOperationUtil {
 
         if(!currentPropertyType.toString().equals(propertyType)){
             measurable.removeProperty(propertyName);
-            addMeasurableProperty(measurable,currentPropertyValueVO);
+            addMeasurableSingleProperty(measurable,currentPropertyValueVO);
         }else{
             if(propertyValue!=null){
                 switch(propertyType){
