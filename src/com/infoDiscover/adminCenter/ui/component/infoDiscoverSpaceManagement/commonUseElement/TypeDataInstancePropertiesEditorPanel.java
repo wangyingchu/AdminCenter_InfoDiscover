@@ -82,8 +82,8 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
 
         this.propertiesEditorContainerPanel = new Panel();
         this.propertiesEditorContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        this.propertiesEditorContainerPanel.setWidth("100%");
-        this.propertiesEditorContainerPanel.setHeight(550,Unit.PIXELS);
+        this.propertiesEditorContainerPanel.setWidth(480,Unit.PIXELS);
+        this.propertiesEditorContainerPanel.setHeight(570,Unit.PIXELS);
         this.propertiesEditorContainerPanel.setContent(this.propertiesEditForm);
         addComponent(propertiesEditorContainerPanel);
 

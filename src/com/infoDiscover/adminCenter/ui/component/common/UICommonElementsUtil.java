@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.common;
 
-import org.vaadin.teemu.VaadinIcons;
+
+import com.vaadin.icons.VaadinIcons;
 
 /**
  * Created by wangychu on 11/11/16.

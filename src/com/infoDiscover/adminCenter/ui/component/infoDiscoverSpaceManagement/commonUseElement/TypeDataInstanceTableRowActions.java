@@ -4,10 +4,10 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.teemu.VaadinIcons;
 
 /**
  * Created by wangychu on 11/8/16.
@@ -86,7 +86,7 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
         }
         TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,getMeasurableValue());
         final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-        window.setWidth(600, Unit.PIXELS);
+        window.setWidth(500, Unit.PIXELS);
         window.setHeight(800,Unit.PIXELS);
         window.setCaptionAsHtml(true);
         window.setResizable(true);

@@ -4,13 +4,11 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.shared.ui.window.WindowMode;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -22,6 +20,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
     private MeasurableValueVO measurableValue;
     private Window containerDialog;
     private TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel;
+    private VerticalLayout dataInteractionInfoLayout;
 
     public TypeDataInstanceDetailPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue) {
         this.currentUserClientInfo = userClientInfo;
@@ -33,33 +32,57 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         String dataTypeName=this.measurableValue.getMeasurableTypeName();
         String discoverSpaceName=this.measurableValue.getDiscoverSpaceName();
         String dataId=this.measurableValue.getId();
+
         String dataInstanceBasicInfoNoticeText;
-        String propertiesNoticeText;
+        //String propertiesNoticeText;
+        String dataInstanceTypeText;
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.TAGS.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
-            propertiesNoticeText="维度数据属性";
+            dataInstanceTypeText="维度数据";
         }else if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.CLONE.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
-            propertiesNoticeText="事实数据属性";
+            dataInstanceTypeText="事实数据";
         }else if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(dataTypeKind)){
-            propertiesNoticeText="关系数据属性";
+            dataInstanceTypeText="关系数据";
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
         }else{
-            propertiesNoticeText="数据属性";
+            dataInstanceTypeText="数据";
             dataInstanceBasicInfoNoticeText="";
         }
         Label sectionActionBarLabel=new Label(dataInstanceBasicInfoNoticeText, ContentMode.HTML);
         SectionActionsBar dataTypeNoticeActionsBar = new SectionActionsBar(sectionActionBarLabel);
         addComponent(dataTypeNoticeActionsBar);
 
-        Label dataPropertyTitle= new Label(FontAwesome.LIST_UL.getHtml() +" "+propertiesNoticeText, ContentMode.HTML);
+        HorizontalLayout dataInstanceDetailContainerLayout=new HorizontalLayout();
+        dataInstanceDetailContainerLayout.setHeight(100,Unit.PERCENTAGE);
+        addComponent(dataInstanceDetailContainerLayout);
+
+        //left side properties editor
+        VerticalLayout dataPropertyInfoLayout=new VerticalLayout();
+        dataPropertyInfoLayout.setHeight(100,Unit.PERCENTAGE);
+        dataPropertyInfoLayout.setWidth(485,Unit.PIXELS);
+
+        Label dataPropertyTitle= new Label(FontAwesome.LIST_UL.getHtml() +" "+dataInstanceTypeText+"属性", ContentMode.HTML);
         dataPropertyTitle.addStyleName(ValoTheme.LABEL_SMALL);
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
-        dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
-        addComponent(dataPropertyTitle);
+        dataPropertyInfoLayout.addComponent(dataPropertyTitle);
 
         typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
-        addComponent(typeDataInstancePropertiesEditorPanel);
+        dataPropertyInfoLayout.addComponent(typeDataInstancePropertiesEditorPanel);
+
+        dataInstanceDetailContainerLayout.addComponent(dataPropertyInfoLayout);
+
+        //right side data relation info editor
+        this.dataInteractionInfoLayout=new VerticalLayout();
+        this.dataInteractionInfoLayout.setHeight(100,Unit.PERCENTAGE);
+        this.dataInteractionInfoLayout.setWidth(500,Unit.PIXELS);
+        this.dataInteractionInfoLayout.addStyleName("ui_appSubViewContainer");
+
+        Label dataRelationInfoTitle= new Label(VaadinIcons.CLUSTER.getHtml() +" "+dataInstanceTypeText+"关联交互信息", ContentMode.HTML);
+        dataRelationInfoTitle.addStyleName(ValoTheme.LABEL_SMALL);
+        dataRelationInfoTitle.addStyleName("ui_appSectionLightDiv");
+        this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitle);
+        dataInstanceDetailContainerLayout.addComponent(this.dataInteractionInfoLayout);
     }
 
     @Override
@@ -78,14 +101,19 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
     private void setUIElementsSizeForWindowSizeChange(){
         Window containerDialog=this.getContainerDialog();
         int browserWindowHeight=UI.getCurrent().getPage().getBrowserWindowHeight();
+        int browserWindowWidth=UI.getCurrent().getPage().getBrowserWindowWidth();
         int containerWindowDialogFixHeight=(int)containerDialog.getHeight();
         int typeInstanceDetailPropertiesEditorContainerPanelHeight=0;
+        int dataRelationInfoLayoutWidth=500;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
-            typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-250;
+            typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
+            dataRelationInfoLayoutWidth=browserWindowWidth-510;
+
         }else{
-            typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-250;
+            typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-230;
         }
-        typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(typeInstanceDetailPropertiesEditorContainerPanelHeight);
+        this.typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(typeInstanceDetailPropertiesEditorContainerPanelHeight);
+        this.dataInteractionInfoLayout.setWidth(dataRelationInfoLayoutWidth,Unit.PIXELS);
     }
 
     public void setContainerDialog(Window containerDialog) {
