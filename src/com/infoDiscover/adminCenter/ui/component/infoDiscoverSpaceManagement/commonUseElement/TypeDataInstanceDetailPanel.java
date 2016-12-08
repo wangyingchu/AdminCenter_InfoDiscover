@@ -2,13 +2,13 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
-import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
-import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
@@ -21,6 +21,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private MeasurableValueVO measurableValue;
     private Window containerDialog;
+    private TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel;
 
     public TypeDataInstanceDetailPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue) {
         this.currentUserClientInfo = userClientInfo;
@@ -57,11 +58,41 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
         addComponent(dataPropertyTitle);
 
-        TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
+        typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
         addComponent(typeDataInstancePropertiesEditorPanel);
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        Window containerWindow=this.getContainerDialog();
+        containerWindow.addWindowModeChangeListener(new Window.WindowModeChangeListener() {
+            @Override
+            public void windowModeChanged(Window.WindowModeChangeEvent windowModeChangeEvent) {
+                setUIElementsSizeForWindowSizeChange();
+            }
+        });
+        setUIElementsSizeForWindowSizeChange();
+    }
+
+    private void setUIElementsSizeForWindowSizeChange(){
+        Window containerDialog=this.getContainerDialog();
+        int browserWindowHeight=UI.getCurrent().getPage().getBrowserWindowHeight();
+        int containerWindowDialogFixHeight=(int)containerDialog.getHeight();
+        int typeInstanceDetailPropertiesEditorContainerPanelHeight=0;
+        if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
+            typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-250;
+        }else{
+            typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-250;
+        }
+        typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(typeInstanceDetailPropertiesEditorContainerPanelHeight);
     }
 
     public void setContainerDialog(Window containerDialog) {
         this.containerDialog = containerDialog;
+    }
+
+    public Window getContainerDialog() {
+        return containerDialog;
     }
 }

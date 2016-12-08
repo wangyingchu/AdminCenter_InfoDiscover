@@ -112,6 +112,9 @@ public class TypeDataInstanceList extends VerticalLayout {
         dataContainer.removeAllItems();
         Container queryResultDataContainer = new IndexedContainer();
         this.typeDataInstanceTable.setContainerDataSource(queryResultDataContainer);
+        this.typeDataInstanceTable.addContainerProperty(" 操作",TypeDataInstanceTableRowActions.class,null);
+        this.typeDataInstanceTable.setColumnIcon(" 操作",FontAwesome.WRENCH);
+        this.typeDataInstanceTable.setColumnWidth(" 操作", 130);
         this.typeDataInstanceTable.addContainerProperty(" ID",String.class,"");
         this.typeDataInstanceTable.setColumnIcon(" ID",FontAwesome.KEY);
         if(typePropertiesInfoList!=null){
@@ -119,9 +122,6 @@ public class TypeDataInstanceList extends VerticalLayout {
                 this.typeDataInstanceTable.addContainerProperty(currentPropertyTypeVO.getPropertyName(), String.class, "");
             }
         }
-        this.typeDataInstanceTable.addContainerProperty(" 操作",TypeDataInstanceTableRowActions.class,null);
-        this.typeDataInstanceTable.setColumnIcon(" 操作",FontAwesome.WRENCH);
-        this.typeDataInstanceTable.setColumnWidth(" 操作", 130);
         typeDataInstanceTable.setPageLength(this.getTablePageSize());
 
         this.paginationContainerLayout.removeAllComponents();
@@ -141,6 +141,10 @@ public class TypeDataInstanceList extends VerticalLayout {
             for(int i=0;i<queryResults.size();i++){
                 MeasurableValueVO currentMeasurableValueVO=queryResults.get(i);
                 Item newRecord=this.typeDataInstanceTable.addItem("typeInstance_index_"+i);
+                TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
+                typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
+                typeDataInstanceTableRowActions.setContainerTypeDataInstanceList(this);
+                newRecord.getItemProperty(" 操作").setValue(typeDataInstanceTableRowActions);
                 newRecord.getItemProperty(" ID").setValue(currentMeasurableValueVO.getId());
                 for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
                     PropertyValueVO currentPropertyValueVO=currentMeasurableValueVO.getPropertyValue(currentPropertyTypeVO.getPropertyName());
@@ -154,10 +158,6 @@ public class TypeDataInstanceList extends VerticalLayout {
                         }
                     }
                 }
-                TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
-                typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
-                typeDataInstanceTableRowActions.setContainerTypeDataInstanceList(this);
-                newRecord.getItemProperty(" 操作").setValue(typeDataInstanceTableRowActions);
             }
         }
     }

@@ -415,18 +415,16 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     private void setUIElementsSizeForWindowSizeChange(){
         Window containerDialog=this.getContainerDialog();
-        int screenHeight=this.currentUserClientInfo.getUserWebBrowserInfo().getScreenHeight();
-        int windowsHeight=0;
         int queryConditionInputContainerPanelHeight=0;
         int typeDataInstanceListHeight=0;
+        int browserWindowHeight=UI.getCurrent().getPage().getBrowserWindowHeight();
+        int containerDialogInitFixHeight=(int)(containerDialog.getHeight()/100*browserWindowHeight);
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
-            windowsHeight=screenHeight;
-            queryConditionInputContainerPanelHeight=windowsHeight-395;
-            typeDataInstanceListHeight=windowsHeight-415;
+            queryConditionInputContainerPanelHeight=browserWindowHeight-250;
+            typeDataInstanceListHeight=browserWindowHeight-270;
         }else{
-            windowsHeight=(int)(containerDialog.getHeight()/100*screenHeight);
-            queryConditionInputContainerPanelHeight=windowsHeight-363;
-            typeDataInstanceListHeight=windowsHeight-383;
+            queryConditionInputContainerPanelHeight=containerDialogInitFixHeight-250;
+            typeDataInstanceListHeight=containerDialogInitFixHeight-270;
         }
         queryConditionInputContainerPanel.setHeight(queryConditionInputContainerPanelHeight,Unit.PIXELS);
         this.typeDataInstanceList.setTypeDataInstanceListHeight(typeDataInstanceListHeight);

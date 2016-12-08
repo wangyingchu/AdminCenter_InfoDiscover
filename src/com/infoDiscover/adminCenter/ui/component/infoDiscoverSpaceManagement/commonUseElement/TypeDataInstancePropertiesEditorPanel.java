@@ -42,6 +42,7 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
     private HorizontalLayout editorFormFooter;
     private String editPropertiesButtonCaption="---";
     private String currentTempCustomPropertyDataType;
+    private Panel propertiesEditorContainerPanel;
 
     public TypeDataInstancePropertiesEditorPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue){
         this.currentUserClientInfo=userClientInfo;
@@ -79,12 +80,12 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         this.propertiesEditForm.setWidth("100%");
         this.propertiesEditForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
-        Panel dataCountFormContainerPanel = new Panel();
-        dataCountFormContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
-        dataCountFormContainerPanel.setWidth("100%");
-        dataCountFormContainerPanel.setHeight(550,Unit.PIXELS);
-        dataCountFormContainerPanel.setContent(this.propertiesEditForm);
-        addComponent(dataCountFormContainerPanel);
+        this.propertiesEditorContainerPanel = new Panel();
+        this.propertiesEditorContainerPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        this.propertiesEditorContainerPanel.setWidth("100%");
+        this.propertiesEditorContainerPanel.setHeight(550,Unit.PIXELS);
+        this.propertiesEditorContainerPanel.setContent(this.propertiesEditForm);
+        addComponent(propertiesEditorContainerPanel);
 
         this.editorFormFooter = new HorizontalLayout();
         this.editorFormFooter.setMargin(new MarginInfo(true, false, true, false));
@@ -157,7 +158,6 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
         generateDataPropertiesEditUIElements();
         setDisableFormEditableStatue(true);
     }
-
 
     private void generateTypePropertiesEditUIElements(List<PropertyTypeVO> typePropertiesList){
         for(PropertyTypeVO currentPropertyTypeVO:typePropertiesList){
@@ -584,5 +584,9 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             currentPropertyValueVO.setPropertyValue(propertyValueObj);
         }
         return propertyValueVOList;
+    }
+
+    public void setPropertiesEditorContainerPanelHeight(int panelHeight){
+        this.propertiesEditorContainerPanel.setHeight(panelHeight,Unit.PIXELS);
     }
 }
