@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
@@ -82,6 +83,17 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         dataRelationInfoTitle.addStyleName(ValoTheme.LABEL_SMALL);
         dataRelationInfoTitle.addStyleName("ui_appSectionLightDiv");
         this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitle);
+
+
+        RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
+        currentRelationableValueVO.setDiscoverSpaceName(discoverSpaceName);
+        currentRelationableValueVO.setRelationableTypeName(dataTypeName);
+        currentRelationableValueVO.setRelationableTypeKind(dataTypeKind);
+        currentRelationableValueVO.setId(dataId);
+
+        RelationableRelationsList relationableRelationsList=new RelationableRelationsList(this.currentUserClientInfo,currentRelationableValueVO);
+        this.dataInteractionInfoLayout.addComponent(relationableRelationsList);
+
         dataInstanceDetailContainerLayout.addComponent(this.dataInteractionInfoLayout);
     }
 
