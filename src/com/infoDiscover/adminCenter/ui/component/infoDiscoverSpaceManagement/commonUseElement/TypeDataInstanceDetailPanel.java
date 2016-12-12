@@ -22,6 +22,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
     private Window containerDialog;
     private TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel;
     private VerticalLayout dataInteractionInfoLayout;
+    private RelationableRelationsList relationableRelationsList;
 
     public TypeDataInstanceDetailPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue) {
         this.currentUserClientInfo = userClientInfo;
@@ -84,15 +85,14 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         dataRelationInfoTitle.addStyleName("ui_appSectionLightDiv");
         this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitle);
 
-
         RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
         currentRelationableValueVO.setDiscoverSpaceName(discoverSpaceName);
         currentRelationableValueVO.setRelationableTypeName(dataTypeName);
         currentRelationableValueVO.setRelationableTypeKind(dataTypeKind);
         currentRelationableValueVO.setId(dataId);
 
-        RelationableRelationsList relationableRelationsList=new RelationableRelationsList(this.currentUserClientInfo,currentRelationableValueVO);
-        this.dataInteractionInfoLayout.addComponent(relationableRelationsList);
+        this.relationableRelationsList=new RelationableRelationsList(this.currentUserClientInfo,currentRelationableValueVO);
+        this.dataInteractionInfoLayout.addComponent(this.relationableRelationsList);
 
         dataInstanceDetailContainerLayout.addComponent(this.dataInteractionInfoLayout);
     }
@@ -117,15 +117,18 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         int containerWindowDialogFixHeight=(int)containerDialog.getHeight();
         int typeInstanceDetailPropertiesEditorContainerPanelHeight=0;
         int dataRelationInfoLayoutWidth=500;
+        int relationsListHeight;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
             dataRelationInfoLayoutWidth=browserWindowWidth-510;
-
+            relationsListHeight=browserWindowHeight-500;
         }else{
             typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-230;
+            relationsListHeight=50;
         }
         this.typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(typeInstanceDetailPropertiesEditorContainerPanelHeight);
         this.dataInteractionInfoLayout.setWidth(dataRelationInfoLayoutWidth,Unit.PIXELS);
+        this.relationableRelationsList.setRelationableRelationsTableHeight(relationsListHeight);
     }
 
     public void setContainerDialog(Window containerDialog) {
