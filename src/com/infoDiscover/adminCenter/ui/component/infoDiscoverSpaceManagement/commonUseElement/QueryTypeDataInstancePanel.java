@@ -14,7 +14,6 @@ import com.infoDiscover.infoDiscoverEngine.dataWarehouse.SQLBuilder;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 
-import com.vaadin.addon.modeltable.ModelTable;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
@@ -23,7 +22,6 @@ import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -61,8 +59,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
     private boolean queryDistinctMode=true;
 
     private TypeDataInstanceList typeDataInstanceList;
-
-    public static Map<Integer, Item> itemFieldMap = new HashMap<>();
 
     public QueryTypeDataInstancePanel(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
@@ -189,28 +185,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         this.typeDataInstanceList=new TypeDataInstanceList(this.currentUserClientInfo);
         this.typeDataInstanceList.setTablePageSize(this.queryPageSize);
         queryResultContainerLayout.addComponent(this.typeDataInstanceList);
-
-        /*
-        ModelTable<Item> table1 = buildModelTable(0);
-        table1.setTitleCaption("Direction.RIGHT [ ColumnSize: " + 3 + "]");
-        table1.setItemDirection(ModelTable.Direction.RIGHT, 3);
-        Item item0=new Item();
-        item0.setField01("fdwefwf f");
-        item0.setField02("fdwefwf fv");
-        item0.setField03("fdwefwfw");
-        item0.setField04("fdwefwf3");
-        item0.setField05("fdwefwf f");
-        table1.setItem(item0);
-        queryResultContainerLayout.addComponent(table1);
-        final Collection<CriteriaField> fields = new HashSet<CriteriaField>();
-        fields.add(new CriteriaField("name", "Name"));
-        fields.add(new CriteriaField("code", "Code", CriteriaField.ClassField.INTEGER));
-        fields.add(new CriteriaField("summa", "Summa", CriteriaField.ClassField.FLOAT));
-        fields.add(new CriteriaField("date", "Date", CriteriaField.ClassField.DATE));
-        fields.add(new CriteriaField("city", "City"));
-        CriteriaBuilder criteriaBuilder = new CriteriaBuilder(fields);
-        queryResultContainerLayout.addComponent(criteriaBuilder);
-        */
     }
 
     public int getQueryPageSize() {
@@ -251,78 +225,6 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
     public void setQueryDistinctMode(boolean queryDistinctMode) {
         this.queryDistinctMode = queryDistinctMode;
-    }
-
-
-    public class Item implements Serializable {
-        private String field01;
-        private String field02;
-        private String field03;
-        private String field04;
-        private String field05;
-
-        public String getField01() {
-            return field01;
-        }
-
-        public void setField01(String field01) {
-            this.field01 = field01;
-        }
-
-        public String getField02() {
-            return field02;
-        }
-
-        public void setField02(String field02) {
-            this.field02 = field02;
-        }
-
-        public String getField03() {
-            return field03;
-        }
-
-        public void setField03(String field03) {
-            this.field03 = field03;
-        }
-
-        public String getField04() {
-            return field04;
-        }
-
-        public void setField04(String field04) {
-            this.field04 = field04;
-        }
-
-        public String getField05() {
-            return field05;
-        }
-
-        public void setField05(String field05) {
-            this.field05 = field05;
-        }
-    }
-
-
-    private ModelTable<Item> buildModelTable(final int dataIndex) {
-        final Item item = itemFieldMap.get(dataIndex);
-        final ModelTable<Item> modelTable = new ModelTable<>(Item.class);
-        modelTable.setItem(item);
-        modelTable.addMenuItem("Edit", FontAwesome.EDIT, new MenuBar.Command() {
-            @Override
-            public void menuSelected(MenuBar.MenuItem menuItem) {
-                item.setField01("Edit :" + dataIndex);
-                modelTable.setItem(item);
-                Notification.show("Edit : " + dataIndex);
-            }
-        });
-        modelTable.addMenuItem("Reload", FontAwesome.CIRCLE_O_NOTCH, new MenuBar.Command() {
-            @Override
-            public void menuSelected(MenuBar.MenuItem menuItem) {
-                Notification.show("Refresh[removeItem] : " + dataIndex);
-                modelTable.removeItem();
-            }
-        });
-        return modelTable;
     }
 
     public Window getContainerDialog() {

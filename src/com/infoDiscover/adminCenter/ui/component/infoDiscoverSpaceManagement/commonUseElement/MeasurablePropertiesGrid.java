@@ -1,53 +1,52 @@
-package com.vaadin.addon.modeltable;
+package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
+//import com.vaadin.addon.propertiesGrid.propertiesGrid;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.ConverterUtil;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-/**
- * Created by gmind on 2016-10-20.
- */
-public class ModelTable<T> extends VerticalLayout {
+import java.util.Date;
+import java.util.List;
 
-	private static final long serialVersionUID = 1L;
+/**
+ * Created by wangychu on 12/12/16.
+ */
+public class MeasurablePropertiesGrid extends VerticalLayout {
 
     private static int prevStyleHashCode;
-
     private int columnSize;
     private int rowSize;
-
     private Direction columnDirection;
-
     private Label title;
-
     private final Table targetTable;
     private final Table sourceTable;
-
     private final MenuBar menubar;
     private MenuBar.MenuItem menuItem;
-
     private HorizontalLayout toolbar;
 
-    public ModelTable(Class<? super T> beanType) {
-        this("", beanType);
+    public MeasurablePropertiesGrid() {
+        this("");
     }
 
-    public ModelTable(String caption, Class<? super T> beanType) {
+    public MeasurablePropertiesGrid(String caption) {
         setStyles();
-        this.title = new Label(caption);
-        this.title.addStyleName("modeltable");
+        this.title = new Label(caption, ContentMode.HTML);
+        this.title.addStyleName("propertiesGrid");
         this.columnDirection = Direction.RIGHT;
         this.menubar = new MenuBar();
         this.targetTable = new Table();
         this.sourceTable = new Table();
-        this.sourceTable.setContainerDataSource(new BeanItemContainer<T>(beanType));
+        this.sourceTable.setContainerDataSource(new IndexedContainer());
         Component component = buildContent();
         addComponent(component);
     }
@@ -65,12 +64,12 @@ public class ModelTable<T> extends VerticalLayout {
             return;
         }
         prevStyleHashCode = styles.hashCode();
-        styles.add(".v-label-modeltable {\n" +
-                "     border-left: 3px solid #00b4f0;\n" +
-                "     padding-left: 10px;\n" +
+        styles.add(".v-label-propertiesGrid {\n" +
+                //"     border-left: 3px solid #00b4f0;\n" +
+                //"     padding-left: 10px;\n" +
                 "}\n" +
                 "\n" +
-                ".v-table-modeltable .v-table-cell-content-key {\n" +
+                ".v-table-propertiesGrid .v-table-cell-content-key {\n" +
                 "    background-color: #fafafa;\n" +
                 "    background-image: -webkit-linear-gradient(top, #fafafa 2%, #efefef 98%);\n" +
                 "    background-image: linear, to bottom, #fafafa 2%, #efefef 98%;\n" +
@@ -83,9 +82,8 @@ public class ModelTable<T> extends VerticalLayout {
     }
 
     private Component buildContent() {
-        buildModelTable();
+        buildpropertiesGrid();
         Component toolbar = createToolbar();
-
         VerticalLayout wrapper = new VerticalLayout();
         wrapper.setWidth(100, Unit.PERCENTAGE);
         wrapper.setHeightUndefined();
@@ -94,11 +92,11 @@ public class ModelTable<T> extends VerticalLayout {
         return wrapper;
     }
 
-    private void buildModelTable() {
-        targetTable.addStyleName("modeltable");
+    private void buildpropertiesGrid() {
+        targetTable.addStyleName("propertiesGrid");
         targetTable.setWidth(100, Unit.PERCENTAGE);
         targetTable.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
-        targetTable.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+        //targetTable.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
         targetTable.addStyleName(ValoTheme.TABLE_SMALL);
     }
 
@@ -128,7 +126,7 @@ public class ModelTable<T> extends VerticalLayout {
 
     public void setTitleLabel(Label label) {
         title = label;
-        title.addStyleName("modeltable");
+        title.addStyleName("propertiesGrid");
     }
 
     public Object[] getVisibleColumns() {
@@ -149,16 +147,16 @@ public class ModelTable<T> extends VerticalLayout {
 
     public void setItemDirection(Direction direction, int size) {
         columnDirection = direction;
-        if(columnDirection==Direction.RIGHT) {
+        if(columnDirection== Direction.RIGHT) {
             columnSize = size;
-        } else if(columnDirection==Direction.BOTTOM) {
+        } else if(columnDirection== Direction.BOTTOM) {
             rowSize = size;
         }
     }
 
     @SuppressWarnings("unchecked")
-	public T getItem() {
-        return (T) sourceTable.firstItemId();
+    public Object getItem() {
+        return sourceTable.firstItemId();
     }
 
     public void setItem(Object item) {
@@ -169,9 +167,82 @@ public class ModelTable<T> extends VerticalLayout {
         }
     }
 
-    public void removeItem() {
+    public void setItem(List<PropertyValueVO> propertiesList) {
         sourceTable.removeAllItems();
-        targetTable.removeAllItems();
+        if(propertiesList!=null){
+            for(PropertyValueVO currentPropertyValueVO:propertiesList){
+                String propertyName=currentPropertyValueVO.getPropertyName();
+                String propertyType=currentPropertyValueVO.getPropertyType();
+                switch(propertyType){
+                    case ApplicationConstant.DataFieldType_STRING:
+                        sourceTable.addContainerProperty("[STRING] "+propertyName, String.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_BOOLEAN:
+                        sourceTable.addContainerProperty("[BOOLEAN] "+propertyName, Boolean.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_DATE:
+                        sourceTable.addContainerProperty("[DATE] "+propertyName, Date.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_INT:
+                        sourceTable.addContainerProperty("[INT] "+propertyName, Integer.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_LONG:
+                        sourceTable.addContainerProperty("[LONG] "+propertyName, Long.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_DOUBLE:
+                        sourceTable.addContainerProperty("[DOUBLE] "+propertyName, Double.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_FLOAT:
+                        sourceTable.addContainerProperty("[FLOAT] "+propertyName, Float.class, null);
+                        break;
+                    case ApplicationConstant.DataFieldType_SHORT:
+                        sourceTable.addContainerProperty("[SHORT] "+propertyName, Short.class, null);
+                        break;
+                }
+            }
+            Item newRecord = sourceTable.addItem("measurablePropertiesGrid_index");
+            for(PropertyValueVO currentPropertyValueVO:propertiesList){
+                String propertyName=currentPropertyValueVO.getPropertyName();
+                String propertyType=currentPropertyValueVO.getPropertyType();
+                Object propertyValue=currentPropertyValueVO.getPropertyValue();
+                switch(propertyType){
+                    case ApplicationConstant.DataFieldType_STRING:
+                        newRecord.getItemProperty("[STRING] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_BOOLEAN:
+                        newRecord.getItemProperty("[BOOLEAN] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_DATE:
+                        newRecord.getItemProperty("[DATE] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_INT:
+                        newRecord.getItemProperty("[INT] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_LONG:
+                        newRecord.getItemProperty("[LONG] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_DOUBLE:
+                        newRecord.getItemProperty("[DOUBLE] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_FLOAT:
+                        newRecord.getItemProperty("[FLOAT] "+propertyName).setValue(propertyValue);
+                        break;
+                    case ApplicationConstant.DataFieldType_SHORT:
+                        newRecord.getItemProperty("[SHORT] "+propertyName).setValue(propertyValue);
+                        break;
+                }
+            }
+        }
+        if(isAttached()) {
+            refreshRendered();
+        }
+    }
+
+    public void removeItem() {
+        this.sourceTable.removeAllItems();
+        this.targetTable.removeAllItems();
+        this.sourceTable.setContainerDataSource(new IndexedContainer());
+        this.targetTable.setContainerDataSource(new IndexedContainer());
         targetTable.setPageLength(0);
     }
 
@@ -208,7 +279,7 @@ public class ModelTable<T> extends VerticalLayout {
 
     @SuppressWarnings("unchecked")
     private void itemTrait() {
-        Object sourceItemId = (T) sourceTable.firstItemId();
+        Object sourceItemId = sourceTable.firstItemId();
         Item sourceItem = sourceTable.getItem(sourceItemId);
 
         int pageLength = 0;
@@ -227,9 +298,9 @@ public class ModelTable<T> extends VerticalLayout {
 
             for(int j=0, index=0; j < columnMaxSize; j++) {
 
-                if(j==0 || columnDirection==Direction.RIGHT) {
+                if(j==0 || columnDirection== Direction.RIGHT) {
                     index = i+j;
-                } else if(columnDirection==Direction.BOTTOM) {
+                } else if(columnDirection== Direction.BOTTOM) {
                     index = index + rowMaxSize;
                 }
 
@@ -247,9 +318,9 @@ public class ModelTable<T> extends VerticalLayout {
                 }
             }
 
-            if(columnDirection==Direction.RIGHT) {
+            if(columnDirection== Direction.RIGHT) {
                 i = i+columnSize;
-            } else if(columnDirection==Direction.BOTTOM) {
+            } else if(columnDirection== Direction.BOTTOM) {
                 i++;
             }
 
@@ -275,14 +346,14 @@ public class ModelTable<T> extends VerticalLayout {
     }
 
     protected int rowMaxSize() {
-        if(columnDirection==Direction.BOTTOM) {
+        if(columnDirection== Direction.BOTTOM) {
             return rowSize;
         }
         return getVisibleColumns().length;
     }
 
     protected int columnMaxSize() {
-        if(columnDirection==Direction.RIGHT) {
+        if(columnDirection== Direction.RIGHT) {
             return columnSize;
         }
         int size = (int) Math.ceil((double)getVisibleColumns().length / (double) rowSize);
@@ -301,10 +372,10 @@ public class ModelTable<T> extends VerticalLayout {
         }
 
         targetTable.setCellStyleGenerator(new Table.CellStyleGenerator() {
-            
-			private static final long serialVersionUID = 1L;
 
-			@Override
+            private static final long serialVersionUID = 1L;
+
+            @Override
             public String getStyle(Table table, Object itemId, Object propertyId) {
                 if(propertyId==null) {
                     return null;
@@ -337,95 +408,11 @@ public class ModelTable<T> extends VerticalLayout {
         return this.targetTable;
     }
 
-
-
-    /* Usage Example
-
-        ModelTable<DataItem> table1 = buildModelTable(0);
-        table1.setTitleCaption("Direction.RIGHT [ ColumnSize: " + 3 + "]");
-        table1.setItemDirection(ModelTable.Direction.RIGHT, 3);
-        DataItem item0=new DataItem();
-        item0.setField01("fdwefwf f");
-        item0.setField02("fdwefwf fv");
-        item0.setField03("fdwefwfw");
-        item0.setField04("fdwefwf3");
-        item0.setField05("fdwefwf f");
-        table1.setItem(item0);
-        addComponent(table1);
-
-
-        public class DataItem implements Serializable {
-        private String field01;
-        private String field02;
-        private String field03;
-        private String field04;
-        private String field05;
-
-        public String getField01() {
-            return field01;
-        }
-
-        public void setField01(String field01) {
-            this.field01 = field01;
-        }
-
-        public String getField02() {
-            return field02;
-        }
-
-        public void setField02(String field02) {
-            this.field02 = field02;
-        }
-
-        public String getField03() {
-            return field03;
-        }
-
-        public void setField03(String field03) {
-            this.field03 = field03;
-        }
-
-        public String getField04() {
-            return field04;
-        }
-
-        public void setField04(String field04) {
-            this.field04 = field04;
-        }
-
-        public String getField05() {
-            return field05;
-        }
-
-        public void setField05(String field05) {
-            this.field05 = field05;
-        }
+    public void setPropertiesGridHeight(int gridHeight){
+        targetTable.setHeight(gridHeight,Unit.PIXELS);
     }
 
-    private ModelTable<DataItem> buildModelTable(final int dataIndex) {
-        final DataItem item = itemFieldMap.get(dataIndex);
-        final ModelTable<DataItem> modelTable = new ModelTable<>(DataItem.class);
-        modelTable.setItem(item);
-
-        modelTable.addMenuItem("Edit", FontAwesome.EDIT, new MenuBar.Command() {
-            @Override
-            public void menuSelected(MenuBar.MenuItem menuItem) {
-                item.setField01("Edit :" + dataIndex);
-                modelTable.setItem(item);
-                Notification.show("Edit : " + dataIndex);
-            }
-        });
-        modelTable.addMenuItem("Reload", FontAwesome.CIRCLE_O_NOTCH, new MenuBar.Command() {
-            @Override
-            public void menuSelected(MenuBar.MenuItem menuItem) {
-                Notification.show("Refresh[removeItem] : " + dataIndex);
-                modelTable.removeItem();
-            }
-        });
-
-        return modelTable;
+    public Label getPropertiesGridTitle(){
+        return this.title;
     }
-
-
-    */
 }

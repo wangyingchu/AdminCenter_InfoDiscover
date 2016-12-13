@@ -1178,6 +1178,7 @@ public class InfoDiscoverSpaceOperationUtil {
 
                     List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
                     currentRelationValueVO.setProperties(propertyValueVOList);
+                    /* for better performance but get properties's value here
                     List<Property> propertiesList=currentRelation.getProperties();
                     if(propertiesList!=null){
                         for(Property currentProperty:propertiesList){
@@ -1190,6 +1191,7 @@ public class InfoDiscoverSpaceOperationUtil {
                             }
                         }
                     }
+                    */
                     resultRelationValueList.add(currentRelationValueVO);
                 }
             }
@@ -1201,5 +1203,33 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return resultRelationValueList;
+    }
+
+    public static List<PropertyValueVO> getMeasurablePropertiesById(String spaceName,String measurableId){
+        List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            Measurable targetMeasurable=targetSpace.getMeasurableById(measurableId);
+            if(targetMeasurable!=null){
+                List<Property> propertiesList=targetMeasurable.getProperties();
+                if(propertiesList!=null){
+                    for(Property currentProperty:propertiesList){
+                        if(currentProperty.getPropertyType()!=null){
+                            PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                            currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                            currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                            currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                            propertyValueVOList.add(currentPropertyValueVO);
+                        }
+                    }
+                }
+            }
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return propertyValueVOList;
     }
 }

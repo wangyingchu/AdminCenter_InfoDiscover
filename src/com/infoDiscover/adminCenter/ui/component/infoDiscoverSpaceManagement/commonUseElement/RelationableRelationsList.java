@@ -1,16 +1,20 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.TableColumnValueIcon;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
 import com.vaadin.addon.pagination.PaginationResource;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -30,6 +34,7 @@ public class RelationableRelationsList extends VerticalLayout {
     private HorizontalLayout paginationContainerLayout;
     private Label relationResultCountLabel;
     private int itemsPerRelationableRelationsTablePage=20;
+    private MeasurablePropertiesGrid measurablePropertiesGrid;
 
     public RelationableRelationsList(UserClientInfo userClientInfo, RelationableValueVO relationableValueVO) {
         this.currentUserClientInfo = userClientInfo;
@@ -42,6 +47,7 @@ public class RelationableRelationsList extends VerticalLayout {
         addComponent(relationsSummaryInfoContainerLayout);
         Label relationResultCountInfo = new Label(FontAwesome.SHARE_ALT_SQUARE.getHtml() + " 关联关系总量: ", ContentMode.HTML);
         relationResultCountInfo.addStyleName(ValoTheme.LABEL_TINY);
+        relationResultCountInfo.addStyleName(ValoTheme.LABEL_COLORED);
         relationsSummaryInfoContainerLayout.addComponent(relationResultCountInfo);
         relationsSummaryInfoContainerLayout.setComponentAlignment(relationResultCountInfo, Alignment.MIDDLE_LEFT);
         this.relationResultCountLabel = new Label("--");
@@ -55,11 +61,42 @@ public class RelationableRelationsList extends VerticalLayout {
         this.relationableRelationsTable.setSelectable(true);
         this.relationableRelationsTable.addStyleName(ValoTheme.TABLE_SMALL);
         this.relationableRelationsTable.setRowHeaderMode(Table.RowHeaderMode.INDEX);
+        this.relationableRelationsTable.setNullSelectionAllowed(false);
+
+        this.relationableRelationsTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent itemClickEvent) {
+                renderRelationPropertiesInfo(itemClickEvent.getItem());
+            }
+        });
         addComponent(this.relationableRelationsTable);
 
         this.paginationContainerLayout = new HorizontalLayout();
         this.paginationContainerLayout.setWidth(100, Unit.PERCENTAGE);
         addComponent(this.paginationContainerLayout);
+
+        this.measurablePropertiesGrid=new MeasurablePropertiesGrid();
+        this.measurablePropertiesGrid.getPropertiesGridTitle().removeStyleName(ValoTheme.LABEL_H4);
+        this.measurablePropertiesGrid.getPropertiesGridTitle().addStyleName(ValoTheme.LABEL_TINY);
+        this.measurablePropertiesGrid.setTitleCaption(FontAwesome.LIST_UL.getHtml() + " 当前所选关系属性数据: ");
+        this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 2);
+        this.measurablePropertiesGrid.setPropertiesGridHeight(200);
+        /*
+        measurablePropertiesGrid.addMenuItem("Edit", FontAwesome.EDIT, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem menuItem) {
+                Notification.show("Edit : ");
+            }
+        });
+        measurablePropertiesGrid.addMenuItem("Reload", FontAwesome.CIRCLE_O_NOTCH, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem menuItem) {
+                Notification.show("Refresh: ");
+                //modelTable.removeItem();
+            }
+        });
+        */
+        addComponent(measurablePropertiesGrid);
     }
 
     @Override
@@ -121,21 +158,13 @@ public class RelationableRelationsList extends VerticalLayout {
                     RelationableInfoTableRowActions relationableInfoTableRowActions = new RelationableInfoTableRowActions(this.currentUserClientInfo, fromRelationable);
                     newRecord.getItemProperty(" 相关数据").setValue(relationableInfoTableRowActions);
                 }
-                //currentRelationValueVO.getProperties();
             }
-        }
-        for (int i = 0; i < 1500; i++) {
-            Item newRecord = this.relationableRelationsTable.addItem("dataRelation_index_" + i);
-            TableColumnValueIcon TableColumnValueIcon = new TableColumnValueIcon(FontAwesome.SHARE_ALT_SQUARE, null);
-            newRecord.getItemProperty(" 关系ID").setValue(" " + i);
-            newRecord.getItemProperty(" 关系方向").setValue(TableColumnValueIcon);
         }
         this.relationableRelationsTable.setPageLength(itemsPerRelationableRelationsTablePage);
 
         this.paginationContainerLayout.removeAllComponents();
         int startPage = relationValuesList.size() > 0 ? 1 : 0;
-        //Pagination relationsDataPagination = createPagination(relationValuesList.size(), startPage);
-        Pagination relationsDataPagination = createPagination(1500, startPage);
+        Pagination relationsDataPagination = createPagination(relationValuesList.size(), startPage);
         relationsDataPagination.setItemsPerPageVisible(false);
         relationsDataPagination.addPageChangeListener(new PaginationChangeListener() {
             @Override
@@ -154,5 +183,30 @@ public class RelationableRelationsList extends VerticalLayout {
         final PaginationResource paginationResource = PaginationResource.newBuilder().setTotal(totalData).setPage(initPageNumber).setLimit(itemsPerRelationableRelationsTablePage).build();
         final Pagination pagination = new Pagination(paginationResource);
         return pagination;
+    }
+
+    private void renderRelationPropertiesInfo(Item relationItem){
+        String propertiesGridTitleMessageStr=FontAwesome.LIST_UL.getHtml() + " 当前所选关系属性数据: ";
+        this.measurablePropertiesGrid.removeItem();
+        if(relationItem!=null){
+            Property relationTypeProperty=relationItem.getItemProperty(" 关系类型");
+            Property idProperty=relationItem.getItemProperty(" 关系ID");
+            if(relationTypeProperty!=null&&relationTypeProperty.getValue()!=null){
+                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+relationTypeProperty.getValue().toString()+" /";
+            }
+            if(idProperty!=null&&idProperty.getValue()!=null){
+                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+FontAwesome.KEY.getHtml()+" "+idProperty.getValue().toString();
+            }
+            List<PropertyValueVO> relationProperties=InfoDiscoverSpaceOperationUtil.getMeasurablePropertiesById(relationableValueVO.getDiscoverSpaceName(),idProperty.getValue().toString());
+            if(relationProperties.size()<=6){
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 1);
+            }else if(relationProperties.size()>6&&relationProperties.size()<=12){
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 2);
+            }else{
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 3);
+            }
+            measurablePropertiesGrid.setItem(relationProperties);
+        }
+        this.measurablePropertiesGrid.setTitleCaption(propertiesGridTitleMessageStr);
     }
 }
