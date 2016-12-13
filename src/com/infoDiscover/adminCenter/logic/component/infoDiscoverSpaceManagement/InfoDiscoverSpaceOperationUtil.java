@@ -1232,4 +1232,69 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return propertyValueVOList;
     }
+
+    public static MeasurableValueVO getMeasurableValueById(String spaceName,String measurableId){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            Measurable targetMeasurable=targetSpace.getMeasurableById(measurableId);
+            if(targetMeasurable!=null){
+                MeasurableValueVO currentMeasurableValueVO=new MeasurableValueVO();
+                currentMeasurableValueVO.setDiscoverSpaceName(spaceName);
+                if(targetMeasurable instanceof Dimension){
+                    Dimension dimensionRelationable=(Dimension)targetMeasurable;
+                    currentMeasurableValueVO.setMeasurableTypeName(dimensionRelationable.getType());
+                    currentMeasurableValueVO.setMeasurableTypeKind(TYPEKIND_DIMENSION);
+                    currentMeasurableValueVO.setId(dimensionRelationable.getId());
+                }
+                if(targetMeasurable instanceof Fact){
+                    Fact factRelationable=(Fact)targetMeasurable;
+                    currentMeasurableValueVO.setMeasurableTypeName(factRelationable.getType());
+                    currentMeasurableValueVO.setMeasurableTypeKind(TYPEKIND_FACT);
+                    currentMeasurableValueVO.setId(factRelationable.getId());
+                }
+                if(targetMeasurable instanceof Relation){
+                    Relation relationRelationable=(Relation)targetMeasurable;
+                    currentMeasurableValueVO.setMeasurableTypeName(relationRelationable.getType());
+                    currentMeasurableValueVO.setMeasurableTypeKind(TYPEKIND_RELATION);
+                    currentMeasurableValueVO.setId(relationRelationable.getId());
+                }
+                List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+                currentMeasurableValueVO.setProperties(propertyValueVOList);
+                List<Property> propertiesList=targetMeasurable.getProperties();
+                if(propertiesList!=null){
+                    for(Property currentProperty:propertiesList){
+                        if(currentProperty.getPropertyType()!=null){
+                            PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                            currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                            currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                            currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                            propertyValueVOList.add(currentPropertyValueVO);
+                        }
+                    }
+                }
+                return currentMeasurableValueVO;
+            }
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return null;
+    }
+
+    public static boolean removeRelationById(String spaceName,String relationId){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            return targetSpace.removeRelation(relationId);
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return false;
+    }
 }

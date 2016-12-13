@@ -1,15 +1,16 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 /**
@@ -19,6 +20,7 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private RelationableValueVO relationableValueVO;
+    private Button showTypeDataDetailButton;
 
     public RelationableInfoTableRowActions(UserClientInfo userClientInfo,RelationableValueVO relationableValueVO) {
         this.currentUserClientInfo = userClientInfo;
@@ -42,7 +44,7 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
         this.addComponent(operationSpaceDivLabel);
         this.setComponentAlignment(operationSpaceDivLabel, Alignment.MIDDLE_RIGHT);
 
-        Button showTypeDataDetailButton = new Button();
+        showTypeDataDetailButton = new Button();
         showTypeDataDetailButton.setIcon(FontAwesome.EYE);
         showTypeDataDetailButton.setDescription("显示数据详情");
         showTypeDataDetailButton.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -51,7 +53,7 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
                 showTypeDataDetailButton.setEnabled(false);
-                //showDataDetailInfoPanel();
+                showDataDetailInfoPanel();
             }
         });
         addComponent(showTypeDataDetailButton);
@@ -81,5 +83,49 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
             }
         });
         addComponent(deleteButton);
+    }
+
+    private void showDataDetailInfoPanel(){
+        MeasurableValueVO targetMeasurableValue=InfoDiscoverSpaceOperationUtil.getMeasurableValueById(this.relationableValueVO.getDiscoverSpaceName(),this.relationableValueVO.getId());
+        if(targetMeasurableValue==null){
+            Notification errorNotification = new Notification("获取数据错误",
+                    "系统中不存在ID为 "+this.relationableValueVO.getId()+" 的数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        String dataTypeKind= targetMeasurableValue.getMeasurableTypeKind();
+        String dataDetailInfoTitle;
+        if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
+            dataDetailInfoTitle="维度数据详细信息";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
+            dataDetailInfoTitle="事实数据详细信息";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+            dataDetailInfoTitle="关系数据详细信息";
+        }else{
+            dataDetailInfoTitle="数据详细信息";
+        }
+        TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
+        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+        window.setWidth(500, Unit.PIXELS);
+        window.setHeight(800,Unit.PIXELS);
+        window.setCaptionAsHtml(true);
+        window.setResizable(true);
+        window.setDraggable(true);
+        window.setModal(false);
+        window.center();
+        window.setContent(typeDataInstanceDetailPanel);
+        typeDataInstanceDetailPanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
+
+        window.addCloseListener(new Window.CloseListener() {
+            @Override
+            public void windowClose(Window.CloseEvent closeEvent) {
+                showTypeDataDetailButton.setEnabled(true);
+            }
+        });
     }
 }

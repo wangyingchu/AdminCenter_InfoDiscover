@@ -137,7 +137,7 @@ public class RelationableRelationsList extends VerticalLayout {
             for (RelationValueVO currentRelationValueVO : relationValuesList) {
                 String relationId = currentRelationValueVO.getId();
                 Item newRecord = this.relationableRelationsTable.addItem("dataRelation_index_" + relationId);
-                RelationableRelationsTableRowActions relationableRelationsTableRowActions = new RelationableRelationsTableRowActions(this.currentUserClientInfo, this.relationableValueVO);
+                RelationableRelationsTableRowActions relationableRelationsTableRowActions = new RelationableRelationsTableRowActions(this.currentUserClientInfo, currentRelationValueVO);
                 newRecord.getItemProperty(" 操作").setValue(relationableRelationsTableRowActions);
                 newRecord.getItemProperty(" 关系ID").setValue(relationId);
                 String relationType = currentRelationValueVO.getRelationTypeName();
