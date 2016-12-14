@@ -43,6 +43,8 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
     private String editPropertiesButtonCaption="---";
     private String currentTempCustomPropertyDataType;
     private Panel propertiesEditorContainerPanel;
+    private Window containerDialog;
+    private TypeDataInstancePropertiesEditorInvoker typeDataInstancePropertiesEditorInvoker;
 
     public TypeDataInstancePropertiesEditorPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue){
         this.currentUserClientInfo=userClientInfo;
@@ -514,6 +516,10 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
                 List<PropertyValueVO> dataProperties=retrievePropertyValueObjects();
 
                 boolean updateDataPropertiesResult=InfoDiscoverSpaceOperationUtil.updateMeasurableProperties(measurableValue.getDiscoverSpaceName(),measurableValue.getId(),dataProperties);
+                if(getTypeDataInstancePropertiesEditorInvoker()!=null){
+                    getTypeDataInstancePropertiesEditorInvoker().updateTypeDataInstancePropertiesActionFinish(updateDataPropertiesResult);
+                }
+
                 if(updateDataPropertiesResult){
                     measurableValue.setProperties(dataProperties);
                     setDisableFormEditableStatue(true);
@@ -522,6 +528,9 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
                     resultNotification.setPosition(Position.MIDDLE_CENTER);
                     resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
                     resultNotification.show(Page.getCurrent());
+                    if(getContainerDialog()!=null){
+                        getContainerDialog().close();
+                    }
                 }else{
                     Notification errorNotification = new Notification("更新数据属性错误",
                             "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
@@ -588,5 +597,21 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
 
     public void setPropertiesEditorContainerPanelHeight(int panelHeight){
         this.propertiesEditorContainerPanel.setHeight(panelHeight,Unit.PIXELS);
+    }
+
+    public Window getContainerDialog() {
+        return containerDialog;
+    }
+
+    public void setContainerDialog(Window containerDialog) {
+        this.containerDialog = containerDialog;
+    }
+
+    public TypeDataInstancePropertiesEditorInvoker getTypeDataInstancePropertiesEditorInvoker() {
+        return typeDataInstancePropertiesEditorInvoker;
+    }
+
+    public void setTypeDataInstancePropertiesEditorInvoker(TypeDataInstancePropertiesEditorInvoker typeDataInstancePropertiesEditorInvoker) {
+        this.typeDataInstancePropertiesEditorInvoker = typeDataInstancePropertiesEditorInvoker;
     }
 }

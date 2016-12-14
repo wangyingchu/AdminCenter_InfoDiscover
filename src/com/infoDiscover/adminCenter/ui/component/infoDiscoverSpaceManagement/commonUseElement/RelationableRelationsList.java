@@ -1,9 +1,12 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
+import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
+import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.component.common.TableColumnValueIcon;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 
@@ -17,6 +20,8 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -26,7 +31,7 @@ import java.util.List;
 /**
  * Created by wangychu on 12/8/16.
  */
-public class RelationableRelationsList extends VerticalLayout {
+public class RelationableRelationsList extends VerticalLayout implements TypeDataInstancePropertiesEditorInvoker{
 
     private UserClientInfo currentUserClientInfo;
     private RelationableValueVO relationableValueVO;
@@ -84,13 +89,14 @@ public class RelationableRelationsList extends VerticalLayout {
         this.measurablePropertiesGrid.setTitleCaption(FontAwesome.LIST_UL.getHtml() + " 当前所选关系属性数据: ");
         this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 2);
         this.measurablePropertiesGrid.setPropertiesGridHeight(200);
-        /*
-        measurablePropertiesGrid.addMenuItem("Edit", FontAwesome.EDIT, new MenuBar.Command() {
+
+        measurablePropertiesGrid.addMenuItem("编辑关系属性......", FontAwesome.EDIT, new MenuBar.Command() {
             @Override
             public void menuSelected(MenuBar.MenuItem menuItem) {
-                Notification.show("Edit : ");
+                renderRelationPropertiesEditorWindow();
             }
         });
+        /*
         measurablePropertiesGrid.addMenuItem("Reload", FontAwesome.CIRCLE_O_NOTCH, new MenuBar.Command() {
             @Override
             public void menuSelected(MenuBar.MenuItem menuItem) {
@@ -267,5 +273,65 @@ public class RelationableRelationsList extends VerticalLayout {
         setInitPagination();
         renderRelationPropertiesInfo(null);
         this.currentRenderingPropertiesRelationId=null;
+    }
+
+    public void renderRelationPropertiesEditorWindow(){
+        if( this.currentRenderingPropertiesRelationId==null){
+            Notification errorNotification = new Notification("数据校验错误",
+                    " 请选择需要编辑属性的关系数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        MeasurableValueVO targetMeasurableValue=InfoDiscoverSpaceOperationUtil.getMeasurableValueById(this.relationableValueVO.getDiscoverSpaceName(),this.currentRenderingPropertiesRelationId);
+        if(targetMeasurableValue==null){
+            Notification errorNotification = new Notification("获取数据错误",
+                    "系统中不存在ID为 "+this.relationableValueVO.getId()+" 的数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,targetMeasurableValue);
+        typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(460);
+        VerticalLayout typeDataInstancePropertiesEditContainerLayout=new VerticalLayout();
+        typeDataInstancePropertiesEditContainerLayout.setSpacing(true);
+        typeDataInstancePropertiesEditContainerLayout.setMargin(true);
+
+        SecondarySectionTitle updateTypePropertiesSectionTitle=new SecondarySectionTitle("编辑关系属性数据");
+        typeDataInstancePropertiesEditContainerLayout.addComponent(updateTypePropertiesSectionTitle);
+
+        String dataTypeName= targetMeasurableValue.getMeasurableTypeName();
+        //String discoverSpaceName= targetMeasurableValue.getDiscoverSpaceName();
+        String dataId= targetMeasurableValue.getId();
+        //String dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
+        String dataInstanceBasicInfoNoticeText=FontAwesome.SHARE_ALT.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
+        Label sectionActionBarLabel=new Label(dataInstanceBasicInfoNoticeText, ContentMode.HTML);
+        SectionActionsBar dataTypeNoticeActionsBar = new SectionActionsBar(sectionActionBarLabel);
+        typeDataInstancePropertiesEditContainerLayout.addComponent(dataTypeNoticeActionsBar);
+        typeDataInstancePropertiesEditContainerLayout.addComponent(typeDataInstancePropertiesEditorPanel);
+
+        final Window window = new Window();
+        window.setWidth(500, Unit.PIXELS);
+        window.setHeight(700,Unit.PIXELS);
+        window.setCaptionAsHtml(true);
+        window.setResizable(false);
+        window.setDraggable(true);
+        window.setModal(true);
+        window.center();
+        window.setContent(typeDataInstancePropertiesEditContainerLayout);
+        typeDataInstancePropertiesEditorPanel.setContainerDialog(window);
+        typeDataInstancePropertiesEditorPanel.setTypeDataInstancePropertiesEditorInvoker(this);
+        UI.getCurrent().addWindow(window);
+    }
+
+    @Override
+    public void updateTypeDataInstancePropertiesActionFinish(boolean actionResult) {
+        if(actionResult){
+            String targetItemId="dataRelation_index_" + this.currentRenderingPropertiesRelationId;
+            Item targetItem=this.relationableRelationsTable.getItem(targetItemId);
+            renderRelationPropertiesInfo(targetItem);
+        }
     }
 }

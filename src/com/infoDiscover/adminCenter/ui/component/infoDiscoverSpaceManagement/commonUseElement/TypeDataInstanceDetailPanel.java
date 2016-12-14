@@ -36,7 +36,6 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         String dataId=this.measurableValue.getId();
 
         String dataInstanceBasicInfoNoticeText;
-        //String propertiesNoticeText;
         String dataInstanceTypeText;
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataTypeKind)){
             dataInstanceBasicInfoNoticeText=FontAwesome.CUBE.getHtml()+" "+discoverSpaceName+" /"+FontAwesome.TAGS.getHtml()+" "+dataTypeName+" /"+FontAwesome.KEY.getHtml()+" "+dataId;
