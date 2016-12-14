@@ -18,6 +18,7 @@ public class RelationableRelationsTableRowActions extends HorizontalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private RelationValueVO relationValueVO;
+    private RelationableRelationsList containerRelationableRelationsList;
 
     public RelationableRelationsTableRowActions(UserClientInfo userClientInfo,RelationValueVO relationValueVO) {
         this.currentUserClientInfo = userClientInfo;
@@ -57,6 +58,9 @@ public class RelationableRelationsTableRowActions extends HorizontalLayout {
                     resultNotification.setPosition(Position.MIDDLE_CENTER);
                     resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
                     resultNotification.show(Page.getCurrent());
+                    if(getContainerRelationableRelationsList()!=null){
+                        getContainerRelationableRelationsList().removeRelationByRelationId(relationValueVO.getId());
+                    }
                 }else{
                     Notification errorNotification = new Notification("删除关系数据　"+relationValueVO.getRelationTypeName()+"/ "+relationValueVO.getId()+"　错误",
                             "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
@@ -69,5 +73,13 @@ public class RelationableRelationsTableRowActions extends HorizontalLayout {
         };
         deleteRelationConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(deleteRelationConfirmDialog);
+    }
+
+    public RelationableRelationsList getContainerRelationableRelationsList() {
+        return containerRelationableRelationsList;
+    }
+
+    public void setContainerRelationableRelationsList(RelationableRelationsList containerRelationableRelationsList) {
+        this.containerRelationableRelationsList = containerRelationableRelationsList;
     }
 }

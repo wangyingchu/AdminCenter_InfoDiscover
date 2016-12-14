@@ -35,6 +35,9 @@ public class RelationableRelationsList extends VerticalLayout {
     private Label relationResultCountLabel;
     private int itemsPerRelationableRelationsTablePage=20;
     private MeasurablePropertiesGrid measurablePropertiesGrid;
+    private long currentRelationsCount;
+    private String currentRenderingPropertiesRelationId;
+    private Pagination relationsDataPagination;
 
     public RelationableRelationsList(UserClientInfo userClientInfo, RelationableValueVO relationableValueVO) {
         this.currentUserClientInfo = userClientInfo;
@@ -102,8 +105,86 @@ public class RelationableRelationsList extends VerticalLayout {
     @Override
     public void attach() {
         super.attach();
+        loadRelationsInfo();
+        setInitPagination();
+    }
+
+    public void setRelationableRelationsTableHeight(int newTableHeight) {
+        this.relationableRelationsTable.setHeight(newTableHeight, Unit.PIXELS);
+    }
+
+    private Pagination createPagination(long totalData, int initPageNumber) {
+        final PaginationResource paginationResource = PaginationResource.newBuilder().setTotal(totalData).setPage(initPageNumber).setLimit(itemsPerRelationableRelationsTablePage).build();
+        final Pagination pagination = new Pagination(paginationResource);
+        return pagination;
+    }
+
+    private void renderRelationPropertiesInfo(Item relationItem){
+        String propertiesGridTitleMessageStr=FontAwesome.LIST_UL.getHtml() + " 当前所选关系属性数据: ";
+        this.measurablePropertiesGrid.removeItem();
+        if(relationItem!=null){
+            Property relationTypeProperty=relationItem.getItemProperty(" 关系类型");
+            Property idProperty=relationItem.getItemProperty(" 关系ID");
+            if(relationTypeProperty!=null&&relationTypeProperty.getValue()!=null){
+                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+relationTypeProperty.getValue().toString()+" /";
+            }
+            if(idProperty!=null&&idProperty.getValue()!=null){
+                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+FontAwesome.KEY.getHtml()+" "+idProperty.getValue().toString();
+                this.currentRenderingPropertiesRelationId=idProperty.getValue().toString();
+            }
+            List<PropertyValueVO> relationProperties=InfoDiscoverSpaceOperationUtil.getMeasurablePropertiesById(relationableValueVO.getDiscoverSpaceName(),idProperty.getValue().toString());
+            if(relationProperties.size()<=6){
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 1);
+            }else if(relationProperties.size()>6&&relationProperties.size()<=12){
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 2);
+            }else{
+                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 3);
+            }
+            measurablePropertiesGrid.setItem(relationProperties);
+        }
+        this.measurablePropertiesGrid.setTitleCaption(propertiesGridTitleMessageStr);
+    }
+
+    public void removeRelationByRelationId(String relationId){
+        String targetItemId="dataRelation_index_" + relationId;
+        Item targetItem=this.relationableRelationsTable.getItem(targetItemId);
+        if(targetItem!=null){
+            boolean removeRelationResult=this.relationableRelationsTable.removeItem(targetItemId);
+            if(removeRelationResult) {
+                this.currentRelationsCount--;
+                this.relationResultCountLabel.setValue("" + this.currentRelationsCount);
+
+                int currentPaginationPage=this.relationsDataPagination.getCurrentPage();
+                if(this.relationsDataPagination!=null){
+                    this.relationsDataPagination.removeAllPageChangeListener();
+                }
+                this.paginationContainerLayout.removeAllComponents();
+
+                if(currentPaginationPage*itemsPerRelationableRelationsTablePage>this.currentRelationsCount){
+                    currentPaginationPage=currentPaginationPage-1;
+                }
+                this.relationsDataPagination = createPagination(this.currentRelationsCount, currentPaginationPage);
+                this.relationsDataPagination.setItemsPerPageVisible(false);
+                this.relationsDataPagination.addPageChangeListener(new PaginationChangeListener() {
+                    @Override
+                    public void changed(PaginationResource event) {
+                        relationableRelationsTable.setCurrentPageFirstItemIndex(event.offset());
+                    }
+                });
+                this.paginationContainerLayout.addComponent(this.relationsDataPagination);
+
+                if(relationId.equals(this.currentRenderingPropertiesRelationId)){
+                    renderRelationPropertiesInfo(null);
+                    this.currentRenderingPropertiesRelationId=null;
+                }
+            }
+        }
+    }
+
+    public void loadRelationsInfo(){
         List<RelationValueVO> relationValuesList = InfoDiscoverSpaceOperationUtil.getRelationableRelationsById(relationableValueVO.getDiscoverSpaceName(), relationableValueVO.getRelationableTypeKind(), relationableValueVO.getId());
-        this.relationResultCountLabel.setValue("" + relationValuesList.size());
+        this.currentRelationsCount=relationValuesList.size();
+        this.relationResultCountLabel.setValue("" + this.currentRelationsCount);
 
         Container dataContainer = this.relationableRelationsTable.getContainerDataSource();
         dataContainer.removeAllItems();
@@ -138,6 +219,7 @@ public class RelationableRelationsList extends VerticalLayout {
                 String relationId = currentRelationValueVO.getId();
                 Item newRecord = this.relationableRelationsTable.addItem("dataRelation_index_" + relationId);
                 RelationableRelationsTableRowActions relationableRelationsTableRowActions = new RelationableRelationsTableRowActions(this.currentUserClientInfo, currentRelationValueVO);
+                relationableRelationsTableRowActions.setContainerRelationableRelationsList(this);
                 newRecord.getItemProperty(" 操作").setValue(relationableRelationsTableRowActions);
                 newRecord.getItemProperty(" 关系ID").setValue(relationId);
                 String relationType = currentRelationValueVO.getRelationTypeName();
@@ -161,52 +243,29 @@ public class RelationableRelationsList extends VerticalLayout {
             }
         }
         this.relationableRelationsTable.setPageLength(itemsPerRelationableRelationsTablePage);
+    }
 
+    public void setInitPagination(){
+        if(this.relationsDataPagination!=null){
+            this.relationsDataPagination.removeAllPageChangeListener();
+        }
         this.paginationContainerLayout.removeAllComponents();
-        int startPage = relationValuesList.size() > 0 ? 1 : 0;
-        Pagination relationsDataPagination = createPagination(relationValuesList.size(), startPage);
-        relationsDataPagination.setItemsPerPageVisible(false);
-        relationsDataPagination.addPageChangeListener(new PaginationChangeListener() {
+        int startPage = this.currentRelationsCount > 0 ? 1 : 0;
+        this.relationsDataPagination = createPagination(this.currentRelationsCount, startPage);
+        this.relationsDataPagination.setItemsPerPageVisible(false);
+        this.relationsDataPagination.addPageChangeListener(new PaginationChangeListener() {
             @Override
             public void changed(PaginationResource event) {
                 relationableRelationsTable.setCurrentPageFirstItemIndex(event.offset());
             }
         });
-        this.paginationContainerLayout.addComponent(relationsDataPagination);
+        this.paginationContainerLayout.addComponent(this.relationsDataPagination);
     }
 
-    public void setRelationableRelationsTableHeight(int newTableHeight) {
-        this.relationableRelationsTable.setHeight(newTableHeight, Unit.PIXELS);
-    }
-
-    private Pagination createPagination(long totalData, int initPageNumber) {
-        final PaginationResource paginationResource = PaginationResource.newBuilder().setTotal(totalData).setPage(initPageNumber).setLimit(itemsPerRelationableRelationsTablePage).build();
-        final Pagination pagination = new Pagination(paginationResource);
-        return pagination;
-    }
-
-    private void renderRelationPropertiesInfo(Item relationItem){
-        String propertiesGridTitleMessageStr=FontAwesome.LIST_UL.getHtml() + " 当前所选关系属性数据: ";
-        this.measurablePropertiesGrid.removeItem();
-        if(relationItem!=null){
-            Property relationTypeProperty=relationItem.getItemProperty(" 关系类型");
-            Property idProperty=relationItem.getItemProperty(" 关系ID");
-            if(relationTypeProperty!=null&&relationTypeProperty.getValue()!=null){
-                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+relationTypeProperty.getValue().toString()+" /";
-            }
-            if(idProperty!=null&&idProperty.getValue()!=null){
-                propertiesGridTitleMessageStr=propertiesGridTitleMessageStr+FontAwesome.KEY.getHtml()+" "+idProperty.getValue().toString();
-            }
-            List<PropertyValueVO> relationProperties=InfoDiscoverSpaceOperationUtil.getMeasurablePropertiesById(relationableValueVO.getDiscoverSpaceName(),idProperty.getValue().toString());
-            if(relationProperties.size()<=6){
-                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 1);
-            }else if(relationProperties.size()>6&&relationProperties.size()<=12){
-                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 2);
-            }else{
-                this.measurablePropertiesGrid.setItemDirection(MeasurablePropertiesGrid.Direction.RIGHT, 3);
-            }
-            measurablePropertiesGrid.setItem(relationProperties);
-        }
-        this.measurablePropertiesGrid.setTitleCaption(propertiesGridTitleMessageStr);
+    public void reloadRelationsInfo(){
+        loadRelationsInfo();
+        setInitPagination();
+        renderRelationPropertiesInfo(null);
+        this.currentRenderingPropertiesRelationId=null;
     }
 }

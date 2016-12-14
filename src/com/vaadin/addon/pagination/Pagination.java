@@ -100,8 +100,16 @@ public class Pagination extends HorizontalLayout {
         listeners.remove(listener);
     }
 
+    public void removeAllPageChangeListener() {
+        listeners.clear();
+    }
+
     public void setCurrentPage(int page) {
         currentPageTextField.setValue(String.valueOf(page));
+    }
+
+    public int getCurrentPage(){
+        return Integer.parseInt(currentPageTextField.getValue());
     }
 
     public void firstClick() {

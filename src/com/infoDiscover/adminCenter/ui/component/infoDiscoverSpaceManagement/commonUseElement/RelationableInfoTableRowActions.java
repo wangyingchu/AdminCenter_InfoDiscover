@@ -70,19 +70,6 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
             }
         });
         addComponent(addToProcessingListButton);
-
-        Button deleteButton = new Button();
-        deleteButton.setIcon(FontAwesome.TRASH_O);
-        deleteButton.setDescription("删除数据");
-        deleteButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        deleteButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-        deleteButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                //processDeleteData();
-            }
-        });
-        addComponent(deleteButton);
     }
 
     private void showDataDetailInfoPanel(){

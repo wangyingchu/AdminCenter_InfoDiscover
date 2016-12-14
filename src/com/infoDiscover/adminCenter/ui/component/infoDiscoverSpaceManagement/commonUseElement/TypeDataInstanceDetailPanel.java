@@ -64,10 +64,38 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         dataPropertyInfoLayout.setHeight(100,Unit.PERCENTAGE);
         dataPropertyInfoLayout.setWidth(485,Unit.PIXELS);
 
+        HorizontalLayout dataPropertyInfoTitleContainerLayout=new HorizontalLayout();
+        dataPropertyInfoTitleContainerLayout.setWidth(100,Unit.PERCENTAGE);
+        dataPropertyInfoLayout.addComponent(dataPropertyInfoTitleContainerLayout);
+
         Label dataPropertyTitle= new Label(FontAwesome.LIST_UL.getHtml() +" "+dataInstanceTypeText+"属性", ContentMode.HTML);
         dataPropertyTitle.addStyleName(ValoTheme.LABEL_SMALL);
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
-        dataPropertyInfoLayout.addComponent(dataPropertyTitle);
+        dataPropertyInfoTitleContainerLayout.addComponent(dataPropertyTitle);
+
+        Button showRelationsSwitchButton=new Button();
+        showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
+        showRelationsSwitchButton.setDescription("显示数据关联交互信息");
+        showRelationsSwitchButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        showRelationsSwitchButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        dataPropertyInfoTitleContainerLayout.addComponent(showRelationsSwitchButton);
+        showRelationsSwitchButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                if(getContainerDialog()!=null){
+                    if (getContainerDialog().getWindowMode().equals(WindowMode.MAXIMIZED)){
+                        getContainerDialog().setWindowMode(WindowMode.NORMAL);
+                        showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
+                        showRelationsSwitchButton.setDescription("显示数据关联交互信息");
+                    }else{
+                        getContainerDialog().setWindowMode(WindowMode.MAXIMIZED);
+                        showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
+                        showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
+                    }
+                }
+            }
+        });
+        dataPropertyInfoTitleContainerLayout.setExpandRatio(dataPropertyTitle,1);
 
         typeDataInstancePropertiesEditorPanel=new TypeDataInstancePropertiesEditorPanel(this.currentUserClientInfo,this.measurableValue);
         dataPropertyInfoLayout.addComponent(typeDataInstancePropertiesEditorPanel);
@@ -80,10 +108,28 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         this.dataInteractionInfoLayout.setWidth(500,Unit.PIXELS);
         this.dataInteractionInfoLayout.addStyleName("ui_appSubViewContainer");
 
+        HorizontalLayout dataRelationInfoTitleContainerLayout=new HorizontalLayout();
+        dataRelationInfoTitleContainerLayout.setWidth(100,Unit.PERCENTAGE);
+        this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitleContainerLayout);
+
         Label dataRelationInfoTitle= new Label(VaadinIcons.CLUSTER.getHtml() +" "+dataInstanceTypeText+"关联交互信息", ContentMode.HTML);
         dataRelationInfoTitle.addStyleName(ValoTheme.LABEL_SMALL);
         dataRelationInfoTitle.addStyleName("ui_appSectionLightDiv");
-        this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitle);
+        dataRelationInfoTitleContainerLayout.addComponent(dataRelationInfoTitle);
+
+        Button refreshRelationsInfoButton=new Button();
+        refreshRelationsInfoButton.setIcon(FontAwesome.REFRESH);
+        refreshRelationsInfoButton.setDescription("刷新数据关联交互信息");
+        refreshRelationsInfoButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        refreshRelationsInfoButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        dataRelationInfoTitleContainerLayout.addComponent(refreshRelationsInfoButton);
+        refreshRelationsInfoButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                relationableRelationsList.reloadRelationsInfo();
+            }
+        });
+        dataRelationInfoTitleContainerLayout.setExpandRatio(dataRelationInfoTitle,1);
 
         RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
         currentRelationableValueVO.setDiscoverSpaceName(discoverSpaceName);
