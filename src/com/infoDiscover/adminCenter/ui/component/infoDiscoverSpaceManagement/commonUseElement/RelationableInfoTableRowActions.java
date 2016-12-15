@@ -2,8 +2,10 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceAddProcessingDataEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -66,7 +68,7 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
         addToProcessingListButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //processAddToProcessingList();
+                processAddToProcessingList();
             }
         });
         addComponent(addToProcessingListButton);
@@ -114,5 +116,17 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
                 showTypeDataDetailButton.setEnabled(true);
             }
         });
+    }
+
+    private void processAddToProcessingList(){
+        ProcessingDataVO processingDataVO=new ProcessingDataVO();
+        processingDataVO.setId(this.relationableValueVO.getId());
+        processingDataVO.setDiscoverSpaceName(this.relationableValueVO.getDiscoverSpaceName());
+        processingDataVO.setDataTypeKind(this.relationableValueVO.getRelationableTypeKind());
+        processingDataVO.setDataTypeName(this.relationableValueVO.getRelationableTypeName());
+
+        DiscoverSpaceAddProcessingDataEvent discoverSpaceAddProcessingDataEvent=new DiscoverSpaceAddProcessingDataEvent(this.relationableValueVO.getDiscoverSpaceName());
+        discoverSpaceAddProcessingDataEvent.setProcessingData(processingDataVO);
+        this.currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceAddProcessingDataEvent);
     }
 }

@@ -51,8 +51,12 @@ public class AdminCenterApplicationUI extends UI {
                 DiscoverSpaceDeletedEvent.class);
         BLACKBOARD.register(DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener.class,
                 DiscoverSpaceTypeDataInstanceQueryRequiredEvent.class);
-        BLACKBOARD.register(OpenProcessingDataListEvent.OpenProcessingDataListListener.class,
-                OpenProcessingDataListEvent.class);
+        BLACKBOARD.register(DiscoverSpaceOpenProcessingDataListEvent.DiscoverSpaceOpenProcessingDataListListener.class,
+                DiscoverSpaceOpenProcessingDataListEvent.class);
+        BLACKBOARD.register(DiscoverSpaceAddProcessingDataEvent.DiscoverSpaceAddProcessingDataListener.class,
+                DiscoverSpaceAddProcessingDataEvent.class);
+        BLACKBOARD.register(DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener.class,
+                DiscoverSpaceRemoveProcessingDataEvent.class);
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 
         if (browserCantRenderFontsConsistently()) {

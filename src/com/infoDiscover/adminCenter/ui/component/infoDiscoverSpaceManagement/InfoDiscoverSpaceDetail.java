@@ -1,10 +1,10 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
-import com.infoDiscover.adminCenter.ui.component.event.OpenProcessingDataListEvent;
+import com.infoDiscover.adminCenter.ui.component.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
@@ -20,18 +20,24 @@ import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by wangychu on 10/1/16.
  */
-public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener,
-        OpenProcessingDataListEvent.OpenProcessingDataListListener {
-
+public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
+        DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener,
+        DiscoverSpaceOpenProcessingDataListEvent.DiscoverSpaceOpenProcessingDataListListener,
+        DiscoverSpaceAddProcessingDataEvent.DiscoverSpaceAddProcessingDataListener,
+        DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener{
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
     private InfoDiscoverSpaceRuntimeGeneralInfo infoDiscoverSpaceRuntimeGeneralInfo;
     private InfoDiscoverSpaceDimensionsInfo infoDiscoverSpaceDimensionsInfo;
     private InfoDiscoverSpaceFactsInfo infoDiscoverSpaceFactsInfo;
     private InfoDiscoverSpaceRelationsInfo infoDiscoverSpaceRelationsInfo;
+    private Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap;
 
     public InfoDiscoverSpaceDetail(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -75,6 +81,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceRuntimeInfoLayout4.addComponent(infoDiscoverSpaceRelationsInfo);
 
+        this.discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
 
 
 
@@ -171,8 +178,40 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
     }
 
     @Override
-    public void receivedOpenProcessingDataListEvent(OpenProcessingDataListEvent event) {
+    public void receivedDiscoverSpaceOpenProcessingDataListEvent(DiscoverSpaceOpenProcessingDataListEvent event) {
+        System.out.println("+++++++++DiscoverSpaceOpenProcessingDataListEvent++++++++++++++++++++");
+        System.out.println(event.getDiscoverSpaceName());
         System.out.println("+++++++++++++++++++++++++++++++++++++");
+    }
+
+    @Override
+    public void receivedDiscoverSpaceAddProcessingDataEvent(DiscoverSpaceAddProcessingDataEvent event) {
+        String targetDiscoverSpaceName=event.getDiscoverSpaceName();
+        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(targetDiscoverSpaceName);
+        if(targetProcessingDataList==null){
+            targetProcessingDataList=new ProcessingDataListVO(targetDiscoverSpaceName);
+            this.discoverSpacesProcessingDataMap.put(targetDiscoverSpaceName,targetProcessingDataList);
+        }
+        ProcessingDataVO targetProcessingData=event.getProcessingData();
+        boolean addToProcessingListResult=targetProcessingDataList.addProcessingData(targetProcessingData);
+        if(addToProcessingListResult){
+            Notification resultNotification = new Notification("添加待处理数据操作成功",
+                    "已成功将数据"+targetProcessingData.getDataTypeName()+" /"+targetProcessingData.getId()+"添加入待处理数据列表", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.BOTTOM_RIGHT);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+        }else{
+            Notification resultNotification = new Notification("添加待处理数据操作未成功",
+                    "待处理数据列表中已经加入过数据"+targetProcessingData.getDataTypeName()+" /"+targetProcessingData.getId()+"，或该数据在当前信息发现空间中不存在", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.BOTTOM_RIGHT);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+        }
+    }
+
+    @Override
+    public void receivedDiscoverSpaceRemoveProcessingDataEvent(DiscoverSpaceRemoveProcessingDataEvent event) {
+        System.out.println("++++++++++DiscoverSpaceRemoveProcessingDataEvent+++++++++++++++++++");
         System.out.println(event.getDiscoverSpaceName());
         System.out.println("+++++++++++++++++++++++++++++++++++++");
     }

@@ -1,7 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement;
 
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionActionBarTitle;
-import com.infoDiscover.adminCenter.ui.component.event.OpenProcessingDataListEvent;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceOpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 
@@ -35,8 +35,8 @@ public class InfoDiscoverSpaceDimensionsInfo extends VerticalLayout {
         openProcessingDataListButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                OpenProcessingDataListEvent openProcessingDataListEvent=new OpenProcessingDataListEvent(discoverSpaceName);
-                currentUserClientInfo.getEventBlackBoard().fire(openProcessingDataListEvent);
+                DiscoverSpaceOpenProcessingDataListEvent discoverSpaceOpenProcessingDataListEvent =new DiscoverSpaceOpenProcessingDataListEvent(discoverSpaceName);
+                currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceOpenProcessingDataListEvent);
             }
         });
 

@@ -6,7 +6,7 @@ import com.github.wolfie.blackboard.Listener;
 /**
  * Created by wangychu on 12/15/16.
  */
-public class OpenProcessingDataListEvent implements Event {
+public class DiscoverSpaceOpenProcessingDataListEvent implements Event {
 
     private String discoverSpaceName;
 
@@ -18,11 +18,11 @@ public class OpenProcessingDataListEvent implements Event {
         this.discoverSpaceName = discoverSpaceName;
     }
 
-    public OpenProcessingDataListEvent(String discoverSpaceName){
+    public DiscoverSpaceOpenProcessingDataListEvent(String discoverSpaceName){
         this.setDiscoverSpaceName(discoverSpaceName);
     }
 
-    public interface OpenProcessingDataListListener extends Listener {
-        public void receivedOpenProcessingDataListEvent(final OpenProcessingDataListEvent event);
+    public interface DiscoverSpaceOpenProcessingDataListListener extends Listener {
+        public void receivedDiscoverSpaceOpenProcessingDataListEvent(final DiscoverSpaceOpenProcessingDataListEvent event);
     }
 }

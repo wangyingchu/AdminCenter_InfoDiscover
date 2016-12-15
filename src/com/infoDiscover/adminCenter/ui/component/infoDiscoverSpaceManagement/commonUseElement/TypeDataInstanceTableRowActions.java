@@ -2,7 +2,9 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceAddProcessingDataEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -113,7 +115,17 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
         }
     }
 
-    private void processAddToProcessingList(){}
+    private void processAddToProcessingList(){
+        ProcessingDataVO processingDataVO=new ProcessingDataVO();
+        processingDataVO.setId(getMeasurableValue().getId());
+        processingDataVO.setDiscoverSpaceName(getMeasurableValue().getDiscoverSpaceName());
+        processingDataVO.setDataTypeKind(getMeasurableValue().getMeasurableTypeKind());
+        processingDataVO.setDataTypeName(getMeasurableValue().getMeasurableTypeName());
+
+        DiscoverSpaceAddProcessingDataEvent discoverSpaceAddProcessingDataEvent=new DiscoverSpaceAddProcessingDataEvent(getMeasurableValue().getDiscoverSpaceName());
+        discoverSpaceAddProcessingDataEvent.setProcessingData(processingDataVO);
+        this.currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceAddProcessingDataEvent);
+    }
 
     private void processDeleteData(){}
 
