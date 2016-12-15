@@ -3,10 +3,7 @@ package com.infoDiscover.adminCenter.ui;
 import com.github.wolfie.blackboard.Blackboard;
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
+import com.infoDiscover.adminCenter.ui.component.event.*;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -54,6 +51,8 @@ public class AdminCenterApplicationUI extends UI {
                 DiscoverSpaceDeletedEvent.class);
         BLACKBOARD.register(DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener.class,
                 DiscoverSpaceTypeDataInstanceQueryRequiredEvent.class);
+        BLACKBOARD.register(OpenProcessingDataListEvent.OpenProcessingDataListListener.class,
+                OpenProcessingDataListEvent.class);
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 
         if (browserCantRenderFontsConsistently()) {

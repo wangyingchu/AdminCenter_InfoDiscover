@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
+import com.infoDiscover.adminCenter.ui.component.event.OpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
@@ -22,7 +23,8 @@ import com.vaadin.ui.*;
 /**
  * Created by wangychu on 10/1/16.
  */
-public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener {
+public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener,
+        OpenProcessingDataListEvent.OpenProcessingDataListListener {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -166,5 +168,12 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View, Dis
         window.setContent(queryTypeDataInstancePanel);
         queryTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
+    }
+
+    @Override
+    public void receivedOpenProcessingDataListEvent(OpenProcessingDataListEvent event) {
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        System.out.println(event.getDiscoverSpaceName());
+        System.out.println("+++++++++++++++++++++++++++++++++++++");
     }
 }

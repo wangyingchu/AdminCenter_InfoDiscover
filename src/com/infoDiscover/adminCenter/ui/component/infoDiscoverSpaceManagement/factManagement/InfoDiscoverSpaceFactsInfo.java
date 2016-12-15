@@ -1,9 +1,11 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement;
 
-import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
+import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionActionBarTitle;
+import com.infoDiscover.adminCenter.ui.component.event.OpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -15,18 +17,32 @@ import com.vaadin.ui.themes.ValoTheme;
  * Created by wangychu on 10/21/16.
  */
 public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
+
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
-    private SecondarySectionTitle mainSectionTitle;
     private InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail;
     private FactsRuntimeGeneralInfoPanel factsRuntimeGeneralInfoPanel;
     private FactTypesManagementPanel factTypesManagementPanel;
     private FactInstancesManagementPanel factInstancesManagementPane;
+    private SecondarySectionActionBarTitle secondarySectionActionBarTitle;
 
     public InfoDiscoverSpaceFactsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
-        mainSectionTitle=new SecondarySectionTitle("-------");
-        addComponent(mainSectionTitle);
+        Button openProcessingDataListButton = new Button("待处理数据...");
+        openProcessingDataListButton.setIcon(VaadinIcons.MAILBOX);
+        openProcessingDataListButton.setDescription("显示待处理数据列表");
+        openProcessingDataListButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        openProcessingDataListButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        openProcessingDataListButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                OpenProcessingDataListEvent openProcessingDataListEvent=new OpenProcessingDataListEvent(discoverSpaceName);
+                currentUserClientInfo.getEventBlackBoard().fire(openProcessingDataListEvent);
+            }
+        });
+
+        secondarySectionActionBarTitle=new SecondarySectionActionBarTitle("-------",new Button[]{openProcessingDataListButton});
+        addComponent(secondarySectionActionBarTitle);
 
         TabSheet tabs=new TabSheet();
         addComponent(tabs);
@@ -70,7 +86,7 @@ public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
     }
 
     public void renderFactsInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
-        this.mainSectionTitle.setValue(this.discoverSpaceName);
+        this.secondarySectionActionBarTitle.updateSectionTitle(this.discoverSpaceName);
         this.factsRuntimeGeneralInfoPanel.renderFactsRuntimeGeneralInfo(discoverSpaceStatisticMetrics);
         this.factTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.factTypesManagementPanel.renderFactTypesManagementInfo(discoverSpaceStatisticMetrics);
