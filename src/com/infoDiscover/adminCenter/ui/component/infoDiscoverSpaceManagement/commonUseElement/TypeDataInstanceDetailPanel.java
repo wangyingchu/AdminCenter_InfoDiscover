@@ -128,6 +128,20 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
                 relationableRelationsList.reloadRelationsInfo();
             }
         });
+
+        Button createNewRelationButton=new Button();
+        createNewRelationButton.setIcon(FontAwesome.CHAIN);
+        createNewRelationButton.setDescription("建立新的数据关联");
+        createNewRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        createNewRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        dataRelationInfoTitleContainerLayout.addComponent(createNewRelationButton);
+        createNewRelationButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                relationableRelationsList.reloadRelationsInfo();
+            }
+        });
+
         dataRelationInfoTitleContainerLayout.setExpandRatio(dataRelationInfoTitle,1);
 
         RelationableValueVO currentRelationableValueVO=new RelationableValueVO();

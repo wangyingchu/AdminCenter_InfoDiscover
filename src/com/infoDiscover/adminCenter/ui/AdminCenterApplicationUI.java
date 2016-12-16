@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui;
 
 import com.github.wolfie.blackboard.Blackboard;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
 import com.infoDiscover.adminCenter.ui.component.event.*;
@@ -14,6 +15,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import javax.servlet.ServletException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wangychu on 9/28/16.
@@ -58,6 +61,9 @@ public class AdminCenterApplicationUI extends UI {
         BLACKBOARD.register(DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener.class,
                 DiscoverSpaceRemoveProcessingDataEvent.class);
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
+
+        Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
+        currentUserClientInfo.setDiscoverSpacesProcessingDataMap(discoverSpacesProcessingDataMap);
 
         if (browserCantRenderFontsConsistently()) {
             getPage().getStyles().add(".v-app.v-app.v-app {font-family: Sans-Serif;}");

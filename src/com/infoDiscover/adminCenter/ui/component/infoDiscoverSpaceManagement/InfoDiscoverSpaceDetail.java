@@ -22,9 +22,6 @@ import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by wangychu on 10/1/16.
  */
@@ -39,7 +36,6 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
     private InfoDiscoverSpaceDimensionsInfo infoDiscoverSpaceDimensionsInfo;
     private InfoDiscoverSpaceFactsInfo infoDiscoverSpaceFactsInfo;
     private InfoDiscoverSpaceRelationsInfo infoDiscoverSpaceRelationsInfo;
-    private Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap;
 
     public InfoDiscoverSpaceDetail(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -82,9 +78,6 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         infoDiscoverSpaceRelationsInfo=new InfoDiscoverSpaceRelationsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceRelationsInfoLayout.addComponent(infoDiscoverSpaceRelationsInfo);
-
-        this.discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
-
 
 
 
@@ -184,10 +177,10 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         String discoverSpaceName=event.getDiscoverSpaceName();
         ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo);
         processingDataOperationPanel.setDiscoverSpaceName(discoverSpaceName);
-        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(discoverSpaceName);
+        ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(discoverSpaceName);
         if(targetProcessingDataList==null){
             targetProcessingDataList=new ProcessingDataListVO(discoverSpaceName);
-            this.discoverSpacesProcessingDataMap.put(discoverSpaceName,targetProcessingDataList);
+            currentUserClientInfo.getDiscoverSpacesProcessingDataMap().put(discoverSpaceName,targetProcessingDataList);
         }
         processingDataOperationPanel.setProcessingDataList(targetProcessingDataList);
 
@@ -201,18 +194,16 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         window.setModal(false);
 
         window.setContent(processingDataOperationPanel);
-        //createTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
-
     }
 
     @Override
     public void receivedDiscoverSpaceAddProcessingDataEvent(DiscoverSpaceAddProcessingDataEvent event) {
         String targetDiscoverSpaceName=event.getDiscoverSpaceName();
-        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(targetDiscoverSpaceName);
+        ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(targetDiscoverSpaceName);
         if(targetProcessingDataList==null){
             targetProcessingDataList=new ProcessingDataListVO(targetDiscoverSpaceName);
-            this.discoverSpacesProcessingDataMap.put(targetDiscoverSpaceName,targetProcessingDataList);
+            this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().put(targetDiscoverSpaceName,targetProcessingDataList);
         }
         ProcessingDataVO targetProcessingData=event.getProcessingData();
         boolean addToProcessingListResult=targetProcessingDataList.addProcessingData(targetProcessingData);
@@ -234,7 +225,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
     @Override
     public void receivedDiscoverSpaceRemoveProcessingDataEvent(DiscoverSpaceRemoveProcessingDataEvent event) {
         String targetDiscoverSpaceName=event.getDiscoverSpaceName();
-        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(targetDiscoverSpaceName);
+        ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(targetDiscoverSpaceName);
         if(targetProcessingDataList!=null){
             ProcessingDataVO targetProcessingData=event.getProcessingData();
             boolean removeFromProcessingListResult=targetProcessingDataList.removeProcessingData(targetProcessingData);
