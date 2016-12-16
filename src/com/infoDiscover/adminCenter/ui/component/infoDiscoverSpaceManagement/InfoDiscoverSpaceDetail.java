@@ -4,7 +4,9 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.event.*;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.ProcessingDataOperationPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
@@ -74,12 +76,12 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         infoDiscoverSpaceFactsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceFactsInfoLayout.addComponent(infoDiscoverSpaceFactsInfo);
 
-        VerticalLayout discoverSpaceRuntimeInfoLayout4=new VerticalLayout();
-        TabSheet.Tab discoverSpaceRelationsInfoLayoutTab =tabs.addTab(discoverSpaceRuntimeInfoLayout4, "空间关系管理");
+        VerticalLayout discoverSpaceRelationsInfoLayout=new VerticalLayout();
+        TabSheet.Tab discoverSpaceRelationsInfoLayoutTab =tabs.addTab(discoverSpaceRelationsInfoLayout, "空间关系管理");
         discoverSpaceRelationsInfoLayoutTab.setIcon(FontAwesome.SHARE_ALT);
         infoDiscoverSpaceRelationsInfo=new InfoDiscoverSpaceRelationsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
-        discoverSpaceRuntimeInfoLayout4.addComponent(infoDiscoverSpaceRelationsInfo);
+        discoverSpaceRelationsInfoLayout.addComponent(infoDiscoverSpaceRelationsInfo);
 
         this.discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
 
@@ -179,9 +181,29 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
     @Override
     public void receivedDiscoverSpaceOpenProcessingDataListEvent(DiscoverSpaceOpenProcessingDataListEvent event) {
-        System.out.println("+++++++++DiscoverSpaceOpenProcessingDataListEvent++++++++++++++++++++");
-        System.out.println(event.getDiscoverSpaceName());
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        String discoverSpaceName=event.getDiscoverSpaceName();
+        ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo);
+        processingDataOperationPanel.setDiscoverSpaceName(discoverSpaceName);
+        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(discoverSpaceName);
+        if(targetProcessingDataList==null){
+            targetProcessingDataList=new ProcessingDataListVO(discoverSpaceName);
+            this.discoverSpacesProcessingDataMap.put(discoverSpaceName,targetProcessingDataList);
+        }
+        processingDataOperationPanel.setProcessingDataList(targetProcessingDataList);
+
+        String dataDetailInfoTitle="信息发现空间待处理数据列表";
+        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+        window.setWidth(600, Unit.PIXELS);
+        window.setHeight(820,Unit.PIXELS);
+        window.setCaptionAsHtml(true);
+        window.setResizable(true);
+        window.setDraggable(true);
+        window.setModal(false);
+
+        window.setContent(processingDataOperationPanel);
+        //createTypeDataInstancePanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
+
     }
 
     @Override
@@ -211,8 +233,24 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
     @Override
     public void receivedDiscoverSpaceRemoveProcessingDataEvent(DiscoverSpaceRemoveProcessingDataEvent event) {
-        System.out.println("++++++++++DiscoverSpaceRemoveProcessingDataEvent+++++++++++++++++++");
-        System.out.println(event.getDiscoverSpaceName());
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
+        String targetDiscoverSpaceName=event.getDiscoverSpaceName();
+        ProcessingDataListVO targetProcessingDataList=this.discoverSpacesProcessingDataMap.get(targetDiscoverSpaceName);
+        if(targetProcessingDataList!=null){
+            ProcessingDataVO targetProcessingData=event.getProcessingData();
+            boolean removeFromProcessingListResult=targetProcessingDataList.removeProcessingData(targetProcessingData);
+            if(removeFromProcessingListResult){
+                Notification resultNotification = new Notification("移除待处理数据操作成功",
+                        "已成功将数据"+targetProcessingData.getDataTypeName()+" /"+targetProcessingData.getId()+"从待处理数据列表中移除", Notification.Type.HUMANIZED_MESSAGE);
+                resultNotification.setPosition(Position.BOTTOM_RIGHT);
+                resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                resultNotification.show(Page.getCurrent());
+            }else{
+                Notification resultNotification = new Notification("移除待处理数据操作未成功",
+                        "待处理数据列表中不存在数据"+targetProcessingData.getDataTypeName()+" /"+targetProcessingData.getId()+"", Notification.Type.HUMANIZED_MESSAGE);
+                resultNotification.setPosition(Position.BOTTOM_RIGHT);
+                resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                resultNotification.show(Page.getCurrent());
+            }
+        }
     }
 }

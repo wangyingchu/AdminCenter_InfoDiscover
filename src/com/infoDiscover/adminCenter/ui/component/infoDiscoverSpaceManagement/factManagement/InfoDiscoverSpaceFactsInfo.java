@@ -28,7 +28,7 @@ public class InfoDiscoverSpaceFactsInfo extends VerticalLayout {
 
     public InfoDiscoverSpaceFactsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
-        Button openProcessingDataListButton = new Button("待处理数据...");
+        Button openProcessingDataListButton = new Button("待处理数据");
         openProcessingDataListButton.setIcon(VaadinIcons.MAILBOX);
         openProcessingDataListButton.setDescription("显示待处理数据列表");
         openProcessingDataListButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
