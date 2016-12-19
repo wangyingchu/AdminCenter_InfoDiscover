@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -12,6 +13,9 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,23 +27,23 @@ public class ProcessingDataList extends VerticalLayout {
     private String discoverSpaceName;
     private List<ProcessingDataVO> processingDataVOList;
     private String processingDataType;
-
     private Table processingDataInstanceTable;
+    private boolean isSelectable;
 
-    public ProcessingDataList(UserClientInfo userClientInfo) {
+    public ProcessingDataList(UserClientInfo userClientInfo,boolean isSelectable) {
         this.currentUserClientInfo = userClientInfo;
         this.setWidth(100,Unit.PERCENTAGE);
-
+        this.isSelectable=isSelectable;
         this.processingDataInstanceTable =new Table();
         this.processingDataInstanceTable.setWidth(100, Unit.PERCENTAGE);
         this.processingDataInstanceTable.setSelectable(true);
         addComponent(this.processingDataInstanceTable);
-
-        this.processingDataInstanceTable.addContainerProperty(" 选择", CheckBox.class,null);
-        this.processingDataInstanceTable.setColumnIcon(" 选择",FontAwesome.CHECK_SQUARE_O);
-        this.processingDataInstanceTable.setColumnWidth(" 选择", 70);
-        this.processingDataInstanceTable.setColumnAlignment(" 选择", Table.Align.CENTER);
-
+        if(this.isSelectable) {
+            this.processingDataInstanceTable.addContainerProperty(" 选择", CheckBox.class, null);
+            this.processingDataInstanceTable.setColumnIcon(" 选择", FontAwesome.CHECK_SQUARE_O);
+            this.processingDataInstanceTable.setColumnWidth(" 选择", 70);
+            this.processingDataInstanceTable.setColumnAlignment(" 选择", Table.Align.CENTER);
+        }
         this.processingDataInstanceTable.addContainerProperty(" 待处理数据",Label.class,"");
         this.processingDataInstanceTable.setColumnIcon(" 待处理数据", VaadinIcons.BUTTON);
 
@@ -118,9 +122,39 @@ public class ProcessingDataList extends VerticalLayout {
             processingDataInstanceTableRowActions.setProcessingDataVO(currentProcessingDataVO);
 
             Item newRecord=this.processingDataInstanceTable.addItem("processingDataInstance_index_"+dataId);
-            newRecord.getItemProperty(" 选择").setValue(new CheckBox());
+            if(this.isSelectable) {
+                newRecord.getItemProperty(" 选择").setValue(new CheckBox());
+            }
             newRecord.getItemProperty(" 待处理数据").setValue(processingDataInfoLabel);
             newRecord.getItemProperty(" 操作").setValue(processingDataInstanceTableRowActions);
         }
+    }
+
+    public void setProcessingDataInstanceTableHeight(int tableHeight){
+        this.processingDataInstanceTable.setHeight(tableHeight,Unit.PIXELS);
+    }
+
+    public List<String> getSelectedDataId(){
+        List<String> selectedItemIdList=new ArrayList<String>();
+        if(isSelectable) {
+            Collection itemIdsCollection = this.processingDataInstanceTable.getVisibleItemIds();
+            Iterator idsIterator = itemIdsCollection.iterator();
+            while (idsIterator.hasNext()) {
+                Object itemId=idsIterator.next();
+                Item currentItem = this.processingDataInstanceTable.getItem(itemId);
+                if (currentItem != null) {
+                    Property slector=currentItem.getItemProperty(" 选择");
+                    if(slector!=null&&slector.getValue()!=null){
+                        CheckBox checkBoxElement=(CheckBox)slector.getValue();
+                        if(checkBoxElement.getValue()){
+                            String selectedDataId=itemId.toString().replaceFirst("processingDataInstance_index_","");
+                            System.out.println(selectedDataId);
+                            selectedItemIdList.add(selectedDataId);
+                        }
+                    }
+                }
+            }
+        }
+        return selectedItemIdList;
     }
 }

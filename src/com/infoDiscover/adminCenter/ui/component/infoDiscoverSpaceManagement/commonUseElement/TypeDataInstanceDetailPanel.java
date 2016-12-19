@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -138,7 +139,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         createNewRelationButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                relationableRelationsList.reloadRelationsInfo();
+                createNewRelation();
             }
         });
 
@@ -196,5 +197,32 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
 
     public Window getContainerDialog() {
         return containerDialog;
+    }
+
+    public void createNewRelation(){
+        String dataTypeKind= this.measurableValue.getMeasurableTypeKind();
+        String dataTypeName=this.measurableValue.getMeasurableTypeName();
+        String discoverSpaceName=this.measurableValue.getDiscoverSpaceName();
+        String dataId=this.measurableValue.getId();
+
+        RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
+        currentRelationableValueVO.setDiscoverSpaceName(discoverSpaceName);
+        currentRelationableValueVO.setRelationableTypeName(dataTypeName);
+        currentRelationableValueVO.setRelationableTypeKind(dataTypeKind);
+        currentRelationableValueVO.setId(dataId);
+
+        CreateRelationPanel createRelationPanel=new CreateRelationPanel(this.currentUserClientInfo,currentRelationableValueVO);
+
+        final Window window = new Window();
+        window.setWidth(1150, Unit.PIXELS);
+        window.setHeight(720,Unit.PIXELS);
+        window.setCaptionAsHtml(true);
+        window.setResizable(false);
+        window.setDraggable(true);
+        window.setModal(true);
+        window.center();
+        window.setContent(createRelationPanel);
+        createRelationPanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
     }
 }

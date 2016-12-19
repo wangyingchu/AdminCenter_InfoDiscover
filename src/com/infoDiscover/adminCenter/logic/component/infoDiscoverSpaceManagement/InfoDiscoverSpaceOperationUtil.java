@@ -26,6 +26,10 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String TYPEKIND_FACT="TYPEKIND_FACT";
     public static final String TYPEKIND_RELATION="TYPEKIND_RELATION";
 
+    public static final String RELATION_DIRECTION_FROM="FROM";
+    public static final String RELATION_DIRECTION_TO="TO";
+    public static final String RELATION_DIRECTION_BOTH="BOTH";
+
     public static boolean checkDiscoverSpaceExistence(String spaceName){
         return DiscoverEngineComponentFactory.checkDiscoverSpaceExistence(spaceName);
     }
@@ -1296,5 +1300,59 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return false;
+    }
+
+    public static boolean createRelations(RelationableValueVO sourceRelationableValue,String relationTypeName,
+                                          String relationDirection,List<PropertyValueVO> relationProperties,
+                                          List<String> targetDimensionsIdList, List<String> targetFactsIdList){
+        String discoverSpaceName=sourceRelationableValue.getDiscoverSpaceName();
+        String relationableTypeKind=sourceRelationableValue.getRelationableTypeKind();
+        String sourceRelationablId=sourceRelationableValue.getId();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+            Relationable sourceRelationable=null;
+            if(TYPEKIND_DIMENSION.equals(relationableTypeKind)){
+                sourceRelationable=targetSpace.getDimensionById(sourceRelationablId);
+            }
+            if(TYPEKIND_FACT.equals(relationableTypeKind)){
+                sourceRelationable=targetSpace.getFactById(sourceRelationablId);
+            }
+            if(sourceRelationable==null){
+                return false;
+            }else{
+                Relationable targetRelationable=null;
+                if(targetDimensionsIdList!=null) {
+                    for (String currentDimensionId:targetDimensionsIdList) {
+                        targetRelationable=targetSpace.getDimensionById(currentDimensionId);
+                        if(targetRelationable!=null){
+                            addRelationWithProperties(targetSpace,sourceRelationable,targetRelationable,relationDirection,relationProperties);
+                        }
+                    }
+                }
+                if(targetFactsIdList!=null) {
+                    for (String currentFactId:targetDimensionsIdList) {
+                        targetRelationable=targetSpace.getFactById(currentFactId);
+                        if(targetRelationable!=null){
+                            addRelationWithProperties(targetSpace,sourceRelationable,targetRelationable,relationDirection,relationProperties);
+                        }
+                    }
+                }
+            }
+            return true;
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    private static void addRelationWithProperties(InfoDiscoverSpace targetSpace,Relationable sourceRelationable,
+                                                  Relationable targetRelationable,String relationDirection,
+                                                  List<PropertyValueVO> relationProperties){
+
     }
 }

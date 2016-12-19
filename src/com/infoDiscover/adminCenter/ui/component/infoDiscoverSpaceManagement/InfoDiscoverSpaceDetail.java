@@ -175,7 +175,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
     @Override
     public void receivedDiscoverSpaceOpenProcessingDataListEvent(DiscoverSpaceOpenProcessingDataListEvent event) {
         String discoverSpaceName=event.getDiscoverSpaceName();
-        ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo);
+        ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo,true,false,true);
         processingDataOperationPanel.setDiscoverSpaceName(discoverSpaceName);
         ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(discoverSpaceName);
         if(targetProcessingDataList==null){
