@@ -148,7 +148,6 @@ public class ProcessingDataList extends VerticalLayout {
                         CheckBox checkBoxElement=(CheckBox)slector.getValue();
                         if(checkBoxElement.getValue()){
                             String selectedDataId=itemId.toString().replaceFirst("processingDataInstance_index_","");
-                            System.out.println(selectedDataId);
                             selectedItemIdList.add(selectedDataId);
                         }
                     }

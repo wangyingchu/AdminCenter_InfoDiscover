@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.ProcessingDataOperationPanel;
@@ -229,9 +230,40 @@ public class CreateRelationPanel extends VerticalLayout {
         if(relationDirectionStr.equals("双向关系")){
             relationDirection=InfoDiscoverSpaceOperationUtil.RELATION_DIRECTION_BOTH;
         }
+        String finalRelationDirection = relationDirection;
         List<PropertyValueVO> relationProperties=this.relationPropertiesEditorPanel.retrievePropertyValueObjects();
-        boolean createRelationsResult=InfoDiscoverSpaceOperationUtil.createRelations(this.relationableValueVO,relationTypeName,relationDirection,
-                relationProperties,selectedDimensionsIdList,selectedFactsIdList);
 
+        int totalRelationCount=selectedDimensionsIdList.size()+selectedFactsIdList.size();
+        String confirmMessageString=" 请确认为数据 "+this.relationableValueVO.getRelationableTypeName()+" /"+this.relationableValueVO.getId()+" 建立"+totalRelationCount+"项类型为 "+relationTypeName+" 的数据关联";
+        Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
+
+        final ConfirmDialog addDataConfirmDialog = new ConfirmDialog();
+        addDataConfirmDialog.setConfirmMessage(confirmMessage);
+
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                addDataConfirmDialog.close();
+                boolean createRelationsResult=InfoDiscoverSpaceOperationUtil.createRelations(relationableValueVO,relationTypeName, finalRelationDirection,
+                        relationProperties,selectedDimensionsIdList,selectedFactsIdList);
+                if(createRelationsResult){
+                    //getCreateTypePropertyPanelInvoker().createTypePropertyActionFinish(createTypePropertyResult);
+                    Notification resultNotification = new Notification("添加数据操作成功",
+                            "建立数据关联成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                }else{
+                    Notification errorNotification = new Notification("建立数据关联错误",
+                            "发生服务器端错误,请确认所有参与建立关联的数据项均处于数据合法状态", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+            }
+        };
+        addDataConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(addDataConfirmDialog);
     }
 }

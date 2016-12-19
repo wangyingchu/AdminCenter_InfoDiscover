@@ -1059,6 +1059,15 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
+    public static void addMeasurableMultiProperties(Measurable measurable,List<PropertyValueVO> propertiesValueList){
+        Map<String, Object> propertiesNeedAddMap=new HashMap<String, Object>();
+        for(PropertyValueVO currentNewPropertyValue:propertiesValueList){
+            String propertyName=currentNewPropertyValue.getPropertyName();
+            propertiesNeedAddMap.put(propertyName,getMeasurablePropertyValue(currentNewPropertyValue));
+        }
+        measurable.addProperties(propertiesNeedAddMap);
+    }
+
     public static void updateMeasurableSingleProperty(Measurable measurable,PropertyValueVO currentPropertyValueVO) throws InfoDiscoveryEngineRuntimeException {
         String propertyName=currentPropertyValueVO.getPropertyName();
         String propertyType=currentPropertyValueVO.getPropertyType();
@@ -1326,15 +1335,15 @@ public class InfoDiscoverSpaceOperationUtil {
                     for (String currentDimensionId:targetDimensionsIdList) {
                         targetRelationable=targetSpace.getDimensionById(currentDimensionId);
                         if(targetRelationable!=null){
-                            addRelationWithProperties(targetSpace,sourceRelationable,targetRelationable,relationDirection,relationProperties);
+                            addRelationWithProperties(sourceRelationable,targetRelationable,relationTypeName,relationDirection,relationProperties);
                         }
                     }
                 }
                 if(targetFactsIdList!=null) {
-                    for (String currentFactId:targetDimensionsIdList) {
+                    for (String currentFactId:targetFactsIdList) {
                         targetRelationable=targetSpace.getFactById(currentFactId);
                         if(targetRelationable!=null){
-                            addRelationWithProperties(targetSpace,sourceRelationable,targetRelationable,relationDirection,relationProperties);
+                            addRelationWithProperties(sourceRelationable,targetRelationable,relationTypeName,relationDirection,relationProperties);
                         }
                     }
                 }
@@ -1350,9 +1359,30 @@ public class InfoDiscoverSpaceOperationUtil {
         return false;
     }
 
-    private static void addRelationWithProperties(InfoDiscoverSpace targetSpace,Relationable sourceRelationable,
-                                                  Relationable targetRelationable,String relationDirection,
-                                                  List<PropertyValueVO> relationProperties){
-
+    private static void addRelationWithProperties(Relationable sourceRelationable,
+                                                  Relationable targetRelationable,String relationTypeName,String relationDirection,
+                                                  List<PropertyValueVO> relationProperties) throws InfoDiscoveryEngineRuntimeException {
+        if(RELATION_DIRECTION_BOTH.equals(relationDirection)){
+            Relation resultFromRelation=sourceRelationable.addFromRelation(targetRelationable,relationTypeName);
+            if(resultFromRelation!=null){
+                addMeasurableMultiProperties(resultFromRelation,relationProperties);
+            }
+            Relation resultToRelation=sourceRelationable.addToRelation(targetRelationable,relationTypeName);
+            if(resultToRelation!=null){
+                addMeasurableMultiProperties(resultToRelation,relationProperties);
+            }
+        }
+        if(RELATION_DIRECTION_FROM.equals(relationDirection)){
+            Relation resultFromRelation=sourceRelationable.addFromRelation(targetRelationable,relationTypeName);
+            if(resultFromRelation!=null){
+                addMeasurableMultiProperties(resultFromRelation,relationProperties);
+            }
+        }
+        if(RELATION_DIRECTION_TO.equals(relationDirection)){
+            Relation resultToRelation=sourceRelationable.addToRelation(targetRelationable,relationTypeName);
+            if(resultToRelation!=null){
+                addMeasurableMultiProperties(resultToRelation,relationProperties);
+            }
+        }
     }
 }
