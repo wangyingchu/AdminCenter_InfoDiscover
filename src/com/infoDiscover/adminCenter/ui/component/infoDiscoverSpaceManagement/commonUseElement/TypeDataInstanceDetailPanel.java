@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -16,7 +17,7 @@ import com.vaadin.ui.themes.ValoTheme;
 /**
  * Created by wangychu on 11/10/16.
  */
-public class TypeDataInstanceDetailPanel extends VerticalLayout {
+public class TypeDataInstanceDetailPanel extends VerticalLayout implements CreateRelationPanelInvoker {
 
     private UserClientInfo currentUserClientInfo;
     private MeasurableValueVO measurableValue;
@@ -212,6 +213,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         currentRelationableValueVO.setId(dataId);
 
         CreateRelationPanel createRelationPanel=new CreateRelationPanel(this.currentUserClientInfo,currentRelationableValueVO);
+        createRelationPanel.setCreateRelationPanelInvoker(this);
 
         final Window window = new Window();
         window.setWidth(1150, Unit.PIXELS);
@@ -224,5 +226,10 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout {
         window.setContent(createRelationPanel);
         createRelationPanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
+    }
+
+    @Override
+    public void createRelationsActionFinish(boolean actionResult) {
+        relationableRelationsList.reloadRelationsInfo();
     }
 }

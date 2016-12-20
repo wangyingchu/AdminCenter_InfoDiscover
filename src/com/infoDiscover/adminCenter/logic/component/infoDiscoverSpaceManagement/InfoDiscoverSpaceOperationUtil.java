@@ -1362,27 +1362,25 @@ public class InfoDiscoverSpaceOperationUtil {
     private static void addRelationWithProperties(Relationable sourceRelationable,
                                                   Relationable targetRelationable,String relationTypeName,String relationDirection,
                                                   List<PropertyValueVO> relationProperties) throws InfoDiscoveryEngineRuntimeException {
-        if(RELATION_DIRECTION_BOTH.equals(relationDirection)){
-            Relation resultFromRelation=sourceRelationable.addFromRelation(targetRelationable,relationTypeName);
-            if(resultFromRelation!=null){
-                addMeasurableMultiProperties(resultFromRelation,relationProperties);
+        try {
+            Map<String, Object> propertiesNeedAddMap=new HashMap<String, Object>();
+            for(PropertyValueVO currentNewPropertyValue:relationProperties){
+                String propertyName=currentNewPropertyValue.getPropertyName();
+                propertiesNeedAddMap.put(propertyName,getMeasurablePropertyValue(currentNewPropertyValue));
             }
-            Relation resultToRelation=sourceRelationable.addToRelation(targetRelationable,relationTypeName);
-            if(resultToRelation!=null){
-                addMeasurableMultiProperties(resultToRelation,relationProperties);
+            if (RELATION_DIRECTION_BOTH.equals(relationDirection)) {
+                sourceRelationable.addFromRelation(targetRelationable, relationTypeName,propertiesNeedAddMap);
+                sourceRelationable.addToRelation(targetRelationable, relationTypeName,propertiesNeedAddMap);
             }
-        }
-        if(RELATION_DIRECTION_FROM.equals(relationDirection)){
-            Relation resultFromRelation=sourceRelationable.addFromRelation(targetRelationable,relationTypeName);
-            if(resultFromRelation!=null){
-                addMeasurableMultiProperties(resultFromRelation,relationProperties);
+            if (RELATION_DIRECTION_FROM.equals(relationDirection)) {
+                sourceRelationable.addFromRelation(targetRelationable, relationTypeName,propertiesNeedAddMap);
             }
-        }
-        if(RELATION_DIRECTION_TO.equals(relationDirection)){
-            Relation resultToRelation=sourceRelationable.addToRelation(targetRelationable,relationTypeName);
-            if(resultToRelation!=null){
-                addMeasurableMultiProperties(resultToRelation,relationProperties);
+            if (RELATION_DIRECTION_TO.equals(relationDirection)) {
+                sourceRelationable.addToRelation(targetRelationable, relationTypeName,propertiesNeedAddMap);
             }
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new InfoDiscoveryEngineRuntimeException();
         }
     }
 }

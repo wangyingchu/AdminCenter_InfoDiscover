@@ -224,27 +224,30 @@ public class RelationableRelationsList extends VerticalLayout implements TypeDat
             for (RelationValueVO currentRelationValueVO : relationValuesList) {
                 String relationId = currentRelationValueVO.getId();
                 Item newRecord = this.relationableRelationsTable.addItem("dataRelation_index_" + relationId);
-                RelationableRelationsTableRowActions relationableRelationsTableRowActions = new RelationableRelationsTableRowActions(this.currentUserClientInfo, currentRelationValueVO);
-                relationableRelationsTableRowActions.setContainerRelationableRelationsList(this);
-                newRecord.getItemProperty(" 操作").setValue(relationableRelationsTableRowActions);
-                newRecord.getItemProperty(" 关系ID").setValue(relationId);
-                String relationType = currentRelationValueVO.getRelationTypeName();
-                newRecord.getItemProperty(" 关系类型").setValue(relationType);
-                RelationableValueVO fromRelationable = currentRelationValueVO.getFromRelationable();
-                RelationableValueVO toRelationable = currentRelationValueVO.getToRelationable();
-                if (fromRelationable.getId().equals(currentRelationableId)) {
-                    //to other relationable
-                    TableColumnValueIcon tableColumnValueIcon = new TableColumnValueIcon(VaadinIcons.ANGLE_DOUBLE_RIGHT, "关系由当前数据发出");
-                    newRecord.getItemProperty(" 关系方向").setValue(tableColumnValueIcon);
-                    RelationableInfoTableRowActions relationableInfoTableRowActions = new RelationableInfoTableRowActions(this.currentUserClientInfo, toRelationable);
-                    newRecord.getItemProperty(" 相关数据").setValue(relationableInfoTableRowActions);
-                }
-                if (toRelationable.getId().equals(currentRelationableId)) {
-                    //from other relationable
-                    TableColumnValueIcon tableColumnValueIcon = new TableColumnValueIcon(FontAwesome.ANGLE_DOUBLE_LEFT, "关系指向当前数据");
-                    newRecord.getItemProperty(" 关系方向").setValue(tableColumnValueIcon);
-                    RelationableInfoTableRowActions relationableInfoTableRowActions = new RelationableInfoTableRowActions(this.currentUserClientInfo, fromRelationable);
-                    newRecord.getItemProperty(" 相关数据").setValue(relationableInfoTableRowActions);
+                //If RelationValues have same id(related to themselves),the second will get a null return value
+                if(newRecord!=null){
+                    RelationableRelationsTableRowActions relationableRelationsTableRowActions = new RelationableRelationsTableRowActions(this.currentUserClientInfo, currentRelationValueVO);
+                    relationableRelationsTableRowActions.setContainerRelationableRelationsList(this);
+                    newRecord.getItemProperty(" 操作").setValue(relationableRelationsTableRowActions);
+                    newRecord.getItemProperty(" 关系ID").setValue(relationId);
+                    String relationType = currentRelationValueVO.getRelationTypeName();
+                    newRecord.getItemProperty(" 关系类型").setValue(relationType);
+                    RelationableValueVO fromRelationable = currentRelationValueVO.getFromRelationable();
+                    RelationableValueVO toRelationable = currentRelationValueVO.getToRelationable();
+                    if (fromRelationable.getId().equals(currentRelationableId)) {
+                        //to other relationable
+                        TableColumnValueIcon tableColumnValueIcon = new TableColumnValueIcon(VaadinIcons.ANGLE_DOUBLE_RIGHT, "关系由当前数据发出");
+                        newRecord.getItemProperty(" 关系方向").setValue(tableColumnValueIcon);
+                        RelationableInfoTableRowActions relationableInfoTableRowActions = new RelationableInfoTableRowActions(this.currentUserClientInfo, toRelationable);
+                        newRecord.getItemProperty(" 相关数据").setValue(relationableInfoTableRowActions);
+                    }
+                    if (toRelationable.getId().equals(currentRelationableId)) {
+                        //from other relationable
+                        TableColumnValueIcon tableColumnValueIcon = new TableColumnValueIcon(FontAwesome.ANGLE_DOUBLE_LEFT, "关系指向当前数据");
+                        newRecord.getItemProperty(" 关系方向").setValue(tableColumnValueIcon);
+                        RelationableInfoTableRowActions relationableInfoTableRowActions = new RelationableInfoTableRowActions(this.currentUserClientInfo, fromRelationable);
+                        newRecord.getItemProperty(" 相关数据").setValue(relationableInfoTableRowActions);
+                    }
                 }
             }
         }
@@ -331,7 +334,9 @@ public class RelationableRelationsList extends VerticalLayout implements TypeDat
         if(actionResult){
             String targetItemId="dataRelation_index_" + this.currentRenderingPropertiesRelationId;
             Item targetItem=this.relationableRelationsTable.getItem(targetItemId);
-            renderRelationPropertiesInfo(targetItem);
+            if(targetItem!=null){
+                renderRelationPropertiesInfo(targetItem);
+            }
         }
     }
 }

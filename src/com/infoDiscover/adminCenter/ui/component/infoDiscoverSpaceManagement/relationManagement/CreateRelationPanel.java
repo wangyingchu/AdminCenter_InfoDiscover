@@ -35,6 +35,7 @@ public class CreateRelationPanel extends VerticalLayout {
     private ComboBox relationTypeSelectorCombox;
     private OptionGroup relationDirectionOptionGroup;
     private ProcessingDataOperationPanel processingDataOperationPanel;
+    private CreateRelationPanelInvoker createRelationPanelInvoker;
 
     public CreateRelationPanel(UserClientInfo userClientInfo,RelationableValueVO relationableValueVO) {
         this.currentUserClientInfo=userClientInfo;
@@ -248,7 +249,6 @@ public class CreateRelationPanel extends VerticalLayout {
                 boolean createRelationsResult=InfoDiscoverSpaceOperationUtil.createRelations(relationableValueVO,relationTypeName, finalRelationDirection,
                         relationProperties,selectedDimensionsIdList,selectedFactsIdList);
                 if(createRelationsResult){
-                    //getCreateTypePropertyPanelInvoker().createTypePropertyActionFinish(createTypePropertyResult);
                     Notification resultNotification = new Notification("添加数据操作成功",
                             "建立数据关联成功", Notification.Type.HUMANIZED_MESSAGE);
                     resultNotification.setPosition(Position.MIDDLE_CENTER);
@@ -261,9 +261,20 @@ public class CreateRelationPanel extends VerticalLayout {
                     errorNotification.show(Page.getCurrent());
                     errorNotification.setIcon(FontAwesome.WARNING);
                 }
+                if(getCreateRelationPanelInvoker()!=null){
+                    getCreateRelationPanelInvoker().createRelationsActionFinish(createRelationsResult);
+                }
             }
         };
         addDataConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(addDataConfirmDialog);
+    }
+
+    public CreateRelationPanelInvoker getCreateRelationPanelInvoker() {
+        return createRelationPanelInvoker;
+    }
+
+    public void setCreateRelationPanelInvoker(CreateRelationPanelInvoker createRelationPanelInvoker) {
+        this.createRelationPanelInvoker = createRelationPanelInvoker;
     }
 }
