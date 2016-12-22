@@ -156,45 +156,73 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
     @Override
     public void receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent(DiscoverSpaceTypeDataInstanceQueryRequiredEvent event) {
-        QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
-        queryTypeDataInstancePanel.setDiscoverSpaceName(event.getDiscoverSpaceName());
-        queryTypeDataInstancePanel.setDataInstanceTypeName((event.getDataInstanceTypeName()));
-        queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
-        final Window window = new Window();
-        window.setResizable(true);
-        window.setDraggable(true);
-        window.setWidth(80, Unit.PERCENTAGE);
-        window.setHeight(80, Unit.PERCENTAGE);
-        window.center();
-        //window.setModal(true);
-        window.setContent(queryTypeDataInstancePanel);
-        queryTypeDataInstancePanel.setContainerDialog(window);
-        UI.getCurrent().addWindow(window);
+        String discoverSpaceName=event.getDiscoverSpaceName();
+        String targetWindowUID=discoverSpaceName+"_GlobalQueryDimensionDataInstanceWindow_"+event.getDataInstanceTypeName();
+        Window targetWindow=this.currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+        if(targetWindow!=null){
+            targetWindow.bringToFront();
+            targetWindow.center();
+        }else{
+            QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
+            queryTypeDataInstancePanel.setDiscoverSpaceName(event.getDiscoverSpaceName());
+            queryTypeDataInstancePanel.setDataInstanceTypeName((event.getDataInstanceTypeName()));
+            queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+            final Window window = new Window();
+            window.setResizable(true);
+            window.setDraggable(true);
+            window.setWidth(80, Unit.PERCENTAGE);
+            window.setHeight(80, Unit.PERCENTAGE);
+            window.center();
+            //window.setModal(true);
+            window.setContent(queryTypeDataInstancePanel);
+            queryTypeDataInstancePanel.setContainerDialog(window);
+            window.addCloseListener(new Window.CloseListener() {
+                @Override
+                public void windowClose(Window.CloseEvent closeEvent) {
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                }
+            });
+            this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+            UI.getCurrent().addWindow(window);
+        }
     }
 
     @Override
     public void receivedDiscoverSpaceOpenProcessingDataListEvent(DiscoverSpaceOpenProcessingDataListEvent event) {
         String discoverSpaceName=event.getDiscoverSpaceName();
-        ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo,true,false,true);
-        processingDataOperationPanel.setDiscoverSpaceName(discoverSpaceName);
-        ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(discoverSpaceName);
-        if(targetProcessingDataList==null){
-            targetProcessingDataList=new ProcessingDataListVO(discoverSpaceName);
-            currentUserClientInfo.getDiscoverSpacesProcessingDataMap().put(discoverSpaceName,targetProcessingDataList);
+        String targetWindowUID=discoverSpaceName+"_GlobalProcessingDataListWindow";
+        Window targetWindow=this.currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+        if(targetWindow!=null){
+            targetWindow.bringToFront();
+            targetWindow.center();
+        }else{
+            ProcessingDataOperationPanel processingDataOperationPanel =new ProcessingDataOperationPanel(this.currentUserClientInfo,true,false,true);
+            processingDataOperationPanel.setDiscoverSpaceName(discoverSpaceName);
+            ProcessingDataListVO targetProcessingDataList=this.currentUserClientInfo.getDiscoverSpacesProcessingDataMap().get(discoverSpaceName);
+            if(targetProcessingDataList==null){
+                targetProcessingDataList=new ProcessingDataListVO(discoverSpaceName);
+                currentUserClientInfo.getDiscoverSpacesProcessingDataMap().put(discoverSpaceName,targetProcessingDataList);
+            }
+            processingDataOperationPanel.setProcessingDataList(targetProcessingDataList);
+
+            String dataDetailInfoTitle="信息发现空间待处理数据列表";
+            final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+            window.setWidth(600, Unit.PIXELS);
+            window.setHeight(820,Unit.PIXELS);
+            window.setCaptionAsHtml(true);
+            window.setResizable(true);
+            window.setDraggable(true);
+            window.setModal(false);
+            window.setContent(processingDataOperationPanel);
+            window.addCloseListener(new Window.CloseListener() {
+                @Override
+                public void windowClose(Window.CloseEvent closeEvent) {
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                }
+            });
+            this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+            UI.getCurrent().addWindow(window);
         }
-        processingDataOperationPanel.setProcessingDataList(targetProcessingDataList);
-
-        String dataDetailInfoTitle="信息发现空间待处理数据列表";
-        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-        window.setWidth(600, Unit.PIXELS);
-        window.setHeight(820,Unit.PIXELS);
-        window.setCaptionAsHtml(true);
-        window.setResizable(true);
-        window.setDraggable(true);
-        window.setModal(false);
-
-        window.setContent(processingDataOperationPanel);
-        UI.getCurrent().addWindow(window);
     }
 
     @Override

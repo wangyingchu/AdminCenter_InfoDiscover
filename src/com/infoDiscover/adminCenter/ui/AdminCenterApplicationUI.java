@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
 import com.infoDiscover.adminCenter.ui.component.event.*;
+import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -64,6 +65,9 @@ public class AdminCenterApplicationUI extends UI {
 
         Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
         currentUserClientInfo.setDiscoverSpacesProcessingDataMap(discoverSpacesProcessingDataMap);
+
+        RuntimeWindowsRepository runtimeWindowsRepository=new RuntimeWindowsRepository();
+        currentUserClientInfo.setRuntimeWindowsRepository(runtimeWindowsRepository);
 
         if (browserCantRenderFontsConsistently()) {
             getPage().getStyles().add(".v-app.v-app.v-app {font-family: Sans-Serif;}");
