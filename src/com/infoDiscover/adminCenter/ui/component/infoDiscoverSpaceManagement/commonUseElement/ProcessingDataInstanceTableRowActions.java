@@ -61,7 +61,7 @@ public class ProcessingDataInstanceTableRowActions extends HorizontalLayout {
         deleteButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //processDeleteData();
+                processDeleteData();
             }
         });
         addComponent(deleteButton);
@@ -94,30 +94,47 @@ public class ProcessingDataInstanceTableRowActions extends HorizontalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        String dataTypeKind= getProcessingDataVO().getDataTypeKind();
-        String dataDetailInfoTitle;
-        if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
-            dataDetailInfoTitle="维度数据详细信息";
-        }
-        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
-            dataDetailInfoTitle="事实数据详细信息";
-        }
-        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
-            dataDetailInfoTitle="关系数据详细信息";
+        String discoverSpaceName=targetMeasurableValue.getDiscoverSpaceName();
+        String dataTypeName=targetMeasurableValue.getMeasurableTypeName();
+        String dataId=targetMeasurableValue.getId();
+        String targetWindowUID=discoverSpaceName+"_GlobalDataInstanceDetailWindow_"+dataTypeName+"_"+dataId;
+        Window targetWindow=this.currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+        if(targetWindow!=null){
+            targetWindow.bringToFront();
+            //targetWindow.center();
         }else{
-            dataDetailInfoTitle="数据详细信息";
+            String dataTypeKind= getProcessingDataVO().getDataTypeKind();
+            String dataDetailInfoTitle;
+            if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
+                dataDetailInfoTitle="维度数据详细信息";
+            }
+            else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
+                dataDetailInfoTitle="事实数据详细信息";
+            }
+            else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+                dataDetailInfoTitle="关系数据详细信息";
+            }else{
+                dataDetailInfoTitle="数据详细信息";
+            }
+            TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
+            final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+            window.setWidth(500, Unit.PIXELS);
+            window.setHeight(800,Unit.PIXELS);
+            window.setCaptionAsHtml(true);
+            window.setResizable(true);
+            window.setDraggable(true);
+            window.setModal(false);
+            window.setContent(typeDataInstanceDetailPanel);
+            typeDataInstanceDetailPanel.setContainerDialog(window);
+            window.addCloseListener(new Window.CloseListener() {
+                @Override
+                public void windowClose(Window.CloseEvent closeEvent) {
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                }
+            });
+            this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+            UI.getCurrent().addWindow(window);
         }
-        TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
-        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-        window.setWidth(500, Unit.PIXELS);
-        window.setHeight(800,Unit.PIXELS);
-        window.setCaptionAsHtml(true);
-        window.setResizable(true);
-        window.setDraggable(true);
-        window.setModal(true);
-        window.setContent(typeDataInstanceDetailPanel);
-        typeDataInstanceDetailPanel.setContainerDialog(window);
-        UI.getCurrent().addWindow(window);
     }
 
     private void processMoveOutFromProcessingList(){
@@ -149,5 +166,79 @@ public class ProcessingDataInstanceTableRowActions extends HorizontalLayout {
         };
         removeFromProcessingListConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(removeFromProcessingListConfirmDialog);
+    }
+
+    private void processDeleteData(){
+        MeasurableValueVO targetMeasurableValue=InfoDiscoverSpaceOperationUtil.getMeasurableValueById(getProcessingDataVO().getDiscoverSpaceName(),getProcessingDataVO().getId());
+        if(targetMeasurableValue==null){
+            Notification errorNotification = new Notification("获取数据错误",
+                    "系统中不存在ID为 "+getProcessingDataVO().getId()+" 的数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        String dataTypeKind= targetMeasurableValue.getMeasurableTypeKind();
+        String dataTypeInfoTitle;
+        if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
+            dataTypeInfoTitle="维度数据";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
+            dataTypeInfoTitle="事实数据";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+            dataTypeInfoTitle="关系数据";
+        }else{
+            dataTypeInfoTitle="数据详细信息";
+        }
+        String confirmMessageString=" 请确认删除"+dataTypeInfoTitle+" "+targetMeasurableValue.getMeasurableTypeName()+"/ "+targetMeasurableValue.getId();
+        Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
+
+        final ConfirmDialog deleteDataInstanceConfirmDialog = new ConfirmDialog();
+        deleteDataInstanceConfirmDialog.setConfirmMessage(confirmMessage);
+
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                deleteDataInstanceConfirmDialog.close();
+
+                boolean removeDataInstanceResult=InfoDiscoverSpaceOperationUtil.removeMeasurableById(targetMeasurableValue.getDiscoverSpaceName(),targetMeasurableValue.getMeasurableTypeKind(),targetMeasurableValue.getId());
+                if(removeDataInstanceResult){
+                    ProcessingDataVO processingDataVO=new ProcessingDataVO();
+                    processingDataVO.setId(targetMeasurableValue.getId());
+                    processingDataVO.setDiscoverSpaceName(targetMeasurableValue.getDiscoverSpaceName());
+                    processingDataVO.setDataTypeKind(targetMeasurableValue.getMeasurableTypeKind());
+                    processingDataVO.setDataTypeName(targetMeasurableValue.getMeasurableTypeName());
+
+                    DiscoverSpaceRemoveProcessingDataEvent discoverSpaceRemoveProcessingDataEvent=new DiscoverSpaceRemoveProcessingDataEvent(targetMeasurableValue.getDiscoverSpaceName());
+                    discoverSpaceRemoveProcessingDataEvent.setProcessingData(processingDataVO);
+                    currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceRemoveProcessingDataEvent);
+
+                    getContainerProcessingDataList().removeProcessingDataByDataId(getProcessingDataVO().getId());
+
+                    Notification resultNotification = new Notification("删除数据操作成功",
+                            "删除"+dataTypeInfoTitle+" "+targetMeasurableValue.getMeasurableTypeName()+"/ "+targetMeasurableValue.getId()+"　成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+
+                    String targetWindowUID=targetMeasurableValue.getDiscoverSpaceName()+"_GlobalDataInstanceDetailWindow_"+targetMeasurableValue.getMeasurableTypeName()+"_"+targetMeasurableValue.getId();
+                    Window detailDataWindow=currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(targetMeasurableValue.getDiscoverSpaceName(),targetWindowUID);
+                    if(detailDataWindow!=null){
+                        detailDataWindow.close();
+                    }
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(targetMeasurableValue.getDiscoverSpaceName(),targetWindowUID);
+                }else{
+                    Notification errorNotification = new Notification("删除"+dataTypeInfoTitle+" "+targetMeasurableValue.getMeasurableTypeName()+"/ "+targetMeasurableValue.getId()+"　错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+            }
+        };
+        deleteDataInstanceConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(deleteDataInstanceConfirmDialog);
     }
 }

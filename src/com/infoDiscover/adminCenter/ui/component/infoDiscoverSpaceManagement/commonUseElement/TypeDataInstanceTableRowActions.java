@@ -174,23 +174,25 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
                     resultNotification.setPosition(Position.MIDDLE_CENTER);
                     resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
                     resultNotification.show(Page.getCurrent());
+
+                    String discoverSpaceName=getMeasurableValue().getDiscoverSpaceName();
+                    String dataTypeName=getMeasurableValue().getMeasurableTypeName();
+                    String dataId=getMeasurableValue().getId();
+
+                    String targetWindowUID=discoverSpaceName+"_GlobalDataInstanceDetailWindow_"+dataTypeName+"_"+dataId;
+                    Window detailDataWindow=currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+                    if(detailDataWindow!=null){
+                        detailDataWindow.close();
+                    }
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+
                     if(getContainerTypeDataInstanceList()!=null){
-                        String discoverSpaceName=getMeasurableValue().getDiscoverSpaceName();
-                        String dataTypeName=getMeasurableValue().getMeasurableTypeName();
-                        String dataId=getMeasurableValue().getId();
                         ProcessingDataVO processingDataVO=new ProcessingDataVO();
                         processingDataVO.setId(getMeasurableValue().getId());
                         processingDataVO.setDiscoverSpaceName(discoverSpaceName);
                         processingDataVO.setDataTypeKind(getMeasurableValue().getMeasurableTypeKind());
                         processingDataVO.setDataTypeName(dataTypeName);
                         getContainerTypeDataInstanceList().removeTypeDataInstanceById(getDataItemIdInTypeDataInstanceList(),processingDataVO);
-
-                        String targetWindowUID=discoverSpaceName+"_GlobalDataInstanceDetailWindow_"+dataTypeName+"_"+dataId;
-                        Window detailDataWindow=currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
-                        if(detailDataWindow!=null){
-                            detailDataWindow.close();
-                        }
-                        currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
                     }
                 }else{
                     Notification errorNotification = new Notification("删除"+dataTypeInfoTitle+" "+getMeasurableValue().getMeasurableTypeName()+"/ "+getMeasurableValue().getId()+"　错误",
