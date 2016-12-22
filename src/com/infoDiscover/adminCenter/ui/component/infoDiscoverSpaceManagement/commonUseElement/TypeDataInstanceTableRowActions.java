@@ -19,11 +19,10 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
     private UserClientInfo currentUserClientInfo;
     private MeasurableValueVO measurableValue;
     private TypeDataInstanceList containerTypeDataInstanceList;
-    private Button showTypeDataDetailButton;
 
     public TypeDataInstanceTableRowActions(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
-        showTypeDataDetailButton = new Button();
+        Button showTypeDataDetailButton = new Button();
         showTypeDataDetailButton.setIcon(FontAwesome.EYE);
         showTypeDataDetailButton.setDescription("显示数据详情");
         showTypeDataDetailButton.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -31,7 +30,6 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
         showTypeDataDetailButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                showTypeDataDetailButton.setEnabled(false);
                 showDataDetailInfoPanel();
             }
         });
@@ -73,45 +71,56 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
     }
 
     private void showDataDetailInfoPanel(){
-        String dataTypeKind= getMeasurableValue().getMeasurableTypeKind();
-        String dataDetailInfoTitle;
-        if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
-            dataDetailInfoTitle="维度数据详细信息";
-        }
-        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
-            dataDetailInfoTitle="事实数据详细信息";
-        }
-        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
-            dataDetailInfoTitle="关系数据详细信息";
+        String discoverSpaceName=getMeasurableValue().getDiscoverSpaceName();
+        String dataTypeName=getMeasurableValue().getMeasurableTypeName();
+        String dataId=getMeasurableValue().getId();
+        String targetWindowUID=discoverSpaceName+"_GlobalDataInstanceDetailWindow_"+dataTypeName+"_"+dataId;
+        Window targetWindow=this.currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+        if(targetWindow!=null){
+            targetWindow.bringToFront();
+            //targetWindow.center();
         }else{
-            dataDetailInfoTitle="数据详细信息";
-        }
-        TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,getMeasurableValue());
-        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-        window.setWidth(500, Unit.PIXELS);
-        window.setHeight(800,Unit.PIXELS);
-        window.setCaptionAsHtml(true);
-        window.setResizable(true);
-        window.setDraggable(true);
-        window.setModal(false);
-        window.setContent(typeDataInstanceDetailPanel);
-        typeDataInstanceDetailPanel.setContainerDialog(window);
-        UI.getCurrent().addWindow(window);
-        int currentSubWindowXPositionOffset=getContainerTypeDataInstanceList().getSubWindowsXPositionOffset();
-        int currentSubWindowYPositionOffset=getContainerTypeDataInstanceList().getSubWindowsYPositionOffset();
-
-        window.setPosition(currentSubWindowXPositionOffset,currentSubWindowYPositionOffset);
-        window.addCloseListener(new Window.CloseListener() {
-            @Override
-            public void windowClose(Window.CloseEvent closeEvent) {
-                showTypeDataDetailButton.setEnabled(true);
+            String dataTypeKind= getMeasurableValue().getMeasurableTypeKind();
+            String dataDetailInfoTitle;
+            if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
+                dataDetailInfoTitle="维度数据详细信息";
             }
-        });
-        getContainerTypeDataInstanceList().setSubWindowsXPositionOffset(currentSubWindowXPositionOffset + 50);
-        if(currentSubWindowYPositionOffset<=450){
-            getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(currentSubWindowYPositionOffset + 50);
-        }else{
-            getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(20);
+            else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
+                dataDetailInfoTitle="事实数据详细信息";
+            }
+            else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+                dataDetailInfoTitle="关系数据详细信息";
+            }else{
+                dataDetailInfoTitle="数据详细信息";
+            }
+            TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,getMeasurableValue());
+            final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+            window.setWidth(500, Unit.PIXELS);
+            window.setHeight(800,Unit.PIXELS);
+            window.setCaptionAsHtml(true);
+            window.setResizable(true);
+            window.setDraggable(true);
+            window.setModal(false);
+            window.setContent(typeDataInstanceDetailPanel);
+            typeDataInstanceDetailPanel.setContainerDialog(window);
+            window.addCloseListener(new Window.CloseListener() {
+                @Override
+                public void windowClose(Window.CloseEvent closeEvent) {
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                }
+            });
+            this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+
+            int currentSubWindowXPositionOffset=getContainerTypeDataInstanceList().getSubWindowsXPositionOffset();
+            int currentSubWindowYPositionOffset=getContainerTypeDataInstanceList().getSubWindowsYPositionOffset();
+            window.setPosition(currentSubWindowXPositionOffset,currentSubWindowYPositionOffset);
+            getContainerTypeDataInstanceList().setSubWindowsXPositionOffset(currentSubWindowXPositionOffset + 50);
+            if(currentSubWindowYPositionOffset<=450){
+                getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(currentSubWindowYPositionOffset + 50);
+            }else{
+                getContainerTypeDataInstanceList().setSubWindowsYPositionOffset(20);
+            }
+            UI.getCurrent().addWindow(window);
         }
     }
 
