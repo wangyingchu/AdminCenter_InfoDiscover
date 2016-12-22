@@ -2,8 +2,10 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceRemoveProcessingDataEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
@@ -39,6 +41,8 @@ public class TypeDataInstanceList extends VerticalLayout {
     private int tablePageSize=20;
     private int subWindowsXPositionOffset;
     private int subWindowsYPositionOffset;
+    private int currentDataInstancesCount;
+    private Pagination typeDataInstancePagination;
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
@@ -92,7 +96,8 @@ public class TypeDataInstanceList extends VerticalLayout {
 
     public void renderTypeDataInstanceList(List<PropertyTypeVO> queryParameters,List<MeasurableValueVO> queryResults){
         this.querySQLButton.setEnabled(true);
-        this.queryResultCountLabel.setValue(""+queryResults.size());
+        this.currentDataInstancesCount=queryResults.size();
+        this.queryResultCountLabel.setValue(""+this.currentDataInstancesCount);
 
         List<PropertyTypeVO> typePropertiesInfoList=null;
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(getDataInstanceTypeKind())){
@@ -126,7 +131,7 @@ public class TypeDataInstanceList extends VerticalLayout {
 
         this.paginationContainerLayout.removeAllComponents();
         int startPage=queryResults.size()>0?1:0;
-        Pagination typeDataInstancePagination=createPagination(queryResults.size(), startPage);
+        typeDataInstancePagination=createPagination(queryResults.size(), startPage);
         typeDataInstancePagination.setItemsPerPageVisible(false);
         typeDataInstancePagination.addPageChangeListener(new PaginationChangeListener() {
             @Override
@@ -144,6 +149,7 @@ public class TypeDataInstanceList extends VerticalLayout {
                 TypeDataInstanceTableRowActions typeDataInstanceTableRowActions=new TypeDataInstanceTableRowActions(this.currentUserClientInfo);
                 typeDataInstanceTableRowActions.setMeasurableValue(currentMeasurableValueVO);
                 typeDataInstanceTableRowActions.setContainerTypeDataInstanceList(this);
+                typeDataInstanceTableRowActions.setDataItemIdInTypeDataInstanceList("typeInstance_index_"+i);
                 newRecord.getItemProperty(" 操作").setValue(typeDataInstanceTableRowActions);
                 newRecord.getItemProperty(" ID").setValue(currentMeasurableValueVO.getId());
                 for(PropertyTypeVO currentPropertyTypeVO:typePropertiesInfoList){
@@ -251,5 +257,38 @@ public class TypeDataInstanceList extends VerticalLayout {
 
     public void setSubWindowsXPositionOffset(int subWindowsXPositionOffset) {
         this.subWindowsXPositionOffset = subWindowsXPositionOffset;
+    }
+
+    public void removeTypeDataInstanceById(String dataId,ProcessingDataVO processingDataVO){
+        Item targetItem=this.typeDataInstanceTable.getItem(dataId);
+        if(targetItem!=null){
+            boolean removeTypeInstanceResult=this.typeDataInstanceTable.removeItem(dataId);
+            if(removeTypeInstanceResult) {
+                this.currentDataInstancesCount--;
+                this.queryResultCountLabel.setValue(""+this.currentDataInstancesCount);
+                int currentPaginationPage=this.typeDataInstancePagination.getCurrentPage();
+                if(this.typeDataInstancePagination!=null){
+                    this.typeDataInstancePagination.removeAllPageChangeListener();
+                }
+                this.paginationContainerLayout.removeAllComponents();
+
+                if(currentPaginationPage*tablePageSize>this.currentDataInstancesCount){
+                    currentPaginationPage=currentPaginationPage-1;
+                }
+                this.typeDataInstancePagination = createPagination(this.currentDataInstancesCount, currentPaginationPage);
+                this.typeDataInstancePagination.setItemsPerPageVisible(false);
+                this.typeDataInstancePagination.addPageChangeListener(new PaginationChangeListener() {
+                    @Override
+                    public void changed(PaginationResource event) {
+                        typeDataInstanceTable.setCurrentPageFirstItemIndex(event.offset());
+                    }
+                });
+                this.paginationContainerLayout.addComponent(this.typeDataInstancePagination);
+
+                DiscoverSpaceRemoveProcessingDataEvent discoverSpaceRemoveProcessingDataEvent=new DiscoverSpaceRemoveProcessingDataEvent(this.getDiscoverSpaceName());
+                discoverSpaceRemoveProcessingDataEvent.setProcessingData(processingDataVO);
+                currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceRemoveProcessingDataEvent);
+            }
+        }
     }
 }

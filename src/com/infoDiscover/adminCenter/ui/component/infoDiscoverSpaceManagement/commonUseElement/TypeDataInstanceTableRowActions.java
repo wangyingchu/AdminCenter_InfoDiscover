@@ -3,11 +3,15 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceAddProcessingDataEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -19,6 +23,7 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
     private UserClientInfo currentUserClientInfo;
     private MeasurableValueVO measurableValue;
     private TypeDataInstanceList containerTypeDataInstanceList;
+    private String dataItemIdInTypeDataInstanceList;
 
     public TypeDataInstanceTableRowActions(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
@@ -136,13 +141,83 @@ public class TypeDataInstanceTableRowActions extends HorizontalLayout {
         this.currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceAddProcessingDataEvent);
     }
 
-    private void processDeleteData(){}
+    private void processDeleteData(){
+        String dataTypeKind= getMeasurableValue().getMeasurableTypeKind();
+        String dataTypeInfoTitle;
+        if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION)){
+            dataTypeInfoTitle="维度数据";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT)){
+            dataTypeInfoTitle="事实数据";
+        }
+        else if(dataTypeKind.equals(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION)){
+            dataTypeInfoTitle="关系数据";
+        }else{
+            dataTypeInfoTitle="数据详细信息";
+        }
+        String confirmMessageString=" 请确认删除"+dataTypeInfoTitle+" "+getMeasurableValue().getMeasurableTypeName()+"/ "+getMeasurableValue().getId();
+        Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
+
+        final ConfirmDialog deleteDataInstanceConfirmDialog = new ConfirmDialog();
+        deleteDataInstanceConfirmDialog.setConfirmMessage(confirmMessage);
+
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                deleteDataInstanceConfirmDialog.close();
+
+                boolean removeDataInstanceResult=InfoDiscoverSpaceOperationUtil.removeMeasurableById(getMeasurableValue().getDiscoverSpaceName(),getMeasurableValue().getMeasurableTypeKind(),getMeasurableValue().getId());
+                if(removeDataInstanceResult){
+                    Notification resultNotification = new Notification("删除数据操作成功",
+                            "删除"+dataTypeInfoTitle+" "+getMeasurableValue().getMeasurableTypeName()+"/ "+getMeasurableValue().getId()+"　成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                    if(getContainerTypeDataInstanceList()!=null){
+                        String discoverSpaceName=getMeasurableValue().getDiscoverSpaceName();
+                        String dataTypeName=getMeasurableValue().getMeasurableTypeName();
+                        String dataId=getMeasurableValue().getId();
+                        ProcessingDataVO processingDataVO=new ProcessingDataVO();
+                        processingDataVO.setId(getMeasurableValue().getId());
+                        processingDataVO.setDiscoverSpaceName(discoverSpaceName);
+                        processingDataVO.setDataTypeKind(getMeasurableValue().getMeasurableTypeKind());
+                        processingDataVO.setDataTypeName(dataTypeName);
+                        getContainerTypeDataInstanceList().removeTypeDataInstanceById(getDataItemIdInTypeDataInstanceList(),processingDataVO);
+
+                        String targetWindowUID=discoverSpaceName+"_GlobalDataInstanceDetailWindow_"+dataTypeName+"_"+dataId;
+                        Window detailDataWindow=currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+                        if(detailDataWindow!=null){
+                            detailDataWindow.close();
+                        }
+                        currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                    }
+                }else{
+                    Notification errorNotification = new Notification("删除"+dataTypeInfoTitle+" "+getMeasurableValue().getMeasurableTypeName()+"/ "+getMeasurableValue().getId()+"　错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+            }
+        };
+        deleteDataInstanceConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(deleteDataInstanceConfirmDialog);
+    }
 
     public TypeDataInstanceList getContainerTypeDataInstanceList() {
-        return containerTypeDataInstanceList;
+        return this.containerTypeDataInstanceList;
     }
 
     public void setContainerTypeDataInstanceList(TypeDataInstanceList containerTypeDataInstanceList) {
         this.containerTypeDataInstanceList = containerTypeDataInstanceList;
+    }
+
+    public String getDataItemIdInTypeDataInstanceList() {
+        return dataItemIdInTypeDataInstanceList;
+    }
+
+    public void setDataItemIdInTypeDataInstanceList(String dataItemIdInTypeDataInstanceList) {
+        this.dataItemIdInTypeDataInstanceList = dataItemIdInTypeDataInstanceList;
     }
 }

@@ -50,7 +50,7 @@ public class RelationableRelationsTableRowActions extends HorizontalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 deleteRelationConfirmDialog.close();
-                boolean removeRelationResult=InfoDiscoverSpaceOperationUtil.removeRelationById(relationValueVO.getDiscoverSpaceName(),relationValueVO.getId());
+                boolean removeRelationResult=InfoDiscoverSpaceOperationUtil.removeMeasurableById(relationValueVO.getDiscoverSpaceName(),InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,relationValueVO.getId());
 
                 if(removeRelationResult){
                     Notification resultNotification = new Notification("删除数据操作成功",

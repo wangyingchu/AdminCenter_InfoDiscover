@@ -1296,21 +1296,6 @@ public class InfoDiscoverSpaceOperationUtil {
         return null;
     }
 
-    public static boolean removeRelationById(String spaceName,String relationId){
-        InfoDiscoverSpace targetSpace=null;
-        try {
-            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
-            return targetSpace.removeRelation(relationId);
-        } catch (InfoDiscoveryEngineRuntimeException e) {
-            e.printStackTrace();
-        } finally {
-            if(targetSpace!=null){
-                targetSpace.closeSpace();
-            }
-        }
-        return false;
-    }
-
     public static boolean createRelations(RelationableValueVO sourceRelationableValue,String relationTypeName,
                                           String relationDirection,List<PropertyValueVO> relationProperties,
                                           List<String> targetDimensionsIdList, List<String> targetFactsIdList){
@@ -1382,5 +1367,28 @@ public class InfoDiscoverSpaceOperationUtil {
             e.printStackTrace();
             throw new InfoDiscoveryEngineRuntimeException();
         }
+    }
+
+    public static boolean removeMeasurableById(String spaceName,String measurableType,String measurableId){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(measurableType)){
+                return targetSpace.removeDimension(measurableId);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(measurableType)){
+                return targetSpace.removeFact(measurableId);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(measurableType)){
+                return targetSpace.removeRelation(measurableId);
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return false;
     }
 }

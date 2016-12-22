@@ -25,6 +25,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
     private TypeDataInstancePropertiesEditorPanel typeDataInstancePropertiesEditorPanel;
     private VerticalLayout dataInteractionInfoLayout;
     private RelationableRelationsList relationableRelationsList;
+    private Button showRelationsSwitchButton;
 
     public TypeDataInstanceDetailPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue) {
         this.currentUserClientInfo = userClientInfo;
@@ -74,7 +75,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         dataPropertyTitle.addStyleName("ui_appSectionLightDiv");
         dataPropertyInfoTitleContainerLayout.addComponent(dataPropertyTitle);
 
-        Button showRelationsSwitchButton=new Button();
+        showRelationsSwitchButton=new Button();
         showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
         showRelationsSwitchButton.setDescription("显示数据关联交互信息");
         showRelationsSwitchButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -86,12 +87,8 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
                 if(getContainerDialog()!=null){
                     if (getContainerDialog().getWindowMode().equals(WindowMode.MAXIMIZED)){
                         getContainerDialog().setWindowMode(WindowMode.NORMAL);
-                        showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
-                        showRelationsSwitchButton.setDescription("显示数据关联交互信息");
                     }else{
                         getContainerDialog().setWindowMode(WindowMode.MAXIMIZED);
-                        showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
-                        showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
                     }
                 }
             }
@@ -183,9 +180,13 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
             dataRelationInfoLayoutWidth=browserWindowWidth-510;
             relationsListHeight=browserWindowHeight-500;
+            showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
+            showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
         }else{
             typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-230;
             relationsListHeight=50;
+            showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
+            showRelationsSwitchButton.setDescription("显示数据关联交互信息");
         }
         this.typeDataInstancePropertiesEditorPanel.setPropertiesEditorContainerPanelHeight(typeInstanceDetailPropertiesEditorContainerPanelHeight);
         this.dataInteractionInfoLayout.setWidth(dataRelationInfoLayoutWidth,Unit.PIXELS);
