@@ -166,7 +166,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
             QueryTypeDataInstancePanel queryTypeDataInstancePanel=new QueryTypeDataInstancePanel(this.currentUserClientInfo);
             queryTypeDataInstancePanel.setDiscoverSpaceName(event.getDiscoverSpaceName());
             queryTypeDataInstancePanel.setDataInstanceTypeName((event.getDataInstanceTypeName()));
-            queryTypeDataInstancePanel.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
+            queryTypeDataInstancePanel.setDataInstanceTypeKind(event.getDataInstanceTypeKind());
             final Window window = new Window();
             window.setResizable(true);
             window.setDraggable(true);

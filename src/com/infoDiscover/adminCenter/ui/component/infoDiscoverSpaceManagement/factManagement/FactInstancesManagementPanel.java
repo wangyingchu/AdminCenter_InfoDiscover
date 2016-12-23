@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
@@ -61,8 +62,8 @@ public class FactInstancesManagementPanel extends VerticalLayout {
         // Define a common menu command for all the search dimension menu items
         this.searchFactInstanceMenuItemCommand = new MenuBar.Command() {
             public void menuSelected(MenuBar.MenuItem selectedItem) {
-                String selectedDimensionTypeName=selectedItem.getText();
-                //executeSearchDimensionTypeOperation(selectedDimensionTypeName);
+                String selectedFactTypeName=selectedItem.getText();
+                executeSearchFactTypeOperation(selectedFactTypeName);
             }
         };
 
@@ -120,10 +121,12 @@ public class FactInstancesManagementPanel extends VerticalLayout {
         this.searchFactInstanceMenuItem.removeChildren();
         List<DataTypeStatisticMetrics> factTypeStatisticMetrics=this.currentDiscoverSpaceStatisticMetrics.getFactsStatisticMetrics();
         if(factTypeStatisticMetrics!=null){
+            searchFactInstanceMenuItem.addItem(InfoDiscoverEngineConstant.FACT_ROOTCLASSNAME, null, searchFactInstanceMenuItemCommand);
             for(DataTypeStatisticMetrics currentDataTypeStatisticMetrics:factTypeStatisticMetrics){
                 String factTypeName=currentDataTypeStatisticMetrics.getDataTypeName().replaceFirst(InfoDiscoverEngineConstant.CLASSPERFIX_FACT,"");
                 long factTypeDataCount=currentDataTypeStatisticMetrics.getTypeDataCount();
                 createFactInstanceMenuItem.addItem(factTypeName, null, createFactInstanceMenuItemCommand);
+                searchFactInstanceMenuItem.addItem(factTypeName, null, searchFactInstanceMenuItemCommand);
                 TextField currentDimensionTypeDataSize = new TextField(factTypeName);
                 currentDimensionTypeDataSize.setValue(""+factTypeDataCount);
                 currentDimensionTypeDataSize.setRequired(false);
@@ -154,5 +157,13 @@ public class FactInstancesManagementPanel extends VerticalLayout {
         window.setContent(createTypeDataInstancePanel);
         createTypeDataInstancePanel.setContainerDialog(window);
         UI.getCurrent().addWindow(window);
+    }
+
+    private void executeSearchFactTypeOperation(String factType){
+        DiscoverSpaceTypeDataInstanceQueryRequiredEvent currentQueryEvent=new DiscoverSpaceTypeDataInstanceQueryRequiredEvent();
+        currentQueryEvent.setDiscoverSpaceName(this.getDiscoverSpaceName());
+        currentQueryEvent.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT);
+        currentQueryEvent.setDataInstanceTypeName(factType);
+        this.currentUserClientInfo.getEventBlackBoard().fire(currentQueryEvent);
     }
 }

@@ -474,14 +474,27 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
         }
         exploreParameters.setDistinctMode(this.getQueryDistinctMode());
 
-        List<MeasurableValueVO> resultDimensionValuesList= InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName, exploreParameters);
-        try {
-            String sql= SQLBuilder.buildQuerySQL(InformationType.DIMENSION, exploreParameters);
-            this.typeDataInstanceList.setQuerySQL(sql);
-        } catch (InfoDiscoveryEngineInfoExploreException e) {
-            e.printStackTrace();
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(getDataInstanceTypeKind())){
+            List<MeasurableValueVO> resultDimensionValuesList= InfoDiscoverSpaceOperationUtil.queryDimensions(this.discoverSpaceName, exploreParameters);
+            try {
+                String sql= SQLBuilder.buildQuerySQL(InformationType.DIMENSION, exploreParameters);
+                this.typeDataInstanceList.setQuerySQL(sql);
+            } catch (InfoDiscoveryEngineInfoExploreException e) {
+                e.printStackTrace();
+            }
+            renderQueryResultsGrid(this.queryConditionItemList,resultDimensionValuesList);
         }
-        renderQueryResultsGrid(this.queryConditionItemList,resultDimensionValuesList);
+
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
+            List<MeasurableValueVO> resultFactValuesList= InfoDiscoverSpaceOperationUtil.queryFacts(this.discoverSpaceName, exploreParameters);
+            try {
+                String sql= SQLBuilder.buildQuerySQL(InformationType.FACT, exploreParameters);
+                this.typeDataInstanceList.setQuerySQL(sql);
+            } catch (InfoDiscoveryEngineInfoExploreException e) {
+                e.printStackTrace();
+            }
+            renderQueryResultsGrid(this.queryConditionItemList,resultFactValuesList);
+        }
     }
 
     private void renderQueryResultsGrid(List<QueryConditionItem> queryConditions,List<MeasurableValueVO> queryResults){

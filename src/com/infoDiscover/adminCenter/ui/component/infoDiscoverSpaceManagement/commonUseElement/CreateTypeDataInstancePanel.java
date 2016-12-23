@@ -177,7 +177,7 @@ public class CreateTypeDataInstancePanel extends VerticalLayout implements Input
             this.addNewTypeDataInstanceSectionTitle.setValue("创建事实数据");
             this.operationTitle.setValue(FontAwesome.LIST_UL.getHtml() +" 添加事实属性:");
             this.addButton.setCaption("创建事实数据");
-            Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.DATABASE.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
+            Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.CLONE.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataFieldActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
 
             List<PropertyTypeVO> factTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
