@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.re
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationTypeVO;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
@@ -294,9 +295,29 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         if(this.currentSelectedRelationTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
             RelationTypeVO currentRelationTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRootRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentDiscoverSpaceStatisticMetrics);
             setRelationInstanceCountInfo(currentRelationTypeVO);
+            List<RelationTypeVO> childRelationTypeVOsList=currentRelationTypeVO.getChildRelationTypesVOList();
+            MenuBar.MenuItem rootSearchRelationTypeItem = searchRelationInstanceMenuItem.addItem(this.currentSelectedRelationTypeName, null, searchRelationInstanceMenuItemCommand);
+            if(childRelationTypeVOsList!=null){
+                for(RelationTypeVO currentRelationType:childRelationTypeVOsList){
+                    MenuBar.MenuItem currentSearchDimensionTypeItem = rootSearchRelationTypeItem.addItem(currentRelationType.getTypeName(), null, searchRelationInstanceMenuItemCommand);
+                    setChildMenuItem(currentSearchDimensionTypeItem,currentRelationType,searchRelationInstanceMenuItemCommand);
+                }
+            }
         }else{
             RelationTypeVO currentRelationTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRelationTypeRuntimeInfo(this.discoverSpaceName, this.currentSelectedRelationTypeName, this.currentDiscoverSpaceStatisticMetrics);
             setRelationInstanceCountInfo(currentRelationTypeVO);
+            MenuBar.MenuItem currentSearchDimensionTypeItem = searchRelationInstanceMenuItem.addItem(currentRelationTypeVO.getTypeName(), null, searchRelationInstanceMenuItemCommand);
+            setChildMenuItem(currentSearchDimensionTypeItem,currentRelationTypeVO,searchRelationInstanceMenuItemCommand);
+        }
+    }
+
+    private void setChildMenuItem(MenuBar.MenuItem parentMenuItem,RelationTypeVO parentRelationTypeVO,MenuBar.Command menuCommand){
+        List<RelationTypeVO> childRelationTypeVOsList=parentRelationTypeVO.getChildRelationTypesVOList();
+        if(childRelationTypeVOsList!=null){
+            for(RelationTypeVO currentRelationType:childRelationTypeVOsList){
+                MenuBar.MenuItem currentRelationTypeItem = parentMenuItem.addItem(currentRelationType.getTypeName(), null, menuCommand);
+                setChildMenuItem(currentRelationTypeItem,currentRelationType,menuCommand);
+            }
         }
     }
 
@@ -334,5 +355,11 @@ public class RelationInstancesManagementPanel extends VerticalLayout {
         }
     }
 
-    private void executeSearchRelationTypeOperation(String relationType){}
+    private void executeSearchRelationTypeOperation(String relationType){
+        DiscoverSpaceTypeDataInstanceQueryRequiredEvent currentQueryEvent=new DiscoverSpaceTypeDataInstanceQueryRequiredEvent();
+        currentQueryEvent.setDiscoverSpaceName(this.getDiscoverSpaceName());
+        currentQueryEvent.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION);
+        currentQueryEvent.setDataInstanceTypeName(relationType);
+        this.currentUserClientInfo.getEventBlackBoard().fire(currentQueryEvent);
+    }
 }

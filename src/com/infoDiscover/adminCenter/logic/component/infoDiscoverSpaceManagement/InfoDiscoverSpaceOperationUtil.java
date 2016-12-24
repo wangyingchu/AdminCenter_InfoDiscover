@@ -939,6 +939,49 @@ public class InfoDiscoverSpaceOperationUtil {
         return measurableValueList;
     }
 
+    public static List<MeasurableValueVO> queryRelations(String spaceName,ExploreParameters exploreParameters){
+        List<MeasurableValueVO> measurableValueList=new ArrayList<MeasurableValueVO>();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            List<Relation> resultRelationsList=ie.discoverRelations(exploreParameters);
+            if(resultRelationsList!=null) {
+                for (Relation currentRelation : resultRelationsList) {
+                    MeasurableValueVO currentMeasurableValueVO=new MeasurableValueVO();
+                    measurableValueList.add(currentMeasurableValueVO);
+                    currentMeasurableValueVO.setDiscoverSpaceName(spaceName);
+                    currentMeasurableValueVO.setId(currentRelation.getId());
+                    currentMeasurableValueVO.setMeasurableTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION);
+                    currentMeasurableValueVO.setMeasurableTypeName(currentRelation.getType());
+                    List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+                    currentMeasurableValueVO.setProperties(propertyValueVOList);
+                    List<Property> propertiesList=currentRelation.getProperties();
+                    if(propertiesList!=null){
+                        for(Property currentProperty:propertiesList){
+                            if(currentProperty.getPropertyType()!=null){
+                                PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                                currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                                currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                                currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                                propertyValueVOList.add(currentPropertyValueVO);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return measurableValueList;
+    }
+
     public static boolean updateMeasurableProperties(String spaceName,String measurableId,List<PropertyValueVO> propertiesValue){
         if(propertiesValue==null){
             return false;

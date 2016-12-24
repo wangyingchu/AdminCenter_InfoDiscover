@@ -274,14 +274,7 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
 
             List<PropertyTypeVO> dimensionTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
             if(dimensionTypePropertiesList!=null){
-                for(PropertyTypeVO currentPropertyTypeVO:dimensionTypePropertiesList){
-                    this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
-                    if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                        this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.queryTypePropertyMenuItemCommand);
-                    }else{
-                        this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.queryTypePropertyMenuItemCommand);
-                    }
-                }
+                setQueryPerDefinedProperties(dimensionTypePropertiesList);
             }
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(getDataInstanceTypeKind())){
@@ -293,6 +286,11 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.CLONE.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
             this.queryButton.setCaption("查询事实数据");
+
+            List<PropertyTypeVO> factTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
+            if(factTypePropertiesList!=null){
+                setQueryPerDefinedProperties(factTypePropertiesList);
+            }
         }
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(getDataInstanceTypeKind())){
             if(this.getContainerDialog()!=null){
@@ -303,6 +301,11 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName()+" /"+FontAwesome.SHARE_ALT.getHtml()+" "+this.getDataInstanceTypeName(), ContentMode.HTML);
             dataTypeNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
             this.queryButton.setCaption("查询关系数据");
+
+            List<PropertyTypeVO> relationTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveRelationTypePropertiesInfo(this.getDiscoverSpaceName(), getDataInstanceTypeName());
+            if(relationTypePropertiesList!=null){
+                setQueryPerDefinedProperties(relationTypePropertiesList);
+            }
         }
 
         Window containerWindow=this.getContainerDialog();
@@ -313,6 +316,17 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
             }
         });
         setUIElementsSizeForWindowSizeChange();
+    }
+
+    private void setQueryPerDefinedProperties( List<PropertyTypeVO> typePropertiesList){
+        for(PropertyTypeVO currentPropertyTypeVO:typePropertiesList){
+            this.typePropertiesInfoMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
+            if(dataInstanceTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
+                this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.CIRCLE_O, this.queryTypePropertyMenuItemCommand);
+            }else{
+                this.queryTypeDefinedPropertyMenuItem.addItem(currentPropertyTypeVO.getPropertyName(), FontAwesome.REPLY_ALL, this.queryTypePropertyMenuItemCommand);
+            }
+        }
     }
 
     private void setUIElementsSizeForWindowSizeChange(){
@@ -494,6 +508,17 @@ public class QueryTypeDataInstancePanel extends VerticalLayout implements InputP
                 e.printStackTrace();
             }
             renderQueryResultsGrid(this.queryConditionItemList,resultFactValuesList);
+        }
+
+        if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(getDataInstanceTypeKind())){
+            List<MeasurableValueVO> resultRelationValuesList= InfoDiscoverSpaceOperationUtil.queryRelations(this.discoverSpaceName, exploreParameters);
+            try {
+                String sql= SQLBuilder.buildQuerySQL(InformationType.RELATION, exploreParameters);
+                this.typeDataInstanceList.setQuerySQL(sql);
+            } catch (InfoDiscoveryEngineInfoExploreException e) {
+                e.printStackTrace();
+            }
+            renderQueryResultsGrid(this.queryConditionItemList,resultRelationValuesList);
         }
     }
 
