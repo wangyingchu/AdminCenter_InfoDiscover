@@ -1477,4 +1477,77 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return false;
     }
+
+    public static RelationValueVO getRelationById(String spaceName,String relationId){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            Relation targetRelation = targetSpace.getRelationById(relationId);
+            if(targetRelation!=null){
+                RelationValueVO currentRelationValueVO=new RelationValueVO();
+                currentRelationValueVO.setId(targetRelation.getId());
+                currentRelationValueVO.setRelationTypeName(targetRelation.getType());
+                currentRelationValueVO.setDiscoverSpaceName(spaceName);
+
+                Relationable fromRelationable=targetRelation.getFromRelationable();
+                if(fromRelationable!=null){
+                    RelationableValueVO fromRelationableValueVO=new RelationableValueVO();
+                    fromRelationableValueVO.setDiscoverSpaceName(spaceName);
+                    fromRelationableValueVO.setId(fromRelationable.getId());
+                    if(fromRelationable instanceof Dimension){
+                        Dimension dimensionRelationable=(Dimension)fromRelationable;
+                        fromRelationableValueVO.setRelationableTypeName(dimensionRelationable.getType());
+                        fromRelationableValueVO.setRelationableTypeKind(TYPEKIND_DIMENSION);
+                    }
+                    if(fromRelationable instanceof Fact){
+                        Fact factRelationable=(Fact)fromRelationable;
+                        fromRelationableValueVO.setRelationableTypeName(factRelationable.getType());
+                        fromRelationableValueVO.setRelationableTypeKind(TYPEKIND_FACT);
+                    }
+                    currentRelationValueVO.setFromRelationable(fromRelationableValueVO);
+                }
+
+                Relationable toRelationable=targetRelation.getToRelationable();
+                if(toRelationable!=null){
+                    RelationableValueVO toRelationableValueVO=new RelationableValueVO();
+                    toRelationableValueVO.setDiscoverSpaceName(spaceName);
+                    toRelationableValueVO.setId(toRelationable.getId());
+                    if(toRelationable instanceof Dimension){
+                        Dimension dimensionRelationable=(Dimension)toRelationable;
+                        toRelationableValueVO.setRelationableTypeName(dimensionRelationable.getType());
+                        toRelationableValueVO.setRelationableTypeKind(TYPEKIND_DIMENSION);
+                    }
+                    if(toRelationable instanceof Fact){
+                        Fact factRelationable=(Fact)toRelationable;
+                        toRelationableValueVO.setRelationableTypeName(factRelationable.getType());
+                        toRelationableValueVO.setRelationableTypeKind(TYPEKIND_FACT);
+                    }
+                    currentRelationValueVO.setToRelationable(toRelationableValueVO);
+                }
+
+                List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+                currentRelationValueVO.setProperties(propertyValueVOList);
+                    /* for better performance but get properties's value here
+                    List<Property> propertiesList=currentRelation.getProperties();
+                    if(propertiesList!=null){
+                        for(Property currentProperty:propertiesList){
+                            if(currentProperty.getPropertyType()!=null){
+                                PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                                currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                                currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                                currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                                propertyValueVOList.add(currentPropertyValueVO);
+                            }
+                        }
+                    }
+                    */
+                return currentRelationValueVO;
+            }
+        }finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return null;
+    }
 }
