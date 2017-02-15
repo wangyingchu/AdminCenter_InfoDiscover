@@ -11,6 +11,7 @@ import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.rel
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
@@ -18,6 +19,8 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.shared.ui.window.WindowMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Date;
 
 /**
  * Created by wangychu on 11/10/16.
@@ -31,6 +34,10 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
     private VerticalLayout dataInteractionInfoLayout;
     private RelationableRelationsList relationableRelationsList;
     private Button showRelationsSwitchButton;
+    private BrowserFrame dataRelationGraphBrowserFrame;
+    private Button createNewRelationButton;
+    private String typeInstanceRelationsCycleGraphQueryAddress;
+    private int relationsCycleGraphHeight=700;
 
     public TypeDataInstanceDetailPanel(UserClientInfo userClientInfo,MeasurableValueVO measurableValue) {
         this.currentUserClientInfo = userClientInfo;
@@ -42,6 +49,10 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         String dataTypeName=this.measurableValue.getMeasurableTypeName();
         String discoverSpaceName=this.measurableValue.getDiscoverSpaceName();
         String dataId=this.measurableValue.getId();
+
+        String dataInstanceQueryId=dataId.replaceAll("#","%23");
+        dataInstanceQueryId=dataInstanceQueryId.replaceAll(":","%3a");
+        typeInstanceRelationsCycleGraphQueryAddress="http://localhost:8080/infoAnalysePages/typeInstanceRelationAnalyse/typeInstanceRelationsCycleGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName;
 
         String dataInstanceBasicInfoNoticeText;
         String dataInstanceTypeText;
@@ -83,7 +94,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         if(!InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(dataTypeKind)) {
             showRelationsSwitchButton = new Button();
             showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
-            showRelationsSwitchButton.setDescription("显示数据关联交互信息");
+            showRelationsSwitchButton.setDescription("显示数据关联信息");
             showRelationsSwitchButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
             showRelationsSwitchButton.addStyleName(ValoTheme.BUTTON_SMALL);
             dataPropertyInfoTitleContainerLayout.addComponent(showRelationsSwitchButton);
@@ -162,14 +173,14 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             dataRelationInfoTitleContainerLayout.setWidth(100, Unit.PERCENTAGE);
             this.dataInteractionInfoLayout.addComponent(dataRelationInfoTitleContainerLayout);
 
-            Label dataRelationInfoTitle = new Label(VaadinIcons.CLUSTER.getHtml() + " " + dataInstanceTypeText + "关联交互信息", ContentMode.HTML);
+            Label dataRelationInfoTitle = new Label(FontAwesome.INFO_CIRCLE.getHtml() + " " + dataInstanceTypeText + "关联信息", ContentMode.HTML);
             dataRelationInfoTitle.addStyleName(ValoTheme.LABEL_SMALL);
             dataRelationInfoTitle.addStyleName("ui_appSectionLightDiv");
             dataRelationInfoTitleContainerLayout.addComponent(dataRelationInfoTitle);
 
             Button refreshRelationsInfoButton = new Button();
             refreshRelationsInfoButton.setIcon(FontAwesome.REFRESH);
-            refreshRelationsInfoButton.setDescription("刷新数据关联交互信息");
+            refreshRelationsInfoButton.setDescription("刷新数据关联信息");
             refreshRelationsInfoButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
             refreshRelationsInfoButton.addStyleName(ValoTheme.BUTTON_SMALL);
             dataRelationInfoTitleContainerLayout.addComponent(refreshRelationsInfoButton);
@@ -177,10 +188,13 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
                 @Override
                 public void buttonClick(Button.ClickEvent clickEvent) {
                     relationableRelationsList.reloadRelationsInfo();
+                    long timeStampPostValue=new Date().getTime();
+                    dataRelationGraphBrowserFrame.setSource(new ExternalResource(
+                            typeInstanceRelationsCycleGraphQueryAddress+"&graphHeight="+relationsCycleGraphHeight+"&timestamp="+timeStampPostValue));
                 }
             });
 
-            Button createNewRelationButton = new Button();
+            createNewRelationButton = new Button();
             createNewRelationButton.setIcon(FontAwesome.CHAIN);
             createNewRelationButton.setDescription("建立新的数据关联");
             createNewRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -195,16 +209,37 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
 
             dataRelationInfoTitleContainerLayout.setExpandRatio(dataRelationInfoTitle, 1);
 
+            TabSheet tabs=new TabSheet();
+            this.dataInteractionInfoLayout.addComponent(tabs);
+
             RelationableValueVO currentRelationableValueVO = new RelationableValueVO();
             currentRelationableValueVO.setDiscoverSpaceName(discoverSpaceName);
             currentRelationableValueVO.setRelationableTypeName(dataTypeName);
             currentRelationableValueVO.setRelationableTypeKind(dataTypeKind);
             currentRelationableValueVO.setId(dataId);
-
             this.relationableRelationsList = new RelationableRelationsList(this.currentUserClientInfo, currentRelationableValueVO);
-            this.dataInteractionInfoLayout.addComponent(this.relationableRelationsList);
 
+            TabSheet.Tab relationsListLayoutTab =tabs.addTab(this.relationableRelationsList, "数据关系信息");
+            relationsListLayoutTab.setIcon(VaadinIcons.INFO_CIRCLE_O);
             dataInstanceDetailContainerLayout.addComponent(this.dataInteractionInfoLayout);
+
+            final String browserFrameCaption="DataInstanceRelationGraph";
+            this.dataRelationGraphBrowserFrame = new BrowserFrame(browserFrameCaption);
+
+            this.dataRelationGraphBrowserFrame.setSizeFull();
+            TabSheet.Tab dataRelationGraphContainerLayoutTab =tabs.addTab(this.dataRelationGraphBrowserFrame, "数据关联网络图");
+            dataRelationGraphContainerLayoutTab.setIcon(VaadinIcons.CLUSTER);
+
+            tabs.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
+                @Override
+                public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
+                    if(browserFrameCaption.equals(selectedTabChangeEvent.getTabSheet().getSelectedTab().getCaption())){
+                        createNewRelationButton.setEnabled(false);
+                    }else{
+                        createNewRelationButton.setEnabled(true);
+                    }
+                }
+            });
         }
     }
 
@@ -235,7 +270,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
             dataRelationInfoLayoutWidth=browserWindowWidth-510;
-            relationsListHeight=browserWindowHeight-500;
+            relationsListHeight=browserWindowHeight-550;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
                 showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
@@ -254,6 +289,12 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         }
         if(this.relationableRelationsList!=null){
             this.relationableRelationsList.setRelationableRelationsTableHeight(relationsListHeight);
+        }
+        if(this.dataRelationGraphBrowserFrame!=null){
+            this.dataRelationGraphBrowserFrame.setHeight(browserWindowHeight-200,Unit.PIXELS);
+            this.relationsCycleGraphHeight=browserWindowHeight-220;
+            dataRelationGraphBrowserFrame.setSource(new ExternalResource(
+                    typeInstanceRelationsCycleGraphQueryAddress+"&graphHeight="+relationsCycleGraphHeight));
         }
     }
 
@@ -296,6 +337,9 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
     @Override
     public void createRelationsActionFinish(boolean actionResult) {
         relationableRelationsList.reloadRelationsInfo();
+        long timeStampPostValue=new Date().getTime();
+        dataRelationGraphBrowserFrame.setSource(new ExternalResource(
+                typeInstanceRelationsCycleGraphQueryAddress+"&graphHeight="+relationsCycleGraphHeight+"&timestamp="+timeStampPostValue));
     }
 
     private void showDataDetailInfoPanel(RelationableValueVO targetRelationableValueVO){

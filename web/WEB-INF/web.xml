@@ -11,8 +11,19 @@
             <param-value>com.infoDiscover.adminCenter.ui.AdminCenterApplicationUI</param-value>
         </init-param>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>VaadinApplicationServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    <!--
+    <servlet-mapping>
+        <servlet-name>VaadinApplicationServlet</servlet-name>
+        <url-pattern>/adminCenter/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VaadinApplicationServlet</servlet-name>
+        <url-pattern>/VAADIN/*</url-pattern>
+    </servlet-mapping>
+    -->
 </web-app>
