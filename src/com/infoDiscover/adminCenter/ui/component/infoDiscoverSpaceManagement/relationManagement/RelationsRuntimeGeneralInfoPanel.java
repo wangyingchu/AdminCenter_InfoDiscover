@@ -57,7 +57,7 @@ public class RelationsRuntimeGeneralInfoPanel extends VerticalLayout {
         VerticalLayout showDetailChartButtonBarContainerLayout=new VerticalLayout();
         Button editDataFieldsButton = new Button();
         editDataFieldsButton.setIcon(VaadinIcons.BAR_CHART_H);
-        editDataFieldsButton.setDescription("信息发现空间关系数据详细分布");
+        editDataFieldsButton.setDescription("信息发现空间关系类型数据详细分布");
         editDataFieldsButton.addStyleName(ValoTheme.BUTTON_SMALL);
         editDataFieldsButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         editDataFieldsButton.addClickListener(new Button.ClickListener() {
@@ -69,10 +69,10 @@ public class RelationsRuntimeGeneralInfoPanel extends VerticalLayout {
                     targetWindow.bringToFront();
                     targetWindow.center();
                 }else{
-                    String typeInstanceRelationsCycleGraphQueryAddress= AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+                    String chartDataQueryAddress= AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                             "infoAnalysePages/infoDiscoverSpaceAnalyse/spaceRelationTypesTreeDataCountTreeMap.html?graphHeight=740&discoverSpace="+discoverSpaceName;
-                    String windowTitle="信息发现空间 <b>"+discoverSpaceName+"</b> 关系数据详细分布";
-                    BrowserFrame dataRelationGraphBrowserFrame=new BrowserFrame("",new ExternalResource(typeInstanceRelationsCycleGraphQueryAddress));
+                    String windowTitle="信息发现空间 <b>"+discoverSpaceName+"</b> 关系类型数据详细分布";
+                    BrowserFrame dataRelationGraphBrowserFrame=new BrowserFrame("",new ExternalResource(chartDataQueryAddress));
                     dataRelationGraphBrowserFrame.setSizeFull();
                     final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(windowTitle));
                     window.setWidth(1000, Unit.PIXELS);
