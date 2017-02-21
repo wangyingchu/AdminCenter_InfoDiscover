@@ -1,14 +1,16 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement;
 
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPerportyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ExternalResource;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class RelationsRuntimeGeneralInfoPanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private Grid relationTypesDataGrid;
     private InfoDiscoverSpaceRelationsInfoChart infoDiscoverSpaceRelationsInfoChart;
+    private String discoverSpaceName;
 
     public RelationsRuntimeGeneralInfoPanel(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -41,9 +44,60 @@ public class RelationsRuntimeGeneralInfoPanel extends VerticalLayout {
         generalInfoContainer.addComponent(relationTypesDataGrid);
         elementPlacementLayout.addComponent(generalInfoContainer);
 
+        HorizontalLayout chartsPlacementLayout=new HorizontalLayout();
+        elementPlacementLayout.setWidth("100%");
+
+        elementPlacementLayout.addComponent(chartsPlacementLayout);
+        elementPlacementLayout.setComponentAlignment(chartsPlacementLayout, Alignment.MIDDLE_LEFT);
+
         this.infoDiscoverSpaceRelationsInfoChart=new InfoDiscoverSpaceRelationsInfoChart(this.currentUserClientInfo);
-        elementPlacementLayout.addComponent(this.infoDiscoverSpaceRelationsInfoChart);
-        elementPlacementLayout.setComponentAlignment(this.infoDiscoverSpaceRelationsInfoChart, Alignment.MIDDLE_LEFT);
+        chartsPlacementLayout.addComponent(this.infoDiscoverSpaceRelationsInfoChart);
+        chartsPlacementLayout.setComponentAlignment(this.infoDiscoverSpaceRelationsInfoChart, Alignment.MIDDLE_LEFT);
+
+        VerticalLayout showDetailChartButtonBarContainerLayout=new VerticalLayout();
+        Button editDataFieldsButton = new Button();
+        editDataFieldsButton.setIcon(VaadinIcons.BAR_CHART_H);
+        editDataFieldsButton.setDescription("信息发现空间关系数据详细分布");
+        editDataFieldsButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        editDataFieldsButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        editDataFieldsButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                String targetWindowUID=discoverSpaceName+"_GlobalRelationTypesTreeDataCountDetailWindow";
+                Window targetWindow=currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+                if(targetWindow!=null){
+                    targetWindow.bringToFront();
+                    targetWindow.center();
+                }else{
+                    String typeInstanceRelationsCycleGraphQueryAddress= AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+                            "infoAnalysePages/infoDiscoverSpaceAnalyse/spaceRelationTypesTreeDataCountTreeMap.html?graphHeight=740&discoverSpace="+discoverSpaceName;
+                    String windowTitle="信息发现空间 <b>"+discoverSpaceName+"</b> 关系数据详细分布";
+                    BrowserFrame dataRelationGraphBrowserFrame=new BrowserFrame("",new ExternalResource(typeInstanceRelationsCycleGraphQueryAddress));
+                    dataRelationGraphBrowserFrame.setSizeFull();
+                    final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(windowTitle));
+                    window.setWidth(1000, Unit.PIXELS);
+                    window.setHeight(800,Unit.PIXELS);
+                    window.setCaptionAsHtml(true);
+                    window.setResizable(false);
+                    window.setDraggable(true);
+                    window.setModal(false);
+                    window.center();
+                    window.setContent(dataRelationGraphBrowserFrame);
+                    window.addCloseListener(new Window.CloseListener() {
+                        @Override
+                        public void windowClose(Window.CloseEvent closeEvent) {
+                            currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                        }
+                    });
+                    currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+                    UI.getCurrent().addWindow(window);
+                }
+            }
+        });
+
+        showDetailChartButtonBarContainerLayout.addComponent(editDataFieldsButton);
+        chartsPlacementLayout.addComponent(showDetailChartButtonBarContainerLayout);
+        chartsPlacementLayout.setComponentAlignment(showDetailChartButtonBarContainerLayout, Alignment.TOP_RIGHT);
     }
 
     public void renderRelationsRuntimeGeneralInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
@@ -55,5 +109,13 @@ public class RelationsRuntimeGeneralInfoPanel extends VerticalLayout {
             this.relationTypesDataGrid.addRow(relationTypeName, new Long(currentMetrics.getTypeDataCount()));
         }
         relationTypesDataGrid.recalculateColumnWidths();
+    }
+
+    public String getDiscoverSpaceName() {
+        return discoverSpaceName;
+    }
+
+    public void setDiscoverSpaceName(String discoverSpaceName) {
+        this.discoverSpaceName = discoverSpaceName;
     }
 }

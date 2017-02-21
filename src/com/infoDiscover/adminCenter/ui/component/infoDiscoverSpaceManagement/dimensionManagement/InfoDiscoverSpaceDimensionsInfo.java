@@ -87,6 +87,7 @@ public class InfoDiscoverSpaceDimensionsInfo extends VerticalLayout {
 
     public void renderDimensionsInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
         this.secondarySectionActionBarTitle.updateSectionTitle(this.discoverSpaceName);
+        this.dimensionsRuntimeGeneralInfoPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.dimensionsRuntimeGeneralInfoPanel.renderDimensionsRuntimeGeneralInfo(discoverSpaceStatisticMetrics);
         this.dimensionTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.dimensionTypesManagementPanel.renderDimensionTypesManagementInfo(discoverSpaceStatisticMetrics);

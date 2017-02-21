@@ -94,6 +94,7 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
 
     public void renderRelationsInfo(DiscoverSpaceStatisticMetrics discoverSpaceStatisticMetrics){
         this.secondarySectionActionBarTitle.updateSectionTitle(this.discoverSpaceName);
+        this.relationsRuntimeGeneralInfoPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.relationsRuntimeGeneralInfoPanel.renderRelationsRuntimeGeneralInfo(discoverSpaceStatisticMetrics);
         this.relationTypesManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.relationTypesManagementPanel.renderRelationTypesManagementInfo(discoverSpaceStatisticMetrics);
