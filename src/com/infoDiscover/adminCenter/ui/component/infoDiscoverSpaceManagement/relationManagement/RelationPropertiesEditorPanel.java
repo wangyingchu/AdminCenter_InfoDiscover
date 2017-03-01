@@ -274,7 +274,7 @@ public class RelationPropertiesEditorPanel extends VerticalLayout implements Inp
         boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(propertyNameValue);
         if(containsSpecialChars){
             Notification errorNotification = new Notification("数据校验错误",
-                    "当前输入属性名称 "+propertyNameValue+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+                    "当前输入属性名称 "+propertyNameValue+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > & 空格", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);

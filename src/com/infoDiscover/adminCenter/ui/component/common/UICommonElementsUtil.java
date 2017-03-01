@@ -27,6 +27,7 @@ public class UICommonElementsUtil {
         if(checkValue.contains("[")){return true;}
         if(checkValue.contains("]")){return true;}
         if(checkValue.contains(" ")){return true;}
+        if(checkValue.contains("&")){return true;}
         return false;
     }
 

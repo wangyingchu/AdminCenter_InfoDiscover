@@ -101,5 +101,6 @@ public class InfoDiscoverSpaceDimensionsInfo extends VerticalLayout {
 
     public void setParentInfoDiscoverSpaceDetail(InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail) {
         this.parentInfoDiscoverSpaceDetail = parentInfoDiscoverSpaceDetail;
+        this.dimensionInstancesManagementPanel.setAncestorInfoDiscoverSpaceDetail(this.parentInfoDiscoverSpaceDetail);
     }
 }

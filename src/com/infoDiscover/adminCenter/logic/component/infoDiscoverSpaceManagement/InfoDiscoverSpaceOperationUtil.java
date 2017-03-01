@@ -8,6 +8,7 @@ import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverAdminSpace;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverSpace;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
+import com.infoDiscover.infoDiscoverEngine.util.config.RuntimeEnvironmentHandler;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineDataMartException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRuntimeException;
@@ -16,6 +17,7 @@ import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -1549,5 +1551,156 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return null;
+    }
+
+    public static boolean initCountriesAndRegionsDimensionData(String discoverSpaceName,String dimensionTypePerfix){
+        String continentsDimensionTypeName=dimensionTypePerfix+"_"+"geo_Continents";
+        String countriesAndRegionsDimensionTypeName=dimensionTypePerfix+"_"+"geo_CountriesAndRegions";
+        String geoBelongsToRelationTypeName=dimensionTypePerfix+"_"+"geo_BelongsTo";
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+            if(!targetSpace.hasDimensionType(continentsDimensionTypeName)){
+                DimensionType continentsDimensionType= targetSpace.addDimensionType(continentsDimensionTypeName);
+                TypeProperty continentChineseNameTypeProperty= continentsDimensionType.addTypeProperty("continentChineseName",PropertyType.STRING);
+                continentChineseNameTypeProperty.setMandatory(true);
+                TypeProperty continentEnglishNameTypeProperty=continentsDimensionType.addTypeProperty("continentEnglishName",PropertyType.STRING);
+                continentEnglishNameTypeProperty.setMandatory(true);
+                TypeProperty continentChineseFullNameTypeProperty=continentsDimensionType.addTypeProperty("continentChineseFullName",PropertyType.STRING);
+                continentChineseFullNameTypeProperty.setMandatory(false);
+            }
+            if(!targetSpace.hasDimensionType(countriesAndRegionsDimensionTypeName)){
+                DimensionType countriesAndRegionsDimensionType= targetSpace.addDimensionType(countriesAndRegionsDimensionTypeName);
+                TypeProperty _2bitCodeTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("2bitCode",PropertyType.STRING);
+                _2bitCodeTypeProperty.setMandatory(true);
+                TypeProperty _3bitCodeTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("3bitCode",PropertyType.STRING);
+                _3bitCodeTypeProperty.setMandatory(true);
+                TypeProperty numberTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("number",PropertyType.STRING);
+                numberTypeProperty.setMandatory(true);
+                TypeProperty ISO3122_2CodeTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("ISO3122_2Code",PropertyType.STRING);
+                ISO3122_2CodeTypeProperty.setMandatory(true);
+                TypeProperty _EnglishNameTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("EnglishName",PropertyType.STRING);
+                _EnglishNameTypeProperty.setMandatory(true);
+                TypeProperty _ChineseNameTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("ChineseName",PropertyType.STRING);
+                _ChineseNameTypeProperty.setMandatory(true);
+                TypeProperty belongedContinentTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("belongedContinent",PropertyType.STRING);
+                belongedContinentTypeProperty.setMandatory(false);
+                TypeProperty capitalChineseNameTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("capitalChineseName",PropertyType.STRING);
+                capitalChineseNameTypeProperty.setMandatory(false);
+                TypeProperty capitalEnglishNameTypeProperty= countriesAndRegionsDimensionType.addTypeProperty("capitalEnglishName",PropertyType.STRING);
+                capitalEnglishNameTypeProperty.setMandatory(false);
+            }
+            if(!targetSpace.hasRelationType(geoBelongsToRelationTypeName)){
+                targetSpace.addRelationType(geoBelongsToRelationTypeName);
+            }
+
+            //Add Continents dimension
+            Dimension _AsiaDimension=null;
+            Dimension _EuropeDimension=null;
+            Dimension _NorthAmericaDimension=null;
+            Dimension _SouthAmericaDimension=null;
+            Dimension _AfricaDimension=null;
+            Dimension _OceaniaDimension=null;
+            Dimension _AntarcticaDimension=null;
+
+            File continentsInfoFile =new File(RuntimeEnvironmentHandler.getApplicationRootPath()+"ContinentsInfo.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(continentsInfoFile),"UTF-8"));
+            String lineTxt = null;
+            while ((lineTxt = br.readLine()) != null) {
+                String[] continentsInfoValueArray = lineTxt.split("\\|");
+                Dimension targetContinentDimension=DiscoverEngineComponentFactory.createDimension(continentsDimensionTypeName);
+                targetContinentDimension.setInitProperty("continentChineseName",continentsInfoValueArray[0]);
+                targetContinentDimension.setInitProperty("continentEnglishName",continentsInfoValueArray[2]);
+                if(!"-".equals(continentsInfoValueArray[1])){
+                    targetContinentDimension.setInitProperty("continentChineseFullName",continentsInfoValueArray[1]);
+                }
+                targetContinentDimension=targetSpace.addDimension(targetContinentDimension);
+                if("Asia".equals(continentsInfoValueArray[2])){
+                    _AsiaDimension=targetContinentDimension;
+                }
+                if("Europe".equals(continentsInfoValueArray[2])){
+                    _EuropeDimension=targetContinentDimension;
+                }
+                if("North America".equals(continentsInfoValueArray[2])){
+                    _NorthAmericaDimension=targetContinentDimension;
+                }
+                if("South America".equals(continentsInfoValueArray[2])){
+                    _SouthAmericaDimension=targetContinentDimension;
+                }
+                if("Africa".equals(continentsInfoValueArray[2])){
+                    _AfricaDimension=targetContinentDimension;
+                }
+                if("Oceania".equals(continentsInfoValueArray[2])){
+                    _OceaniaDimension=targetContinentDimension;
+                }
+                if("Antarctica".equals(continentsInfoValueArray[2])){
+                    _AntarcticaDimension=targetContinentDimension;
+                }
+            }
+            br.close();
+
+            File countriesAndRegionInfoFile =new File(RuntimeEnvironmentHandler.getApplicationRootPath()+"ISO_3166_2_CountriesAndRegions.txt");
+            BufferedReader br1 = new BufferedReader(new InputStreamReader(new FileInputStream(countriesAndRegionInfoFile),"UTF-8"));
+            while ((lineTxt = br1.readLine()) != null) {
+                String[] countriesAndRegionInfoValueArray = lineTxt.split("\\|");
+                Dimension targetCountryOrRegionDimension=DiscoverEngineComponentFactory.createDimension(countriesAndRegionsDimensionTypeName);
+                targetCountryOrRegionDimension.setInitProperty("2bitCode",countriesAndRegionInfoValueArray[0].trim());
+                targetCountryOrRegionDimension.setInitProperty("3bitCode",countriesAndRegionInfoValueArray[1].trim());
+                targetCountryOrRegionDimension.setInitProperty("number",countriesAndRegionInfoValueArray[2].trim());
+                targetCountryOrRegionDimension.setInitProperty("ISO3122_2Code",countriesAndRegionInfoValueArray[3].trim());
+                targetCountryOrRegionDimension.setInitProperty("EnglishName",countriesAndRegionInfoValueArray[4].trim());
+                targetCountryOrRegionDimension.setInitProperty("ChineseName",countriesAndRegionInfoValueArray[5].trim());
+                if(!"-".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.setInitProperty("belongedContinent",countriesAndRegionInfoValueArray[6].trim());
+                }
+                if(!"-".equals(countriesAndRegionInfoValueArray[7].trim())){
+                    targetCountryOrRegionDimension.setInitProperty("capitalChineseName",countriesAndRegionInfoValueArray[7].trim());
+                }
+                if(!"-".equals(countriesAndRegionInfoValueArray[8].trim())){
+                    targetCountryOrRegionDimension.setInitProperty("capitalEnglishName",countriesAndRegionInfoValueArray[8].trim());
+                }
+
+                targetCountryOrRegionDimension=targetSpace.addDimension(targetCountryOrRegionDimension);
+
+                if("Asia".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_AsiaDimension,geoBelongsToRelationTypeName);
+                }
+                if("Europe".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_EuropeDimension,geoBelongsToRelationTypeName);
+                }
+                if("North America".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_NorthAmericaDimension,geoBelongsToRelationTypeName);
+                }
+                if("South America".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_SouthAmericaDimension,geoBelongsToRelationTypeName);
+                }
+                if("Africa".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_AfricaDimension,geoBelongsToRelationTypeName);
+                }
+                if("Oceania".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_OceaniaDimension,geoBelongsToRelationTypeName);
+                }
+                if("Antarctica".equals(countriesAndRegionInfoValueArray[6].trim())){
+                    targetCountryOrRegionDimension.addToRelation(_AntarcticaDimension,geoBelongsToRelationTypeName);
+                }
+            }
+            br1.close();
+            return true;
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return false;
     }
 }

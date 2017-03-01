@@ -103,7 +103,7 @@ public class CreateDimensionTypePanel extends VerticalLayout {
         boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(dimensionTypeNameStr);
         if(containsSpecialChars){
             Notification errorNotification = new Notification("数据校验错误",
-                    "当前输入维度类型名称 "+dimensionTypeNameStr+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > 空格", Notification.Type.ERROR_MESSAGE);
+                    "当前输入维度类型名称 "+dimensionTypeNameStr+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > & 空格", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);

@@ -3,7 +3,10 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.di
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.DimensionTypeVO;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypeDataInstancePanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.CountriesAndRegionsDimensionDataInitPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.CountriesAndRegionsDimensionDataInitPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
@@ -11,6 +14,7 @@ import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMet
 import com.vaadin.data.Item;
 import com.vaadin.data.util.HierarchicalContainer;
 import com.vaadin.event.ItemClickEvent;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
@@ -21,7 +25,7 @@ import java.util.List;
 /**
  * Created by wangychu on 10/13/16.
  */
-public class DimensionInstancesManagementPanel extends VerticalLayout {
+public class DimensionInstancesManagementPanel extends VerticalLayout implements CountriesAndRegionsDimensionDataInitPanelInvoker {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -36,12 +40,16 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
     private DimensionTypeDataInstancesInfoChart dimensionTypeDataInstancesInfoChart;
     private MenuBar.Command createDimensionInstanceMenuItemCommand;
     private MenuBar.Command searchDimensionInstanceMenuItemCommand;
+    private MenuBar.Command initStandardDimensionTypeDataMenuItemCommand;
     private MenuBar.MenuItem createDimensionInstanceMenuItem;
     private MenuBar.MenuItem searchDimensionInstanceMenuItem;
+    private MenuBar.MenuItem initStandardDimensionTypeDataMenuItem;
     private FormLayout dimensionTypeDataInstanceCountInfoForm;
 
     private VerticalLayout rightSideUIPromptBox;
     private VerticalLayout rightSideUIElementsBox;
+
+    private InfoDiscoverSpaceDetail ancestorInfoDiscoverSpaceDetail;
 
     public DimensionInstancesManagementPanel(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -195,6 +203,21 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
         this.createDimensionInstanceMenuItem = dimensionInstanceOperationMenuBar.addItem("创建维度数据", FontAwesome.PLUS_CIRCLE, null);
         this.searchDimensionInstanceMenuItem = dimensionInstanceOperationMenuBar.addItem("查询维度数据", FontAwesome.SEARCH, null);
 
+        this.initStandardDimensionTypeDataMenuItemCommand= new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedDimensionTypeName=selectedItem.getText();
+                executeInitStandardDimensionTypeDataOperation(selectedDimensionTypeName);
+            }
+        };
+
+        this.initStandardDimensionTypeDataMenuItem = dimensionInstanceOperationMenuBar.addItem("标准维度类型数据初始化", VaadinIcons.RECORDS, null);
+        MenuBar.MenuItem geographyDataMenuItem =   this.initStandardDimensionTypeDataMenuItem.addItem("地理信息维度数据", VaadinIcons.GLOBE, null);
+        geographyDataMenuItem.addItem("世界国家地区信息数据", null, initStandardDimensionTypeDataMenuItemCommand);
+        MenuBar.MenuItem nationalDataMenuItem =   geographyDataMenuItem.addItem("国家地区行政区划数据", null, null);
+        nationalDataMenuItem.addItem("中国行政区划数据", null, initStandardDimensionTypeDataMenuItemCommand);
+        this.initStandardDimensionTypeDataMenuItem.addItem("时间维度数据", VaadinIcons.CALENDAR, initStandardDimensionTypeDataMenuItemCommand);
+
+
         HorizontalLayout dimensionTypeDataInstanceInfoContainerLayout=new HorizontalLayout();
         dimensionTypeDataInstanceInfoContainerLayout.setWidth(700,Unit.PIXELS);
         this.rightSideUIElementsBox.addComponent(dimensionTypeDataInstanceInfoContainerLayout);
@@ -305,6 +328,7 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
         this.createDimensionInstanceMenuItem.removeChildren();
         this.searchDimensionInstanceMenuItem.removeChildren();
         if(this.currentSelectedDimensionTypeName.equals(InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME)){
+            this.initStandardDimensionTypeDataMenuItem.setEnabled(true);
             DimensionTypeVO currentDimensionTypeVO=InfoDiscoverSpaceOperationUtil.retrieveRootDimensionTypeRuntimeInfo(this.discoverSpaceName,this.currentDiscoverSpaceStatisticMetrics);
             setDimensionInstanceCountInfo(currentDimensionTypeVO);
             List<DimensionTypeVO> childDimensionTypeVOsList=currentDimensionTypeVO.getChildDimensionTypesVOList();
@@ -318,6 +342,7 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
                 }
             }
         }else{
+            this.initStandardDimensionTypeDataMenuItem.setEnabled(false);
             DimensionTypeVO currentDimensionTypeVO=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypeRuntimeInfo(this.discoverSpaceName, this.currentSelectedDimensionTypeName,this.currentDiscoverSpaceStatisticMetrics);
             setDimensionInstanceCountInfo(currentDimensionTypeVO);
             MenuBar.MenuItem currentCreateDimensionTypeItem = createDimensionInstanceMenuItem.addItem(currentDimensionTypeVO.getTypeName(), null, createDimensionInstanceMenuItemCommand);
@@ -392,5 +417,40 @@ public class DimensionInstancesManagementPanel extends VerticalLayout {
         currentQueryEvent.setDataInstanceTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION);
         currentQueryEvent.setDataInstanceTypeName(dimensionType);
         this.currentUserClientInfo.getEventBlackBoard().fire(currentQueryEvent);
+    }
+
+    private void executeInitStandardDimensionTypeDataOperation(String operationType){
+        if("世界国家地区信息数据".equals(operationType)){
+            CountriesAndRegionsDimensionDataInitPanel countriesAndRegionsDimensionDataInitPanel=new CountriesAndRegionsDimensionDataInitPanel(this.currentUserClientInfo);
+            countriesAndRegionsDimensionDataInitPanel.setDiscoverSpaceName(this.getDiscoverSpaceName());
+            countriesAndRegionsDimensionDataInitPanel.setCountriesAndRegionsDimensionDataInitPanelInvoker(this);
+            final Window window = new Window();
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(countriesAndRegionsDimensionDataInitPanel);
+            countriesAndRegionsDimensionDataInitPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+        if("中国行政区划数据".equals(operationType)){System.out.println("chinaaa");}
+        if("时间维度数据".equals(operationType)){System.out.println("date");}
+    }
+
+    @Override
+    public void initCountriesAndRegionsDimensionDataActionFinish(boolean actionResult) {
+        if(actionResult){
+            if(getAncestorInfoDiscoverSpaceDetail()!=null){
+                getAncestorInfoDiscoverSpaceDetail().renderDiscoverSpaceDetail();
+            }
+        }
+    }
+
+    public InfoDiscoverSpaceDetail getAncestorInfoDiscoverSpaceDetail() {
+        return ancestorInfoDiscoverSpaceDetail;
+    }
+
+    public void setAncestorInfoDiscoverSpaceDetail(InfoDiscoverSpaceDetail ancestorInfoDiscoverSpaceDetail) {
+        this.ancestorInfoDiscoverSpaceDetail = ancestorInfoDiscoverSpaceDetail;
     }
 }
