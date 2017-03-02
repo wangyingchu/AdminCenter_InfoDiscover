@@ -6,12 +6,14 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.event.*;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.DataAnalyzeApplicationBrowserPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.ProcessingDataOperationPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.InfoDiscoverSpaceDimensionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.InfoDiscoverSpaceRelationsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.runtimeInfo.InfoDiscoverSpaceRuntimeGeneralInfo;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPerportyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.navigator.View;
@@ -29,13 +31,15 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener,
         DiscoverSpaceOpenProcessingDataListEvent.DiscoverSpaceOpenProcessingDataListListener,
         DiscoverSpaceAddProcessingDataEvent.DiscoverSpaceAddProcessingDataListener,
-        DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener{
+        DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener,
+        DiscoverSpaceLaunchDataAnalyzeApplicationEvent.DiscoverSpaceLaunchDataAnalyzeApplicationListener{
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
     private InfoDiscoverSpaceRuntimeGeneralInfo infoDiscoverSpaceRuntimeGeneralInfo;
     private InfoDiscoverSpaceDimensionsInfo infoDiscoverSpaceDimensionsInfo;
     private InfoDiscoverSpaceFactsInfo infoDiscoverSpaceFactsInfo;
     private InfoDiscoverSpaceRelationsInfo infoDiscoverSpaceRelationsInfo;
+    private String dataAnalyzeApplicationBaseAddress;
 
     public InfoDiscoverSpaceDetail(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -78,6 +82,9 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         infoDiscoverSpaceRelationsInfo=new InfoDiscoverSpaceRelationsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceRelationsInfoLayout.addComponent(infoDiscoverSpaceRelationsInfo);
+
+        dataAnalyzeApplicationBaseAddress= AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+                "infoAnalyseApp/index.html";
     }
 
     @Override
@@ -252,6 +259,38 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
                 resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
                 resultNotification.show(Page.getCurrent());
             }
+        }
+    }
+
+    @Override
+    public void receivedDiscoverSpaceLaunchDataAnalyzeApplicationEvent(DiscoverSpaceLaunchDataAnalyzeApplicationEvent event) {
+        String discoverSpaceName=event.getDiscoverSpaceName();
+        String targetWindowUID=discoverSpaceName+"_GlobalDataAnalyzeApplicationWindow";
+        Window targetWindow=this.currentUserClientInfo.getRuntimeWindowsRepository().getExistingWindow(discoverSpaceName,targetWindowUID);
+        if(targetWindow!=null){
+            targetWindow.bringToFront();
+            targetWindow.center();
+        }else{
+            DataAnalyzeApplicationBrowserPanel dataAnalyzeApplicationBrowserPanel=new DataAnalyzeApplicationBrowserPanel(this.currentUserClientInfo);
+            dataAnalyzeApplicationBrowserPanel.setDiscoverSpaceName(discoverSpaceName);
+            dataAnalyzeApplicationBrowserPanel.setDataAnalyzeApplicationBaseAddress(this.dataAnalyzeApplicationBaseAddress);
+            String dataDetailInfoTitle="信息发现空间 "+discoverSpaceName+" 数据分析发现应用系统";
+            final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+            window.setWidth(80, Unit.PERCENTAGE);
+            window.setHeight(80,Unit.PERCENTAGE);
+            window.setCaptionAsHtml(true);
+            window.setResizable(true);
+            window.setDraggable(true);
+            window.setModal(false);
+            window.setContent(dataAnalyzeApplicationBrowserPanel);
+            window.addCloseListener(new Window.CloseListener() {
+                @Override
+                public void windowClose(Window.CloseEvent closeEvent) {
+                    currentUserClientInfo.getRuntimeWindowsRepository().removeExistingWindow(discoverSpaceName,targetWindowUID);
+                }
+            });
+            this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
+            UI.getCurrent().addWindow(window);
         }
     }
 }

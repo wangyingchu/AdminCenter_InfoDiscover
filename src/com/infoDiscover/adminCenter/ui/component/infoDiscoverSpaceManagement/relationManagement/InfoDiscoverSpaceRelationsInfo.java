@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement;
 
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionActionBarTitle;
+import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceLaunchDataAnalyzeApplicationEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceOpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -41,7 +42,20 @@ public class InfoDiscoverSpaceRelationsInfo extends VerticalLayout {
             }
         });
 
-        secondarySectionActionBarTitle=new SecondarySectionActionBarTitle("-------",new Button[]{openProcessingDataListButton});
+        Button launchDataAnalyzeApplicationButton = new Button("信息分析发现应用");
+        launchDataAnalyzeApplicationButton.setIcon(VaadinIcons.CHART_TIMELINE);
+        launchDataAnalyzeApplicationButton.setDescription("启动信息分析发现应用系统");
+        launchDataAnalyzeApplicationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        launchDataAnalyzeApplicationButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        launchDataAnalyzeApplicationButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                DiscoverSpaceLaunchDataAnalyzeApplicationEvent discoverSpaceLaunchDataAnalyzeApplicationEvent =new DiscoverSpaceLaunchDataAnalyzeApplicationEvent(discoverSpaceName);
+                currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceLaunchDataAnalyzeApplicationEvent);
+            }
+        });
+
+        secondarySectionActionBarTitle=new SecondarySectionActionBarTitle("-------",new Button[]{openProcessingDataListButton,launchDataAnalyzeApplicationButton});
         addComponent(secondarySectionActionBarTitle);
 
         TabSheet tabs=new TabSheet();

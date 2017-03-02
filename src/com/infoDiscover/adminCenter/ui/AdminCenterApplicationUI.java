@@ -61,7 +61,9 @@ public class AdminCenterApplicationUI extends UI {
                 DiscoverSpaceAddProcessingDataEvent.class);
         BLACKBOARD.register(DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener.class,
                 DiscoverSpaceRemoveProcessingDataEvent.class);
-        currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
+        BLACKBOARD.register(DiscoverSpaceLaunchDataAnalyzeApplicationEvent.DiscoverSpaceLaunchDataAnalyzeApplicationListener.class,
+                DiscoverSpaceLaunchDataAnalyzeApplicationEvent.class);
+                currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 
         Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
         currentUserClientInfo.setDiscoverSpacesProcessingDataMap(discoverSpacesProcessingDataMap);
