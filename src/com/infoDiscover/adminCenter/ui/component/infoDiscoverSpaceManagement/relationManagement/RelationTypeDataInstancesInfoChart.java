@@ -13,7 +13,9 @@ import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class RelationTypeDataInstancesInfoChart extends VerticalLayout {
     private HighChart pieChart;
 
     public RelationTypeDataInstancesInfoChart(UserClientInfo currentUserClientInfo) {
+        this.setMargin(new MarginInfo(false,false,false,true));
         this.currentUserClientInfo = currentUserClientInfo;
         this.pieConfiguration = new ChartConfiguration();
         this.pieConfiguration.setChartType(ChartType.PIE);
@@ -59,8 +62,24 @@ public class RelationTypeDataInstancesInfoChart extends VerticalLayout {
         this.pieConfiguration.getSeriesList().add(pieSpaceDataSeries);
         try {
             this.pieChart = HighChartFactory.renderChart(this.pieConfiguration);
-            pieChart.setHeight(400, Unit.PIXELS);
-            pieChart.setWidth(500, Unit.PIXELS);
+
+            int browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
+            int browserWindowWidth= UI.getCurrent().getPage().getBrowserWindowWidth();
+
+            int chartWidth=browserWindowWidth-1200;
+            if(chartWidth>500){
+                pieChart.setWidth(chartWidth, Unit.PIXELS);
+            }else{
+                pieChart.setWidth(500, Unit.PIXELS);
+            }
+
+            int chartHeight=browserWindowHeight-500;
+            if(chartHeight>400){
+                pieChart.setHeight(chartHeight, Unit.PIXELS);
+            }else{
+                pieChart.setHeight(400, Unit.PIXELS);
+            }
+
             this.addComponent(this.pieChart);
             this.setComponentAlignment(pieChart, Alignment.MIDDLE_LEFT);
         } catch (HighChartsException e) {

@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -8,6 +9,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 
 /**
@@ -143,24 +145,40 @@ public class CountriesAndRegionsDimensionDataInitPanel extends VerticalLayout {
             return;
         }
 
-        boolean initDataResult=InfoDiscoverSpaceOperationUtil.initCountriesAndRegionsDimensionData(getDiscoverSpaceName(),dimensionTypeNamePerfixStr);
-        if(this.getCountriesAndRegionsDimensionDataInitPanelInvoker()!=null){
-            this.getCountriesAndRegionsDimensionDataInitPanelInvoker().initCountriesAndRegionsDimensionDataActionFinish(initDataResult);
-        }
-        if(initDataResult){
-            getContainerDialog().close();
-            Notification resultNotification = new Notification("添加数据操作成功",
-                    "初始化世界国家地区信息维度数据成功,数据维度类型前缀为: "+dimensionTypeNamePerfixStr, Notification.Type.HUMANIZED_MESSAGE);
-            resultNotification.setPosition(Position.MIDDLE_CENTER);
-            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
-            resultNotification.show(Page.getCurrent());
-        }else{
-            Notification errorNotification = new Notification("初始化世界国家地区信息维度数据错误",
-                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
-            errorNotification.setPosition(Position.MIDDLE_CENTER);
-            errorNotification.show(Page.getCurrent());
-            errorNotification.setIcon(FontAwesome.WARNING);
-        }
-        containerDialog.close();
+        String confirmMessageString=" 请确认初始化前缀为 "+dimensionTypeNamePerfixStr+" 的世界国家地区信息维度数据";
+        Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
+
+        final ConfirmDialog addDataConfirmDialog = new ConfirmDialog();
+        addDataConfirmDialog.setConfirmMessage(confirmMessage);
+
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                addDataConfirmDialog.close();
+
+                boolean initDataResult=InfoDiscoverSpaceOperationUtil.initCountriesAndRegionsDimensionData(getDiscoverSpaceName(),dimensionTypeNamePerfixStr);
+                if(getCountriesAndRegionsDimensionDataInitPanelInvoker()!=null){
+                    getCountriesAndRegionsDimensionDataInitPanelInvoker().initCountriesAndRegionsDimensionDataActionFinish(initDataResult);
+                }
+                if(initDataResult){
+                    getContainerDialog().close();
+                    Notification resultNotification = new Notification("添加数据操作成功",
+                            "初始化世界国家地区信息维度数据成功,数据维度类型前缀为: "+dimensionTypeNamePerfixStr, Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                }else{
+                    Notification errorNotification = new Notification("初始化世界国家地区信息维度数据错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+                containerDialog.close();
+            }
+        };
+        addDataConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(addDataConfirmDialog);
     }
 }

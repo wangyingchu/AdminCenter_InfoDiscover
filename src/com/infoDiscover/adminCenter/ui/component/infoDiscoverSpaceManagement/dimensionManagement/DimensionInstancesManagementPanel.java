@@ -5,6 +5,8 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceTypeDataInstanceQueryRequiredEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypeDataInstancePanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.ChineseAdministrativeDivisionDimensionDataInitPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.ChineseAdministrativeDivisionDimensionDataInitPanelInvoker;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.CountriesAndRegionsDimensionDataInitPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dimensionManagement.standardDimensionTypeManagement.CountriesAndRegionsDimensionDataInitPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -25,7 +27,7 @@ import java.util.List;
 /**
  * Created by wangychu on 10/13/16.
  */
-public class DimensionInstancesManagementPanel extends VerticalLayout implements CountriesAndRegionsDimensionDataInitPanelInvoker {
+public class DimensionInstancesManagementPanel extends VerticalLayout implements CountriesAndRegionsDimensionDataInitPanelInvoker,ChineseAdministrativeDivisionDimensionDataInitPanelInvoker {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -433,7 +435,20 @@ public class DimensionInstancesManagementPanel extends VerticalLayout implements
             countriesAndRegionsDimensionDataInitPanel.setContainerDialog(window);
             UI.getCurrent().addWindow(window);
         }
-        if("中国行政区划数据".equals(operationType)){System.out.println("chinaaa");}
+        if("中国行政区划数据".equals(operationType)){
+            ChineseAdministrativeDivisionDimensionDataInitPanel chineseAdministrativeDivisionDimensionDataInitPanel=
+                    new ChineseAdministrativeDivisionDimensionDataInitPanel(this.currentUserClientInfo);
+            chineseAdministrativeDivisionDimensionDataInitPanel.setDiscoverSpaceName(this.getDiscoverSpaceName());
+            chineseAdministrativeDivisionDimensionDataInitPanel.setChineseAdministrativeDivisionDimensionDataInitPanelInvoker(this);
+            final Window window = new Window();
+            window.setWidth(550.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(chineseAdministrativeDivisionDimensionDataInitPanel);
+            chineseAdministrativeDivisionDimensionDataInitPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
         if("时间维度数据".equals(operationType)){System.out.println("date");}
     }
 
@@ -452,5 +467,10 @@ public class DimensionInstancesManagementPanel extends VerticalLayout implements
 
     public void setAncestorInfoDiscoverSpaceDetail(InfoDiscoverSpaceDetail ancestorInfoDiscoverSpaceDetail) {
         this.ancestorInfoDiscoverSpaceDetail = ancestorInfoDiscoverSpaceDetail;
+    }
+
+    @Override
+    public void initChineseAdministrativeDivisionDimensionDataActionFinish(boolean actionResult) {
+
     }
 }

@@ -12,8 +12,8 @@ import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
-import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
@@ -47,8 +47,24 @@ public class InfoDiscoverSpaceFactsInfoChart extends VerticalLayout {
         this.barConfiguration.getSeriesList().add(barChartSeries);
         try {
             this.barChart = HighChartFactory.renderChart(this.barConfiguration);
-            barChart.setHeight(500, Sizeable.Unit.PIXELS);
-            barChart.setWidth(600, Sizeable.Unit.PIXELS);
+
+            int browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
+            int browserWindowWidth= UI.getCurrent().getPage().getBrowserWindowWidth();
+
+            int chartWidth=browserWindowWidth-1200;
+            if(chartWidth>600){
+                barChart.setWidth(chartWidth, Unit.PIXELS);
+            }else{
+                barChart.setWidth(600, Unit.PIXELS);
+            }
+
+            int chartHeight=browserWindowHeight-500;
+            if(chartHeight>500){
+                barChart.setHeight(chartHeight, Unit.PIXELS);
+            }else{
+                barChart.setHeight(500, Unit.PIXELS);
+            }
+
             this.addComponent(this.barChart);
             this.setComponentAlignment(barChart, Alignment.MIDDLE_LEFT);
         } catch (HighChartsException e) {
