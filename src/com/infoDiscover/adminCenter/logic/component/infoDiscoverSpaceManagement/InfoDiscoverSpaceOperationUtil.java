@@ -1820,4 +1820,25 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return false;
     }
+
+    public static long countDimensionRelationsById(String spaceName,String dimensionId,String relationType,RelationDirection relationDirection){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            Dimension targetDimension = targetSpace.getDimensionById(dimensionId);
+            if (targetDimension == null) {
+                return Long.MIN_VALUE;
+            } else {
+                List<Relation> relatedDataList = targetDimension.getSpecifiedRelations(relationType, relationDirection);
+                return relatedDataList.size();
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return Long.MIN_VALUE;
+    }
 }

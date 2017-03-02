@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.infoDiscover.infoDiscoverEngine.dataMart.RelationDirection;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.EqualFilteringItem;
 import com.vaadin.server.FontAwesome;
@@ -157,6 +158,16 @@ public class ChineseAdministrativeDivisionDimensionDataInitPanel extends Vertica
         if(chinaDimensionList.size()>1){
             Notification errorNotification = new Notification("数据校验错误",
                     "维度类型为 "+countriesAndRegionsDimensionTypeName+" 的世界国家地区信息数据中存在多个标识为中国的维度数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        long _ChinaDimensionRelationsCountCheck=InfoDiscoverSpaceOperationUtil.
+                countDimensionRelationsById(getDiscoverSpaceName(),chinaDimensionList.get(0).getId(),geoBelongsToRelationTypeName, RelationDirection.TO);
+        if(_ChinaDimensionRelationsCountCheck!=0){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "针对维度类型为 "+countriesAndRegionsDimensionTypeName+" 的世界国家地区信息数据已执行过中国行政区划信息维度数据初始化操作", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);
