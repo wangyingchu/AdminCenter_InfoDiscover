@@ -471,6 +471,10 @@ public class DimensionInstancesManagementPanel extends VerticalLayout implements
 
     @Override
     public void initChineseAdministrativeDivisionDimensionDataActionFinish(boolean actionResult) {
-
+        if(actionResult){
+            if(getAncestorInfoDiscoverSpaceDetail()!=null){
+                getAncestorInfoDiscoverSpaceDetail().renderDiscoverSpaceDetail();
+            }
+        }
     }
 }

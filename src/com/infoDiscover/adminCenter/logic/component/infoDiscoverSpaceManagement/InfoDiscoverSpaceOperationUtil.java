@@ -1703,4 +1703,121 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return false;
     }
+
+    public static boolean initChineseAdministrativeDivisionDimensionData(String discoverSpaceName,String dimensionTypePerfix,String chinaDimensionId){
+        String countriesAndRegionsDimensionTypeName=dimensionTypePerfix+"_"+"geo_CountriesAndRegions";
+        String geoBelongsToRelationTypeName=dimensionTypePerfix+"_"+"geo_BelongsTo";
+
+        String administrativeDivisionDimensionTypeName=dimensionTypePerfix+"_"+"geo_AdministrativeDivision";
+        String provincialLevelDimensionTypeName=dimensionTypePerfix+"_"+"geo_ProvincialLevel";
+        String cityLevelDimensionTypeName=dimensionTypePerfix+"_"+"geo_CityLevel";
+        String districtLevelDimensionTypeName=dimensionTypePerfix+"_"+"geo_DistrictLevel";
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+
+            Dimension _ChinaDimension=targetSpace.getDimensionById(chinaDimensionId);
+            if(_ChinaDimension==null){
+                return false;
+            }
+            if(!_ChinaDimension.getType().equals(countriesAndRegionsDimensionTypeName)){
+                return false;
+            }
+            if(!targetSpace.hasDimensionType(administrativeDivisionDimensionTypeName)){
+                DimensionType adminDivisionDimensionType =targetSpace.addDimensionType(administrativeDivisionDimensionTypeName);
+                TypeProperty divisionCodeTypeProperty= adminDivisionDimensionType.addTypeProperty("divisionCode",PropertyType.STRING);
+                divisionCodeTypeProperty.setMandatory(true);
+                TypeProperty divisionNameTypeProperty= adminDivisionDimensionType.addTypeProperty("divisionName",PropertyType.STRING);
+                divisionNameTypeProperty.setMandatory(true);
+            }
+
+            if(!targetSpace.hasDimensionType(provincialLevelDimensionTypeName)){
+                targetSpace.addChildDimensionType(provincialLevelDimensionTypeName,administrativeDivisionDimensionTypeName);
+            }
+            if(!targetSpace.hasDimensionType(cityLevelDimensionTypeName)){
+                targetSpace.addChildDimensionType(cityLevelDimensionTypeName,administrativeDivisionDimensionTypeName);
+            }
+            if(!targetSpace.hasDimensionType(districtLevelDimensionTypeName)){
+                targetSpace.addChildDimensionType(districtLevelDimensionTypeName,administrativeDivisionDimensionTypeName);
+            }
+
+            Map<String,Dimension> existDimensionMap=new HashMap<>();
+
+            File continentsInfoFile =new File(RuntimeEnvironmentHandler.getApplicationRootPath()+"China_MinistryOfCivilAffairs_AdministrativeDivision_Code.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(continentsInfoFile),"UTF-8"));
+            String lineTxt = null;
+            while ((lineTxt = br.readLine()) != null) {
+                String administrativeDivision_CodeInfoStr=lineTxt.trim();
+                String[] codeInfoValueArray = administrativeDivision_CodeInfoStr.split(" ");
+                int infoLength=codeInfoValueArray.length;
+
+                if(infoLength==2){
+                    //省,自治区，直辖市，港澳台，钓鱼岛等
+                    String divisionCode=codeInfoValueArray[0].trim();
+                    String divisionName=codeInfoValueArray[1].trim();
+
+                    Dimension targetProvincialLevelDimension=DiscoverEngineComponentFactory.createDimension(provincialLevelDimensionTypeName);
+                    targetProvincialLevelDimension.setInitProperty("divisionCode",divisionCode);
+                    targetProvincialLevelDimension.setInitProperty("divisionName",divisionName);
+
+                    targetProvincialLevelDimension=targetSpace.addDimension(targetProvincialLevelDimension);
+                    targetProvincialLevelDimension.addToRelation(_ChinaDimension,geoBelongsToRelationTypeName);
+
+                    existDimensionMap.put(divisionName,targetProvincialLevelDimension);
+
+                }
+                if(infoLength==3){
+                    String divisionCode=codeInfoValueArray[0].trim();
+                    String divisionNameStr=codeInfoValueArray[2].trim();
+                    String[] divisionNameArray=divisionNameStr.split("-");
+                    if(divisionNameArray.length==2){
+                        //市级
+                        String cityLevelDivisionName=divisionNameArray[1].trim();
+                        String parentLevelName=divisionNameArray[0].trim();
+
+                        Dimension targetCityLevelDimension=DiscoverEngineComponentFactory.createDimension(cityLevelDimensionTypeName);
+                        targetCityLevelDimension.setInitProperty("divisionCode",divisionCode);
+                        targetCityLevelDimension.setInitProperty("divisionName",cityLevelDivisionName);
+
+                        targetCityLevelDimension=targetSpace.addDimension(targetCityLevelDimension);
+                        if(existDimensionMap.get(parentLevelName)!=null){
+                            targetCityLevelDimension.addToRelation(existDimensionMap.get(parentLevelName),geoBelongsToRelationTypeName);
+                        }
+                        existDimensionMap.put(parentLevelName+"_"+cityLevelDivisionName,targetCityLevelDimension);
+                    }
+                    if(divisionNameArray.length==3){
+                        //区级
+                        String districtLevelDivisionName=divisionNameArray[2].trim();
+                        String parentLevelName=divisionNameArray[0].trim()+"_"+divisionNameArray[1].trim();
+
+                        Dimension targetDistrictLevelDimension=DiscoverEngineComponentFactory.createDimension(districtLevelDimensionTypeName);
+                        targetDistrictLevelDimension.setInitProperty("divisionCode",divisionCode);
+                        targetDistrictLevelDimension.setInitProperty("divisionName",districtLevelDivisionName);
+
+                        targetDistrictLevelDimension=targetSpace.addDimension(targetDistrictLevelDimension);
+                        if(existDimensionMap.get(parentLevelName)!=null){
+                            targetDistrictLevelDimension.addToRelation(existDimensionMap.get(parentLevelName),geoBelongsToRelationTypeName);
+                        }
+                    }
+                }
+            }
+            br.close();
+            return true;
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return false;
+    }
 }
