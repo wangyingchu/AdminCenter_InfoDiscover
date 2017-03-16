@@ -82,7 +82,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         //left side properties editor
         VerticalLayout dataPropertyInfoLayout=new VerticalLayout();
         dataPropertyInfoLayout.setHeight(100,Unit.PERCENTAGE);
-        dataPropertyInfoLayout.setWidth(485,Unit.PIXELS);
+        dataPropertyInfoLayout.setWidth(560,Unit.PIXELS);
 
         HorizontalLayout dataPropertyInfoTitleContainerLayout=new HorizontalLayout();
         dataPropertyInfoTitleContainerLayout.setWidth(100,Unit.PERCENTAGE);
@@ -168,7 +168,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             //right side data relation info editor
             this.dataInteractionInfoLayout = new VerticalLayout();
             this.dataInteractionInfoLayout.setHeight(100, Unit.PERCENTAGE);
-            this.dataInteractionInfoLayout.setWidth(500, Unit.PIXELS);
+            this.dataInteractionInfoLayout.setWidth(550, Unit.PIXELS);
             this.dataInteractionInfoLayout.addStyleName("ui_appSubViewContainer");
 
             HorizontalLayout dataRelationInfoTitleContainerLayout = new HorizontalLayout();
@@ -258,7 +258,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(this.measurableValue.getMeasurableTypeKind())){
             containerWindow.setResizable(false);
         }
-        setUIElementsSizeForWindowSizeChange();
+        //setUIElementsSizeForWindowSizeChange();
     }
 
     private void setUIElementsSizeForWindowSizeChange(){
@@ -271,7 +271,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         int relationsListHeight;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
-            dataRelationInfoLayoutWidth=browserWindowWidth-510;
+            dataRelationInfoLayoutWidth=browserWindowWidth-600;
             relationsListHeight=browserWindowHeight-550;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
@@ -376,7 +376,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             }
             TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
             final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-            window.setWidth(500, Unit.PIXELS);
+            window.setWidth(570, Unit.PIXELS);
             window.setHeight(800,Unit.PIXELS);
             window.setCaptionAsHtml(true);
             window.setResizable(true);
