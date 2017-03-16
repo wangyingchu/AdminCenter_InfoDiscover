@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui;
 
 import com.github.wolfie.blackboard.Blackboard;
+import com.infoDiscover.adminCenter.logic.common.CustomizedConverterFactory;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
@@ -41,6 +42,9 @@ public class AdminCenterApplicationUI extends UI {
 
     @Override
     public void init(VaadinRequest request) {
+        //set CustomizedConverterFactory for text fields string -> number convert logic
+        VaadinSession.getCurrent().setConverterFactory(new CustomizedConverterFactory());
+
         final WebBrowser webBrowser = Page.getCurrent().getWebBrowser();
         UserClientInfo currentUserClientInfo=new UserClientInfo();
         currentUserClientInfo.setUserWebBrowserInfo(webBrowser);
