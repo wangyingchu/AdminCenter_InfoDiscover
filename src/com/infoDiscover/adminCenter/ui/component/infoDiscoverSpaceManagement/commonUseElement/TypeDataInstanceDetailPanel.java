@@ -258,7 +258,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(this.measurableValue.getMeasurableTypeKind())){
             containerWindow.setResizable(false);
         }
-        //setUIElementsSizeForWindowSizeChange();
+        setUIElementsSizeForWindowSizeChange();
     }
 
     private void setUIElementsSizeForWindowSizeChange(){
@@ -269,10 +269,12 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         int typeInstanceDetailPropertiesEditorContainerPanelHeight=0;
         int dataRelationInfoLayoutWidth=500;
         int relationsListHeight;
+        int dataRelationGraphBrowserFrameHeight;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
             dataRelationInfoLayoutWidth=browserWindowWidth-600;
             relationsListHeight=browserWindowHeight-550;
+            dataRelationGraphBrowserFrameHeight=browserWindowHeight-200;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
                 showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
@@ -280,6 +282,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         }else{
             typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-230;
             relationsListHeight=50;
+            dataRelationGraphBrowserFrameHeight=70;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
                 showRelationsSwitchButton.setDescription("显示数据关联交互信息");
@@ -293,8 +296,8 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             this.relationableRelationsList.setRelationableRelationsTableHeight(relationsListHeight);
         }
         if(this.dataRelationGraphBrowserFrame!=null){
-            this.dataRelationGraphBrowserFrame.setHeight(browserWindowHeight-200,Unit.PIXELS);
-            this.relationsCycleGraphHeight=browserWindowHeight-220;
+            this.dataRelationGraphBrowserFrame.setHeight(dataRelationGraphBrowserFrameHeight,Unit.PIXELS);
+            this.relationsCycleGraphHeight=dataRelationGraphBrowserFrameHeight-20;
             dataRelationGraphBrowserFrame.setSource(new ExternalResource(
                     typeInstanceRelationsCycleGraphQueryAddress+"&graphHeight="+relationsCycleGraphHeight));
         }
