@@ -8,10 +8,10 @@ import java.util.Properties;
 /**
  * Created by wangychu on 2/21/17.
  */
-public class AdminCenterPerportyHandler {
+public class AdminCenterPropertyHandler {
     private static Properties _properties;
     public static String INFO_ANALYSE_SERVICE_ROOT_LOCATION="INFO_ANALYSE_SERVICE_ROOT_LOCATION";
-    private static String web_inf_Path=AdminCenterPerportyHandler.class.getResource("/").getPath();
+    private static String web_inf_Path=AdminCenterPropertyHandler.class.getResource("/").getPath();
 
     public static String getPropertyValue(String resourceFileName){
         _properties=new Properties();

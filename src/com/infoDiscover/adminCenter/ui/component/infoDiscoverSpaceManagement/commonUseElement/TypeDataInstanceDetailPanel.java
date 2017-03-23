@@ -9,7 +9,7 @@ import com.infoDiscover.adminCenter.ui.component.common.TableColumnValueIcon;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanelInvoker;
-import com.infoDiscover.adminCenter.ui.util.AdminCenterPerportyHandler;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
@@ -53,7 +53,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
 
         String dataInstanceQueryId=dataId.replaceAll("#","%23");
         dataInstanceQueryId=dataInstanceQueryId.replaceAll(":","%3a");
-        typeInstanceRelationsCycleGraphQueryAddress=AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+        typeInstanceRelationsCycleGraphQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                 "infoAnalysePages/typeInstanceRelationAnalyse/typeInstanceRelationsCycleGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName;
 
         String dataInstanceBasicInfoNoticeText;

@@ -2,7 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.fa
 
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
-import com.infoDiscover.adminCenter.ui.util.AdminCenterPerportyHandler;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
@@ -69,7 +69,7 @@ public class FactsRuntimeGeneralInfoPanel extends VerticalLayout {
                     targetWindow.bringToFront();
                     targetWindow.center();
                 }else{
-                    String chartDataQueryAddress= AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+                    String chartDataQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                             "infoAnalysePages/infoDiscoverSpaceAnalyse/spaceFactTypesDataOccupiesComparedPieMap.html?graphHeight=600&discoverSpace="+discoverSpaceName;
                     String windowTitle="信息发现空间 <b>"+discoverSpaceName+"</b> 事实类型数据详细占比";
                     BrowserFrame dataRelationGraphBrowserFrame=new BrowserFrame("",new ExternalResource(chartDataQueryAddress));
