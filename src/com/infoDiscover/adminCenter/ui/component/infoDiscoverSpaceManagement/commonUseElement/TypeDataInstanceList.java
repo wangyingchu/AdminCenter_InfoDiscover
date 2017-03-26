@@ -1,11 +1,10 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.MeasurableValueVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceRemoveProcessingDataEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement.VisualizationAnalyzePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.addon.pagination.Pagination;
 import com.vaadin.addon.pagination.PaginationChangeListener;
@@ -14,9 +13,15 @@ import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.text.SimpleDateFormat;
@@ -43,6 +48,7 @@ public class TypeDataInstanceList extends VerticalLayout {
     private int subWindowsYPositionOffset;
     private int currentDataInstancesCount;
     private Pagination typeDataInstancePagination;
+    private  MenuBar graphDisplaySelectorMenuBar;
 
     public TypeDataInstanceList(UserClientInfo userClientInfo) {
         this.currentUserClientInfo = userClientInfo;
@@ -62,9 +68,29 @@ public class TypeDataInstanceList extends VerticalLayout {
         this.queryResultCountLabel.addStyleName("ui_appFriendlyElement");
         queryResultSummaryInfoContainerLayout.addComponent(this.queryResultCountLabel);
         queryResultSummaryInfoContainerLayout.setComponentAlignment(this.queryResultCountLabel,Alignment.MIDDLE_LEFT);
+
+        MenuBar.Command visualizationAnalyzeMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedCommandName=selectedItem.getText();
+                launchVisualizationAnalyzeUI(selectedCommandName);
+            }
+        };
+
+        this.graphDisplaySelectorMenuBar = new MenuBar();
+        this.graphDisplaySelectorMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        this.graphDisplaySelectorMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+        MenuBar.MenuItem visualizationAnalyzeRootItem=this.graphDisplaySelectorMenuBar.addItem("查询结果可视化分析", VaadinIcons.CHART_GRID, null);
+        visualizationAnalyzeRootItem.addItem("时间序列数据分析", VaadinIcons.SPLINE_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem("数据地理坐标分布分析", VaadinIcons.MAP_MARKER, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem("2维平面数据气泡图分析", VaadinIcons.SCATTER_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem("3维空间数据分布分析", VaadinIcons.GLOBE_WIRE, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem("3维空间数据分布＋第四维数据密度分析", VaadinIcons.CHART_3D, visualizationAnalyzeMenuItemCommand);
+        this.graphDisplaySelectorMenuBar.setEnabled(false);
+        queryResultSummaryInfoContainerLayout.addComponent(graphDisplaySelectorMenuBar);
+
         this.querySQLButton=new Button("查询条件 SQL");
         this.querySQLButton.setIcon(FontAwesome.FILE_TEXT_O);
-        this.querySQLButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.querySQLButton.addStyleName(ValoTheme.BUTTON_SMALL);
         this.querySQLButton.addStyleName(ValoTheme.BUTTON_LINK);
         this.querySQLButton.setEnabled(false);
         this.querySQLButton.addClickListener(new Button.ClickListener() {
@@ -96,6 +122,7 @@ public class TypeDataInstanceList extends VerticalLayout {
 
     public void renderTypeDataInstanceList(List<PropertyTypeVO> queryParameters,List<MeasurableValueVO> queryResults){
         this.querySQLButton.setEnabled(true);
+        this.graphDisplaySelectorMenuBar.setEnabled(true);
         this.currentDataInstancesCount=queryResults.size();
         this.queryResultCountLabel.setValue(""+this.currentDataInstancesCount);
 
@@ -290,5 +317,25 @@ public class TypeDataInstanceList extends VerticalLayout {
                 currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceRemoveProcessingDataEvent);
             }
         }
+    }
+
+    private void launchVisualizationAnalyzeUI(String commandText){
+        MeasurableTypeVO measurableTypeVO=new MeasurableTypeVO();
+        measurableTypeVO.setDiscoverSpaceName(this.getDiscoverSpaceName());
+        measurableTypeVO.setMeasurableTypeKind(this.getDataInstanceTypeKind());
+        measurableTypeVO.setMeasurableTypeName(this.getDataInstanceTypeName());
+        VisualizationAnalyzePanel visualizationAnalyzePanel=new VisualizationAnalyzePanel(this.currentUserClientInfo,commandText,measurableTypeVO);
+        visualizationAnalyzePanel.setQuerySQL(this.querySQL);
+        String dataDetailInfoTitle="数据可视化分析 > "+ commandText;
+        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+        window.setWidth(570, Unit.PIXELS);
+        window.setHeight(800,Unit.PIXELS);
+        window.setSizeFull();
+        window.setCaptionAsHtml(true);
+        window.setResizable(false);
+        window.setDraggable(false);
+        window.setModal(true);
+        window.setContent(visualizationAnalyzePanel);
+        UI.getCurrent().addWindow(window);
     }
 }
