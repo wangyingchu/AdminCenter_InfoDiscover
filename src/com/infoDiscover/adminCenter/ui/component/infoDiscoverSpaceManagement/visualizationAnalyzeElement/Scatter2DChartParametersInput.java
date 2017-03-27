@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.vi
 
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 
+import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -26,6 +27,8 @@ public class Scatter2DChartParametersInput extends BaseChartParametersInput{
     private ComboBox xAxisComboBox;
     private ComboBox yAxisComboBox;
     private ComboBox scatterPropertyComboBox;
+    private TextField xAxisRulerValueEditor;
+    private TextField yAxisRulerValueEditor;
 
     public Scatter2DChartParametersInput(UserClientInfo userClientInfo,List<String> measurablePropertiesNameList,List<String> stringPropertiesNameList) {
         this.setMargin(true);
@@ -81,6 +84,42 @@ public class Scatter2DChartParametersInput extends BaseChartParametersInput{
         spacingLayout.setWidth(100,Unit.PERCENTAGE);
         addComponent(spacingLayout);
         spacingLayout.addStyleName("ui_appSectionLightDiv");
+
+        HorizontalLayout chartRulesValueTitleLayout=new HorizontalLayout();
+        chartRulesValueTitleLayout.setHeight(30,Unit.PIXELS);
+        chartRulesValueTitleLayout.addStyleName("ui_appStandaloneElementPadding");
+        Label rulesValueTitle= new Label(VaadinIcons.PASSWORD.getHtml() +" 轴数据标尺值", ContentMode.HTML);
+        rulesValueTitle.addStyleName(ValoTheme.LABEL_TINY);
+        chartRulesValueTitleLayout.addComponent(rulesValueTitle);
+        chartRulesValueTitleLayout.setComponentAlignment(rulesValueTitle,Alignment.MIDDLE_LEFT);
+        this.addComponent(chartRulesValueTitleLayout);
+
+        FormLayout axisPropertiesRuleValueForm = new FormLayout();
+        axisPropertiesRuleValueForm.setMargin(false);
+        axisPropertiesRuleValueForm.setWidth(100,Unit.PERCENTAGE);
+        axisPropertiesRuleValueForm.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        this.addComponent(axisPropertiesRuleValueForm);
+
+        xAxisRulerValueEditor = new TextField("X 轴标尺值");
+        xAxisRulerValueEditor.addStyleName(ValoTheme.TEXTFIELD_SMALL);
+        xAxisRulerValueEditor.setWidth(100,Unit.PERCENTAGE);
+        xAxisRulerValueEditor.setConverter(Double.class);
+        xAxisRulerValueEditor.addValidator(new DoubleRangeValidator("该项属性值必须为数值类型", null, null));
+        xAxisRulerValueEditor.setValue("0");
+        axisPropertiesRuleValueForm.addComponent(xAxisRulerValueEditor);
+
+        yAxisRulerValueEditor = new TextField("Y 轴标尺值");
+        yAxisRulerValueEditor.addStyleName(ValoTheme.TEXTFIELD_SMALL);
+        yAxisRulerValueEditor.setWidth(100,Unit.PERCENTAGE);
+        yAxisRulerValueEditor.setConverter(Double.class);
+        yAxisRulerValueEditor.addValidator(new DoubleRangeValidator("该项属性值必须为数值类型", null, null));
+        yAxisRulerValueEditor.setValue("0");
+        axisPropertiesRuleValueForm.addComponent(yAxisRulerValueEditor);
+
+        VerticalLayout spacingLayout１=new VerticalLayout();
+        spacingLayout１.setWidth(100,Unit.PERCENTAGE);
+        addComponent(spacingLayout１);
+        spacingLayout１.addStyleName("ui_appSectionLightDiv");
 
         HorizontalLayout scatterPropertiesTitleLayout=new HorizontalLayout();
         scatterPropertiesTitleLayout.setHeight(30,Unit.PIXELS);
@@ -174,6 +213,12 @@ public class Scatter2DChartParametersInput extends BaseChartParametersInput{
                 parametersQuerySb.append(currentField.getValue().toString());
             }
         }
+        if(!xAxisRulerValueEditor.getConvertedValue().toString().equals("0.0")){
+            parametersQuerySb.append("&xRuler="+ xAxisRulerValueEditor.getConvertedValue().toString());
+        }
+        if(!yAxisRulerValueEditor.getConvertedValue().toString().equals("0.0")){
+            parametersQuerySb.append("&yRuler="+ yAxisRulerValueEditor.getConvertedValue().toString());
+        }
         return parametersQuerySb.toString();
     }
 
@@ -183,7 +228,8 @@ public class Scatter2DChartParametersInput extends BaseChartParametersInput{
         validateResult=validateResult&xAxisComboBox.isValid();
         validateResult=validateResult&yAxisComboBox.isValid();
         validateResult=validateResult& scatterPropertyComboBox.isValid();
-
+        validateResult=validateResult& xAxisRulerValueEditor.isValid();
+        validateResult=validateResult& yAxisRulerValueEditor.isValid();
         for(TextField scatterValueInputField:scatterPropertyValueInputFieldList){
             validateResult=validateResult&scatterValueInputField.isValid();
         }
