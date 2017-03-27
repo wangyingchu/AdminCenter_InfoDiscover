@@ -23,6 +23,17 @@ import java.util.*;
  */
 public class VisualizationAnalyzePanel extends VerticalLayout {
 
+    public static final String TimeValuesAnalyzeChart="时间序列数据分析";
+    public static final String GeographicalCoordinatesAnalyzeChart="数据地理坐标分布分析";
+    public static final String BubbleAnalyzeChart="2维平面数据气泡图分析";
+    public static final String Values3DAnalyzeChart="3维空间数据分布分析";
+    public static final String Values3DPlusColorAnalyzeChart="3维空间数据分布＋第４维数据密度分析";
+    public static final String ScatterAnalyzeChart="散点图数据分析...";
+    public static final String Scatter2DAnalyzeChart="2维平面数据属性值散点分布图分析";
+    public static final String Scatter3DAnalyzeChart="3维空间数据属性值散点分布图分析";
+    public static final String Scatter2DWithMathAnalyzeChart="2维平面数据属性值散点分布＋基础数理统计分析";
+    public static final String Scatter2DPlusSizeAnalyzeChart="2维平面数据属性值散点分布＋第３维数据密度分析";
+
     private UserClientInfo currentUserClientInfo;
     private String querySQL;
     private String visualizationChartType;
@@ -181,7 +192,7 @@ public class VisualizationAnalyzePanel extends VerticalLayout {
             e.printStackTrace();
         }
 
-        if("时间序列数据分析".equals(this.visualizationChartType)){
+        if(TimeValuesAnalyzeChart.equals(this.visualizationChartType)){
             visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
                     "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_vis_TimeValuesChart.html?" +
                     "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
@@ -189,7 +200,7 @@ public class VisualizationAnalyzePanel extends VerticalLayout {
                     "&measurableType="+measurableTypeString+
                     "&graphHeight="+visualizationGraphHeight+parametersQueryString;
         }
-        if("数据地理坐标分布分析".equals(this.visualizationChartType)){
+        if(GeographicalCoordinatesAnalyzeChart.equals(this.visualizationChartType)){
             visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
                     "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_leaflet_MapChart.html?" +
                     "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
@@ -197,23 +208,55 @@ public class VisualizationAnalyzePanel extends VerticalLayout {
                     "&measurableType="+measurableTypeString+
                     "&graphHeight="+visualizationGraphHeight+parametersQueryString;
         }
-        if("2维平面数据气泡图分析".equals(this.visualizationChartType)){
+        if(BubbleAnalyzeChart.equals(this.visualizationChartType)){
             visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
                     "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_highcharts_BubbleChart.html?" +
                     "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
                     "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
                     "&measurableType="+measurableTypeString+
                     "&graphHeight="+visualizationGraphHeight+parametersQueryString;
-        }if("3维空间数据分布分析".equals(this.visualizationChartType)){
+        }if(Values3DAnalyzeChart.equals(this.visualizationChartType)){
             visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
                     "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_plotly_Values3dChart.html?" +
                     "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
                     "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
                     "&measurableType="+measurableTypeString+
                     "&graphHeight="+visualizationGraphHeight+parametersQueryString;
-        }if("3维空间数据分布＋第四维数据密度分析".equals(this.visualizationChartType)){
+        }if(Values3DPlusColorAnalyzeChart.equals(this.visualizationChartType)){
             visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
                     "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_vis_Values3dChart.html?" +
+                    "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
+                    "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
+                    "&measurableType="+measurableTypeString+
+                    "&graphHeight="+visualizationGraphHeight+parametersQueryString;
+        }
+        if(Scatter2DAnalyzeChart.equals(this.visualizationChartType)){
+            visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
+                    "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_highcharts_ScatterChart.html?" +
+                    "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
+                    "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
+                    "&measurableType="+measurableTypeString+
+                    "&graphHeight="+visualizationGraphHeight+parametersQueryString;
+        }
+        if(Scatter2DWithMathAnalyzeChart.equals(this.visualizationChartType)){
+            visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
+                    "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_echarts_ScatterChart.html?" +
+                    "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
+                    "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
+                    "&measurableType="+measurableTypeString+
+                    "&graphHeight="+visualizationGraphHeight+parametersQueryString;
+        }
+        if(Scatter3DAnalyzeChart.equals(this.visualizationChartType)){
+            visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
+                    "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_plotly_Scatter3dChart.html?" +
+                    "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
+                    "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
+                    "&measurableType="+measurableTypeString+
+                    "&graphHeight="+visualizationGraphHeight+parametersQueryString;
+        }
+        if(Scatter2DPlusSizeAnalyzeChart.equals(this.visualizationChartType)){
+            visualizationAnalyzeGraphURL=this.visualizationAnalyzeGraphRootQueryAddress+
+                    "infoAnalysePages/typeDataStatisticsAnalyse/measurableTypeDataStatistics_plotly_Scatter2dChart.html?" +
                     "discoverSpace="+measurableTypeVO.getDiscoverSpaceName()+
                     "&measurableName="+measurableTypeVO.getMeasurableTypeName()+
                     "&measurableType="+measurableTypeString+

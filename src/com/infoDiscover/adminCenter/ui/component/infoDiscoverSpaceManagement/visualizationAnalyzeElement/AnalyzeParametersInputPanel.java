@@ -17,8 +17,8 @@ public class AnalyzeParametersInputPanel extends VerticalLayout {
 
     public static final String NumberTypeProperties="NUMBER";
     public static final String DateTypeProperties="DATE";
-    public static final String FloatTypeProperties="Float";
-    public static final String StringTypeProperties="String";
+    public static final String FloatTypeProperties="FLOAT";
+    public static final String StringTypeProperties="STRING";
 
     private UserClientInfo currentUserClientInfo;
     private VerticalLayout parametersInputContainerLayout;
@@ -85,20 +85,32 @@ public class AnalyzeParametersInputPanel extends VerticalLayout {
     private void renderVisualizationAnalyzeConfigParameters(){
         this.parametersInputContainerLayout.removeAllComponents();
         if(this.visualizationChartType!=null){
-            if("时间序列数据分析".equals(this.visualizationChartType)){
+            if(VisualizationAnalyzePanel.TimeValuesAnalyzeChart.equals(this.visualizationChartType)){
                 this.chartParametersInput=new TimeValuesChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList,this.datePropertiesNameList);
             }
-            if("数据地理坐标分布分析".equals(this.visualizationChartType)){
+            if(VisualizationAnalyzePanel.GeographicalCoordinatesAnalyzeChart.equals(this.visualizationChartType)){
                 this.chartParametersInput=new GeographicalCoordinatesChartParametersInput(this.currentUserClientInfo,this.geographicalCoordinatesPropertiesNameList,this.stringPropertiesNameList);
             }
-            if("2维平面数据气泡图分析".equals(this.visualizationChartType)){
+            if(VisualizationAnalyzePanel.BubbleAnalyzeChart.equals(this.visualizationChartType)){
                 this.chartParametersInput=new BubbleChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList);
             }
-            if("3维空间数据分布分析".equals(this.visualizationChartType)){
+            if(VisualizationAnalyzePanel.Values3DAnalyzeChart.equals(this.visualizationChartType)){
                 this.chartParametersInput=new Values3DChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList);
             }
-            if("3维空间数据分布＋第四维数据密度分析".equals(this.visualizationChartType)){
+            if(VisualizationAnalyzePanel.Values3DPlusColorAnalyzeChart.equals(this.visualizationChartType)){
                 this.chartParametersInput=new Values3DPlusColorChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList);
+            }
+            if(VisualizationAnalyzePanel.Scatter2DAnalyzeChart.equals(this.visualizationChartType)){
+                this.chartParametersInput=new Scatter2DChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList,this.stringPropertiesNameList);
+            }
+            if(VisualizationAnalyzePanel.Scatter3DAnalyzeChart.equals(this.visualizationChartType)){
+                this.chartParametersInput=new Scatter3DChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList,this.stringPropertiesNameList);
+            }
+            if(VisualizationAnalyzePanel.Scatter2DWithMathAnalyzeChart.equals(this.visualizationChartType)){
+                this.chartParametersInput=new Scatter2DWithMathChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList,this.stringPropertiesNameList);
+            }
+            if(VisualizationAnalyzePanel.Scatter2DPlusSizeAnalyzeChart.equals(this.visualizationChartType)){
+                this.chartParametersInput=new Scatter2DPlusSizeChartParametersInput(this.currentUserClientInfo,this.measurablePropertiesNameList,this.stringPropertiesNameList);
             }
         }
         this.parametersInputContainerLayout.addComponent(this.chartParametersInput);

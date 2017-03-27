@@ -80,11 +80,17 @@ public class TypeDataInstanceList extends VerticalLayout {
         this.graphDisplaySelectorMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         this.graphDisplaySelectorMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
         MenuBar.MenuItem visualizationAnalyzeRootItem=this.graphDisplaySelectorMenuBar.addItem("查询结果可视化分析", VaadinIcons.CHART_GRID, null);
-        visualizationAnalyzeRootItem.addItem("时间序列数据分析", VaadinIcons.SPLINE_CHART, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("数据地理坐标分布分析", VaadinIcons.MAP_MARKER, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("2维平面数据气泡图分析", VaadinIcons.SCATTER_CHART, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("3维空间数据分布分析", VaadinIcons.GLOBE_WIRE, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("3维空间数据分布＋第四维数据密度分析", VaadinIcons.CHART_3D, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.BubbleAnalyzeChart, FontAwesome.CIRCLE_O, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Values3DAnalyzeChart, VaadinIcons.GLOBE_WIRE, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Values3DPlusColorAnalyzeChart, VaadinIcons.CHART_3D, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.TimeValuesAnalyzeChart, VaadinIcons.SPLINE_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.GeographicalCoordinatesAnalyzeChart, VaadinIcons.MAP_MARKER, visualizationAnalyzeMenuItemCommand);
+        MenuBar.MenuItem scatterChartAnalyzeRootItem= visualizationAnalyzeRootItem.addItem(VisualizationAnalyzePanel.ScatterAnalyzeChart, VaadinIcons.SCATTER_CHART, null);
+        scatterChartAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Scatter2DAnalyzeChart, null, visualizationAnalyzeMenuItemCommand);
+        scatterChartAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Scatter3DAnalyzeChart, null, visualizationAnalyzeMenuItemCommand);
+        scatterChartAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Scatter2DWithMathAnalyzeChart, null, visualizationAnalyzeMenuItemCommand);
+        scatterChartAnalyzeRootItem.addItem(VisualizationAnalyzePanel.Scatter2DPlusSizeAnalyzeChart, null, visualizationAnalyzeMenuItemCommand);
+
         this.graphDisplaySelectorMenuBar.setEnabled(false);
         queryResultSummaryInfoContainerLayout.addComponent(graphDisplaySelectorMenuBar);
 
