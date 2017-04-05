@@ -110,7 +110,8 @@ public class VisualizationAnalyzePanel extends VerticalLayout {
                 if((""+PropertyType.DATE).equals(currentPropertyTypeVO.getPropertyType())){
                     datePropertiesNameList.add(currentPropertyTypeVO.getPropertyName());
                 }
-                if((""+PropertyType.FLOAT).equals(currentPropertyTypeVO.getPropertyType())){
+                if((""+PropertyType.FLOAT).equals(currentPropertyTypeVO.getPropertyType())||
+                        (""+PropertyType.DOUBLE).equals(currentPropertyTypeVO.getPropertyType())){
                     geographicalCoordinatesPropertiesNameList.add(currentPropertyTypeVO.getPropertyName());
                 }
                 if((""+PropertyType.STRING).equals(currentPropertyTypeVO.getPropertyType())){
