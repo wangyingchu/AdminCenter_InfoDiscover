@@ -120,12 +120,11 @@ public class VisualizationAnalyzePanel extends VerticalLayout {
             }
         }
 
-        //left side
         HorizontalSplitPanel visualizationAnalyzeSplitPanel = new HorizontalSplitPanel();
         visualizationAnalyzeSplitPanel.setSizeFull();
         visualizationAnalyzeSplitPanel.setSplitPosition(300, Unit.PIXELS);
         addComponent(visualizationAnalyzeSplitPanel);
-
+        //left side
         Map<String,List<String>> dataTypePropertiesNameListMap=new HashMap<>();
         dataTypePropertiesNameListMap.put(AnalyzeParametersInputPanel.NumberTypeProperties,measurablePropertiesNameList);
         dataTypePropertiesNameListMap.put(AnalyzeParametersInputPanel.DateTypeProperties,datePropertiesNameList);

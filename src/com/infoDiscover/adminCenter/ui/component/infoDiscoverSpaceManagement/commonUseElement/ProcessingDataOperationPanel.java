@@ -2,17 +2,22 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement.ProcessingDataAnalyzePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangychu on 12/15/16.
@@ -84,6 +89,7 @@ public class ProcessingDataOperationPanel extends VerticalLayout {
         if(this.showOperationActions) {
             Label sectionActionBarLabel=new Label(FontAwesome.CUBE.getHtml()+" "+getDiscoverSpaceName(), ContentMode.HTML);
             discoverSpaceNameNoticeActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
+            HorizontalLayout actionButtonsContainer=new HorizontalLayout();
             Button refreshListButton = new Button();
             refreshListButton.setIcon(FontAwesome.REFRESH);
             refreshListButton.setDescription("刷新待处理数据列表信息");
@@ -99,7 +105,21 @@ public class ProcessingDataOperationPanel extends VerticalLayout {
                     }
                 }
             });
-            discoverSpaceNameNoticeActionsBar.addActionComponent(refreshListButton);
+            actionButtonsContainer.addComponent(refreshListButton);
+
+            Button analyzeSelectedDataButton = new Button();
+            analyzeSelectedDataButton.setIcon(VaadinIcons.LINE_BAR_CHART);
+            analyzeSelectedDataButton.setDescription("分析选择的待处理数据");
+            analyzeSelectedDataButton.addStyleName(ValoTheme.BUTTON_SMALL);
+            analyzeSelectedDataButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+            analyzeSelectedDataButton.addClickListener(new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent clickEvent) {
+                    analyzeSelectedDataButton();
+                }
+            });
+            actionButtonsContainer.addComponent(analyzeSelectedDataButton);
+            discoverSpaceNameNoticeActionsBar.addActionComponent(actionButtonsContainer);
         }
     }
 
@@ -138,5 +158,40 @@ public class ProcessingDataOperationPanel extends VerticalLayout {
         }else{
             return null;
         }
+    }
+
+    private void analyzeSelectedDataButton(){
+        Map<String,List<ProcessingDataVO>> selectedProcessingData=new HashMap<>();
+        int totalSelectedDataCount=0;
+        List<ProcessingDataVO> dimensionProcessingDataForAnalyzing=this.dimensionProcessingDataList.getSelectedProcessingDataInfo();
+        totalSelectedDataCount=dimensionProcessingDataForAnalyzing.size();
+        List<ProcessingDataVO> factProcessingDataForAnalyzing=this.factProcessingDataList.getSelectedProcessingDataInfo();
+        totalSelectedDataCount=totalSelectedDataCount+factProcessingDataForAnalyzing.size();
+        if(this.relationProcessingDataList!=null){
+            List<ProcessingDataVO> relationProcessingDataForAnalyzing=this.relationProcessingDataList.getSelectedProcessingDataInfo();
+            totalSelectedDataCount=totalSelectedDataCount+relationProcessingDataForAnalyzing.size();
+            selectedProcessingData.put(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,this.relationProcessingDataList.getSelectedProcessingDataInfo());
+        }
+        if(totalSelectedDataCount==0){
+            Notification errorNotification = new Notification("数据校验错误","请选择至少一项待处理数据", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+
+        selectedProcessingData.put(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,dimensionProcessingDataForAnalyzing);
+        selectedProcessingData.put(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,factProcessingDataForAnalyzing);
+
+        ProcessingDataAnalyzePanel processingDataAnalyzePanel=new ProcessingDataAnalyzePanel(this.currentUserClientInfo,this.discoverSpaceName,selectedProcessingData);
+        String dataDetailInfoTitle="待处理数据信息分析发现";
+        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
+        window.setSizeFull();
+        window.setCaptionAsHtml(true);
+        window.setResizable(false);
+        window.setDraggable(false);
+        window.setModal(false);
+        window.setContent(processingDataAnalyzePanel);
+        UI.getCurrent().addWindow(window);
     }
 }
