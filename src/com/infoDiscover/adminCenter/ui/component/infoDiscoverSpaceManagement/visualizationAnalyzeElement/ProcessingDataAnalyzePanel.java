@@ -15,6 +15,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,17 +31,19 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private List<ProcessingDataVO> processingFactsForAnalyzing;
     private List<ProcessingDataVO> processingRelationsForAnalyzing;
 
-    private final String DataTypeName_PROPERTY="DataTypeName_PROPERTY";
-    private final String Id_PROPERTY="Id_PROPERTY";
-    private final String DataTypeKind_PROPERTY="DataTypeKind_PROPERTY";
-    private final String DiscoverSpaceName_PROPERTY="DiscoverSpaceName_PROPERTY";
+    private final static String DataTypeName_PROPERTY="DataTypeName_PROPERTY";
+    private final static String Id_PROPERTY="Id_PROPERTY";
+    private final static String DataTypeKind_PROPERTY="DataTypeKind_PROPERTY";
+    private final static String DiscoverSpaceName_PROPERTY="DiscoverSpaceName_PROPERTY";
 
-    private final String exploreRelatedInfoActionName = "探索本数据项关联的数据信息";
-    private final String findRelationInfoOfTwoItemActionName = "发现本数据项与另一数据项的关联信息";
-    private final String compareInfoOfManyItemsActionName = "比较本数据项与其他数据项的属性信息";
-    private final String showDataDetailInfoActionName="显示数据详情";
+    private final static String exploreRelatedInfoActionName = "探索本数据项关联的数据信息";
+    private final static String findRelationInfoOfTwoItemActionName = "发现本数据项与另一数据项的关联信息";
+    private final static String compareInfoOfManyItemsActionName = "比较本数据项与其他数据项的属性信息";
+    private final static String showDataDetailInfoActionName="显示数据详情";
+    private final static String exploreRelatedInfoTabNamePerfix="关联数据探索-";
 
     private TabSheet dataAnalyzePageTabs;
+    private Map<String,TabSheet.Tab> exploreRelatedInfoActionLayoutTabMap;
 
     public ProcessingDataAnalyzePanel(UserClientInfo userClientInfo,String discoverSpaceNam,Map<String,List<ProcessingDataVO>> processingDataMap){
         this.setMargin(true);
@@ -205,6 +208,29 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
 
         TabSheet.Tab compareInfoOfManyItemsActionLayoutTab =dataAnalyzePageTabs.addTab(new VerticalLayout(), "多项数据间属性值比较");
         compareInfoOfManyItemsActionLayoutTab.setIcon(VaadinIcons.SCALE_UNBALANCE);
+
+        /*
+        this.dataAnalyzePageTabs.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
+            @Override
+            public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
+                Component currentSelectedComponent=selectedTabChangeEvent.getTabSheet().getSelectedTab();
+                if(currentSelectedComponent instanceof ExploreProcessingDataRelatedInfoPanel){}
+            }
+        });
+        */
+        this.dataAnalyzePageTabs.setCloseHandler(new TabSheet.CloseHandler() {
+            @Override
+            public void onTabClose(TabSheet tabSheet, Component component) {
+                if(component instanceof ExploreProcessingDataRelatedInfoPanel){
+                    ExploreProcessingDataRelatedInfoPanel currentPanel=(ExploreProcessingDataRelatedInfoPanel)component;
+                    String currentTabNameKey=exploreRelatedInfoTabNamePerfix+currentPanel.getProcessingData().getId();
+                    exploreRelatedInfoActionLayoutTabMap.remove(currentTabNameKey);
+                    tabSheet.removeComponent(component);
+                }
+            }
+        });
+
+        this.exploreRelatedInfoActionLayoutTabMap=new HashMap<>();
     }
 
     private String getProcessingDataKind(String dataId){
@@ -271,24 +297,29 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     }
 
     private void executeDataAnalyzeLogic(String analyzeCommandName,String dataItemId){
-        System.out.println(analyzeCommandName);
-        System.out.println(dataItemId);
-
-        if(exploreRelatedInfoActionName.equals(analyzeCommandName)){
-            TabSheet.Tab exploreRelatedInfoActionLayoutTab = dataAnalyzePageTabs.addTab(new VerticalLayout(), "关联数据探索-"+dataItemId);
-            exploreRelatedInfoActionLayoutTab.setClosable(true);
-            exploreRelatedInfoActionLayoutTab.setIcon(VaadinIcons.CLUSTER);
-            dataAnalyzePageTabs.setSelectedTab(exploreRelatedInfoActionLayoutTab);
-        }else if(showDataDetailInfoActionName.equals(analyzeCommandName)){
-            showDataDetailInfoPanel(dataItemId);
-        }
-    }
-
-    private void showDataDetailInfoPanel(String dataItemId){
         ProcessingDataVO targetProcessingDataVO=getProcessingData(dataItemId);
         if(targetProcessingDataVO==null){
             return;
         }
+        if(exploreRelatedInfoActionName.equals(analyzeCommandName)){
+            String tabCaption=exploreRelatedInfoTabNamePerfix+dataItemId;
+            TabSheet.Tab alreadyExistTab=this.exploreRelatedInfoActionLayoutTabMap.get(tabCaption);
+            if(alreadyExistTab!=null){
+                dataAnalyzePageTabs.setSelectedTab(alreadyExistTab);
+            }else{
+                ExploreProcessingDataRelatedInfoPanel exploreProcessingDataRelatedInfoPanel=new ExploreProcessingDataRelatedInfoPanel(this.currentUserClientInfo,targetProcessingDataVO);
+                TabSheet.Tab exploreRelatedInfoActionLayoutTab = dataAnalyzePageTabs.addTab(exploreProcessingDataRelatedInfoPanel, exploreRelatedInfoTabNamePerfix+dataItemId);
+                exploreRelatedInfoActionLayoutTab.setClosable(true);
+                exploreRelatedInfoActionLayoutTab.setIcon(VaadinIcons.CLUSTER);
+                dataAnalyzePageTabs.setSelectedTab(exploreRelatedInfoActionLayoutTab);
+                this.exploreRelatedInfoActionLayoutTabMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
+            }
+        }else if(showDataDetailInfoActionName.equals(analyzeCommandName)){
+            showDataDetailInfoPanel(targetProcessingDataVO);
+        }
+    }
+
+    private void showDataDetailInfoPanel(ProcessingDataVO targetProcessingDataVO){
         String discoverSpaceName=targetProcessingDataVO.getDiscoverSpaceName();
         String dataTypeName=targetProcessingDataVO.getDataTypeName();
         String dataId=targetProcessingDataVO.getId();
