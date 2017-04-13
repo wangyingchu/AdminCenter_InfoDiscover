@@ -61,7 +61,7 @@ public class RulesDetailPanel extends VerticalLayout implements RuleEngineCompon
         if (ruleName != null) {
             this.ruleDetail.setRuleName(ruleName);
             contentNavigator.navigateTo(NAV_DISCOVERSPACE_DETAIL);
-            this.ruleDetail.renderDiscoverSpaceDetail();
+            this.ruleDetail.renderRuleDetail();
         }
     }
 

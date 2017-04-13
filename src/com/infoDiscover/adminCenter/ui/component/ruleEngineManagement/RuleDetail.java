@@ -22,7 +22,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 
 /**
- * Created by wangychu on 10/1/16.
+ * Created by sun.
  */
 public class RuleDetail extends VerticalLayout implements View,
         DiscoverSpaceTypeDataInstanceQueryRequiredEvent.DiscoverSpaceTypeDataInstanceQueryRequiredListener,
@@ -57,7 +57,7 @@ public class RuleDetail extends VerticalLayout implements View,
         this.ruleName = ruleName;
     }
 
-    public void renderDiscoverSpaceDetail(){
+    public void renderRuleDetail(){
         RuleVO ruleVO = RuleEngineOperationUtil.getRuleByName(this.ruleName);
         this.ruleGeneralInfo.setRuleName(this.ruleName);
         this.ruleGeneralInfo.renderRuleGeneralInfo(ruleVO);

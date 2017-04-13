@@ -3,8 +3,6 @@ package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleVO;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement
-        .InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
@@ -17,11 +15,12 @@ public class RuleGeneralInfo extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private TextField ruleType;
+    private TextField spaceName;
     private TextField factName;
     private TextField factMappingProperties;
     private TextField dimensionName;
     private TextField dimensionProperty;
-    private InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail;
+    private RuleDetail ruleDetail;
     private String ruleName;
     private MainSectionTitle mainSectionTitle;
 
@@ -47,6 +46,23 @@ public class RuleGeneralInfo extends VerticalLayout {
         this.ruleType.setRequired(false);
         this.ruleType.setReadOnly(true);
         generalInfoForm3.addComponent(ruleType);
+
+        SecondarySectionTitle secondarySectionTitle4 = new SecondarySectionTitle("信息发现空间");
+        this.setWidth("100%");
+
+        HorizontalLayout elementPlacementLayout4 = new HorizontalLayout();
+        elementPlacementLayout4.setWidth("100%");
+        addComponent(elementPlacementLayout4);
+
+        FormLayout generalInfoForm4 = new FormLayout();
+        generalInfoForm4.setMargin(false);
+        generalInfoForm4.setWidth("100%");
+        generalInfoForm4.addStyleName("light");
+
+        this.spaceName = new TextField("信息发现空间名称");
+        this.spaceName.setRequired(false);
+        this.spaceName.setReadOnly(true);
+        generalInfoForm4.addComponent(spaceName);
 
         SecondarySectionTitle secondarySectionTitle = new SecondarySectionTitle("事实表信息");
         this.setWidth("100%");
@@ -93,6 +109,8 @@ public class RuleGeneralInfo extends VerticalLayout {
         VerticalLayout generalInfoContainer = new VerticalLayout();
         generalInfoContainer.addComponent(secondarySectionTitle3);
         generalInfoContainer.addComponent(generalInfoForm3);
+        generalInfoContainer.addComponent(secondarySectionTitle4);
+        generalInfoContainer.addComponent(generalInfoForm4);
         generalInfoContainer.addComponent(secondarySectionTitle);
         generalInfoContainer.addComponent(generalInfoForm);
         generalInfoContainer.addComponent(secondarySectionTitle2);
@@ -106,39 +124,24 @@ public class RuleGeneralInfo extends VerticalLayout {
         actionButtonsSpacingLayout.setWidth("10px");
         actionButtonsPlacementLayout.addComponent(actionButtonsSpacingLayout);
 
-        Button refreshDiscoverSpaceInfoButton = new Button("刷新规则信息");
-        refreshDiscoverSpaceInfoButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
-        refreshDiscoverSpaceInfoButton.addStyleName(ValoTheme.BUTTON_TINY);
-        refreshDiscoverSpaceInfoButton.setIcon(FontAwesome.REFRESH);
-
         final RuleGeneralInfo self = this;
-        refreshDiscoverSpaceInfoButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (self.parentInfoDiscoverSpaceDetail != null) {
-                    self.parentInfoDiscoverSpaceDetail.renderDiscoverSpaceDetail();
-                }
-            }
-        });
-        actionButtonsPlacementLayout.addComponent(refreshDiscoverSpaceInfoButton);
-
         HorizontalLayout spaceDivLayout = new HorizontalLayout();
         spaceDivLayout.setWidth("15px");
         actionButtonsPlacementLayout.addComponent(spaceDivLayout);
 
-        Button deleteDiscoverSpaceButton = new Button("删除规则");
-        deleteDiscoverSpaceButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        deleteDiscoverSpaceButton.addStyleName(ValoTheme.BUTTON_TINY);
-        deleteDiscoverSpaceButton.setIcon(FontAwesome.TRASH_O);
-        deleteDiscoverSpaceButton.addClickListener(new Button.ClickListener() {
+        Button deleteRuleButton = new Button("删除规则");
+        deleteRuleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        deleteRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
+        deleteRuleButton.setIcon(FontAwesome.TRASH_O);
+        deleteRuleButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if (self.parentInfoDiscoverSpaceDetail != null) {
-                    self.parentInfoDiscoverSpaceDetail.deleteCurrentDiscoverSpace();
+                if (self.ruleDetail != null) {
+                    self.ruleDetail.deleteCurrentDiscoverSpace();
                 }
             }
         });
-        actionButtonsPlacementLayout.addComponent(deleteDiscoverSpaceButton);
+        actionButtonsPlacementLayout.addComponent(deleteRuleButton);
 
         VerticalLayout spacingLayout = new VerticalLayout();
         addComponent(spacingLayout);
@@ -153,6 +156,10 @@ public class RuleGeneralInfo extends VerticalLayout {
                 .getType();
         this.ruleType.setValue("" + ruleType);
         this.ruleType.setReadOnly(true);
+
+        this.spaceName.setReadOnly(false);
+        this.spaceName.setValue("" + ruleVO.getSpaceName());
+        this.spaceName.setReadOnly(true);
 
         this.factName.setReadOnly(false);
         this.factName.setValue("" + ruleVO.getFactName());

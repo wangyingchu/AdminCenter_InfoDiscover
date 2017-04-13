@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.logic.component.ruleEngineManagement;
 
+import com.info.discover.ruleengine.base.RuleEngineImpl;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleVO;
 import com.infoDiscover.common.util.JsonUtil;
 import com.infoDiscover.infoDiscoverEngine.dataMart.Fact;
@@ -12,6 +13,7 @@ import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRun
 import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -69,6 +71,7 @@ public class RuleEngineOperationUtil {
                         content));
                 rule.setFactName(JsonUtil.getPropertyValues("sourceType", content));
                 rule.setDimensionName(JsonUtil.getPropertyValues("targetType", content));
+                rule.setSpaceName(JsonUtil.getPropertyValues("spaceName", content));
                 return rule;
             }
             return null;
@@ -82,16 +85,29 @@ public class RuleEngineOperationUtil {
         return null;
     }
 
-    private static String getSourceProperties(String content) {
-       return JsonUtil.getPropertyValues("sourceProperties",
-                content);
-    }
+    public static boolean createRule(String ruleType, String spaceName, String factName, String
+            factProperties, String dimensionName, String dimensionProperty) {
+        RuleEngineImpl ruleEngine = new RuleEngineImpl();
 
-    private static String getTargetProperty(String content) {
-        return JsonUtil.getPropertyValues("targetProperty",
-                content);
-    }
+        HashMap<String, String> ruleContentMap = new HashMap<>();
+        ruleContentMap.put("source", "Fact");
+        ruleContentMap.put("sourceType", factName);
+        ruleContentMap.put("sourceProperties", factProperties);
+        ruleContentMap.put("target", "Dimension");
+        ruleContentMap.put("targetType", dimensionName);
+        ruleContentMap.put("targetProperty", dimensionProperty);
+        ruleContentMap.put("spaceName", spaceName);
 
+        String ruleContent = JsonUtil.mapToJsonStr(ruleContentMap);
+
+        boolean result = false;
+        try {
+            result = ruleEngine.createRule("ID_FACT_"+factName, "", ruleType,ruleContent);
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            System.out.println("Error when to create rule: " + e.getMessage());
+        }
+        return result;
+    }
 
 
     public static List<Fact> executeFactQuery(InfoDiscoverSpace infoDiscoverSpace, ExploreParameters

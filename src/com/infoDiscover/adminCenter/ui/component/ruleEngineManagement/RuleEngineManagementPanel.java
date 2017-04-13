@@ -1,7 +1,5 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement
-        .InfoDiscoverSpacesDetailPanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;

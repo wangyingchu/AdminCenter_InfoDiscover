@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event
         .RuleEngineComponentSelectedEvent;
+import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineCreatedEvent;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineDeletedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
@@ -18,30 +19,30 @@ import java.util.List;
  */
 public class RulesList extends VerticalLayout implements RuleEngineComponentSelectedEvent
         .RuleEngineComponentSelectedListener,
-        RuleEngineDeletedEvent.RuleEngineDeletedListener {
+        RuleEngineDeletedEvent.RuleEngineDeletedListener, RuleEngineCreatedEvent.RuleEngineCreatedListener {
 
     private UserClientInfo currentUserClientInfo;
-    private List<Button> discoverSpaceButtonsList;
+    private List<Button> ruleButtonsList;
 
     public RulesList(UserClientInfo currentUserClientInfo) {
         this.currentUserClientInfo = currentUserClientInfo;
         this.currentUserClientInfo.getEventBlackBoard().addListener(this);
-        this.discoverSpaceButtonsList = new ArrayList<Button>();
-        renderDiscoverSpacesList();
+        this.ruleButtonsList = new ArrayList<Button>();
+        renderRulesList();
     }
 
-    private void renderDiscoverSpacesList() {
+    private void renderRulesList() {
         this.removeAllComponents();
-        this.discoverSpaceButtonsList.clear();
+        this.ruleButtonsList.clear();
         List<String> rulesList = RuleEngineOperationUtil.getExistingRulesList();
         if (rulesList != null) {
             for (final String rule : rulesList) {
-                Button spaceButton = new Button(rule);
-                spaceButton.setIcon(FontAwesome.CUBE);
-                spaceButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-                spaceButton.addStyleName(ValoTheme.BUTTON_SMALL);
-                spaceButton.addStyleName("ui_appHighLightElement");
-                spaceButton.addClickListener(new Button.ClickListener() {
+                Button ruleButton = new Button(rule);
+                ruleButton.setIcon(FontAwesome.CUBE);
+                ruleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+                ruleButton.addStyleName(ValoTheme.BUTTON_SMALL);
+                ruleButton.addStyleName("ui_appHighLightElement");
+                ruleButton.addClickListener(new Button.ClickListener() {
                     @Override
                     public void buttonClick(Button.ClickEvent event) {
                         clearButtonSelectedStyle();
@@ -49,14 +50,14 @@ public class RulesList extends VerticalLayout implements RuleEngineComponentSele
                         sendRuleSelectedEvent(rule);
                     }
                 });
-                this.discoverSpaceButtonsList.add(spaceButton);
-                addComponent(spaceButton);
+                this.ruleButtonsList.add(ruleButton);
+                addComponent(ruleButton);
             }
         }
     }
 
     private void clearButtonSelectedStyle() {
-        for (Button currentButton : this.discoverSpaceButtonsList) {
+        for (Button currentButton : this.ruleButtonsList) {
             currentButton.removeStyleName("ui_appFriendlyElement");
         }
     }
@@ -70,11 +71,16 @@ public class RulesList extends VerticalLayout implements RuleEngineComponentSele
 
     @Override
     public void receivedRuleEngineDeletedEvent(RuleEngineDeletedEvent event) {
-        this.renderDiscoverSpacesList();
+        this.renderRulesList();
     }
 
     @Override
     public void receivedRuleEngineComponentSelectedEvent(RuleEngineComponentSelectedEvent event) {
-        this.renderDiscoverSpacesList();
+        this.renderRulesList();
+    }
+
+    @Override
+    public void receivedRuleEngineCreatedEvent(RuleEngineCreatedEvent event) {
+        this.renderRulesList();
     }
 }

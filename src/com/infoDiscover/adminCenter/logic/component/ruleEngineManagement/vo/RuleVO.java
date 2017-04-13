@@ -14,6 +14,7 @@ public class RuleVO {
     private String targetProperty;
     private String factName;
     private String dimensionName;
+    private String spaceName;
 
     public String getName() {
         return name;
@@ -85,5 +86,13 @@ public class RuleVO {
 
     public void setDimensionName(String dimensionName) {
         this.dimensionName = dimensionName;
+    }
+
+    public String getSpaceName() {
+        return spaceName;
+    }
+
+    public void setSpaceName(String spaceName) {
+        this.spaceName = spaceName;
     }
 }

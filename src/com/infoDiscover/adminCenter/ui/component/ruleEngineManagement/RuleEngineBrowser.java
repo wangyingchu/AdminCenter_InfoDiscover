@@ -1,7 +1,5 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement
-        .CreateInfoDiscoverSpacePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -11,7 +9,7 @@ import com.vaadin.ui.themes.ValoTheme;
 /**
  * Created by sun.
  */
-public class RuleEngineBrowser extends VerticalLayout{
+public class RuleEngineBrowser extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private MenuBar.MenuItem createRuleMenuItem;
@@ -23,16 +21,16 @@ public class RuleEngineBrowser extends VerticalLayout{
         operationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
         addComponent(operationMenuBar);
 
-        Label spaceListLabel = new Label( FontAwesome.BARS.getHtml()+" 规则列表:", ContentMode.HTML);
+        Label spaceListLabel = new Label(FontAwesome.BARS.getHtml() + " 规则列表:", ContentMode.HTML);
         spaceListLabel.addStyleName(ValoTheme.LABEL_TINY);
         spaceListLabel.addStyleName("ui_appStandaloneElementPadding");
         spaceListLabel.addStyleName("ui_appSectionLightDiv");
         addComponent(spaceListLabel);
 
-        RulesList rulesList=new RulesList(this.currentUserClientInfo);
+        RulesList rulesList = new RulesList(this.currentUserClientInfo);
         addComponent(rulesList);
 
-        VerticalLayout spacingLayout=new VerticalLayout();
+        VerticalLayout spacingLayout = new VerticalLayout();
         addComponent(spacingLayout);
     }
 
@@ -53,17 +51,18 @@ public class RuleEngineBrowser extends VerticalLayout{
         return menubar;
     }
 
-    private void executeOperationMenuItems(int itemId){
-        if(itemId== createRuleMenuItem.getId()){
-            CreateInfoDiscoverSpacePanel createInfoDiscoverSpacePanel=new CreateInfoDiscoverSpacePanel(this.currentUserClientInfo);
+    private void executeOperationMenuItems(int itemId) {
+        if (itemId == createRuleMenuItem.getId()) {
+            CreateRulePanel createRulePanel = new CreateRulePanel(this
+                    .currentUserClientInfo);
             final Window window = new Window();
             window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(200.0f, Unit.PIXELS);
+            window.setHeight(600.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);
-            window.setContent(createInfoDiscoverSpacePanel);
-            createInfoDiscoverSpacePanel.setContainerDialog(window);
+            window.setContent(createRulePanel);
+            createRulePanel.setContainerDialog(window);
             UI.getCurrent().addWindow(window);
         }
     }
