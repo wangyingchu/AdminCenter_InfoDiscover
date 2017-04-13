@@ -38,6 +38,16 @@ public class ElementStatusBar extends HorizontalLayout {
         this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml());
     }
 
+    // rule engine
+    public void setRuleName(String ruleName) {
+        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + FontAwesome
+                .CUBE.getHtml()+ " " +ruleName);
+    }
+
+    public void clearRuleName(){
+        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml());
+    }
+
     public void addStatusElement(Component barElementComponent){
         statusElementsBarLayout.addComponent(barElementComponent);
     }

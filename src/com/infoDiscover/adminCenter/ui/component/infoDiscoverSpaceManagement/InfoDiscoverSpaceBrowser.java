@@ -47,6 +47,7 @@ public class InfoDiscoverSpaceBrowser extends VerticalLayout{
         operationsPrompt.setIcon(FontAwesome.LIST);
         createInfoDiscoverSpaceMenuItem = operationsPrompt.addItem("创建信息发现空间 ...", click);
         createInfoDiscoverSpaceMenuItem.setIcon(FontAwesome.PLUS_SQUARE);
+
         return menubar;
     }
 
