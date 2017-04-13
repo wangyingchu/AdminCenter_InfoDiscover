@@ -156,4 +156,18 @@ public class ProcessingDataList extends VerticalLayout {
         }
         return selectedItemIdList;
     }
+
+    public List<ProcessingDataVO> getSelectedProcessingDataInfo(){
+        List<ProcessingDataVO> selectedProcessingDataList=new ArrayList<>();
+        List<String> selectedDataIdList=getSelectedDataId();
+        for(String currentDataId:selectedDataIdList){
+            for(ProcessingDataVO listProcessingData:this.processingDataVOList){
+                if(listProcessingData.getId().equals(currentDataId)){
+                    selectedProcessingDataList.add(listProcessingData);
+                    break;
+                }
+            }
+        }
+        return selectedProcessingDataList;
+    }
 }

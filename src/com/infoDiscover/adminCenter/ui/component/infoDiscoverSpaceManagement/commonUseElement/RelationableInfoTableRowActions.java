@@ -106,7 +106,7 @@ public class RelationableInfoTableRowActions extends HorizontalLayout {
             }
             TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
             final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-            window.setWidth(500, Unit.PIXELS);
+            window.setWidth(570, Unit.PIXELS);
             window.setHeight(800,Unit.PIXELS);
             window.setCaptionAsHtml(true);
             window.setResizable(true);

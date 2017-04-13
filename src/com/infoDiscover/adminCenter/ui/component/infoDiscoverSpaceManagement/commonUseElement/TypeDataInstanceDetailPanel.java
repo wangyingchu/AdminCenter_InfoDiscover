@@ -9,7 +9,7 @@ import com.infoDiscover.adminCenter.ui.component.common.TableColumnValueIcon;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.CreateRelationPanelInvoker;
-import com.infoDiscover.adminCenter.ui.util.AdminCenterPerportyHandler;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
@@ -53,7 +53,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
 
         String dataInstanceQueryId=dataId.replaceAll("#","%23");
         dataInstanceQueryId=dataInstanceQueryId.replaceAll(":","%3a");
-        typeInstanceRelationsCycleGraphQueryAddress=AdminCenterPerportyHandler.getPropertyValue(AdminCenterPerportyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+        typeInstanceRelationsCycleGraphQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                 "infoAnalysePages/typeInstanceRelationAnalyse/typeInstanceRelationsCycleGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName;
 
         String dataInstanceBasicInfoNoticeText;
@@ -82,7 +82,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         //left side properties editor
         VerticalLayout dataPropertyInfoLayout=new VerticalLayout();
         dataPropertyInfoLayout.setHeight(100,Unit.PERCENTAGE);
-        dataPropertyInfoLayout.setWidth(485,Unit.PIXELS);
+        dataPropertyInfoLayout.setWidth(560,Unit.PIXELS);
 
         HorizontalLayout dataPropertyInfoTitleContainerLayout=new HorizontalLayout();
         dataPropertyInfoTitleContainerLayout.setWidth(100,Unit.PERCENTAGE);
@@ -168,7 +168,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             //right side data relation info editor
             this.dataInteractionInfoLayout = new VerticalLayout();
             this.dataInteractionInfoLayout.setHeight(100, Unit.PERCENTAGE);
-            this.dataInteractionInfoLayout.setWidth(500, Unit.PIXELS);
+            this.dataInteractionInfoLayout.setWidth(550, Unit.PIXELS);
             this.dataInteractionInfoLayout.addStyleName("ui_appSubViewContainer");
 
             HorizontalLayout dataRelationInfoTitleContainerLayout = new HorizontalLayout();
@@ -269,10 +269,12 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         int typeInstanceDetailPropertiesEditorContainerPanelHeight=0;
         int dataRelationInfoLayoutWidth=500;
         int relationsListHeight;
+        int dataRelationGraphBrowserFrameHeight;
         if (containerDialog.getWindowMode().equals(WindowMode.MAXIMIZED)){
             typeInstanceDetailPropertiesEditorContainerPanelHeight=browserWindowHeight-230;
-            dataRelationInfoLayoutWidth=browserWindowWidth-510;
+            dataRelationInfoLayoutWidth=browserWindowWidth-600;
             relationsListHeight=browserWindowHeight-550;
+            dataRelationGraphBrowserFrameHeight=browserWindowHeight-200;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.INSERT);
                 showRelationsSwitchButton.setDescription("隐藏数据关联交互信息");
@@ -280,6 +282,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
         }else{
             typeInstanceDetailPropertiesEditorContainerPanelHeight=containerWindowDialogFixHeight-230;
             relationsListHeight=50;
+            dataRelationGraphBrowserFrameHeight=70;
             if(showRelationsSwitchButton!=null) {
                 showRelationsSwitchButton.setIcon(VaadinIcons.EXPAND_SQUARE);
                 showRelationsSwitchButton.setDescription("显示数据关联交互信息");
@@ -293,8 +296,8 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             this.relationableRelationsList.setRelationableRelationsTableHeight(relationsListHeight);
         }
         if(this.dataRelationGraphBrowserFrame!=null){
-            this.dataRelationGraphBrowserFrame.setHeight(browserWindowHeight-200,Unit.PIXELS);
-            this.relationsCycleGraphHeight=browserWindowHeight-220;
+            this.dataRelationGraphBrowserFrame.setHeight(dataRelationGraphBrowserFrameHeight,Unit.PIXELS);
+            this.relationsCycleGraphHeight=dataRelationGraphBrowserFrameHeight-20;
             dataRelationGraphBrowserFrame.setSource(new ExternalResource(
                     typeInstanceRelationsCycleGraphQueryAddress+"&graphHeight="+relationsCycleGraphHeight));
         }
@@ -376,7 +379,7 @@ public class TypeDataInstanceDetailPanel extends VerticalLayout implements Creat
             }
             TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValue);
             final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-            window.setWidth(500, Unit.PIXELS);
+            window.setWidth(570, Unit.PIXELS);
             window.setHeight(800,Unit.PIXELS);
             window.setCaptionAsHtml(true);
             window.setResizable(true);
