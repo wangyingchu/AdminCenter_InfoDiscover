@@ -11,10 +11,13 @@ import com.vaadin.data.Item;
 import com.vaadin.event.Action;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +40,21 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private final static String DiscoverSpaceName_PROPERTY="DiscoverSpaceName_PROPERTY";
 
     private final static String exploreRelatedInfoActionName = "探索本数据项关联的数据信息";
-    private final static String findRelationInfoOfTwoItemActionName = "发现本数据项与另一数据项的关联信息";
+    private final static String findRelationInfoOfTwoItemAction_1Name = "发现本数据项与另一数据项的关联信息(1)";
+    private final static String findRelationInfoOfTwoItemAction_2Name = "发现本数据项与另一数据项的关联信息(2)";
     private final static String compareInfoOfManyItemsActionName = "比较本数据项与其他数据项的属性信息";
     private final static String showDataDetailInfoActionName="显示数据详情";
-    private final static String exploreRelatedInfoTabNamePerfix="关联数据探索-";
+    private final static String exploreRelationDataInfoActionName = "探索本关系关联的数据信息";
+    private final static String exploreRelatedInfoTabNamePerfix="事实关联数据探索-";
+    private final static String exploreRelationDataInfoTabNamePerfix="关系关联数据探索-";
 
     private TabSheet dataAnalyzePageTabs;
     private Map<String,TabSheet.Tab> exploreRelatedInfoActionLayoutTabMap;
+    private Tree processingDataTree;
+
+    private String factDataRootItemId="processingDataInstance_Fact";
+    private String dimensionDataRootItemId="processingDataInstance_Dimension";
+    private String relationDataRootItemId="processingDataInstance_Relation";
 
     public ProcessingDataAnalyzePanel(UserClientInfo userClientInfo,String discoverSpaceNam,Map<String,List<ProcessingDataVO>> processingDataMap){
         this.setMargin(true);
@@ -57,6 +68,34 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
 
         SectionActionsBar dataTypeNoticeActionsBar = new SectionActionsBar(new Label(FontAwesome.CUBE.getHtml()+" "+this.discoverSpaceName, ContentMode.HTML));
         addComponent(dataTypeNoticeActionsBar);
+
+        HorizontalLayout actionButtonsContainer=new HorizontalLayout();
+        Button addNewDataForAnalyzeButton = new Button("添加待分析数据");
+        addNewDataForAnalyzeButton.setIcon(FontAwesome.PLUS_SQUARE);
+
+        addNewDataForAnalyzeButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        addNewDataForAnalyzeButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        final ProcessingDataAnalyzePanel self=this;
+        addNewDataForAnalyzeButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                AddNewDataForAnalyzePanel addNewDataForAnalyzePanel=new AddNewDataForAnalyzePanel(currentUserClientInfo);
+                addNewDataForAnalyzePanel.setDiscoverSpaceName(discoverSpaceName);
+                addNewDataForAnalyzePanel.setRelatedProcessingDataAnalyzePanel(self);
+                final Window window = new Window();
+                window.setWidth(360.0f, Unit.PIXELS);
+                window.setHeight(180.0f, Unit.PIXELS);
+                window.setResizable(false);
+                window.center();
+                window.setModal(true);
+                window.setContent(addNewDataForAnalyzePanel);
+                addNewDataForAnalyzePanel.setContainerDialog(window);
+                UI.getCurrent().addWindow(window);
+            }
+        });
+
+        actionButtonsContainer.addComponent(addNewDataForAnalyzeButton);
+        dataTypeNoticeActionsBar.addActionComponent(actionButtonsContainer);
 
         HorizontalSplitPanel visualizationAnalyzeSplitPanel = new HorizontalSplitPanel();
         visualizationAnalyzeSplitPanel.setSizeFull();
@@ -87,7 +126,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
         processingDataTreesContainer.addComponent(processingDataSelectorContainerPanel);
         processingDataTreesContainer.setExpandRatio(processingDataSelectorContainerPanel,1f);
 
-        Tree processingDataTree = new Tree();
+        processingDataTree = new Tree();
         processingDataTree.addContainerProperty(DataTypeName_PROPERTY, String.class, "");
         processingDataTree.addContainerProperty(Id_PROPERTY, String.class, "");
         processingDataTree.addContainerProperty(DataTypeKind_PROPERTY, String.class, "");
@@ -103,10 +142,6 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             }
         };
         processingDataTree.setItemDescriptionGenerator(itemDescriptionGenerator);
-
-        String factDataRootItemId="processingDataInstance_Fact";
-        String dimensionDataRootItemId="processingDataInstance_Dimension";
-        String relationDataRootItemId="processingDataInstance_Relation";
 
         processingDataTree.addItem(factDataRootItemId);
         processingDataTree.setItemCaption(factDataRootItemId,"事实数据");
@@ -174,17 +209,19 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 }
                 Action showDataDetailInfoAction = new Action(showDataDetailInfoActionName, FontAwesome.EYE);
                 Action exploreRelatedInfoAction = new Action(exploreRelatedInfoActionName, VaadinIcons.CLUSTER);
-                Action findRelationInfoOfTwoItemAction = new Action(findRelationInfoOfTwoItemActionName, VaadinIcons.SPECIALIST);
+                Action findRelationInfoOfTwoItem_1Action = new Action(findRelationInfoOfTwoItemAction_1Name, VaadinIcons.SPECIALIST);
+                Action findRelationInfoOfTwoItem_2Action = new Action(findRelationInfoOfTwoItemAction_2Name, VaadinIcons.SPECIALIST);
                 Action compareInfoOfManyItemsAction = new Action(compareInfoOfManyItemsActionName, VaadinIcons.SCALE_UNBALANCE);
+                Action exploreRelationDataInfoAction = new Action(exploreRelationDataInfoActionName, VaadinIcons.GLASSES);
 
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(dataKind)){
-                    return new Action[]{exploreRelatedInfoAction,findRelationInfoOfTwoItemAction,compareInfoOfManyItemsAction,showDataDetailInfoAction};
+                    return new Action[]{exploreRelatedInfoAction,findRelationInfoOfTwoItem_1Action,findRelationInfoOfTwoItem_2Action,compareInfoOfManyItemsAction,showDataDetailInfoAction};
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataKind)){
                     return new Action[]{exploreRelatedInfoAction,showDataDetailInfoAction};
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(dataKind)){
-                    return new Action[]{showDataDetailInfoAction};
+                    return new Action[]{exploreRelationDataInfoAction,showDataDetailInfoAction};
                 }
                 return new Action[0];
             }
@@ -218,12 +255,19 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             }
         });
         */
+
         this.dataAnalyzePageTabs.setCloseHandler(new TabSheet.CloseHandler() {
             @Override
             public void onTabClose(TabSheet tabSheet, Component component) {
                 if(component instanceof ExploreProcessingDataRelatedInfoPanel){
                     ExploreProcessingDataRelatedInfoPanel currentPanel=(ExploreProcessingDataRelatedInfoPanel)component;
                     String currentTabNameKey=exploreRelatedInfoTabNamePerfix+currentPanel.getProcessingData().getId();
+                    exploreRelatedInfoActionLayoutTabMap.remove(currentTabNameKey);
+                    tabSheet.removeComponent(component);
+                }
+                if(component instanceof ExploreRelationRelatedDataInfoPanel){
+                    ExploreRelationRelatedDataInfoPanel currentPanel=(ExploreRelationRelatedDataInfoPanel)component;
+                    String currentTabNameKey=exploreRelationDataInfoTabNamePerfix+currentPanel.getProcessingData().getId();
                     exploreRelatedInfoActionLayoutTabMap.remove(currentTabNameKey);
                     tabSheet.removeComponent(component);
                 }
@@ -316,6 +360,20 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             }
         }else if(showDataDetailInfoActionName.equals(analyzeCommandName)){
             showDataDetailInfoPanel(targetProcessingDataVO);
+        }else if(exploreRelationDataInfoActionName.equals(analyzeCommandName)){
+            String tabCaption=exploreRelationDataInfoTabNamePerfix+dataItemId;
+            TabSheet.Tab alreadyExistTab=this.exploreRelatedInfoActionLayoutTabMap.get(tabCaption);
+            if(alreadyExistTab!=null){
+                dataAnalyzePageTabs.setSelectedTab(alreadyExistTab);
+            }else{
+                ExploreRelationRelatedDataInfoPanel exploreRelationRelatedDataInfoPanel=new ExploreRelationRelatedDataInfoPanel(this.currentUserClientInfo,targetProcessingDataVO);
+                TabSheet.Tab exploreRelatedInfoActionLayoutTab = dataAnalyzePageTabs.addTab(exploreRelationRelatedDataInfoPanel, exploreRelationDataInfoTabNamePerfix+dataItemId);
+                exploreRelatedInfoActionLayoutTab.setClosable(true);
+                exploreRelatedInfoActionLayoutTab.setIcon(VaadinIcons.GLASSES);
+                dataAnalyzePageTabs.setSelectedTab(exploreRelatedInfoActionLayoutTab);
+                this.exploreRelatedInfoActionLayoutTabMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
+
+            }
         }
     }
 
@@ -367,6 +425,52 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             });
             this.currentUserClientInfo.getRuntimeWindowsRepository().addNewWindow(discoverSpaceName,targetWindowUID,window);
             UI.getCurrent().addWindow(window);
+        }
+    }
+
+    public boolean addNewProcessingData(ProcessingDataVO newProcessingData){
+        String processingDataId=newProcessingData.getId();
+        if(processingDataTree.getItem(processingDataId)!=null){
+            Notification errorNotification = new Notification("数据校验错误","ID为 "+processingDataId+" 的待分析数据已经存在", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return false;
+        }else{
+
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(newProcessingData.getDataTypeKind())){
+                this.processingFactsForAnalyzing.add(newProcessingData);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(newProcessingData.getDataTypeKind())){
+                this.processingDimensionsForAnalyzing.add(newProcessingData);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(newProcessingData.getDataTypeKind())){
+                if(this.processingRelationsForAnalyzing==null){
+                    this.processingRelationsForAnalyzing=new ArrayList<>();
+                }
+                this.processingRelationsForAnalyzing.add(newProcessingData);
+            }
+            Item newRecord=processingDataTree.addItem(newProcessingData.getId());
+            newRecord.getItemProperty(DataTypeName_PROPERTY).setValue(newProcessingData.getDataTypeName());
+            newRecord.getItemProperty(Id_PROPERTY).setValue(newProcessingData.getId());
+            newRecord.getItemProperty(DataTypeKind_PROPERTY).setValue(newProcessingData.getDataTypeKind());
+            newRecord.getItemProperty(DiscoverSpaceName_PROPERTY).setValue(newProcessingData.getDiscoverSpaceName());
+            processingDataTree.setItemCaption(newProcessingData.getId(),newProcessingData.getId());
+            processingDataTree.setChildrenAllowed(newProcessingData.getId(),false);
+
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(newProcessingData.getDataTypeKind())){
+                processingDataTree.setItemIcon(newProcessingData.getId(),FontAwesome.SQUARE_O);
+                processingDataTree.setParent(newProcessingData.getId(),factDataRootItemId);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(newProcessingData.getDataTypeKind())){
+                processingDataTree.setItemIcon(newProcessingData.getId(),FontAwesome.TAG);
+                processingDataTree.setParent(newProcessingData.getId(),dimensionDataRootItemId);
+            }
+            if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(newProcessingData.getDataTypeKind())){
+                processingDataTree.setItemIcon(newProcessingData.getId(),FontAwesome.SHARE_ALT_SQUARE);
+                processingDataTree.setParent(newProcessingData.getId(),relationDataRootItemId);
+            }
+            return true;
         }
     }
 }

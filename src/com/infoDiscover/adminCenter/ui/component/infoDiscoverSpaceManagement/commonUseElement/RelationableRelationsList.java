@@ -316,7 +316,7 @@ public class RelationableRelationsList extends VerticalLayout implements TypeDat
         typeDataInstancePropertiesEditContainerLayout.addComponent(typeDataInstancePropertiesEditorPanel);
 
         final Window window = new Window();
-        window.setWidth(500, Unit.PIXELS);
+        window.setWidth(550, Unit.PIXELS);
         window.setHeight(700,Unit.PIXELS);
         window.setCaptionAsHtml(true);
         window.setResizable(false);

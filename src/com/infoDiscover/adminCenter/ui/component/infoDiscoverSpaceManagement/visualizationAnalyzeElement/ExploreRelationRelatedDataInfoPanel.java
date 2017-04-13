@@ -11,16 +11,15 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.Date;
 
 /**
- * Created by wangychu on 4/7/17.
+ * Created by wangychu on 4/12/17.
  */
-
-public class ExploreProcessingDataRelatedInfoPanel extends VerticalLayout  {
+public class ExploreRelationRelatedDataInfoPanel extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private ProcessingDataVO processingData;
-    private String typeInstanceRelationsDetailGraphQueryAddress;
+    private String typeInstanceRelationsCycleGraphQueryAddress;
 
-    public ExploreProcessingDataRelatedInfoPanel(UserClientInfo userClientInfo,ProcessingDataVO processingData){
+    public ExploreRelationRelatedDataInfoPanel(UserClientInfo userClientInfo,ProcessingDataVO processingData){
         this.setMargin(true);
         this.currentUserClientInfo = userClientInfo;
         this.processingData=processingData;
@@ -34,14 +33,14 @@ public class ExploreProcessingDataRelatedInfoPanel extends VerticalLayout  {
         String dataInstanceQueryId=dataId.replaceAll("#","%23");
         dataInstanceQueryId=dataInstanceQueryId.replaceAll(":","%3a");
         long timeStampPostValue=new Date().getTime();
-        typeInstanceRelationsDetailGraphQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
-                "infoAnalysePages/typeInstanceRelationAnalyse/typeInstanceRelationsExploreGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName+"&timestamp="+timeStampPostValue;
+        typeInstanceRelationsCycleGraphQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
+                "infoAnalysePages/typeInstanceRelationAnalyse/relationRelatedTypeInstancesExploreGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName+"&timestamp="+timeStampPostValue;
         BrowserFrame dataRelationGraphBrowserFrame = new BrowserFrame();
         dataRelationGraphBrowserFrame.setSizeFull();
         dataRelationGraphBrowserFrame.setHeight(dataRelationGraphBrowserFrameHeight,Unit.PIXELS);
         int relationsCycleGraphHeight=dataRelationGraphBrowserFrameHeight-20;
         dataRelationGraphBrowserFrame.setSource(new ExternalResource(
-                typeInstanceRelationsDetailGraphQueryAddress + "&graphHeight=" + relationsCycleGraphHeight));
+                typeInstanceRelationsCycleGraphQueryAddress + "&graphHeight=" + relationsCycleGraphHeight));
         this.addComponent(dataRelationGraphBrowserFrame);
     }
 
