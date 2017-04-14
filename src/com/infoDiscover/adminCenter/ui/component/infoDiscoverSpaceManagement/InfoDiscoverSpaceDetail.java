@@ -95,7 +95,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
 
 
-
+/*
         Map<String,List<ProcessingDataVO>> selectedProcessingData=new HashMap<>();
         List<ProcessingDataVO> dimensionProcessingDataForAnalyzing=new ArrayList<>();
 
@@ -123,7 +123,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         window.setModal(false);
         window.setContent(processingDataAnalyzePanel);
         UI.getCurrent().addWindow(window);
-
+*/
 
 
 
