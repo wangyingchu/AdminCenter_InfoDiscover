@@ -247,7 +247,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
         TabSheet.Tab findRelationInfoOfTwoItemActionLayoutTab =dataAnalyzePageTabs.addTab(findRelationInfoOfTwoAnalyzingDataPanel, "两项数据间关联关系发现");
         findRelationInfoOfTwoItemActionLayoutTab.setIcon(VaadinIcons.SPECIALIST);
 
-        compareInfoOfManyAnalyzingDataPanel=new CompareInfoOfManyAnalyzingDataPanel(this.currentUserClientInfo);
+        compareInfoOfManyAnalyzingDataPanel=new CompareInfoOfManyAnalyzingDataPanel(this.currentUserClientInfo,this.discoverSpaceName);
         TabSheet.Tab compareInfoOfManyItemsActionLayoutTab =dataAnalyzePageTabs.addTab(compareInfoOfManyAnalyzingDataPanel, "多项数据间属性值比较");
         compareInfoOfManyItemsActionLayoutTab.setIcon(VaadinIcons.SCALE_UNBALANCE);
 
@@ -383,6 +383,9 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             findRelationInfoOfTwoAnalyzingDataPanel.addFirstAnalyzingData(targetProcessingDataVO.getId());
         }else if(findRelationInfoOfTwoItemAction_2Name.equals(analyzeCommandName)){
             findRelationInfoOfTwoAnalyzingDataPanel.addSecondAnalyzingData(targetProcessingDataVO.getId());
+        }
+        else if(compareInfoOfManyItemsActionName.equals(analyzeCommandName)){
+            compareInfoOfManyAnalyzingDataPanel.addDataForCompare(targetProcessingDataVO);
         }
     }
 
