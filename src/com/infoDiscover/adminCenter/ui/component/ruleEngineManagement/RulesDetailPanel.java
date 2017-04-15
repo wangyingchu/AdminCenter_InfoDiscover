@@ -50,16 +50,17 @@ public class RulesDetailPanel extends VerticalLayout implements RuleEngineCompon
 
     @Override
     public void receivedRuleEngineDeletedEvent(RuleEngineDeletedEvent event) {
-
+        this.elementStatusBar.clearRuleName();
+        contentNavigator.navigateTo(NAV_GENERAL);
     }
 
     @Override
     public void receivedRuleEngineComponentSelectedEvent(RuleEngineComponentSelectedEvent
                                                                              event) {
-        String ruleName = event.getRuleName();
-        this.elementStatusBar.setRuleName(ruleName);
-        if (ruleName != null) {
-            this.ruleDetail.setRuleName(ruleName);
+        String ruleId = event.getRuleId();
+        this.elementStatusBar.setRuleName(ruleId);
+        if (ruleId != null) {
+            this.ruleDetail.setRuleId(ruleId);
             contentNavigator.navigateTo(NAV_DISCOVERSPACE_DETAIL);
             this.ruleDetail.renderRuleDetail();
         }

@@ -1,5 +1,8 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
+import com.info.discover.ruleengine.base.vo.RuleVO;
+import com.info.discover.ruleengine.manager.database.DataSpaceManager;
+import com.info.discover.ruleengine.plugins.propertymapping.Execution;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event
         .RuleEngineComponentSelectedEvent;
@@ -28,16 +31,22 @@ public class RulesList extends VerticalLayout implements RuleEngineComponentSele
         this.currentUserClientInfo = currentUserClientInfo;
         this.currentUserClientInfo.getEventBlackBoard().addListener(this);
         this.ruleButtonsList = new ArrayList<Button>();
+
+        // check if RuleEngine is initialized
+        if (!RuleEngineOperationUtil.checkRuleEngineDataSpaceExistence()) {
+            Execution.initRuleEngine();
+        }
+
         renderRulesList();
     }
 
     private void renderRulesList() {
         this.removeAllComponents();
         this.ruleButtonsList.clear();
-        List<String> rulesList = RuleEngineOperationUtil.getExistingRulesList();
+        List<RuleVO> rulesList = RuleEngineOperationUtil.getExistingRulesList();
         if (rulesList != null) {
-            for (final String rule : rulesList) {
-                Button ruleButton = new Button(rule);
+            for (final RuleVO rule : rulesList) {
+                Button ruleButton = new Button(rule.getName());
                 ruleButton.setIcon(FontAwesome.CUBE);
                 ruleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
                 ruleButton.addStyleName(ValoTheme.BUTTON_SMALL);
@@ -47,7 +56,7 @@ public class RulesList extends VerticalLayout implements RuleEngineComponentSele
                     public void buttonClick(Button.ClickEvent event) {
                         clearButtonSelectedStyle();
                         event.getButton().addStyleName("ui_appFriendlyElement");
-                        sendRuleSelectedEvent(rule);
+                        sendRuleSelectedEvent(rule.getRuleId());
                     }
                 });
                 this.ruleButtonsList.add(ruleButton);

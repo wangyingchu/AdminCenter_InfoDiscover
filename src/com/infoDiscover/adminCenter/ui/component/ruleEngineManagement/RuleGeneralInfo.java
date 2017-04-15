@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
-import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleVO;
+import com.info.discover.ruleengine.base.vo.RuleVO;
+import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleContent;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -16,12 +17,14 @@ public class RuleGeneralInfo extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private TextField ruleType;
     private TextField spaceName;
-    private TextField factName;
+    private TextField factTypeName;
     private TextField factMappingProperties;
-    private TextField dimensionName;
+    private TextField dimensionTypeName;
     private TextField dimensionProperty;
+    private TextArea description;
     private RuleDetail ruleDetail;
     private String ruleName;
+    private String ruleId;
     private MainSectionTitle mainSectionTitle;
 
     public RuleGeneralInfo(UserClientInfo currentUserClientInfo) {
@@ -29,6 +32,7 @@ public class RuleGeneralInfo extends VerticalLayout {
 
         mainSectionTitle = new MainSectionTitle("规则基本信息");
         addComponent(mainSectionTitle);
+
 
         SecondarySectionTitle secondarySectionTitle = new SecondarySectionTitle("规则基本信息");
         this.setWidth("100%");
@@ -52,24 +56,29 @@ public class RuleGeneralInfo extends VerticalLayout {
         this.spaceName.setReadOnly(true);
         generalInfoForm.addComponent(spaceName);
 
-        this.factName = new TextField("事实表名称");
-        this.factName.setRequired(false);
-        this.factName.setReadOnly(true);
-        generalInfoForm.addComponent(factName);
+        this.factTypeName = new TextField("事实表名称");
+        this.factTypeName.setRequired(false);
+        this.factTypeName.setReadOnly(true);
+        generalInfoForm.addComponent(factTypeName);
 
         this.factMappingProperties = new TextField("事实表映射字段");
         this.factMappingProperties.setRequired(false);
         this.factMappingProperties.setReadOnly(true);
         generalInfoForm.addComponent(factMappingProperties);
 
-        this.dimensionName = new TextField("维度名称");
-        this.dimensionName.setRequired(false);
-        this.dimensionName.setReadOnly(true);
-        generalInfoForm.addComponent(dimensionName);
+        this.dimensionTypeName = new TextField("维度名称");
+        this.dimensionTypeName.setRequired(false);
+        this.dimensionTypeName.setReadOnly(true);
+        generalInfoForm.addComponent(dimensionTypeName);
         this.dimensionProperty = new TextField("维度映射字段");
         this.dimensionProperty.setRequired(false);
         this.dimensionProperty.setReadOnly(true);
         generalInfoForm.addComponent(dimensionProperty);
+
+        this.description = new TextArea("说明");
+        this.description.setRequired(false);
+        this.description.setReadOnly(true);
+        generalInfoForm.addComponent(description);
 
         VerticalLayout generalInfoContainer = new VerticalLayout();
         generalInfoContainer.addComponent(secondarySectionTitle);
@@ -109,7 +118,7 @@ public class RuleGeneralInfo extends VerticalLayout {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 if (self.ruleDetail != null) {
-                    self.ruleDetail.deleteCurrentDiscoverSpace();
+                    self.ruleDetail.deleteRule();
                 }
             }
         });
@@ -121,7 +130,8 @@ public class RuleGeneralInfo extends VerticalLayout {
 
     public void renderRuleGeneralInfo(RuleVO
                                               ruleVO) {
-        this.mainSectionTitle.setValue(this.ruleName);
+
+        this.mainSectionTitle.setValue(ruleVO.getName());
 
         this.ruleType.setReadOnly(false);
         String ruleType = ruleVO.getType().equalsIgnoreCase("PropertyMapping") ? "属性匹配" : ruleVO
@@ -129,29 +139,40 @@ public class RuleGeneralInfo extends VerticalLayout {
         this.ruleType.setValue("" + ruleType);
         this.ruleType.setReadOnly(true);
 
+        RuleContent ruleContent = new RuleContent(ruleVO.getContent());
         this.spaceName.setReadOnly(false);
-        this.spaceName.setValue("" + ruleVO.getSpaceName());
+        this.spaceName.setValue("" + ruleContent.getSpaceName());
         this.spaceName.setReadOnly(true);
 
-        this.factName.setReadOnly(false);
-        this.factName.setValue("" + ruleVO.getFactName());
-        this.factName.setReadOnly(true);
+        this.factTypeName.setReadOnly(false);
+        this.factTypeName.setValue("" + ruleContent.getSourceType());
+        this.factTypeName.setReadOnly(true);
 
         this.factMappingProperties.setReadOnly(false);
-        this.factMappingProperties.setValue("" + ruleVO
+        this.factMappingProperties.setValue("" + ruleContent
                 .getSourceProperties());
         this.factMappingProperties.setReadOnly(true);
 
-        this.dimensionName.setReadOnly(false);
-        this.dimensionName.setValue("" + ruleVO.getDimensionName());
-        this.dimensionName.setReadOnly(true);
+        this.dimensionTypeName.setReadOnly(false);
+        this.dimensionTypeName.setValue("" + ruleContent.getTargetType());
+        this.dimensionTypeName.setReadOnly(true);
 
         this.dimensionProperty.setReadOnly(false);
-        this.dimensionProperty.setValue("" + ruleVO.getTargetProperty());
+        this.dimensionProperty.setValue("" + ruleContent.getTargetProperty());
         this.dimensionProperty.setReadOnly(true);
+
+        this.description.setReadOnly(false);
+        this.description.setValue("" + ruleVO.getDescription());
+        this.description.setReadOnly(true);
     }
 
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
     }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public void setRuleDetail(RuleDetail ruleDetail) {this.ruleDetail = ruleDetail; }
 }

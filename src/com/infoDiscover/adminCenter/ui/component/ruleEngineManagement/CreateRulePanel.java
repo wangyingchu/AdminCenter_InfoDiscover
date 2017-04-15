@@ -1,13 +1,17 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
+import com.info.discover.ruleengine.base.vo.RuleVO;
+import com.info.discover.ruleengine.manager.database.RuleEngineDatabaseConstants;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement
         .InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleContent;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineCreatedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.infoDiscover.common.util.JsonUtil;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.data.Property;
@@ -29,12 +33,14 @@ public class CreateRulePanel extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
     private Window containerDialog;
+    private TextField ruleName;
     private ComboBox ruleTypeComboBox;
     private ComboBox spaceNameComboBox;
     private ComboBox factNameComboBox;
     private ComboBox factPropertiesComboBox;
     private ComboBox dimensionNameComboBox;
     private ComboBox dimensionPropertyComboBox;
+    private TextArea description;
 
     private List<DataTypeStatisticMetrics> factDataTypeList = new ArrayList<>();
     private List<DataTypeStatisticMetrics> dimensionDataTypeList = new ArrayList<>();
@@ -56,6 +62,11 @@ public class CreateRulePanel extends VerticalLayout {
         form.addStyleName("light");
         addComponent(form);
 
+        ruleName = new TextField("规则名称");
+        ruleName.setRequired(true);
+        form.addComponent(ruleName);
+        form.setReadOnly(true);
+
         ruleTypeComboBox = new ComboBox("规则类型");
         ruleTypeComboBox.addItem("PropertyMapping");
         ruleTypeComboBox.setItemCaption("PropertyMapping", "属性匹配");
@@ -67,7 +78,8 @@ public class CreateRulePanel extends VerticalLayout {
 
         final String[] selectedSpace = new String[1];
         spaceNameComboBox = new ComboBox("信息发现空间");
-        List<String> spaceList = InfoDiscoverSpaceOperationUtil.getExistDiscoverSpace();
+        List<String> spaceList = InfoDiscoverSpaceOperationUtil.getExistDiscoverSpace(new
+                String[]{RuleEngineDatabaseConstants.RuleEngineSpace});
         spaceList.remove("RuleEngine");
         spaceNameComboBox.addItems(spaceList);
         spaceNameComboBox.setRequired(true);
@@ -90,8 +102,6 @@ public class CreateRulePanel extends VerticalLayout {
                         .getFactsStatisticMetrics();
                 dimensionDataTypeList = discoverSpaceStatisticMetrics
                         .getDimensionsStatisticMetrics();
-
-
             }
         });
         form.addComponent(spaceNameComboBox);
@@ -116,7 +126,8 @@ public class CreateRulePanel extends VerticalLayout {
                 if (event.getProperty().getValue() != null) {
                     selectedFactTypeName[0] = event.getProperty().getValue().toString();
                     factPropertiesList = InfoDiscoverSpaceOperationUtil.
-                            retrieveFactTypePropertiesInfo(selectedSpace[0], selectedFactTypeName[0]);
+                            retrieveFactTypePropertiesInfo(selectedSpace[0],
+                                    selectedFactTypeName[0]);
                 }
             }
         });
@@ -124,7 +135,7 @@ public class CreateRulePanel extends VerticalLayout {
         form.addComponent(factNameComboBox);
         form.setReadOnly(true);
 
-        factPropertiesComboBox = new ComboBox("事实表属性");
+        factPropertiesComboBox = new ComboBox("事实表映射属性");
         factPropertiesComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
             if (factPropertiesList != null && factPropertiesList.size() > 0) {
                 List<String> properties = new ArrayList<>();
@@ -156,9 +167,11 @@ public class CreateRulePanel extends VerticalLayout {
 
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                if (event.getProperty().getValue() != null){
-                selectDimensionTypeName[0] = event.getProperty().getValue().toString();
-                dimensionPropertiesList = InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(selectedSpace[0], selectDimensionTypeName[0]);
+                if (event.getProperty().getValue() != null) {
+                    selectDimensionTypeName[0] = event.getProperty().getValue().toString();
+                    dimensionPropertiesList = InfoDiscoverSpaceOperationUtil
+                            .retrieveDimensionTypePropertiesInfo(selectedSpace[0],
+                                    selectDimensionTypeName[0]);
                 }
             }
         });
@@ -166,7 +179,7 @@ public class CreateRulePanel extends VerticalLayout {
         form.addComponent(dimensionNameComboBox);
         form.setReadOnly(true);
 
-        dimensionPropertyComboBox = new ComboBox("维度属性");
+        dimensionPropertyComboBox = new ComboBox("维度映射属性");
         dimensionPropertyComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
             if (dimensionPropertiesList != null && dimensionPropertiesList.size() > 0) {
                 List<String> properties = new ArrayList<>();
@@ -178,6 +191,11 @@ public class CreateRulePanel extends VerticalLayout {
         });
         dimensionPropertyComboBox.setRequired(true);
         form.addComponent(dimensionPropertyComboBox);
+        form.setReadOnly(true);
+
+        description = new TextArea("说明");
+        description.setRequired(false);
+        form.addComponent(description);
         form.setReadOnly(true);
 
         HorizontalLayout footer = new HorizontalLayout();
@@ -198,44 +216,53 @@ public class CreateRulePanel extends VerticalLayout {
         footer.addComponent(addButton);
     }
 
+    private boolean isEmptyValue(String value) {
+        return value == null || value.trim().equals("");
+    }
+
     private void addNewRule() {
-        final String ruleTypeValue = ruleTypeComboBox.getValue().toString();
-        final String spaceNameValue = spaceNameComboBox.getValue().toString();
-        final String factNameValue = factNameComboBox.getValue().toString();
-        final String factPropertiesValue = factPropertiesComboBox.getValue().toString();
-        final String dimensionNameValue = dimensionNameComboBox.getValue().toString();
-        final String dimensionPropertyValue = dimensionPropertyComboBox.getValue().toString();
+        final String ruleNameValue = ruleName.getValue();
+        final String ruleTypeValue = ruleTypeComboBox.getValue() == null ? "" : ruleTypeComboBox
+                .getValue().toString();
+        final String spaceNameValue = spaceNameComboBox.getValue() == null ? "" :
+                spaceNameComboBox.getValue().toString();
+        final String factTypeNameValue = factNameComboBox.getValue() == null ? "" :
+                factNameComboBox.getValue().toString();
+        final String factPropertiesValue = factPropertiesComboBox.getValue() == null ? "" :
+                factPropertiesComboBox.getValue().toString();
+        final String dimensionTypeNameValue = dimensionNameComboBox.getValue() == null ? "" :
+                dimensionNameComboBox.getValue().toString();
+        final String dimensionPropertyValue = dimensionPropertyComboBox.getValue() == null ? "" :
+                dimensionNameComboBox.getValue().toString();
+        final String descriptionValue = description.getValue();
 
-        // TODO: ruleType should be selected not input
-        // TODO: spaceName should be
+        if (isEmptyValue(ruleNameValue) || isEmptyValue(spaceNameValue) || isEmptyValue
+                (factTypeNameValue) || isEmptyValue(factPropertiesValue) || isEmptyValue
+                (dimensionTypeNameValue) || isEmptyValue(dimensionPropertyValue)) {
+            Notification errorNotification = new Notification("数据校验错误",
+                    "请检查 规则名称 信息发现空间 事实表名称 事实表映射属性 维度名称 维度映射属性 是否为空", Notification.Type
+                    .ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
 
-        // check factNameValue is already existed, use factName as rule name, so need to check this
-        // if existed, ask user to update it or not
-
-
-//        if(ruleTypeValue==null||ruleTypeValue.trim().equals("")){
-//            Notification errorNotification = new Notification("数据校验错误",
-//                    "请输入信息发现空间名称", Notification.Type.ERROR_MESSAGE);
-//            errorNotification.setPosition(Position.MIDDLE_CENTER);
-//            errorNotification.show(Page.getCurrent());
-//            errorNotification.setIcon(FontAwesome.WARNING);
-//            return;
-//        }
-//        boolean isExistDiscoverSpaceName= InfoDiscoverSpaceOperationUtil
-//                .checkDiscoverSpaceExistence(ruleTypeValue);
-//        if(isExistDiscoverSpaceName){
-//            Notification errorNotification = new Notification("数据校验错误",
-//                    "信息发现空间 "+ruleTypeValue+" 已经存在", Notification.Type.ERROR_MESSAGE);
-//            errorNotification.setPosition(Position.MIDDLE_CENTER);
-//            errorNotification.show(Page.getCurrent());
-//            errorNotification.setIcon(FontAwesome.WARNING);
-//            return;
-//        }
+        String ruleId = spaceNameValue + "_" + factTypeNameValue;
+        boolean isExistedRule = RuleEngineOperationUtil.checkRuleExistence(ruleId);
+        if (isExistedRule) {
+            Notification errorNotification = new Notification("数据校验错误",
+                    "事实表 " + factTypeNameValue + " 的规则已经存在", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
 
 
         //do add new logic
         Label confirmMessage = new Label(FontAwesome.INFO.getHtml() +
-                " 请确认为事实表<b>" + factNameValue + "</b>创建规则.", ContentMode.HTML);
+                " 请确认为事实表<b>" + factTypeNameValue + "</b>创建规则.", ContentMode.HTML);
         final ConfirmDialog addRuleConfirmDialog = new ConfirmDialog();
         addRuleConfirmDialog.setConfirmMessage(confirmMessage);
 
@@ -245,15 +272,27 @@ public class CreateRulePanel extends VerticalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 addRuleConfirmDialog.close();
-                boolean createRuleResult = RuleEngineOperationUtil.createRule(
-                        ruleTypeValue, spaceNameValue, factNameValue,
-                        factPropertiesValue, dimensionNameValue, dimensionPropertyValue);
+
+                RuleContent ruleContent = new RuleContent(spaceNameValue, factTypeNameValue,
+                        factPropertiesValue, dimensionTypeNameValue, dimensionPropertyValue);
+                String contentStr = JsonUtil.beanToJson(ruleContent);
+
+                String ruleId = spaceNameValue + "_" + factTypeNameValue;
+                RuleVO rule = new RuleVO(ruleId, ruleNameValue, ruleTypeValue, descriptionValue,
+                        contentStr);
+
+                boolean createRuleResult = false;
+                if (RuleEngineOperationUtil.checkRuleExistence(rule.getRuleId())) {
+                    createRuleResult = RuleEngineOperationUtil.updateRule(rule);
+                } else {
+                    createRuleResult = RuleEngineOperationUtil.createRule(rule);
+                }
 
                 if (createRuleResult) {
                     self.containerDialog.close();
 
                     RuleEngineCreatedEvent ruleEngineCreatedEvent = new
-                            RuleEngineCreatedEvent(factNameValue);
+                            RuleEngineCreatedEvent(factTypeNameValue);
                     self.currentUserClientInfo.getEventBlackBoard().fire(ruleEngineCreatedEvent);
 
                     Notification resultNotification = new Notification("添加数据操作成功",

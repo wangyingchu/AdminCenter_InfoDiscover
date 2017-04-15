@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 
+import com.info.discover.ruleengine.manager.database.RuleEngineDatabaseConstants;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
@@ -32,7 +33,8 @@ public class InfoDiscoverSpacesList extends VerticalLayout implements DiscoverSp
     private void renderDiscoverSpacesList(){
         this.removeAllComponents();
         this.discoverSpaceButtonsList.clear();
-        List<String> spacesList= InfoDiscoverSpaceOperationUtil.getExistDiscoverSpace();
+        List<String> spacesList= InfoDiscoverSpaceOperationUtil.getExistDiscoverSpace
+                (new String[]{RuleEngineDatabaseConstants.RuleEngineSpace});
         if(spacesList!=null){
             for(final String currentSpace:spacesList){
                 Button spaceButton = new Button(currentSpace);

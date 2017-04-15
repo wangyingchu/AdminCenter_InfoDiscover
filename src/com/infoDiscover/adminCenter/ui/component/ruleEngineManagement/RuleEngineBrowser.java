@@ -21,11 +21,11 @@ public class RuleEngineBrowser extends VerticalLayout {
         operationMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
         addComponent(operationMenuBar);
 
-        Label spaceListLabel = new Label(FontAwesome.BARS.getHtml() + " 规则列表:", ContentMode.HTML);
-        spaceListLabel.addStyleName(ValoTheme.LABEL_TINY);
-        spaceListLabel.addStyleName("ui_appStandaloneElementPadding");
-        spaceListLabel.addStyleName("ui_appSectionLightDiv");
-        addComponent(spaceListLabel);
+        Label ruleListLabel = new Label(FontAwesome.BARS.getHtml() + " 规则列表:", ContentMode.HTML);
+        ruleListLabel.addStyleName(ValoTheme.LABEL_TINY);
+        ruleListLabel.addStyleName("ui_appStandaloneElementPadding");
+        ruleListLabel.addStyleName("ui_appSectionLightDiv");
+        addComponent(ruleListLabel);
 
         RulesList rulesList = new RulesList(this.currentUserClientInfo);
         addComponent(rulesList);

@@ -4,22 +4,22 @@ import com.github.wolfie.blackboard.Event;
 import com.github.wolfie.blackboard.Listener;
 
 /**
- * Created by wangychu on 10/1/16.
+ * Created by sun.
  */
 public class RuleEngineDeletedEvent implements Event {
 
-    private String ruleName;
+    private String ruleId;
 
-    public RuleEngineDeletedEvent(String ruleName){
-        this.setRuleName(ruleName);
+    public RuleEngineDeletedEvent(String ruleId){
+        this.setRuleId(ruleId);
     }
 
-    public String getRuleName() {
-        return ruleName;
+    public String getRuleId() {
+        return ruleId;
     }
 
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 
     public interface RuleEngineDeletedListener extends Listener {

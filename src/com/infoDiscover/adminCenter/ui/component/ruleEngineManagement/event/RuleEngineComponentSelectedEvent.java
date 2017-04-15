@@ -8,18 +8,18 @@ import com.github.wolfie.blackboard.Listener;
  */
 public class RuleEngineComponentSelectedEvent implements Event {
 
-    private String ruleName;
+    private String ruleId;
 
-    public RuleEngineComponentSelectedEvent(String ruleName){
-        this.setRuleName(ruleName);
+    public RuleEngineComponentSelectedEvent(String ruleId){
+        this.setRuleId(ruleId);
     }
 
-    public String getRuleName() {
-        return ruleName;
+    public String getRuleId() {
+        return ruleId;
     }
 
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 
     public interface RuleEngineComponentSelectedListener extends Listener {

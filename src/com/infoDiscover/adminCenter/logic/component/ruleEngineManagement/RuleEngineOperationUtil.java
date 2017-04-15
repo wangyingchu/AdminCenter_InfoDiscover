@@ -1,19 +1,20 @@
 package com.infoDiscover.adminCenter.logic.component.ruleEngineManagement;
 
 import com.info.discover.ruleengine.base.RuleEngineImpl;
-import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo.RuleVO;
-import com.infoDiscover.common.util.JsonUtil;
+import com.info.discover.ruleengine.base.vo.RuleVO;
+import com.info.discover.ruleengine.manager.database.DataSpaceManager;
+import com.info.discover.ruleengine.manager.database.RuleEngineDatabaseConstants;
+import com.info.discover.ruleengine.manager.database.RuleEngineFactManager;
+import com.info.discover.ruleengine.plugins.propertymapping.PropertyMappingRuleEngineImpl;
 import com.infoDiscover.infoDiscoverEngine.dataMart.Fact;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
-import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.EqualFilteringItem;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverSpace;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRuntimeException;
 import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,20 +22,20 @@ import java.util.List;
  */
 public class RuleEngineOperationUtil {
 
-    public static List<String> getExistingRulesList() {
-        InfoDiscoverSpace infoDiscoverSpace = DiscoverEngineComponentFactory
-                .connectInfoDiscoverSpace("RuleEngine");
+    public static List<RuleVO> getExistingRulesList() {
+
+        InfoDiscoverSpace infoDiscoverSpace = DataSpaceManager.getInfoDiscoverSpace();
 
         ExploreParameters ep = new ExploreParameters();
-        ep.setType("Rule");
+        ep.setType(RuleEngineDatabaseConstants.RuleFact);
 
         try {
             List<Fact> facts = executeFactQuery(infoDiscoverSpace, ep);
-            List<String> list = new ArrayList<>();
+            List<RuleVO> ruleList = new ArrayList<>();
             for (Fact fact : facts) {
-                list.add(fact.getProperty("name").getPropertyValue().toString());
+                ruleList.add(RuleEngineFactManager.getRuleVOFromFact(fact));
             }
-            return list;
+            return ruleList;
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
         } catch (InfoDiscoveryEngineInfoExploreException e) {
@@ -43,72 +44,38 @@ public class RuleEngineOperationUtil {
             infoDiscoverSpace.closeSpace();
         }
 
-
         return null;
     }
 
-    public static RuleVO getRuleByName(String ruleName) {
-        InfoDiscoverSpace infoDiscoverSpace = DiscoverEngineComponentFactory
-                .connectInfoDiscoverSpace("RuleEngine");
-
-        ExploreParameters ep = new ExploreParameters();
-        ep.setType("Rule");
-        ep.setDefaultFilteringItem(new EqualFilteringItem("name", ruleName));
-
-        try {
-            List<Fact> factsList = executeFactQuery(infoDiscoverSpace, ep);
-            if (factsList != null && factsList.size() > 0) {
-                Fact fact = factsList.get(0);
-                RuleVO rule = new RuleVO();
-                rule.setType(fact.getProperty("type").getPropertyValue().toString());
-                rule.setName(fact.getProperty("name").getPropertyValue().toString());
-                rule.setDescription(fact.getProperty("description").getPropertyValue().toString());
-                String content = fact.getProperty("content").getPropertyValue().toString();
-                rule.setContent(content);
-                rule.setSourceProperties(JsonUtil.getPropertyValues("sourceProperties",
-                        content));
-                rule.setTargetProperty(JsonUtil.getPropertyValues("targetProperty",
-                        content));
-                rule.setFactName(JsonUtil.getPropertyValues("sourceType", content));
-                rule.setDimensionName(JsonUtil.getPropertyValues("targetType", content));
-                rule.setSpaceName(JsonUtil.getPropertyValues("spaceName", content));
-                return rule;
-            }
-            return null;
-        } catch (InfoDiscoveryEngineRuntimeException e) {
-            e.printStackTrace();
-        } catch (InfoDiscoveryEngineInfoExploreException e) {
-            e.printStackTrace();
-        } finally {
-            infoDiscoverSpace.closeSpace();
-        }
-        return null;
+    public static RuleVO getRuleById(String ruleId) {
+        return new PropertyMappingRuleEngineImpl().getRule(ruleId);
     }
 
-    public static boolean createRule(String ruleType, String spaceName, String factName, String
-            factProperties, String dimensionName, String dimensionProperty) {
-        RuleEngineImpl ruleEngine = new RuleEngineImpl();
-
-        HashMap<String, String> ruleContentMap = new HashMap<>();
-        ruleContentMap.put("source", "Fact");
-        ruleContentMap.put("sourceType", factName);
-        ruleContentMap.put("sourceProperties", factProperties);
-        ruleContentMap.put("target", "Dimension");
-        ruleContentMap.put("targetType", dimensionName);
-        ruleContentMap.put("targetProperty", dimensionProperty);
-        ruleContentMap.put("spaceName", spaceName);
-
-        String ruleContent = JsonUtil.mapToJsonStr(ruleContentMap);
-
-        boolean result = false;
+    public static boolean createRule(RuleVO rule) {
         try {
-            result = ruleEngine.createRule("ID_FACT_"+factName, "", ruleType,ruleContent);
+            new PropertyMappingRuleEngineImpl().createRule(rule);
+            return true;
         } catch (InfoDiscoveryEngineRuntimeException e) {
-            System.out.println("Error when to create rule: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
-        return result;
     }
 
+    public static boolean checkRuleEngineDataSpaceExistence() {
+        return new RuleEngineImpl().checkRuleEngineDataspaceExistence();
+    }
+
+    public static boolean checkRuleExistence(String ruleId) {
+        return new PropertyMappingRuleEngineImpl().checkRuleExistence(ruleId);
+    }
+
+    public static boolean updateRule(RuleVO rule) {
+        return new PropertyMappingRuleEngineImpl().updateRule(rule);
+    }
+
+    public static boolean deleteRule(String ruleId) {
+        return new PropertyMappingRuleEngineImpl().deleteRule(ruleId);
+    }
 
     public static List<Fact> executeFactQuery(InfoDiscoverSpace infoDiscoverSpace, ExploreParameters
             ep)
@@ -120,4 +87,6 @@ public class RuleEngineOperationUtil {
         List<Fact> facts = ie.discoverFacts(ep);
         return facts;
     }
+
+
 }

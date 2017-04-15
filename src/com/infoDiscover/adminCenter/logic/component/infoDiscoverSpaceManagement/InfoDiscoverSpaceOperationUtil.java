@@ -48,6 +48,15 @@ public class InfoDiscoverSpaceOperationUtil {
         return DiscoverEngineComponentFactory.getDiscoverSpacesListInEngine();
     }
 
+    public static List<String> getExistDiscoverSpace(String[] excludedDiscoverSpaces){
+        List<String>  existingSpaceList= DiscoverEngineComponentFactory
+                .getDiscoverSpacesListInEngine();
+        for(String excludedSpace: excludedDiscoverSpaces) {
+            existingSpaceList.remove(excludedSpace);
+        }
+        return existingSpaceList;
+    }
+
     public static DiscoverSpaceStatisticMetrics getDiscoverSpaceStatisticMetrics(String spaceName){
         DiscoverSpaceStatisticHelper discoverSpaceStatisticHelper= DiscoverEngineComponentFactory.getDiscoverSpaceStatisticHelper();
         return discoverSpaceStatisticHelper.getDiscoverSpaceStatisticMetrics(spaceName);
