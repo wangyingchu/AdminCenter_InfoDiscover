@@ -40,8 +40,8 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private final static String DiscoverSpaceName_PROPERTY="DiscoverSpaceName_PROPERTY";
 
     private final static String exploreRelatedInfoActionName = "探索本数据项关联的数据信息";
-    private final static String findRelationInfoOfTwoItemAction_1Name = "发现本数据项与另一数据项的关联信息(1)";
-    private final static String findRelationInfoOfTwoItemAction_2Name = "发现本数据项与另一数据项的关联信息(2)";
+    private final static String findRelationInfoOfTwoItemAction_1Name = "发现本数据项与另一数据项的关联信息 (1)";
+    private final static String findRelationInfoOfTwoItemAction_2Name = "发现本数据项与另一数据项的关联信息 (2)";
     private final static String compareInfoOfManyItemsActionName = "比较本数据项与其他数据项的属性信息";
     private final static String showDataDetailInfoActionName="显示数据详情";
     private final static String exploreRelationDataInfoActionName = "探索本关系关联的数据信息";
@@ -55,6 +55,9 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private String factDataRootItemId="processingDataInstance_Fact";
     private String dimensionDataRootItemId="processingDataInstance_Dimension";
     private String relationDataRootItemId="processingDataInstance_Relation";
+
+    private FindRelationInfoOfTwoAnalyzingDataPanel findRelationInfoOfTwoAnalyzingDataPanel;
+    private CompareInfoOfManyAnalyzingDataPanel compareInfoOfManyAnalyzingDataPanel;
 
     public ProcessingDataAnalyzePanel(UserClientInfo userClientInfo,String discoverSpaceNam,Map<String,List<ProcessingDataVO>> processingDataMap){
         this.setMargin(true);
@@ -240,10 +243,12 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
         this.dataAnalyzePageTabs=new TabSheet();
         visualizationAnalyzeSplitPanel.setSecondComponent(dataAnalyzePageTabs);
 
-        TabSheet.Tab findRelationInfoOfTwoItemActionLayoutTab =dataAnalyzePageTabs.addTab(new VerticalLayout(), "两项数据间关联关系发现");
+        findRelationInfoOfTwoAnalyzingDataPanel=new FindRelationInfoOfTwoAnalyzingDataPanel(this.currentUserClientInfo);
+        TabSheet.Tab findRelationInfoOfTwoItemActionLayoutTab =dataAnalyzePageTabs.addTab(findRelationInfoOfTwoAnalyzingDataPanel, "两项数据间关联关系发现");
         findRelationInfoOfTwoItemActionLayoutTab.setIcon(VaadinIcons.SPECIALIST);
 
-        TabSheet.Tab compareInfoOfManyItemsActionLayoutTab =dataAnalyzePageTabs.addTab(new VerticalLayout(), "多项数据间属性值比较");
+        compareInfoOfManyAnalyzingDataPanel=new CompareInfoOfManyAnalyzingDataPanel(this.currentUserClientInfo,this.discoverSpaceName);
+        TabSheet.Tab compareInfoOfManyItemsActionLayoutTab =dataAnalyzePageTabs.addTab(compareInfoOfManyAnalyzingDataPanel, "多项数据间属性值比较");
         compareInfoOfManyItemsActionLayoutTab.setIcon(VaadinIcons.SCALE_UNBALANCE);
 
         /*
@@ -374,6 +379,13 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 this.exploreRelatedInfoActionLayoutTabMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
 
             }
+        }else if(findRelationInfoOfTwoItemAction_1Name.equals(analyzeCommandName)){
+            findRelationInfoOfTwoAnalyzingDataPanel.addFirstAnalyzingData(targetProcessingDataVO.getId());
+        }else if(findRelationInfoOfTwoItemAction_2Name.equals(analyzeCommandName)){
+            findRelationInfoOfTwoAnalyzingDataPanel.addSecondAnalyzingData(targetProcessingDataVO.getId());
+        }
+        else if(compareInfoOfManyItemsActionName.equals(analyzeCommandName)){
+            compareInfoOfManyAnalyzingDataPanel.addDataForCompare(targetProcessingDataVO);
         }
     }
 
