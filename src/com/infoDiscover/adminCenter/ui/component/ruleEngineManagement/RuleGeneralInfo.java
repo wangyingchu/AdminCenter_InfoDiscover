@@ -30,41 +30,7 @@ public class RuleGeneralInfo extends VerticalLayout {
         mainSectionTitle = new MainSectionTitle("规则基本信息");
         addComponent(mainSectionTitle);
 
-        SecondarySectionTitle secondarySectionTitle3 = new SecondarySectionTitle("规则类型");
-        this.setWidth("100%");
-
-        HorizontalLayout elementPlacementLayout3 = new HorizontalLayout();
-        elementPlacementLayout3.setWidth("100%");
-        addComponent(elementPlacementLayout3);
-
-        FormLayout generalInfoForm3 = new FormLayout();
-        generalInfoForm3.setMargin(false);
-        generalInfoForm3.setWidth("100%");
-        generalInfoForm3.addStyleName("light");
-
-        this.ruleType = new TextField("类型");
-        this.ruleType.setRequired(false);
-        this.ruleType.setReadOnly(true);
-        generalInfoForm3.addComponent(ruleType);
-
-        SecondarySectionTitle secondarySectionTitle4 = new SecondarySectionTitle("信息发现空间");
-        this.setWidth("100%");
-
-        HorizontalLayout elementPlacementLayout4 = new HorizontalLayout();
-        elementPlacementLayout4.setWidth("100%");
-        addComponent(elementPlacementLayout4);
-
-        FormLayout generalInfoForm4 = new FormLayout();
-        generalInfoForm4.setMargin(false);
-        generalInfoForm4.setWidth("100%");
-        generalInfoForm4.addStyleName("light");
-
-        this.spaceName = new TextField("信息发现空间名称");
-        this.spaceName.setRequired(false);
-        this.spaceName.setReadOnly(true);
-        generalInfoForm4.addComponent(spaceName);
-
-        SecondarySectionTitle secondarySectionTitle = new SecondarySectionTitle("事实表信息");
+        SecondarySectionTitle secondarySectionTitle = new SecondarySectionTitle("规则基本信息");
         this.setWidth("100%");
 
         HorizontalLayout elementPlacementLayout = new HorizontalLayout();
@@ -76,45 +42,38 @@ public class RuleGeneralInfo extends VerticalLayout {
         generalInfoForm.setWidth("100%");
         generalInfoForm.addStyleName("light");
 
-        this.factName = new TextField("表名");
+        this.ruleType = new TextField("规则类型");
+        this.ruleType.setRequired(false);
+        this.ruleType.setReadOnly(true);
+        generalInfoForm.addComponent(ruleType);
+
+        this.spaceName = new TextField("信息发现空间名称");
+        this.spaceName.setRequired(false);
+        this.spaceName.setReadOnly(true);
+        generalInfoForm.addComponent(spaceName);
+
+        this.factName = new TextField("事实表名称");
         this.factName.setRequired(false);
         this.factName.setReadOnly(true);
         generalInfoForm.addComponent(factName);
-        this.factMappingProperties = new TextField("映射字段");
+
+        this.factMappingProperties = new TextField("事实表映射字段");
         this.factMappingProperties.setRequired(false);
         this.factMappingProperties.setReadOnly(true);
         generalInfoForm.addComponent(factMappingProperties);
 
-        SecondarySectionTitle secondarySectionTitle2 = new SecondarySectionTitle("维度信息");
-        this.setWidth("100%");
-
-        HorizontalLayout elementPlacementLayout2 = new HorizontalLayout();
-        elementPlacementLayout2.setWidth("100%");
-        addComponent(elementPlacementLayout2);
-
-        FormLayout generalInfoForm2 = new FormLayout();
-        generalInfoForm2.setMargin(false);
-        generalInfoForm2.setWidth("100%");
-        generalInfoForm2.addStyleName("light");
-
         this.dimensionName = new TextField("维度名称");
         this.dimensionName.setRequired(false);
         this.dimensionName.setReadOnly(true);
-        generalInfoForm2.addComponent(dimensionName);
-        this.dimensionProperty = new TextField("映射字段");
+        generalInfoForm.addComponent(dimensionName);
+        this.dimensionProperty = new TextField("维度映射字段");
         this.dimensionProperty.setRequired(false);
         this.dimensionProperty.setReadOnly(true);
-        generalInfoForm2.addComponent(dimensionProperty);
+        generalInfoForm.addComponent(dimensionProperty);
 
         VerticalLayout generalInfoContainer = new VerticalLayout();
-        generalInfoContainer.addComponent(secondarySectionTitle3);
-        generalInfoContainer.addComponent(generalInfoForm3);
-        generalInfoContainer.addComponent(secondarySectionTitle4);
-        generalInfoContainer.addComponent(generalInfoForm4);
         generalInfoContainer.addComponent(secondarySectionTitle);
         generalInfoContainer.addComponent(generalInfoForm);
-        generalInfoContainer.addComponent(secondarySectionTitle2);
-        generalInfoContainer.addComponent(generalInfoForm2);
         elementPlacementLayout.addComponent(generalInfoContainer);
 
         HorizontalLayout actionButtonsPlacementLayout = new HorizontalLayout();
@@ -124,7 +83,20 @@ public class RuleGeneralInfo extends VerticalLayout {
         actionButtonsSpacingLayout.setWidth("10px");
         actionButtonsPlacementLayout.addComponent(actionButtonsSpacingLayout);
 
-        final RuleGeneralInfo self = this;
+        Button refreshDiscoverSpaceInfoButton=new Button("执行规则");
+        refreshDiscoverSpaceInfoButton.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+        refreshDiscoverSpaceInfoButton.addStyleName(ValoTheme.BUTTON_TINY);
+        refreshDiscoverSpaceInfoButton.setIcon(FontAwesome.REFRESH);
+
+        final RuleGeneralInfo self=this;
+        refreshDiscoverSpaceInfoButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+
+            }
+        });
+        actionButtonsPlacementLayout.addComponent(refreshDiscoverSpaceInfoButton);
+
         HorizontalLayout spaceDivLayout = new HorizontalLayout();
         spaceDivLayout.setWidth("15px");
         actionButtonsPlacementLayout.addComponent(spaceDivLayout);
