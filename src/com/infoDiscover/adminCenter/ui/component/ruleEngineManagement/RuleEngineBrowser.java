@@ -56,8 +56,8 @@ public class RuleEngineBrowser extends VerticalLayout {
             CreateRulePanel createRulePanel = new CreateRulePanel(this
                     .currentUserClientInfo);
             final Window window = new Window();
-            window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(600.0f, Unit.PIXELS);
+            window.setWidth(480.0f, Unit.PIXELS);
+            window.setHeight(620.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);

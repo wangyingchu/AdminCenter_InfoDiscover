@@ -15,7 +15,6 @@ import com.infoDiscover.common.util.JsonUtil;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.data.Property;
-import com.vaadin.event.FieldEvents;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
@@ -37,7 +36,7 @@ public class CreateRulePanel extends VerticalLayout {
     private ComboBox ruleTypeComboBox;
     private ComboBox spaceNameComboBox;
     private ComboBox factNameComboBox;
-    private ComboBox factPropertiesComboBox;
+    private ListSelect factPropertiesMultiSelect;
     private ComboBox dimensionNameComboBox;
     private ComboBox dimensionPropertyComboBox;
     private TextArea description;
@@ -91,7 +90,7 @@ public class CreateRulePanel extends VerticalLayout {
                 // remove
                 factNameComboBox.removeAllItems();
                 dimensionNameComboBox.removeAllItems();
-                factPropertiesComboBox.removeAllItems();
+                factPropertiesMultiSelect.removeAllItems();
                 dimensionPropertyComboBox.removeAllItems();
 
                 selectedSpace[0] = event.getProperty().getValue().toString();
@@ -102,21 +101,27 @@ public class CreateRulePanel extends VerticalLayout {
                         .getFactsStatisticMetrics();
                 dimensionDataTypeList = discoverSpaceStatisticMetrics
                         .getDimensionsStatisticMetrics();
+
+                if (factDataTypeList != null && factDataTypeList.size() > 0) {
+                    for (DataTypeStatisticMetrics dataType : factDataTypeList) {
+                        String factType = dataType.getDataTypeName();
+                        factNameComboBox.addItem(factType.substring(factType.lastIndexOf("_") + 1));
+                    }
+                }
+
+                if (dimensionDataTypeList != null && dimensionDataTypeList.size() > 0) {
+                    for (DataTypeStatisticMetrics dataType : dimensionDataTypeList) {
+                        String dimensionTypeName = dataType.getDataTypeName();
+                        dimensionNameComboBox.addItem(dimensionTypeName.substring(dimensionTypeName
+                                .lastIndexOf("_") + 1));
+                    }
+                }
             }
         });
         form.addComponent(spaceNameComboBox);
         form.setReadOnly(true);
 
         factNameComboBox = new ComboBox("事实表名称");
-        factNameComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
-            if (factDataTypeList != null && factDataTypeList.size() > 0) {
-                for (DataTypeStatisticMetrics dataType : factDataTypeList) {
-                    String factType = dataType.getDataTypeName();
-                    factNameComboBox.addItem(factType.substring(factType.lastIndexOf("_") + 1));
-                }
-            }
-        });
-
         final String[] selectedFactTypeName = new String[1];
         factNameComboBox.addValueChangeListener(new Property.ValueChangeListener() {
             private static final long serialVersionUID = 1L;
@@ -128,6 +133,14 @@ public class CreateRulePanel extends VerticalLayout {
                     factPropertiesList = InfoDiscoverSpaceOperationUtil.
                             retrieveFactTypePropertiesInfo(selectedSpace[0],
                                     selectedFactTypeName[0]);
+
+                    if (factPropertiesList != null && factPropertiesList.size() > 0) {
+                        List<String> properties = new ArrayList<>();
+                        for (PropertyTypeVO vo : factPropertiesList) {
+                            properties.add(vo.getPropertyName());
+                        }
+                        factPropertiesMultiSelect.addItems(properties);
+                    }
                 }
             }
         });
@@ -135,32 +148,16 @@ public class CreateRulePanel extends VerticalLayout {
         form.addComponent(factNameComboBox);
         form.setReadOnly(true);
 
-        factPropertiesComboBox = new ComboBox("事实表映射属性");
-        factPropertiesComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
-            if (factPropertiesList != null && factPropertiesList.size() > 0) {
-                List<String> properties = new ArrayList<>();
-                for (PropertyTypeVO vo : factPropertiesList) {
-                    properties.add(vo.getPropertyName());
-                }
-                factPropertiesComboBox.addItems(properties);
-            }
-        });
-
-        factPropertiesComboBox.setRequired(true);
-        form.addComponent(factPropertiesComboBox);
+        factPropertiesMultiSelect = new ListSelect("事实表映射属性");
+        factPropertiesMultiSelect.setMultiSelect(true);
+        factPropertiesMultiSelect.setNullSelectionAllowed(false);
+        factPropertiesMultiSelect.setRows(4);
+        factPropertiesMultiSelect.setSizeFull();
+        factPropertiesMultiSelect.setRequired(true);
+        form.addComponent(factPropertiesMultiSelect);
         form.setReadOnly(true);
 
         dimensionNameComboBox = new ComboBox("维度名称");
-        dimensionNameComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
-            if (dimensionDataTypeList != null && dimensionDataTypeList.size() > 0) {
-                for (DataTypeStatisticMetrics dataType : dimensionDataTypeList) {
-                    String dimensionTypeName = dataType.getDataTypeName();
-                    dimensionNameComboBox.addItem(dimensionTypeName.substring(dimensionTypeName
-                            .lastIndexOf("_") + 1));
-                }
-            }
-        });
-
         final String[] selectDimensionTypeName = new String[1];
         dimensionNameComboBox.addValueChangeListener(new Property.ValueChangeListener() {
             private static final long serialVersionUID = 1L;
@@ -172,6 +169,13 @@ public class CreateRulePanel extends VerticalLayout {
                     dimensionPropertiesList = InfoDiscoverSpaceOperationUtil
                             .retrieveDimensionTypePropertiesInfo(selectedSpace[0],
                                     selectDimensionTypeName[0]);
+                    if (dimensionPropertiesList != null && dimensionPropertiesList.size() > 0) {
+                        List<String> properties = new ArrayList<>();
+                        for (PropertyTypeVO vo : dimensionPropertiesList) {
+                            properties.add(vo.getPropertyName());
+                        }
+                        dimensionPropertyComboBox.addItems(properties);
+                    }
                 }
             }
         });
@@ -180,15 +184,6 @@ public class CreateRulePanel extends VerticalLayout {
         form.setReadOnly(true);
 
         dimensionPropertyComboBox = new ComboBox("维度映射属性");
-        dimensionPropertyComboBox.addFocusListener((FieldEvents.FocusListener) focusEvent -> {
-            if (dimensionPropertiesList != null && dimensionPropertiesList.size() > 0) {
-                List<String> properties = new ArrayList<>();
-                for (PropertyTypeVO vo : dimensionPropertiesList) {
-                    properties.add(vo.getPropertyName());
-                }
-                dimensionPropertyComboBox.addItems(properties);
-            }
-        });
         dimensionPropertyComboBox.setRequired(true);
         form.addComponent(dimensionPropertyComboBox);
         form.setReadOnly(true);
@@ -228,8 +223,8 @@ public class CreateRulePanel extends VerticalLayout {
                 spaceNameComboBox.getValue().toString();
         final String factTypeNameValue = factNameComboBox.getValue() == null ? "" :
                 factNameComboBox.getValue().toString();
-        final String factPropertiesValue = factPropertiesComboBox.getValue() == null ? "" :
-                factPropertiesComboBox.getValue().toString();
+        final String factPropertiesValue = factPropertiesMultiSelect.getValue() == null ? "" :
+                factPropertiesMultiSelect.getValue().toString();
         final String dimensionTypeNameValue = dimensionNameComboBox.getValue() == null ? "" :
                 dimensionNameComboBox.getValue().toString();
         final String dimensionPropertyValue = dimensionPropertyComboBox.getValue() == null ? "" :
