@@ -215,6 +215,10 @@ public class CreateRulePanel extends VerticalLayout {
         return value == null || value.trim().equals("");
     }
 
+    private boolean isEmptyFactPropertiesValue(String value) {
+        return isEmptyValue(value) || value.trim().equals("[]");
+    }
+
     private void addNewRule() {
         final String ruleNameValue = ruleName.getValue();
         final String ruleTypeValue = ruleTypeComboBox.getValue() == null ? "" : ruleTypeComboBox
@@ -232,7 +236,7 @@ public class CreateRulePanel extends VerticalLayout {
         final String descriptionValue = description.getValue();
 
         if (isEmptyValue(ruleNameValue) || isEmptyValue(spaceNameValue) || isEmptyValue
-                (factTypeNameValue) || isEmptyValue(factPropertiesValue) || isEmptyValue
+                (factTypeNameValue) || isEmptyFactPropertiesValue(factPropertiesValue) || isEmptyValue
                 (dimensionTypeNameValue) || isEmptyValue(dimensionPropertyValue)) {
             Notification errorNotification = new Notification("数据校验错误",
                     "请检查 规则名称 信息发现空间 事实表名称 事实表映射属性 维度名称 维度映射属性 是否为空", Notification.Type
@@ -274,7 +278,7 @@ public class CreateRulePanel extends VerticalLayout {
 
                 String ruleId = spaceNameValue + "_" + factTypeNameValue;
                 RuleVO rule = new RuleVO(ruleId, ruleNameValue, ruleTypeValue, descriptionValue,
-                        contentStr);
+                        contentStr, false);
 
                 boolean createRuleResult = false;
                 if (RuleEngineOperationUtil.checkRuleExistence(rule.getRuleId())) {

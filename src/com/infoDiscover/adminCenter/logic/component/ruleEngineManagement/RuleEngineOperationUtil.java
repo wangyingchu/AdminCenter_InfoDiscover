@@ -9,6 +9,7 @@ import com.info.discover.ruleengine.plugins.propertymapping.PropertyMappingRuleE
 import com.infoDiscover.infoDiscoverEngine.dataMart.Fact;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
+import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.EqualFilteringItem;
 import com.infoDiscover.infoDiscoverEngine.infoDiscoverBureau.InfoDiscoverSpace;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRuntimeException;
@@ -28,6 +29,8 @@ public class RuleEngineOperationUtil {
 
         ExploreParameters ep = new ExploreParameters();
         ep.setType(RuleEngineDatabaseConstants.RuleFact);
+        ep.setDefaultFilteringItem(new EqualFilteringItem(RuleEngineDatabaseConstants
+                .FACT_DELETED, false));
 
         try {
             List<Fact> facts = executeFactQuery(infoDiscoverSpace, ep);
@@ -73,8 +76,12 @@ public class RuleEngineOperationUtil {
         return new PropertyMappingRuleEngineImpl().updateRule(rule);
     }
 
-    public static boolean deleteRule(String ruleId) {
+    public static boolean hardDeleteRule(String ruleId) {
         return new PropertyMappingRuleEngineImpl().deleteRule(ruleId);
+    }
+
+    public static boolean softDeleteRule(String ruleId) {
+        return new PropertyMappingRuleEngineImpl().deleteRule(ruleId, true);
     }
 
     public static List<Fact> executeFactQuery(InfoDiscoverSpace infoDiscoverSpace, ExploreParameters

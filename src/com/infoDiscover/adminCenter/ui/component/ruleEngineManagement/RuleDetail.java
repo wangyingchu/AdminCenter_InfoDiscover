@@ -86,7 +86,7 @@ public class RuleDetail extends VerticalLayout implements View,
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 deleteRuleConfirmDialog.close();
-                boolean deleteRuleResult = RuleEngineOperationUtil.deleteRule(self.ruleId);
+                boolean deleteRuleResult = RuleEngineOperationUtil.softDeleteRule(self.ruleId);
                 if (deleteRuleResult) {
                     RuleEngineDeletedEvent ruleDeletedEvent = new
                             RuleEngineDeletedEvent(self.ruleId);
