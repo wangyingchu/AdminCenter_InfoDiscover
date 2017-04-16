@@ -232,7 +232,7 @@ public class CreateRulePanel extends VerticalLayout {
         final String dimensionTypeNameValue = dimensionNameComboBox.getValue() == null ? "" :
                 dimensionNameComboBox.getValue().toString();
         final String dimensionPropertyValue = dimensionPropertyComboBox.getValue() == null ? "" :
-                dimensionNameComboBox.getValue().toString();
+                dimensionPropertyComboBox.getValue().toString();
         final String descriptionValue = description.getValue();
 
         if (isEmptyValue(ruleNameValue) || isEmptyValue(spaceNameValue) || isEmptyValue

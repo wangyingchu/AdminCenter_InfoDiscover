@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
         .ProcessingDataListVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.component.event.*;
@@ -70,6 +71,43 @@ public class RuleDetail extends VerticalLayout implements View,
         this.ruleGeneralInfo.setRuleName(this.ruleName);
         this.ruleGeneralInfo.setRuleId(this.ruleId);
         this.ruleGeneralInfo.renderRuleGeneralInfo(ruleVO);
+    }
+
+    public void executeRule() {
+        // do execute rule logic
+        Label confirmMessage = new Label("<span style='color:#CE0000;'><span " +
+                "style='font-weight:bold;'>" + FontAwesome.EXCLAMATION_TRIANGLE.getHtml() +
+                " 请确认是否执行规则  <b style='color:#333333;'>" + this.ruleId + "。</b>" +
+                "</span><br/>注意：此项操作将根据数据集的大小，执行一定的时间，请耐心等候。</span>", ContentMode.HTML);
+        final ConfirmDialog executeRuleConfirmDialog = new ConfirmDialog();
+        executeRuleConfirmDialog.setConfirmMessage(confirmMessage);
+        final RuleDetail self = this;
+        Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                //close confirm dialog
+                executeRuleConfirmDialog.close();
+                boolean executeRuleResult = RuleEngineOperationUtil.executeRule(self.ruleId);
+                if (executeRuleResult) {
+                    RuleEngineDeletedEvent ruleDeletedEvent = new
+                            RuleEngineDeletedEvent(self.ruleId);
+                    self.currentUserClientInfo.getEventBlackBoard().fire(ruleDeletedEvent);
+                    Notification resultNotification = new Notification("执行完成",
+                            "规则执行成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                } else {
+                    Notification errorNotification = new Notification("规则执行错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
+            }
+        };
+        executeRuleConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+        UI.getCurrent().addWindow(executeRuleConfirmDialog);
     }
 
     public void deleteRule() {

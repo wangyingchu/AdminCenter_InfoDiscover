@@ -101,7 +101,9 @@ public class RuleGeneralInfo extends VerticalLayout {
         refreshDiscoverSpaceInfoButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-
+                if (self.ruleDetail != null) {
+                    self.ruleDetail.executeRule();
+                }
             }
         });
         actionButtonsPlacementLayout.addComponent(refreshDiscoverSpaceInfoButton);
@@ -122,6 +124,7 @@ public class RuleGeneralInfo extends VerticalLayout {
                 }
             }
         });
+
         actionButtonsPlacementLayout.addComponent(deleteRuleButton);
 
         VerticalLayout spacingLayout = new VerticalLayout();

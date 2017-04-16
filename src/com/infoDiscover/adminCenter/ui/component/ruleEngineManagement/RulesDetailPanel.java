@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.ui.component.common.GeneralInfoView;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event
         .RuleEngineComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineExecutedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.ComponentContainer;
@@ -16,7 +17,7 @@ import com.vaadin.ui.VerticalLayout;
  * Created by sun.
  */
 public class RulesDetailPanel extends VerticalLayout implements RuleEngineComponentSelectedEvent.RuleEngineComponentSelectedListener,
-        RuleEngineDeletedEvent.RuleEngineDeletedListener{
+        RuleEngineDeletedEvent.RuleEngineDeletedListener, RuleEngineExecutedEvent.RuleEngineExecutedListener{
 
     private UserClientInfo currentUserClientInfo;
     private ElementStatusBar elementStatusBar;
@@ -66,4 +67,9 @@ public class RulesDetailPanel extends VerticalLayout implements RuleEngineCompon
         }
     }
 
+    @Override
+    public void receivedRuleEngineExecutedEvent(RuleEngineExecutedEvent event) {
+        this.elementStatusBar.clearRuleName();
+        contentNavigator.navigateTo(NAV_GENERAL);
+    }
 }
