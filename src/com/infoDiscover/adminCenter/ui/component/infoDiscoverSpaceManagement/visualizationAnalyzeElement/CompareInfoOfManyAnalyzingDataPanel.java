@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.vi
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyValueVO;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.dataMart.PropertyType;
 import com.vaadin.data.Container;
@@ -34,12 +35,25 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
     private MenuBar.MenuItem visualizationAnalyzeRootItem;
     private Table dataPropertiesValueCompareTable;
     private BrowserFrame dataCompareChartBrowserFrame;
+    private final static String analyzingChartBaseAddress= AdminCenterPropertyHandler.
+            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstancesDataAnalyse/";
+
+    private static final String chartType_lineChart="折线图比较";
+    private static final String chartType_radarChart="雷达图比较";
+    private static final String chartType_areaChart="面积图比较";
+    private static final String chartType_stackedAreaChart="面积图(堆叠式)比较";
+    private static final String chartType_hBarChart="横向柱状图比较";
+    private static final String chartType_stackedHBarChart="横向(堆叠式)柱状图比较";
+    private static final String chartType_vBarChart="纵向柱状图比较";
+    private static final String chartType_stackedVBarChart="纵向(堆叠式)柱状图比较";
+    private int browserWindowHeight;
 
     public CompareInfoOfManyAnalyzingDataPanel(UserClientInfo userClientInfo,String discoverSpaceName){
         this.setMargin(true);
         this.setSpacing(true);
         this.setWidth(100,Unit.PERCENTAGE);
-        this.setHeight(800,Unit.PIXELS);
+        browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
+        this.setHeight(browserWindowHeight-150,Unit.PIXELS);
         this.currentUserClientInfo = userClientInfo;
         this.discoverSpaceName=discoverSpaceName;
         this.analyzingDataCheckBoxMap=new HashMap<>();
@@ -80,7 +94,7 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
 
         Panel analyzePropertySelectorsPanel=new Panel();
         analyzePropertySelectorsPanel.setWidth(100,Unit.PERCENTAGE);
-        analyzePropertySelectorsPanel.setHeight(450,Unit.PIXELS);
+        analyzePropertySelectorsPanel.setHeight(browserWindowHeight-500,Unit.PIXELS);
         dataInfoLayout.addComponent(analyzePropertySelectorsPanel);
 
         propertyCheckboxFormLayout=new VerticalLayout();
@@ -103,10 +117,14 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
         };
 
         visualizationAnalyzeRootItem=graphDisplaySelectorMenuBar.addItem("比较已选数据", VaadinIcons.CHART_GRID, null);
-        visualizationAnalyzeRootItem.addItem("折线图比较", FontAwesome.LINE_CHART, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("雷达图比较", FontAwesome.CROSSHAIRS, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("面积图比较", VaadinIcons.SPLINE_AREA_CHART, visualizationAnalyzeMenuItemCommand);
-        visualizationAnalyzeRootItem.addItem("柱状图比较", VaadinIcons.BAR_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_lineChart, FontAwesome.LINE_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_radarChart, FontAwesome.CROSSHAIRS, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_areaChart, VaadinIcons.SPLINE_AREA_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_stackedAreaChart, VaadinIcons.SPLINE_AREA_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_hBarChart, VaadinIcons.BAR_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_stackedHBarChart, VaadinIcons.BAR_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_vBarChart, VaadinIcons.BAR_CHART, visualizationAnalyzeMenuItemCommand);
+        visualizationAnalyzeRootItem.addItem(chartType_stackedVBarChart, VaadinIcons.BAR_CHART, visualizationAnalyzeMenuItemCommand);
         visualizationAnalyzeRootItem.setEnabled(false);
 
         actionButtonsContainerLayout.addComponent(graphDisplaySelectorMenuBar);
@@ -128,7 +146,7 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
         dataInfoLayout.setExpandRatio(actionButtonsContainerLayout,1);
 
         VerticalLayout dataPropertyTableLayout=new VerticalLayout();
-        dataPropertyTableLayout.setHeight(750,Unit.PIXELS);
+        dataPropertyTableLayout.setHeight(browserWindowHeight-200,Unit.PIXELS);
         dataPropertyTableLayout.setWidth(600,Unit.PIXELS);
         this.addComponent(dataPropertyTableLayout);
 
@@ -142,7 +160,7 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
         //dataPropertiesValueCompareTable.addStyleName(ValoTheme.TABLE_BORDERLESS);
         dataPropertiesValueCompareTable.addStyleName(ValoTheme.TABLE_SMALL);
         dataPropertiesValueCompareTable.setWidth(600,Unit.PIXELS);
-        dataPropertiesValueCompareTable.setHeight(750,Unit.PIXELS);
+        dataPropertiesValueCompareTable.setHeight(browserWindowHeight-200,Unit.PIXELS);
         dataPropertyTableLayout.addComponent(dataPropertiesValueCompareTable);
         dataPropertyTableLayout.setExpandRatio(dataPropertiesValueCompareTable,1);
 
@@ -152,23 +170,10 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
 
         this.setExpandRatio(dataDetailLayout,1);
 
-        //Label xx1=new Label("CompareInfoOfManyAnalyzingDataPanel2");
-        //dataDetailLayout.addComponent(xx1);
-
-
-
-        //typeInstanceRelationsDetailGraphQueryAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
-        //        "infoAnalysePages/typeInstanceRelationAnalyse/typeInstanceRelationsExploreGraph.html?dataInstanceId="+dataInstanceQueryId+"&discoverSpace="+discoverSpaceName+"&timestamp="+timeStampPostValue;
         dataCompareChartBrowserFrame = new BrowserFrame();
         dataCompareChartBrowserFrame.setSizeFull();
-        dataCompareChartBrowserFrame.setHeight(800,Unit.PIXELS);
-        //int relationsCycleGraphHeight=dataRelationGraphBrowserFrameHeight-20;
-        //dataCompareChartBrowserFrame.setSource(new ExternalResource());
-
+        dataCompareChartBrowserFrame.setHeight(browserWindowHeight-150,Unit.PIXELS);
         dataDetailLayout.addComponent(dataCompareChartBrowserFrame);
-
-
-
     }
 
     public void addDataForCompare(ProcessingDataVO targetProcessingData){
@@ -184,7 +189,7 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
 
         List<PropertyValueVO> propertyValueList= InfoDiscoverSpaceOperationUtil.getMeasurablePropertiesById(this.discoverSpaceName,targetProcessingData.getId());
         this.dataPropertiesValueListMap.put(targetProcessingData.getId(),propertyValueList);
-        List<String> currentMeasurableProperties=getMeasurablePropertieNameList(propertyValueList);
+        List<String> currentMeasurableProperties=getMeasurablePropertiesNameList(propertyValueList);
 
         for(String currentPropertyName:currentMeasurableProperties){
             if(!this.globalMeasurablePropertiesNameList.contains(currentPropertyName)){
@@ -210,9 +215,10 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
         dataContainer.removeAllItems();
         Container queryResultDataContainer = new IndexedContainer();
         this.dataPropertiesValueCompareTable.setContainerDataSource(queryResultDataContainer);
+        dataCompareChartBrowserFrame.setSource(null);
     }
 
-    private List<String> getMeasurablePropertieNameList( List<PropertyValueVO> measurablePropertiesList){
+    private List<String> getMeasurablePropertiesNameList( List<PropertyValueVO> measurablePropertiesList){
         List<String> measurablePropertiesNameList=new ArrayList<>();
         if(measurablePropertiesList!=null){
             for(PropertyValueVO currentPropertyValueVO:measurablePropertiesList){
@@ -309,9 +315,79 @@ public class CompareInfoOfManyAnalyzingDataPanel extends HorizontalLayout {
     }
 
     private void renderCompareDataPropertiesChart(List<String> dataIdList,List<String> dataPropertiesNameList,String chartType){
-        System.out.println(dataIdList);
-        System.out.println(dataPropertiesNameList);
-        System.out.println(chartType);
-        this.dataCompareChartBrowserFrame.setSource(new ExternalResource("http://localhost:8080/infoAnalysePages/typeInstancesDataAnalyse/measurableInstanceDataExhibition_highcharts_LineChart.html?discoverSpace=chartDS&graphHeight=700&measurableIds=%2341%3a0,%2341%3a1,%2341%3a2&lineProperties=int01,long01,float03,double01,int02,double02,double03,long02,long03&chartType=polar"));
+        StringBuffer dataIdsListStr=new StringBuffer();
+        for(int i=0;i<dataIdList.size();i++){
+            String currentDataId=dataIdList.get(i);
+            String enCodedID=currentDataId.replaceFirst("#","%23").replaceFirst(":","%3a");
+            if(i!=dataIdList.size()-1){
+                dataIdsListStr.append(enCodedID+",");
+            }else{
+                dataIdsListStr.append(enCodedID);
+            }
+        }
+        StringBuffer propertiesListStr=new StringBuffer();
+        for(int i=0;i<dataPropertiesNameList.size();i++){
+            String currentProperty=dataPropertiesNameList.get(i);
+            if(i!=dataPropertiesNameList.size()-1){
+                propertiesListStr.append(currentProperty+",");
+            }else{
+                propertiesListStr.append(currentProperty);
+            }
+        }
+
+        String basicChartLocationAddress=null;
+        if(chartType_lineChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_LineChart.html";
+        }
+        if(chartType_radarChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_LineChart.html";
+        }
+        if(chartType_areaChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_AreaChart.html";
+        }
+        if(chartType_stackedAreaChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_AreaChart.html";
+        }
+        if(chartType_hBarChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_BarChart.html";
+        }
+        if(chartType_vBarChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_BarChart.html";
+        }
+
+        if(chartType_stackedVBarChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_BarChart.html";
+        }
+        if(chartType_stackedHBarChart.equals(chartType)){
+            basicChartLocationAddress=this.analyzingChartBaseAddress+"measurableInstanceDataExhibition_highcharts_BarChart.html";
+        }
+
+        basicChartLocationAddress=basicChartLocationAddress+"?discoverSpace="+this.discoverSpaceName+"&measurableIds="+dataIdsListStr.toString();
+        basicChartLocationAddress=basicChartLocationAddress+"&lineProperties="+propertiesListStr.toString();
+
+        if(chartType_radarChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&chartType=polar";
+        }
+        if(chartType_stackedAreaChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&areaType=stacked";
+        }
+
+        if(chartType_hBarChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&barDirection=h";
+        }
+        if(chartType_vBarChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&barDirection=v";
+        }
+        if(chartType_stackedHBarChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&barDirection=h&barType=stacked";
+        }
+        if(chartType_stackedVBarChart.equals(chartType)){
+            basicChartLocationAddress=basicChartLocationAddress+"&barDirection=v&barType=stacked";
+        }
+
+        long timeStampPostValue=new Date().getTime();
+        basicChartLocationAddress=basicChartLocationAddress+"&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-200);
+
+        this.dataCompareChartBrowserFrame.setSource(new ExternalResource(basicChartLocationAddress));
     }
 }
