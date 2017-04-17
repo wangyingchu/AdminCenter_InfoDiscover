@@ -3,8 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 import com.info.discover.ruleengine.base.vo.RuleVO;
 import com.info.discover.ruleengine.plugins.propertymapping.PropertyMappingInitializer;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
-import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event
-        .RuleEngineComponentSelectedEvent;
+import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineCreatedEvent;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineDeletedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
