@@ -1,8 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
 import com.info.discover.ruleengine.base.vo.RuleVO;
-import com.info.discover.ruleengine.manager.database.DataSpaceManager;
-import com.info.discover.ruleengine.plugins.propertymapping.Execution;
+import com.info.discover.ruleengine.plugins.propertymapping.PropertyMappingInitializer;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event
         .RuleEngineComponentSelectedEvent;
@@ -34,7 +33,7 @@ public class RulesList extends VerticalLayout implements RuleEngineComponentSele
 
         // check if RuleEngine is initialized
         if (!RuleEngineOperationUtil.checkRuleEngineDataSpaceExistence()) {
-            Execution.initRuleEngine();
+            PropertyMappingInitializer.initRuleEngine();
         }
 
         renderRulesList();
