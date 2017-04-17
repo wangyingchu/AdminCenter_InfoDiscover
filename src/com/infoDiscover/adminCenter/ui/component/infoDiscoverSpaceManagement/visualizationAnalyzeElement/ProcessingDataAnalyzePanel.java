@@ -30,6 +30,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
     private Map<String,List<ProcessingDataVO>> processingDataMapForAnalyzing;
+    private Map<String,TabSheet.Tab> actionPanelTabKeyMap;
     private List<ProcessingDataVO> processingDimensionsForAnalyzing;
     private List<ProcessingDataVO> processingFactsForAnalyzing;
     private List<ProcessingDataVO> processingRelationsForAnalyzing;
@@ -40,6 +41,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private final static String DiscoverSpaceName_PROPERTY="DiscoverSpaceName_PROPERTY";
 
     private final static String exploreRelatedInfoActionName = "探索本数据项关联的数据信息";
+    private final static String exploreSimilarInfoActionName = "探索与本数据项相似的数据信息";
     private final static String findRelationInfoOfTwoItemAction_1Name = "发现本数据项与另一数据项的关联信息 (1)";
     private final static String findRelationInfoOfTwoItemAction_2Name = "发现本数据项与另一数据项的关联信息 (2)";
     private final static String compareInfoOfManyItemsActionName = "比较本数据项与其他数据项的属性信息";
@@ -47,9 +49,9 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
     private final static String exploreRelationDataInfoActionName = "探索本关系关联的数据信息";
     private final static String exploreRelatedInfoTabNamePerfix="事实关联数据探索-";
     private final static String exploreRelationDataInfoTabNamePerfix="关系关联数据探索-";
+    private final static String exploreSimilarInfoTabNamePerfix="事实相似数据探索-";
 
     private TabSheet dataAnalyzePageTabs;
-    private Map<String,TabSheet.Tab> exploreRelatedInfoActionLayoutTabMap;
     private Tree processingDataTree;
 
     private String factDataRootItemId="processingDataInstance_Fact";
@@ -212,13 +214,14 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 }
                 Action showDataDetailInfoAction = new Action(showDataDetailInfoActionName, FontAwesome.EYE);
                 Action exploreRelatedInfoAction = new Action(exploreRelatedInfoActionName, VaadinIcons.CLUSTER);
+                Action exploreSimilarInfoAction = new Action(exploreSimilarInfoActionName,VaadinIcons.FLIP_H);
                 Action findRelationInfoOfTwoItem_1Action = new Action(findRelationInfoOfTwoItemAction_1Name, VaadinIcons.SPECIALIST);
                 Action findRelationInfoOfTwoItem_2Action = new Action(findRelationInfoOfTwoItemAction_2Name, VaadinIcons.SPECIALIST);
                 Action compareInfoOfManyItemsAction = new Action(compareInfoOfManyItemsActionName, VaadinIcons.SCALE_UNBALANCE);
                 Action exploreRelationDataInfoAction = new Action(exploreRelationDataInfoActionName, VaadinIcons.GLASSES);
 
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT.equals(dataKind)){
-                    return new Action[]{exploreRelatedInfoAction,findRelationInfoOfTwoItem_1Action,findRelationInfoOfTwoItem_2Action,compareInfoOfManyItemsAction,showDataDetailInfoAction};
+                    return new Action[]{exploreRelatedInfoAction,exploreSimilarInfoAction,findRelationInfoOfTwoItem_1Action,findRelationInfoOfTwoItem_2Action,compareInfoOfManyItemsAction,showDataDetailInfoAction};
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataKind)){
                     return new Action[]{exploreRelatedInfoAction,showDataDetailInfoAction};
@@ -267,19 +270,25 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 if(component instanceof ExploreProcessingDataRelatedInfoPanel){
                     ExploreProcessingDataRelatedInfoPanel currentPanel=(ExploreProcessingDataRelatedInfoPanel)component;
                     String currentTabNameKey=exploreRelatedInfoTabNamePerfix+currentPanel.getProcessingData().getId();
-                    exploreRelatedInfoActionLayoutTabMap.remove(currentTabNameKey);
+                    actionPanelTabKeyMap.remove(currentTabNameKey);
                     tabSheet.removeComponent(component);
                 }
                 if(component instanceof ExploreRelationRelatedDataInfoPanel){
                     ExploreRelationRelatedDataInfoPanel currentPanel=(ExploreRelationRelatedDataInfoPanel)component;
                     String currentTabNameKey=exploreRelationDataInfoTabNamePerfix+currentPanel.getProcessingData().getId();
-                    exploreRelatedInfoActionLayoutTabMap.remove(currentTabNameKey);
+                    actionPanelTabKeyMap.remove(currentTabNameKey);
+                    tabSheet.removeComponent(component);
+                }
+                if(component instanceof ExploreProcessingDataSimilarInfoPanel){
+                    ExploreProcessingDataSimilarInfoPanel currentPanel=(ExploreProcessingDataSimilarInfoPanel)component;
+                    String currentTabNameKey=exploreSimilarInfoTabNamePerfix+currentPanel.getProcessingData().getId();
+                    actionPanelTabKeyMap.remove(currentTabNameKey);
                     tabSheet.removeComponent(component);
                 }
             }
         });
 
-        this.exploreRelatedInfoActionLayoutTabMap=new HashMap<>();
+        this.actionPanelTabKeyMap =new HashMap<>();
     }
 
     private String getProcessingDataKind(String dataId){
@@ -352,7 +361,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
         }
         if(exploreRelatedInfoActionName.equals(analyzeCommandName)){
             String tabCaption=exploreRelatedInfoTabNamePerfix+dataItemId;
-            TabSheet.Tab alreadyExistTab=this.exploreRelatedInfoActionLayoutTabMap.get(tabCaption);
+            TabSheet.Tab alreadyExistTab=this.actionPanelTabKeyMap.get(tabCaption);
             if(alreadyExistTab!=null){
                 dataAnalyzePageTabs.setSelectedTab(alreadyExistTab);
             }else{
@@ -361,13 +370,26 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 exploreRelatedInfoActionLayoutTab.setClosable(true);
                 exploreRelatedInfoActionLayoutTab.setIcon(VaadinIcons.CLUSTER);
                 dataAnalyzePageTabs.setSelectedTab(exploreRelatedInfoActionLayoutTab);
-                this.exploreRelatedInfoActionLayoutTabMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
+                this.actionPanelTabKeyMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
+            }
+        }else if(exploreSimilarInfoActionName.equals(analyzeCommandName)){
+            String tabCaption=exploreSimilarInfoTabNamePerfix+dataItemId;
+            TabSheet.Tab alreadyExistTab=this.actionPanelTabKeyMap.get(tabCaption);
+            if(alreadyExistTab!=null){
+                dataAnalyzePageTabs.setSelectedTab(alreadyExistTab);
+            }else{
+                ExploreProcessingDataSimilarInfoPanel exploreProcessingDataSimilarInfoPanel=new ExploreProcessingDataSimilarInfoPanel(this.currentUserClientInfo,targetProcessingDataVO);
+                TabSheet.Tab exploreSimilarInfoActionLayoutTab = dataAnalyzePageTabs.addTab(exploreProcessingDataSimilarInfoPanel, exploreSimilarInfoTabNamePerfix+dataItemId);
+                exploreSimilarInfoActionLayoutTab.setClosable(true);
+                exploreSimilarInfoActionLayoutTab.setIcon(VaadinIcons.FLIP_H);
+                dataAnalyzePageTabs.setSelectedTab(exploreSimilarInfoActionLayoutTab);
+                this.actionPanelTabKeyMap.put(tabCaption,exploreSimilarInfoActionLayoutTab);
             }
         }else if(showDataDetailInfoActionName.equals(analyzeCommandName)){
             showDataDetailInfoPanel(targetProcessingDataVO);
         }else if(exploreRelationDataInfoActionName.equals(analyzeCommandName)){
             String tabCaption=exploreRelationDataInfoTabNamePerfix+dataItemId;
-            TabSheet.Tab alreadyExistTab=this.exploreRelatedInfoActionLayoutTabMap.get(tabCaption);
+            TabSheet.Tab alreadyExistTab=this.actionPanelTabKeyMap.get(tabCaption);
             if(alreadyExistTab!=null){
                 dataAnalyzePageTabs.setSelectedTab(alreadyExistTab);
             }else{
@@ -376,7 +398,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                 exploreRelatedInfoActionLayoutTab.setClosable(true);
                 exploreRelatedInfoActionLayoutTab.setIcon(VaadinIcons.GLASSES);
                 dataAnalyzePageTabs.setSelectedTab(exploreRelatedInfoActionLayoutTab);
-                this.exploreRelatedInfoActionLayoutTabMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
+                this.actionPanelTabKeyMap.put(tabCaption,exploreRelatedInfoActionLayoutTab);
 
             }
         }else if(findRelationInfoOfTwoItemAction_1Name.equals(analyzeCommandName)){
