@@ -36,6 +36,16 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String TYPEKIND_AliasNameFactType="TypeKind_AliasName";
     public static final String TYPEPROPERTY_AliasNameFactType="TypeProperty_AliasName";
 
+    public static final String MetaConfig_PropertyName_DiscoverSpace="discoverSpace";
+    public static final String MetaConfig_PropertyName_TypeKind="typeKind";
+    public static final String MetaConfig_PropertyName_TypeName="typeName";
+    public static final String MetaConfig_PropertyName_TypeAliasName="typeAliasName";
+    public static final String MetaConfig_PropertyName_TypePropertyName="typePropertyName";
+    public static final String MetaConfig_PropertyName_TypePropertyAliasName="typePropertyAliasName";
+
+    private static HashMap<String,String> TYPEKIND_AliasNameMap=new HashMap<>();
+    private static HashMap<String,String> TypeProperty_AliasNameMap=new HashMap<>();
+
     public static boolean checkDiscoverSpaceExistence(String spaceName){
         return DiscoverEngineComponentFactory.checkDiscoverSpaceExistence(spaceName);
     }
@@ -84,7 +94,7 @@ public class InfoDiscoverSpaceOperationUtil {
             if(rootDimensionTypesList!=null){
                 for(String currentDimensionTypeName:rootDimensionTypesList){
                     DimensionType currentDimensionType=targetSpace.getDimensionType(currentDimensionTypeName);
-                    DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(currentDimensionType,dimensionsStatisticMetrics);
+                    DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(spaceName,currentDimensionType,dimensionsStatisticMetrics);
                     childDimensionTypesVOList.add(currentDimensionTypeVO);
                 }
             }
@@ -114,7 +124,7 @@ public class InfoDiscoverSpaceOperationUtil {
             if(rootRelationTypesList!=null){
                 for(String currentRelationTypeName:rootRelationTypesList){
                     RelationType currentRelationType=targetSpace.getRelationType(currentRelationTypeName);
-                    RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(currentRelationType, relationsStatisticMetrics);
+                    RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(spaceName,currentRelationType, relationsStatisticMetrics);
                     childRelationTypesVOList.add(currentRelationTypeVO);
                 }
             }
@@ -135,7 +145,7 @@ public class InfoDiscoverSpaceOperationUtil {
             }else{
                 List<DataTypeStatisticMetrics> dimensionsStatisticMetrics=discoverSpaceStatisticMetrics.getDimensionsStatisticMetrics();
                 DimensionType currentDimensionType=targetSpace.getDimensionType(dimensionTypeName);
-                DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(currentDimensionType,dimensionsStatisticMetrics);
+                DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(spaceName,currentDimensionType,dimensionsStatisticMetrics);
                 return currentDimensionTypeVO;
             }
         }finally {
@@ -154,7 +164,7 @@ public class InfoDiscoverSpaceOperationUtil {
             }else{
                 List<DataTypeStatisticMetrics> relationsStatisticMetrics=discoverSpaceStatisticMetrics.getRelationsStatisticMetrics();
                 RelationType currentRelationType=targetSpace.getRelationType(relationTypeName);
-                RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(currentRelationType, relationsStatisticMetrics);
+                RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(spaceName,currentRelationType, relationsStatisticMetrics);
                 return currentRelationTypeVO;
             }
         }finally {
@@ -164,9 +174,10 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
-    private static DimensionTypeVO retrieveDimensionTypeRuntimeInfo(DimensionType targetDimensionType,List<DataTypeStatisticMetrics> dimensionsStatisticMetrics){
+    private static DimensionTypeVO retrieveDimensionTypeRuntimeInfo(String discoverSpaceName,DimensionType targetDimensionType,List<DataTypeStatisticMetrics> dimensionsStatisticMetrics){
         DimensionTypeVO targetDimensionTypeVO=new DimensionTypeVO();
         targetDimensionTypeVO.setTypeName(targetDimensionType.getTypeName());
+        targetDimensionTypeVO.setTypeAliasName(getTypeKindAliasName(discoverSpaceName,TYPEKIND_DIMENSION,targetDimensionType.getTypeName()));
         if(targetDimensionType.getDescendantDimensionTypes()!=null){
             targetDimensionTypeVO.setDescendantDimensionTypesNumber(targetDimensionType.getDescendantDimensionTypes().size());
         }
@@ -182,16 +193,17 @@ public class InfoDiscoverSpaceOperationUtil {
         List<DimensionType> childDimensionTypesList=targetDimensionType.getChildDimensionTypes();
         if(childDimensionTypesList!=null){
             for(DimensionType currentDimensionType:childDimensionTypesList){
-                DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(currentDimensionType,dimensionsStatisticMetrics);
+                DimensionTypeVO currentDimensionTypeVO=retrieveDimensionTypeRuntimeInfo(discoverSpaceName,currentDimensionType,dimensionsStatisticMetrics);
                 childDimensionTypesVOList.add(currentDimensionTypeVO);
             }
         }
         return targetDimensionTypeVO;
     }
 
-    private static RelationTypeVO retrieveRelationTypeRuntimeInfo(RelationType targetRelationType,List<DataTypeStatisticMetrics> relationsStatisticMetrics){
+    private static RelationTypeVO retrieveRelationTypeRuntimeInfo(String discoverSpaceName,RelationType targetRelationType,List<DataTypeStatisticMetrics> relationsStatisticMetrics){
         RelationTypeVO targetRelationTypeVO=new RelationTypeVO();
         targetRelationTypeVO.setTypeName(targetRelationType.getTypeName());
+        targetRelationTypeVO.setTypeAliasName(getTypeKindAliasName(discoverSpaceName,TYPEKIND_RELATION,targetRelationType.getTypeName()));
         if(targetRelationType.getDescendantRelationTypes()!=null){
             targetRelationTypeVO.setDescendantRelationTypesNumber(targetRelationType.getDescendantRelationTypes().size());
         }
@@ -207,7 +219,7 @@ public class InfoDiscoverSpaceOperationUtil {
         List<RelationType> childRelationTypesList=targetRelationType.getChildRelationTypes();
         if(childRelationTypesList!=null){
             for(RelationType currentRelationType:childRelationTypesList){
-                RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(currentRelationType, relationsStatisticMetrics);
+                RelationTypeVO currentRelationTypeVO=retrieveRelationTypeRuntimeInfo(discoverSpaceName,currentRelationType, relationsStatisticMetrics);
                 childRelationTypesVOList.add(currentRelationTypeVO);
             }
         }
@@ -231,6 +243,8 @@ public class InfoDiscoverSpaceOperationUtil {
                         currentTypeProperty.isNullable();
                         PropertyTypeVO currentPropertyTypeVO=new PropertyTypeVO();
                         currentPropertyTypeVO.setPropertyName(currentTypeProperty.getPropertyName());
+                        currentPropertyTypeVO.setPropertyAliasName(getTypePropertyAliasName(spaceName,
+                                TYPEKIND_DIMENSION,dimensionTypeName,currentTypeProperty.getPropertyName()));
                         currentPropertyTypeVO.setPropertyType(""+currentTypeProperty.getPropertyType());
                         currentPropertyTypeVO.setMandatory(currentTypeProperty.isMandatory());
                         currentPropertyTypeVO.setNullable(currentTypeProperty.isNullable());
@@ -265,6 +279,8 @@ public class InfoDiscoverSpaceOperationUtil {
                         currentTypeProperty.isNullable();
                         PropertyTypeVO currentPropertyTypeVO=new PropertyTypeVO();
                         currentPropertyTypeVO.setPropertyName(currentTypeProperty.getPropertyName());
+                        currentPropertyTypeVO.setPropertyAliasName(getTypePropertyAliasName(spaceName,
+                                TYPEKIND_RELATION,relationTypeName,currentTypeProperty.getPropertyName()));
                         currentPropertyTypeVO.setPropertyType(""+currentTypeProperty.getPropertyType());
                         currentPropertyTypeVO.setMandatory(currentTypeProperty.isMandatory());
                         currentPropertyTypeVO.setNullable(currentTypeProperty.isNullable());
@@ -299,6 +315,8 @@ public class InfoDiscoverSpaceOperationUtil {
                         currentTypeProperty.isNullable();
                         PropertyTypeVO currentPropertyTypeVO=new PropertyTypeVO();
                         currentPropertyTypeVO.setPropertyName(currentTypeProperty.getPropertyName());
+                        currentPropertyTypeVO.setPropertyAliasName(getTypePropertyAliasName(spaceName,
+                                TYPEKIND_FACT,factTypeName,currentTypeProperty.getPropertyName()));
                         currentPropertyTypeVO.setPropertyType(""+currentTypeProperty.getPropertyType());
                         currentPropertyTypeVO.setMandatory(currentTypeProperty.isMandatory());
                         currentPropertyTypeVO.setNullable(currentTypeProperty.isNullable());
@@ -1902,22 +1920,24 @@ public class InfoDiscoverSpaceOperationUtil {
             metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
             if(!metaConfigSpace.hasFactType(TYPEKIND_AliasNameFactType)){
                 FactType typeKindAliasNameFactType=metaConfigSpace.addFactType(TYPEKIND_AliasNameFactType);
-                TypeProperty discoverSpaceProperty=typeKindAliasNameFactType.addTypeProperty("discoverSpace",PropertyType.STRING);
+                TypeProperty discoverSpaceProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_DiscoverSpace,PropertyType.STRING);
                 discoverSpaceProperty.setMandatory(true);
-                TypeProperty typeKindProperty=typeKindAliasNameFactType.addTypeProperty("typeKind",PropertyType.STRING);
+                TypeProperty typeKindProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypeKind,PropertyType.STRING);
                 typeKindProperty.setMandatory(true);
-                TypeProperty typeNameProperty=typeKindAliasNameFactType.addTypeProperty("typeName",PropertyType.STRING);
+                TypeProperty typeNameProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypeName,PropertyType.STRING);
                 typeNameProperty.setMandatory(true);
-                TypeProperty typeAliasNameProperty=typeKindAliasNameFactType.addTypeProperty("typeAliasName",PropertyType.STRING);
+                TypeProperty typeAliasNameProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypeAliasName,PropertyType.STRING);
                 typeAliasNameProperty.setMandatory(true);
             }
             Fact typeKind_AliasNameFact=DiscoverEngineComponentFactory.createFact(TYPEKIND_AliasNameFactType);
-            typeKind_AliasNameFact.setInitProperty("discoverSpace",spaceName);
-            typeKind_AliasNameFact.setInitProperty("typeKind",typeKind);
-            typeKind_AliasNameFact.setInitProperty("typeName",typeName);
-            typeKind_AliasNameFact.setInitProperty("typeAliasName",typeAliasName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_DiscoverSpace,spaceName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypeKind,typeKind);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypeName,typeName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypeAliasName,typeAliasName);
             Fact resultRecord=metaConfigSpace.addFact(typeKind_AliasNameFact);
             if(resultRecord!=null){
+                String recordKey=spaceName+"_"+typeKind+"_"+typeName;
+                TYPEKIND_AliasNameMap.put(recordKey,typeAliasName);
                 return true;
             }
         } catch (InfoDiscoveryEngineDataMartException e) {
@@ -1939,9 +1959,9 @@ public class InfoDiscoverSpaceOperationUtil {
             metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
             ExploreParameters typeKindRecordEP = new ExploreParameters();
             typeKindRecordEP.setType(TYPEKIND_AliasNameFactType);
-            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem("discoverSpace", spaceName));
-            typeKindRecordEP.addFilteringItem(new EqualFilteringItem("typeKind", typeKind), ExploreParameters.FilteringLogic.AND);
-            typeKindRecordEP.addFilteringItem(new EqualFilteringItem("typeName", typeName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeKind, typeKind), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeName, typeName), ExploreParameters.FilteringLogic.AND);
             typeKindRecordEP.setResultNumber(1000000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();
             List<Fact> typeAliasRecordFact = ie.discoverFacts(typeKindRecordEP);
@@ -1950,17 +1970,27 @@ public class InfoDiscoverSpaceOperationUtil {
                     metaConfigSpace.removeFact(currentRecordFact.getId());
                 }
             }
+            String recordKey=spaceName+"_"+typeKind+"_"+typeName;
+            TYPEKIND_AliasNameMap.remove(recordKey);
+
             typeKindRecordEP.setType(TYPEPROPERTY_AliasNameFactType);
             List<Fact> propertyAliasRecordFact = ie.discoverFacts(typeKindRecordEP);
             if(propertyAliasRecordFact!=null) {
                 for (Fact currentRecordFact : propertyAliasRecordFact) {
+                    String propertyName=currentRecordFact.getProperty(MetaConfig_PropertyName_TypePropertyName).getPropertyValue().toString();
+                    String propertyRecordKey=spaceName+"_"+typeKind+"_"+typeName+"_"+propertyName;
                     metaConfigSpace.removeFact(currentRecordFact.getId());
+                    TypeProperty_AliasNameMap.remove(propertyRecordKey);
                 }
             }
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
         }
     }
 
@@ -1971,26 +2001,28 @@ public class InfoDiscoverSpaceOperationUtil {
             metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
             if(!metaConfigSpace.hasFactType(TYPEPROPERTY_AliasNameFactType)){
                 FactType typeKindAliasNameFactType=metaConfigSpace.addFactType(TYPEPROPERTY_AliasNameFactType);
-                TypeProperty discoverSpaceProperty=typeKindAliasNameFactType.addTypeProperty("discoverSpace",PropertyType.STRING);
+                TypeProperty discoverSpaceProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_DiscoverSpace,PropertyType.STRING);
                 discoverSpaceProperty.setMandatory(true);
-                TypeProperty typeKindProperty=typeKindAliasNameFactType.addTypeProperty("typeKind",PropertyType.STRING);
+                TypeProperty typeKindProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypeKind,PropertyType.STRING);
                 typeKindProperty.setMandatory(true);
-                TypeProperty typeNameProperty=typeKindAliasNameFactType.addTypeProperty("typeName",PropertyType.STRING);
+                TypeProperty typeNameProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypeName,PropertyType.STRING);
                 typeNameProperty.setMandatory(true);
-                TypeProperty typePropertyNameProperty=typeKindAliasNameFactType.addTypeProperty("typePropertyName",PropertyType.STRING);
+                TypeProperty typePropertyNameProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypePropertyName,PropertyType.STRING);
                 typePropertyNameProperty.setMandatory(true);
-                TypeProperty typePropertyAliasNameProperty=typeKindAliasNameFactType.addTypeProperty("typePropertyAliasName",PropertyType.STRING);
+                TypeProperty typePropertyAliasNameProperty=typeKindAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_TypePropertyAliasName,PropertyType.STRING);
                 typePropertyAliasNameProperty.setMandatory(true);
 
             }
             Fact typeKind_AliasNameFact=DiscoverEngineComponentFactory.createFact(TYPEPROPERTY_AliasNameFactType);
-            typeKind_AliasNameFact.setInitProperty("discoverSpace",spaceName);
-            typeKind_AliasNameFact.setInitProperty("typeKind",typeKind);
-            typeKind_AliasNameFact.setInitProperty("typeName",typeName);
-            typeKind_AliasNameFact.setInitProperty("typePropertyName",typePropertyName);
-            typeKind_AliasNameFact.setInitProperty("typePropertyAliasName",typePropertyAliasName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_DiscoverSpace,spaceName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypeKind,typeKind);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypeName,typeName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypePropertyName,typePropertyName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_TypePropertyAliasName,typePropertyAliasName);
             Fact resultRecord=metaConfigSpace.addFact(typeKind_AliasNameFact);
             if(resultRecord!=null){
+                String propertyRecordKey=spaceName+"_"+typeKind+"_"+typeName+"_"+typePropertyName;
+                TypeProperty_AliasNameMap.put(propertyRecordKey,typePropertyAliasName);
                 return true;
             }
         } catch (InfoDiscoveryEngineDataMartException e) {
@@ -2012,10 +2044,10 @@ public class InfoDiscoverSpaceOperationUtil {
             metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
             ExploreParameters typeKindRecordEP = new ExploreParameters();
             typeKindRecordEP.setType(TYPEPROPERTY_AliasNameFactType);
-            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem("discoverSpace", spaceName));
-            typeKindRecordEP.addFilteringItem(new EqualFilteringItem("typeKind", typeKind), ExploreParameters.FilteringLogic.AND);
-            typeKindRecordEP.addFilteringItem(new EqualFilteringItem("typeName", typeName), ExploreParameters.FilteringLogic.AND);
-            typeKindRecordEP.addFilteringItem(new EqualFilteringItem("typePropertyName", typePropertyName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeKind, typeKind), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeName, typeName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypePropertyName, typePropertyName), ExploreParameters.FilteringLogic.AND);
             typeKindRecordEP.setResultNumber(1000000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();
             List<Fact> typeAliasRecordFact = ie.discoverFacts(typeKindRecordEP);
@@ -2024,11 +2056,91 @@ public class InfoDiscoverSpaceOperationUtil {
                     metaConfigSpace.removeFact(currentRecordFact.getId());
                 }
             }
+            String propertyRecordKey=spaceName+"_"+typeKind+"_"+typeName+"_"+typePropertyName;
+            TypeProperty_AliasNameMap.remove(propertyRecordKey);
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
         }
     }
 
+    public static String getTypeKindAliasName(String spaceName,String typeKind,String typeName){
+        String typeKindRecordKey=spaceName+"_"+typeKind+"_"+typeName;
+        if(TYPEKIND_AliasNameMap.get(typeKindRecordKey)!=null){
+            return TYPEKIND_AliasNameMap.get(typeKindRecordKey);
+        }
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            ExploreParameters typeKindRecordEP = new ExploreParameters();
+            typeKindRecordEP.setType(TYPEKIND_AliasNameFactType);
+            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeKind, typeKind), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeName, typeName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.setResultNumber(1);
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+            List<Fact> typeAliasRecordFactsList = ie.discoverFacts(typeKindRecordEP);
+            if(typeAliasRecordFactsList!=null) {
+                if(typeAliasRecordFactsList.size()>0){
+                    Fact targetFact=typeAliasRecordFactsList.get(0);
+                    String typeKindAliasName=targetFact.getProperty(MetaConfig_PropertyName_TypeAliasName).getPropertyValue().toString();
+                    TYPEKIND_AliasNameMap.put(typeKindRecordKey,typeKindAliasName);
+                    return typeKindAliasName;
+                }
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return null;
+    }
+
+    public static String getTypePropertyAliasName(String spaceName,String typeKind,String typeName,String typePropertyName) {
+        String propertyRecordKey=spaceName+"_"+typeKind+"_"+typeName+"_"+typePropertyName;
+        if(TypeProperty_AliasNameMap.get(propertyRecordKey)!=null){
+            return TypeProperty_AliasNameMap.get(propertyRecordKey);
+        }
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            ExploreParameters typeKindRecordEP = new ExploreParameters();
+            typeKindRecordEP.setType(TYPEPROPERTY_AliasNameFactType);
+            typeKindRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeKind, typeKind), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypeName, typeName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TypePropertyName, typePropertyName), ExploreParameters.FilteringLogic.AND);
+            typeKindRecordEP.setResultNumber(1);
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+            List<Fact> typePropertyAliasRecordFact = ie.discoverFacts(typeKindRecordEP);
+            if(typePropertyAliasRecordFact!=null) {
+                if(typePropertyAliasRecordFact.size()>0){
+                    Fact targetFact=typePropertyAliasRecordFact.get(0);
+                    String typeKindAliasName=targetFact.getProperty(MetaConfig_PropertyName_TypePropertyAliasName).getPropertyValue().toString();
+                    TypeProperty_AliasNameMap.put(propertyRecordKey,typeKindAliasName);
+                    return typeKindAliasName;
+                }
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return null;
+    }
 }

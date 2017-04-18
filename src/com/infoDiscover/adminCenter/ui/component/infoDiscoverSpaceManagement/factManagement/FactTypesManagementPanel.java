@@ -249,7 +249,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
             long factTypeDataCount=currentMetrics.getTypeDataCount();
             Object[] rootFactTypeInfo=new Object[]{
                     factTypeName,
-                    "need replaced with alias name",
+                    InfoDiscoverSpaceOperationUtil.getTypeKindAliasName(discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,factTypeName),
                     ""+ factTypeDataCount
             };
             final Object currentFactTypeInfoKey = this.factTypesTreeTable.addItem(rootFactTypeInfo, null);
