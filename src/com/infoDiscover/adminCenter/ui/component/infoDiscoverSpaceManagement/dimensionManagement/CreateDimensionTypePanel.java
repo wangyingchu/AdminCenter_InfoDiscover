@@ -123,6 +123,15 @@ public class CreateDimensionTypePanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        final String dimensionTypeAliasNameStr= dimensionTypeAliasName.getValue();
+        if(dimensionTypeAliasNameStr==null||dimensionTypeAliasNameStr.trim().equals("")){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "请输入类型别名名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         //do add new logic
         Label confirmMessage=null;
         if(getParentDimensionType().equals(InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME)){
@@ -142,7 +151,7 @@ public class CreateDimensionTypePanel extends VerticalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 addDimensionTypeConfirmDialog.close();
-                boolean createDimensionTypeResult=InfoDiscoverSpaceOperationUtil.createDimensionType(getDiscoverSpaceName(),dimensionTypeNameStr,getParentDimensionType());
+                boolean createDimensionTypeResult=InfoDiscoverSpaceOperationUtil.createDimensionType(getDiscoverSpaceName(),dimensionTypeNameStr,dimensionTypeAliasNameStr,getParentDimensionType());
                 if(createDimensionTypeResult){
                     self.containerDialog.close();
                     getDimensionTypesManagementPanel().updateDimensionTypesInfo(getParentDimensionType(),dimensionTypeNameStr,false);

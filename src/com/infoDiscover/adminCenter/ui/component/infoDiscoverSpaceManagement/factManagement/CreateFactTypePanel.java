@@ -114,6 +114,15 @@ public class CreateFactTypePanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        final String factTypeAliasNameStr= factTypeAliasName.getValue();
+        if(factTypeAliasNameStr==null||factTypeAliasNameStr.trim().equals("")){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "请输入类型别名名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         //do add new logic
         Label confirmMessage= new Label(FontAwesome.INFO.getHtml()+ " 请确认创建事实类型  <b>"+factTypeNameStr +"</b>.", ContentMode.HTML);
         final ConfirmDialog addFactTypeConfirmDialog = new ConfirmDialog();
@@ -123,7 +132,7 @@ public class CreateFactTypePanel extends VerticalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 addFactTypeConfirmDialog.close();
-                boolean createFactTypeResult=InfoDiscoverSpaceOperationUtil.createFactType(getDiscoverSpaceName(), factTypeNameStr);
+                boolean createFactTypeResult=InfoDiscoverSpaceOperationUtil.createFactType(getDiscoverSpaceName(), factTypeNameStr,factTypeAliasNameStr);
                 if(createFactTypeResult){
                     containerDialog.close();
                     getFactTypesManagementPanel().updateFactTypesInfo(factTypeNameStr, false);

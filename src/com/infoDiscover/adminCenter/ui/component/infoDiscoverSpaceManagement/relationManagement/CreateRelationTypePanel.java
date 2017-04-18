@@ -124,6 +124,15 @@ public class CreateRelationTypePanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        final String relationTypeAliasNameStr= relationTypeAliasName.getValue();
+        if(relationTypeAliasNameStr==null||relationTypeAliasNameStr.trim().equals("")){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "请输入类型别名名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         //do add new logic
         Label confirmMessage=null;
         if(getParentRelationType().equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
@@ -142,7 +151,7 @@ public class CreateRelationTypePanel extends VerticalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 addRelationTypeConfirmDialog.close();
-                boolean createRelationTypeResult=InfoDiscoverSpaceOperationUtil.createRelationType(getDiscoverSpaceName(),relationTypeNameStr, getParentRelationType());
+                boolean createRelationTypeResult=InfoDiscoverSpaceOperationUtil.createRelationType(getDiscoverSpaceName(),relationTypeNameStr,relationTypeAliasNameStr, getParentRelationType());
                 if(createRelationTypeResult){
                     containerDialog.close();
                     getRelationTypesManagementPanel().updateRelationTypesInfo(getParentRelationType(), relationTypeNameStr, false);

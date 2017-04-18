@@ -349,7 +349,7 @@ public class InfoDiscoverSpaceOperationUtil {
         }
     }
 
-    public static boolean createDimensionType(String spaceName, String dimensionTypeName,String parentDimensionTypeName){
+    public static boolean createDimensionType(String spaceName, String dimensionTypeName,String dimensionTypeAliasName,String parentDimensionTypeName){
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
@@ -378,7 +378,7 @@ public class InfoDiscoverSpaceOperationUtil {
         return false;
     }
 
-    public static boolean createRelationType(String spaceName, String relationTypeName,String parentRelationTypeName){
+    public static boolean createRelationType(String spaceName, String relationTypeName,String relationTypeAliasName,String parentRelationTypeName){
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
@@ -407,7 +407,7 @@ public class InfoDiscoverSpaceOperationUtil {
         return false;
     }
 
-    public static boolean createFactType(String spaceName, String factTypeName){
+    public static boolean createFactType(String spaceName, String factTypeName,String factTypeAliasName){
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
@@ -525,7 +525,7 @@ public class InfoDiscoverSpaceOperationUtil {
     }
 
     public static boolean createTypeProperty(String spaceName, String typeKind,String typeName,
-                                             String propertyName,String propertyType,boolean isMandatory,boolean isReadOnly,boolean isNullable){
+                                             String propertyName,String propertyAliasName,String propertyType,boolean isMandatory,boolean isReadOnly,boolean isNullable){
         PropertyType targetPropertyType=null;
         if(ApplicationConstant.DataFieldType_BOOLEAN.equals(propertyType)){
             targetPropertyType=PropertyType.BOOLEAN;

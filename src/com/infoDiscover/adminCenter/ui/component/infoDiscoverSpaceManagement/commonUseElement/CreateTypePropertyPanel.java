@@ -181,6 +181,15 @@ public class CreateTypePropertyPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        final String typePropertyAliasNameStr=this.typePropertyAliasName.getValue();
+        if(typePropertyAliasNameStr==null||typePropertyAliasNameStr.trim().equals("")){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "请输入类型属性别名", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         Object dataFieldTypeObj=dataFieldType.getValue();
         if(dataFieldTypeObj==null){
             Notification errorNotification = new Notification("数据校验错误",
@@ -209,7 +218,6 @@ public class CreateTypePropertyPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-
         //do add new logic
         final String propertyTypeStr=dataFieldType.getValue().toString();
         final boolean isMandatory=mandatoryFieldCheck.getValue();
@@ -238,7 +246,7 @@ public class CreateTypePropertyPanel extends VerticalLayout {
                 //close confirm dialog
                 addTypePropertyConfirmDialog.close();
                 boolean createTypePropertyResult=InfoDiscoverSpaceOperationUtil.createTypeProperty(
-                        getDiscoverSpaceName(), getPropertyTypeKind(),  getTypeName(),typePropertyNameStr,propertyTypeStr,isMandatory,isReadOnly,isNullable);
+                        getDiscoverSpaceName(), getPropertyTypeKind(),  getTypeName(),typePropertyNameStr,typePropertyAliasNameStr,propertyTypeStr,isMandatory,isReadOnly,isNullable);
                 if(createTypePropertyResult){
                     self.containerDialog.close();
                     getCreateTypePropertyPanelInvoker().createTypePropertyActionFinish(createTypePropertyResult);
