@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -34,7 +35,7 @@ public class InfoDiscoverSpacesList extends VerticalLayout implements DiscoverSp
         this.removeAllComponents();
         this.discoverSpaceButtonsList.clear();
         List<String> spacesList= InfoDiscoverSpaceOperationUtil.getExistDiscoverSpace
-                (new String[]{RuleEngineDatabaseConstants.RuleEngineSpace});
+                (new String[]{RuleEngineDatabaseConstants.RuleEngineSpace, AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE)});
         if(spacesList!=null){
             for(final String currentSpace:spacesList){
                 Button spaceButton = new Button(currentSpace);

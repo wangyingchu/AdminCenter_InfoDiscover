@@ -56,7 +56,7 @@ public class InfoDiscoverSpaceBrowser extends VerticalLayout{
             CreateInfoDiscoverSpacePanel createInfoDiscoverSpacePanel=new CreateInfoDiscoverSpacePanel(this.currentUserClientInfo);
             final Window window = new Window();
             window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(200.0f, Unit.PIXELS);
+            window.setHeight(205.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);

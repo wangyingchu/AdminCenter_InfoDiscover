@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
@@ -1849,5 +1850,15 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return Long.MIN_VALUE;
+    }
+
+    public static boolean initMetaConfigDiscoverSpace(){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        boolean metaConfigSpaceAlreadyExist=DiscoverEngineComponentFactory.checkDiscoverSpaceExistence(metaConfigSpaceName);
+        if(!metaConfigSpaceAlreadyExist){
+            return DiscoverEngineComponentFactory.createInfoDiscoverSpace(metaConfigSpaceName);
+        }else{
+            return true;
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -63,6 +64,14 @@ public class CreateInfoDiscoverSpacePanel extends VerticalLayout {
         if(discoverSpaceNameStr==null||discoverSpaceNameStr.trim().equals("")){
             Notification errorNotification = new Notification("数据校验错误",
                     "请输入信息发现空间名称", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        if(discoverSpaceNameStr.equals(AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE))){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "信息发现空间名称 "+discoverSpaceNameStr+" 是系统保留关键字", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);

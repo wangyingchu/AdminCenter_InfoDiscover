@@ -13,7 +13,6 @@ import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.dim
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.factManagement.InfoDiscoverSpaceFactsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement.InfoDiscoverSpaceRelationsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.runtimeInfo.InfoDiscoverSpaceRuntimeGeneralInfo;
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement.ProcessingDataAnalyzePanel;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
@@ -24,11 +23,6 @@ import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wangychu on 10/1/16.
@@ -91,47 +85,6 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
         dataAnalyzeApplicationBaseAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                 "infoAnalyseApp/index.html";
-
-
-
-
-/*
-        Map<String,List<ProcessingDataVO>> selectedProcessingData=new HashMap<>();
-        List<ProcessingDataVO> dimensionProcessingDataForAnalyzing=new ArrayList<>();
-
-        ProcessingDataVO processingDataVO1=new ProcessingDataVO();
-        processingDataVO1.setDiscoverSpaceName("DemoArch");
-        processingDataVO1.setDataTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT);
-        processingDataVO1.setDataTypeName("DEMO_PROGRESS_MAINTAIN");
-        processingDataVO1.setId("#113:0");
-
-
-        List<ProcessingDataVO> factProcessingDataForAnalyzing=new ArrayList<>();
-        factProcessingDataForAnalyzing.add(processingDataVO1);
-
-
-        selectedProcessingData.put(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,dimensionProcessingDataForAnalyzing);
-        selectedProcessingData.put(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,factProcessingDataForAnalyzing);
-
-        ProcessingDataAnalyzePanel processingDataAnalyzePanel=new ProcessingDataAnalyzePanel(this.currentUserClientInfo,"DemoArch",selectedProcessingData);
-        String dataDetailInfoTitle="待处理数据信息分析发现";
-        final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
-        window.setSizeFull();
-        window.setCaptionAsHtml(true);
-        window.setResizable(false);
-        window.setDraggable(false);
-        window.setModal(false);
-        window.setContent(processingDataAnalyzePanel);
-        UI.getCurrent().addWindow(window);
-*/
-
-
-
-
-
-
-
-
     }
 
     @Override
