@@ -23,7 +23,7 @@ public class CreateRelationTypePanel extends VerticalLayout {
     private String discoverSpaceName;
     private String parentRelationType;
     private TextField relationTypeName;
-
+    private TextField relationTypeAliasName;
     private RelationTypesManagementPanel relationTypesManagementPanel;
 
     public CreateRelationTypePanel(UserClientInfo userClientInfo){
@@ -42,6 +42,11 @@ public class CreateRelationTypePanel extends VerticalLayout {
         relationTypeName = new TextField("关系类型名称");
         relationTypeName.setRequired(true);
         form.addComponent(relationTypeName);
+
+        relationTypeAliasName = new TextField("类型别名");
+        relationTypeAliasName.setRequired(true);
+        form.addComponent(relationTypeAliasName);
+
         form.setReadOnly(true);
 
         HorizontalLayout footer = new HorizontalLayout();

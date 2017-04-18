@@ -5,6 +5,7 @@ package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement
  */
 public class PropertyTypeVO {
     private String propertyName;
+    private String propertyAliasName;
     private String propertyType;
     private String propertySourceOwner;
     private boolean mandatory;
@@ -57,5 +58,13 @@ public class PropertyTypeVO {
 
     public void setPropertySourceOwner(String propertySourceOwner) {
         this.propertySourceOwner = propertySourceOwner;
+    }
+
+    public String getPropertyAliasName() {
+        return propertyAliasName;
+    }
+
+    public void setPropertyAliasName(String propertyAliasName) {
+        this.propertyAliasName = propertyAliasName;
     }
 }

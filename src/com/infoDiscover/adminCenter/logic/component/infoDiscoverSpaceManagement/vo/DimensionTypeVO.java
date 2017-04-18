@@ -8,6 +8,7 @@ import java.util.List;
 public class DimensionTypeVO {
 
     private String typeName;
+    private String typeAliasName;
     private long typeDataRecordCount;
     private int descendantDimensionTypesNumber;
     private List<DimensionTypeVO> childDimensionTypesVOList;
@@ -42,5 +43,13 @@ public class DimensionTypeVO {
 
     public void setChildDimensionTypesVOList(List<DimensionTypeVO> childDimensionTypesVO) {
         this.childDimensionTypesVOList = childDimensionTypesVO;
+    }
+
+    public String getTypeAliasName() {
+        return typeAliasName;
+    }
+
+    public void setTypeAliasName(String typeAliasName) {
+        this.typeAliasName = typeAliasName;
     }
 }

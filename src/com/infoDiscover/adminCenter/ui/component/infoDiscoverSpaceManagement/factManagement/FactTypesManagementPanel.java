@@ -32,8 +32,10 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
     private TreeTable factTypePropertiesTable;
 
     private String NAME_PROPERTY="事实类型名称";
+    private String ALIASNAME_PROPERTY="类型别名";
     private String FACTDATAFULLCOUNT_PROPERTY ="类型数据总量";
     private String PROPERTYNAME_PROPERTY="类型属性名";
+    private String PROPERTYALIASNAME_PROPERTY="属性别名";
     private String PROPERTYTYPE_PROPERTY="属性数据类型";
     private String MUSTINPUT_PROPERTY="必填属性";
     private String READONLY_PROPERTY="只读属性";
@@ -124,6 +126,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         this.factTypesTreeTable.setNullSelectionAllowed(false);
 
         this.factTypesTreeTable.addContainerProperty(NAME_PROPERTY, String.class, "");
+        this.factTypesTreeTable.addContainerProperty(ALIASNAME_PROPERTY, String.class, "");
         this.factTypesTreeTable.addContainerProperty(FACTDATAFULLCOUNT_PROPERTY, String.class, "");
         this.factTypesTreeTable.setColumnWidth(FACTDATAFULLCOUNT_PROPERTY, 200);
 
@@ -210,6 +213,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         this.factTypePropertiesTable.setNullSelectionAllowed(false);
 
         this.factTypePropertiesTable.addContainerProperty(PROPERTYNAME_PROPERTY, String.class, "");
+        this.factTypePropertiesTable.addContainerProperty(PROPERTYALIASNAME_PROPERTY, String.class, "");
         this.factTypePropertiesTable.addContainerProperty(PROPERTYTYPE_PROPERTY, String.class, "");
         this.factTypePropertiesTable.addContainerProperty(MUSTINPUT_PROPERTY, String.class, "");
         this.factTypePropertiesTable.addContainerProperty(READONLY_PROPERTY, String.class, "");
@@ -245,7 +249,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
             long factTypeDataCount=currentMetrics.getTypeDataCount();
             Object[] rootFactTypeInfo=new Object[]{
                     factTypeName,
-
+                    "need replaced with alias name",
                     ""+ factTypeDataCount
             };
             final Object currentFactTypeInfoKey = this.factTypesTreeTable.addItem(rootFactTypeInfo, null);
@@ -275,6 +279,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
                 this.currentFactTypePropertiesMap.put(currentPropertyTypeVO.getPropertyName(), currentPropertyTypeVO);
                 Object[] currentFactTypePropertiesInfo=new Object[]{
                         " "+currentPropertyTypeVO.getPropertyName(),
+                        currentPropertyTypeVO.getPropertyAliasName(),
                         currentPropertyTypeVO.getPropertyType(),
                         ""+ currentPropertyTypeVO.isMandatory(),
                         ""+ currentPropertyTypeVO.isReadOnly(),
@@ -336,7 +341,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         createFactTypePanel.setFactTypesManagementPanel(this);
         final Window window = new Window();
         window.setWidth(450.0f, Unit.PIXELS);
-        window.setHeight(200.0f, Unit.PIXELS);
+        window.setHeight(240.0f, Unit.PIXELS);
         window.setResizable(false);
         window.center();
         window.setModal(true);
@@ -396,7 +401,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
             createTypePropertyPanel.setCreateTypePropertyPanelInvoker(this);
 
             final Window window = new Window();
-            window.setHeight(350.0f, Unit.PIXELS);
+            window.setHeight(380.0f, Unit.PIXELS);
             window.setWidth(550.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();

@@ -8,6 +8,7 @@ import java.util.List;
 public class RelationTypeVO {
 
     private String typeName;
+    private String typeAliasName;
     private long typeDataRecordCount;
     private int descendantRelationTypesNumber;
     private List<RelationTypeVO> childRelationTypesVOList;
@@ -42,5 +43,13 @@ public class RelationTypeVO {
 
     public void setChildRelationTypesVOList(List<RelationTypeVO> childDimensionTypesVO) {
         this.childRelationTypesVOList = childDimensionTypesVO;
+    }
+
+    public String getTypeAliasName() {
+        return typeAliasName;
+    }
+
+    public void setTypeAliasName(String typeAliasName) {
+        this.typeAliasName = typeAliasName;
     }
 }

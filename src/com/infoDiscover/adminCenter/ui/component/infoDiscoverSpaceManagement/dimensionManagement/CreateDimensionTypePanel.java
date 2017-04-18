@@ -22,7 +22,7 @@ public class CreateDimensionTypePanel extends VerticalLayout {
     private String discoverSpaceName;
     private String parentDimensionType;
     private TextField dimensionTypeName;
-
+    private TextField dimensionTypeAliasName;
     private DimensionTypesManagementPanel dimensionTypesManagementPanel;
 
     public CreateDimensionTypePanel(UserClientInfo userClientInfo){
@@ -41,6 +41,11 @@ public class CreateDimensionTypePanel extends VerticalLayout {
         dimensionTypeName = new TextField("维度类型名称");
         dimensionTypeName.setRequired(true);
         form.addComponent(dimensionTypeName);
+
+        dimensionTypeAliasName = new TextField("类型别名");
+        dimensionTypeAliasName.setRequired(true);
+        form.addComponent(dimensionTypeAliasName);
+
         form.setReadOnly(true);
 
         HorizontalLayout footer = new HorizontalLayout();

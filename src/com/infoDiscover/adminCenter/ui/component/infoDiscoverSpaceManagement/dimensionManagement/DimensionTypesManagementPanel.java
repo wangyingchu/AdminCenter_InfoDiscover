@@ -34,11 +34,13 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
     private TreeTable dimensionTypePropertiesTable;
 
     private String NAME_PROPERTY="维度类型名称";
+    private String ALIASNAME_PROPERTY="类型别名";
     private String CHILDTYPECOUNT_PROPERTY="子类型数量";
     private String DESCENDANTTYPECOUNT_PROPERTY="后代类型数量";
     private String DIMENSIONDATAFULLCOUNT_PROPERTY="类型数据总量";
 
     private String PROPERTYNAME_PROPERTY="类型属性名";
+    private String PROPERTYALIASNAME_PROPERTY="属性别名";
     private String PROPERTYTYPE_PROPERTY="属性数据类型";
     private String MUSTINPUT_PROPERTY="必填属性";
     private String READONLY_PROPERTY="只读属性";
@@ -129,6 +131,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         this.dimensionTypesTreeTable.setNullSelectionAllowed(false);
 
         this.dimensionTypesTreeTable.addContainerProperty(NAME_PROPERTY, String.class, "");
+        this.dimensionTypesTreeTable.addContainerProperty(ALIASNAME_PROPERTY, String.class, "");
         this.dimensionTypesTreeTable.addContainerProperty(CHILDTYPECOUNT_PROPERTY, String.class, "");
         this.dimensionTypesTreeTable.addContainerProperty(DESCENDANTTYPECOUNT_PROPERTY, String.class, "");
         this.dimensionTypesTreeTable.addContainerProperty(DIMENSIONDATAFULLCOUNT_PROPERTY, String.class, "");
@@ -218,8 +221,8 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         this.dimensionTypePropertiesTable.setSelectable(true);
         this.dimensionTypePropertiesTable.setHeight(dataDisplayElementHeight, Unit.PIXELS);
         this.dimensionTypePropertiesTable.setNullSelectionAllowed(false);
-
         this.dimensionTypePropertiesTable.addContainerProperty(PROPERTYNAME_PROPERTY, String.class, "");
+        this.dimensionTypePropertiesTable.addContainerProperty(PROPERTYALIASNAME_PROPERTY, String.class, "");
         this.dimensionTypePropertiesTable.addContainerProperty(PROPERTYTYPE_PROPERTY, String.class, "");
         this.dimensionTypePropertiesTable.addContainerProperty(MUSTINPUT_PROPERTY, String.class, "");
         this.dimensionTypePropertiesTable.addContainerProperty(READONLY_PROPERTY, String.class, "");
@@ -252,6 +255,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         List<DimensionTypeVO> childDimensionTypesList= rootDimensionTypeVO.getChildDimensionTypesVOList();
         Object[] rootDimensionTypeInfo=new Object[]{
                 rootDimensionTypeVO.getTypeName(),
+                "",
                 ""+ childDimensionTypesList.size(),
                 ""+ rootDimensionTypeVO.getDescendantDimensionTypesNumber(),
                 ""+ rootDimensionTypeVO.getTypeDataRecordCount()
@@ -268,6 +272,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         List<DimensionTypeVO> childDimensionTypesList= currentDimensionTypeVO.getChildDimensionTypesVOList();
         Object[] currentDimensionTypeInfo=new Object[]{
                 currentDimensionTypeVO.getTypeName(),
+                currentDimensionTypeVO.getTypeAliasName(),
                 ""+ childDimensionTypesList.size(),
                 ""+ currentDimensionTypeVO.getDescendantDimensionTypesNumber(),
                 ""+ currentDimensionTypeVO.getTypeDataRecordCount()
@@ -308,6 +313,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
                 this.currentDimensionTypePropertiesMap.put(currentPropertyTypeVO.getPropertyName(),currentPropertyTypeVO);
                 Object[] currentDimensionTypePropertiesInfo=new Object[]{
                         " "+currentPropertyTypeVO.getPropertyName(),
+                        currentPropertyTypeVO.getPropertyAliasName(),
                         currentPropertyTypeVO.getPropertyType(),
                         ""+ currentPropertyTypeVO.isMandatory(),
                         ""+ currentPropertyTypeVO.isReadOnly(),
@@ -368,7 +374,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
             createDimensionTypePanel.setDimensionTypesManagementPanel(this);
             final Window window = new Window();
             window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(200.0f, Unit.PIXELS);
+            window.setHeight(240.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);
@@ -504,7 +510,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
             createTypePropertyPanel.setCreateTypePropertyPanelInvoker(this);
 
             final Window window = new Window();
-            window.setHeight(350.0f, Unit.PIXELS);
+            window.setHeight(380.0f, Unit.PIXELS);
             window.setWidth(550.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();

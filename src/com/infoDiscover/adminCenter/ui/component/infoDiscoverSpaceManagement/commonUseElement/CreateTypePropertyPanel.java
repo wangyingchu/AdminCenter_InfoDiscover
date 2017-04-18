@@ -27,6 +27,7 @@ public class CreateTypePropertyPanel extends VerticalLayout {
     private CreateTypePropertyPanelInvoker createTypePropertyPanelInvoker;
     private SectionActionsBar dataFieldActionsBar;
     private TextField typePropertyName;
+    private TextField typePropertyAliasName;
     private ComboBox dataFieldType;
     private CheckBox mandatoryFieldCheck;
     private CheckBox readOnlyFieldCheck;
@@ -51,6 +52,10 @@ public class CreateTypePropertyPanel extends VerticalLayout {
         this.typePropertyName=new TextField("属性名称");
         this.typePropertyName.setRequired(true);
         form.addComponent(this.typePropertyName);
+
+        this.typePropertyAliasName=new TextField("属性别名");
+        this.typePropertyAliasName.setRequired(true);
+        form.addComponent(this.typePropertyAliasName);
 
         dataFieldType = new ComboBox("属性数据类型");
         dataFieldType.setRequired(true);

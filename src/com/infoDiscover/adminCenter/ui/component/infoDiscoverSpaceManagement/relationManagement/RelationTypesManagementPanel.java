@@ -32,11 +32,13 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
     private TreeTable relationTypePropertiesTable;
 
     private String NAME_PROPERTY="关系类型名称";
+    private String ALIASNAME_PROPERTY="类型别名";
     private String CHILDTYPECOUNT_PROPERTY="子类型数量";
     private String DESCENDANTTYPECOUNT_PROPERTY="后代类型数量";
     private String RELATIONDATAFULLCOUNT_PROPERTY ="类型数据总量";
 
     private String PROPERTYNAME_PROPERTY="类型属性名";
+    private String PROPERTYALIASNAME_PROPERTY="属性别名";
     private String PROPERTYTYPE_PROPERTY="属性数据类型";
     private String MUSTINPUT_PROPERTY="必填属性";
     private String READONLY_PROPERTY="只读属性";
@@ -127,6 +129,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         this.relationTypesTreeTable.setNullSelectionAllowed(false);
 
         this.relationTypesTreeTable.addContainerProperty(NAME_PROPERTY, String.class, "");
+        this.relationTypesTreeTable.addContainerProperty(ALIASNAME_PROPERTY, String.class, "");
         this.relationTypesTreeTable.addContainerProperty(CHILDTYPECOUNT_PROPERTY, String.class, "");
         this.relationTypesTreeTable.addContainerProperty(DESCENDANTTYPECOUNT_PROPERTY, String.class, "");
         this.relationTypesTreeTable.addContainerProperty(RELATIONDATAFULLCOUNT_PROPERTY, String.class, "");
@@ -218,6 +221,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         this.relationTypePropertiesTable.setNullSelectionAllowed(false);
 
         this.relationTypePropertiesTable.addContainerProperty(PROPERTYNAME_PROPERTY, String.class, "");
+        this.relationTypePropertiesTable.addContainerProperty(PROPERTYALIASNAME_PROPERTY, String.class, "");
         this.relationTypePropertiesTable.addContainerProperty(PROPERTYTYPE_PROPERTY, String.class, "");
         this.relationTypePropertiesTable.addContainerProperty(MUSTINPUT_PROPERTY, String.class, "");
         this.relationTypePropertiesTable.addContainerProperty(READONLY_PROPERTY, String.class, "");
@@ -250,6 +254,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         List<RelationTypeVO> childRelationTypesList= rootRelationTypeVO.getChildRelationTypesVOList();
         Object[] rootRelationTypeInfo=new Object[]{
                 rootRelationTypeVO.getTypeName(),
+                "",
                 ""+ childRelationTypesList.size(),
                 ""+ rootRelationTypeVO.getDescendantRelationTypesNumber(),
                 ""+ rootRelationTypeVO.getTypeDataRecordCount()
@@ -266,6 +271,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         List<RelationTypeVO> childRelationTypesList= currentRelationTypeVO.getChildRelationTypesVOList();
         Object[] currentRelationTypeInfo=new Object[]{
                 currentRelationTypeVO.getTypeName(),
+                currentRelationTypeVO.getTypeAliasName(),
                 ""+ childRelationTypesList.size(),
                 ""+ currentRelationTypeVO.getDescendantRelationTypesNumber(),
                 ""+ currentRelationTypeVO.getTypeDataRecordCount()
@@ -306,6 +312,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
                 this.currentRelationTypePropertiesMap.put(currentPropertyTypeVO.getPropertyName(), currentPropertyTypeVO);
                 Object[] currentRelationTypePropertiesInfo=new Object[]{
                         " "+currentPropertyTypeVO.getPropertyName(),
+                        currentPropertyTypeVO.getPropertyAliasName(),
                         currentPropertyTypeVO.getPropertyType(),
                         ""+ currentPropertyTypeVO.isMandatory(),
                         ""+ currentPropertyTypeVO.isReadOnly(),
@@ -366,7 +373,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
             createRelationTypePanel.setRelationTypesManagementPanel(this);
             final Window window = new Window();
             window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(200.0f, Unit.PIXELS);
+            window.setHeight(240.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);
@@ -501,7 +508,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
             createTypePropertyPanel.setCreateTypePropertyPanelInvoker(this);
 
             final Window window = new Window();
-            window.setHeight(350.0f, Unit.PIXELS);
+            window.setHeight(380.0f, Unit.PIXELS);
             window.setWidth(550.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();

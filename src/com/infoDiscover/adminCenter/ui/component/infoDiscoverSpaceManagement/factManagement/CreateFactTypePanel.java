@@ -20,6 +20,7 @@ public class CreateFactTypePanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private Window containerDialog;
     private String discoverSpaceName;
+    private TextField factTypeAliasName;
     private TextField factTypeName;
     private FactTypesManagementPanel factTypesManagementPanel;
 
@@ -39,6 +40,11 @@ public class CreateFactTypePanel extends VerticalLayout {
         factTypeName = new TextField("事实类型名称");
         factTypeName.setRequired(true);
         form.addComponent(factTypeName);
+
+        factTypeAliasName = new TextField("类型别名");
+        factTypeAliasName.setRequired(true);
+        form.addComponent(factTypeAliasName);
+
         form.setReadOnly(true);
 
         HorizontalLayout footer = new HorizontalLayout();
