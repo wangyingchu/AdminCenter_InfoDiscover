@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/highchartsapi-2.2.1-QF.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/blackboard-20161001.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/log4j-api-2.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/orientdb-jdbc-2.2.13-all.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/log4j-core-2.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/vaadin-icons-2.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/CriteriaBuilder.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
