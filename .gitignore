@@ -12,6 +12,6 @@
 hs_err_pid*
 
 # idea related
-#.idea/
+.idea/
 out/
 .DS_store
