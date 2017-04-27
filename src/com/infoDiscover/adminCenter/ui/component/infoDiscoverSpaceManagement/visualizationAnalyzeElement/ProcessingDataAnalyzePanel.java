@@ -434,13 +434,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
             }else{
                 dataDetailInfoTitle="数据详细信息";
             }
-
-            MeasurableValueVO targetMeasurableValueVO=new MeasurableValueVO();
-            targetMeasurableValueVO.setId(targetProcessingDataVO.getId());
-            targetMeasurableValueVO.setDiscoverSpaceName(targetProcessingDataVO.getDiscoverSpaceName());
-            targetMeasurableValueVO.setMeasurableTypeKind(targetProcessingDataVO.getDataTypeKind());
-            targetMeasurableValueVO.setMeasurableTypeName(targetProcessingDataVO.getDataTypeName());
-
+            MeasurableValueVO targetMeasurableValueVO=InfoDiscoverSpaceOperationUtil.getMeasurableValueById(targetProcessingDataVO.getDiscoverSpaceName(),targetProcessingDataVO.getId());
             TypeDataInstanceDetailPanel typeDataInstanceDetailPanel=new TypeDataInstanceDetailPanel(this.currentUserClientInfo,targetMeasurableValueVO);
             final Window window = new Window(UICommonElementsUtil.generateMovableWindowTitleWithFormat(dataDetailInfoTitle));
             window.setWidth(570, Unit.PIXELS);
