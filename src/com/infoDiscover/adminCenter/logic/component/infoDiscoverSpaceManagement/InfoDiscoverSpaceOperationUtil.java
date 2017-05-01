@@ -2152,6 +2152,45 @@ public class InfoDiscoverSpaceOperationUtil {
         return null;
     }
 
+    public static List<RelationableValueVO> getSimilarRelationableConnectedSameDimensions(String spaceName,String sourceRelationableId,List<String> relatedDimensionsList){
+        List<RelationableValueVO> relationableValueVOList=new ArrayList<>();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            List<Relationable> similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList);
+            if(similarRelationableList!=null) {
+                for (Relationable currentRelationable : similarRelationableList) {
+                    RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
+                    if(currentRelationable instanceof Fact){
+                        Fact currentFact=(Fact)currentRelationable;
+                        currentRelationableValueVO.setDiscoverSpaceName(spaceName);
+                        currentRelationableValueVO.setId(currentFact.getId());
+                        currentRelationableValueVO.setRelationableTypeKind(TYPEKIND_FACT);
+                        currentRelationableValueVO.setRelationableTypeName(currentFact.getType());
+                        currentRelationableValueVO.setRelationableTypeAliasName(getTypeKindAliasName(spaceName,TYPEKIND_FACT,currentFact.getType()));
+                    }
+                    if(currentRelationable instanceof Dimension){
+                        Dimension currentDimension=(Dimension)currentRelationable;
+                        currentRelationableValueVO.setDiscoverSpaceName(spaceName);
+                        currentRelationableValueVO.setId(currentDimension.getId());
+                        currentRelationableValueVO.setRelationableTypeKind(TYPEKIND_DIMENSION);
+                        currentRelationableValueVO.setRelationableTypeName(currentDimension.getType());
+                        currentRelationableValueVO.setRelationableTypeAliasName(getTypeKindAliasName(spaceName,TYPEKIND_DIMENSION,currentDimension.getType()));
+                    }
+                    relationableValueVOList.add(currentRelationableValueVO);
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return relationableValueVOList;
+    }
+
     public static void clearItemAliasNameCache(){
         TYPEKIND_AliasNameMap.clear();
         TypeProperty_AliasNameMap.clear();

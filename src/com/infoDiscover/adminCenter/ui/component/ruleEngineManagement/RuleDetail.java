@@ -28,14 +28,17 @@ import com.vaadin.ui.*;
 /**
  * Created by sun.
  */
-public class RuleDetail extends VerticalLayout implements View,
+public class RuleDetail extends VerticalLayout implements View{
+       /* ,
         DiscoverSpaceTypeDataInstanceQueryRequiredEvent
                 .DiscoverSpaceTypeDataInstanceQueryRequiredListener,
         DiscoverSpaceOpenProcessingDataListEvent.DiscoverSpaceOpenProcessingDataListListener,
         DiscoverSpaceAddProcessingDataEvent.DiscoverSpaceAddProcessingDataListener,
         DiscoverSpaceRemoveProcessingDataEvent.DiscoverSpaceRemoveProcessingDataListener,
         DiscoverSpaceLaunchDataAnalyzeApplicationEvent
-                .DiscoverSpaceLaunchDataAnalyzeApplicationListener {
+                .DiscoverSpaceLaunchDataAnalyzeApplicationListener
+                */
+
     private UserClientInfo currentUserClientInfo;
     private String ruleName;
     private String ruleId;
@@ -45,7 +48,7 @@ public class RuleDetail extends VerticalLayout implements View,
         this.currentUserClientInfo = currentUserClientInfo;
         setSpacing(true);
         setMargin(true);
-        this.currentUserClientInfo.getEventBlackBoard().addListener(this);
+       // this.currentUserClientInfo.getEventBlackBoard().addListener(this);
         VerticalLayout viewContentContainer = new VerticalLayout();
         viewContentContainer.setMargin(false);
         viewContentContainer.setSpacing(false);
@@ -146,7 +149,7 @@ public class RuleDetail extends VerticalLayout implements View,
         deleteRuleConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(deleteRuleConfirmDialog);
     }
-
+/*
     @Override
     public void receivedDiscoverSpaceTypeDataInstanceQueryRequiredEvent
             (DiscoverSpaceTypeDataInstanceQueryRequiredEvent event) {
@@ -332,4 +335,5 @@ public class RuleDetail extends VerticalLayout implements View,
             UI.getCurrent().addWindow(window);
         }
     }
+    */
 }

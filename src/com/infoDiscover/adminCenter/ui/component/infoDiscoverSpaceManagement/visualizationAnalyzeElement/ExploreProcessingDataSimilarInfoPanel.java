@@ -6,15 +6,12 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangychu on 4/17/17.
@@ -25,7 +22,7 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
     private ProcessingDataVO processingData;
     private int browserWindowHeight;
     private VerticalLayout dimensionCheckboxFormLayout;
-    private Table similarDataInfoTable;
+    private SimilarRelationablesList similarRelationablesList;
     private BrowserFrame similarDataInfoBrowserFrame;
     private Map<CheckBox,String> analyzingDimensionCheckBoxMap;
 
@@ -65,6 +62,12 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
 
         Button exploreSimilarDataButton=new Button("探索相似数据");
         exploreSimilarDataButton.setIcon(VaadinIcons.SEARCH);
+        exploreSimilarDataButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                doExploreSimilarData();
+            }
+        });
         actionButtonsContainerLayout.addComponent(exploreSimilarDataButton);
 
         VerticalLayout spacingDivLayout0=new VerticalLayout();
@@ -82,12 +85,9 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
         similarDataTableTitle.setWidth(100,Unit.PERCENTAGE);
         similarDataTableLayout.addComponent(similarDataTableTitle);
 
-        similarDataInfoTable=new Table();
-        similarDataInfoTable.addStyleName(ValoTheme.TABLE_SMALL);
-        similarDataInfoTable.setWidth(400,Unit.PIXELS);
-        similarDataInfoTable.setHeight(browserWindowHeight-200,Unit.PIXELS);
-        similarDataTableLayout.addComponent(similarDataInfoTable);
-        similarDataTableLayout.setExpandRatio(similarDataInfoTable,1);
+        similarRelationablesList=new SimilarRelationablesList(this.currentUserClientInfo,browserWindowHeight);
+        similarDataTableLayout.addComponent(similarRelationablesList);
+        similarDataTableLayout.setExpandRatio(similarRelationablesList,1);
 
         VerticalLayout dataDetailGraphLayout=new VerticalLayout();
         dataDetailGraphLayout.setHeight(100,Unit.PERCENTAGE);
@@ -117,6 +117,7 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
                         dataSelectCheckBox.setCaptionAsHtml(true);
                         dataSelectCheckBox.setDescription( "关联的关系: "+currentRelationValue.getRelationTypeName()+"["+currentRelationValue.getId()+"]");
                         dataSelectCheckBox.addStyleName(ValoTheme.CHECKBOX_SMALL);
+                        dataSelectCheckBox.setValue(true);
                         dimensionCheckboxFormLayout.addComponent(dataSelectCheckBox);
                         analyzingDimensionCheckBoxMap.put(dataSelectCheckBox,fromData.getId());
                     }
@@ -128,6 +129,7 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
                         dataSelectCheckBox.setCaptionAsHtml(true);
                         dataSelectCheckBox.setDescription( "关联的关系: "+currentRelationValue.getRelationTypeName()+"["+currentRelationValue.getId()+"]");
                         dataSelectCheckBox.addStyleName(ValoTheme.CHECKBOX_SMALL);
+                        dataSelectCheckBox.setValue(true);
                         dimensionCheckboxFormLayout.addComponent(dataSelectCheckBox);
                         analyzingDimensionCheckBoxMap.put(dataSelectCheckBox,toData.getId());
                     }
@@ -138,5 +140,26 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
 
     public ProcessingDataVO getProcessingData(){
         return this.processingData;
+    }
+
+    private void doExploreSimilarData(){
+        List<String> dimensionList=new ArrayList<>();
+        Set<CheckBox> checkboxSet=analyzingDimensionCheckBoxMap.keySet();
+        Iterator<CheckBox> checkboxIterator=checkboxSet.iterator();
+        while(checkboxIterator.hasNext()){
+            CheckBox currentCheckBox=checkboxIterator.next();
+            if(currentCheckBox.getValue()){
+                dimensionList.add(analyzingDimensionCheckBoxMap.get(currentCheckBox));
+            }
+        }
+        List<RelationableValueVO> similarRelationableValues=
+                InfoDiscoverSpaceOperationUtil.getSimilarRelationableConnectedSameDimensions(processingData.getDiscoverSpaceName(),processingData.getId(),dimensionList);
+        System.out.println(similarRelationableValues);
+
+
+
+        similarRelationablesList.renderSimilarRelationablesList(similarRelationableValues);
+
+
     }
 }
