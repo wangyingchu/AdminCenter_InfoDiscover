@@ -2158,7 +2158,7 @@ public class InfoDiscoverSpaceOperationUtil {
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
             InformationExplorer ie=targetSpace.getInformationExplorer();
-            List<Relationable> similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList);
+            List<Relationable> similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList,InformationExplorer.FilteringPattern.AND);
             if(similarRelationableList!=null) {
                 for (Relationable currentRelationable : similarRelationableList) {
                     RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
