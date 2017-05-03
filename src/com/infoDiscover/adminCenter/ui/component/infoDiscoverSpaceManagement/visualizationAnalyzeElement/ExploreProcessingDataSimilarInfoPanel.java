@@ -4,9 +4,13 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationValueVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationableValueVO;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -25,6 +29,9 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
     private SimilarRelationablesList similarRelationablesList;
     private BrowserFrame similarDataInfoBrowserFrame;
     private Map<CheckBox,String> analyzingDimensionCheckBoxMap;
+    private Label similarDataTableTitle;
+    private final static String similarInfoGraphBaseAddress= AdminCenterPropertyHandler.
+            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/similarTypeInstancesExploreGraph.html";
 
     public ExploreProcessingDataSimilarInfoPanel(UserClientInfo userClientInfo,ProcessingDataVO processingData){
         this.setMargin(true);
@@ -60,15 +67,27 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
         HorizontalLayout actionButtonsContainerLayout=new HorizontalLayout();
         dataRelatedDimensionInfoLayout.addComponent(actionButtonsContainerLayout);
 
-        Button exploreSimilarDataButton=new Button("探索相似数据");
-        exploreSimilarDataButton.setIcon(VaadinIcons.SEARCH);
-        exploreSimilarDataButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                doExploreSimilarData();
+        MenuBar exploreSimilarDataMenuBar = new MenuBar();
+        exploreSimilarDataMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+
+        MenuBar.Command visualizationAnalyzeMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedCommandName=selectedItem.getText();
+                if("探索与所有已选维度关联的数据".equals(selectedCommandName)){
+                    similarDataTableTitle.setValue(VaadinIcons.TABLE.getHtml() +" 相似的数据 (与所有已选维度关联)");
+                    doExploreAllMatchedSimilarData();
+                }
+                if("探索与任一已选维度关联的数据".equals(selectedCommandName)){
+                    similarDataTableTitle.setValue(VaadinIcons.TABLE.getHtml() +" 相似的数据 (与任一已选维度关联)");
+                    doExploreAnyMatchedSimilarData();
+                }
+
             }
-        });
-        actionButtonsContainerLayout.addComponent(exploreSimilarDataButton);
+        };
+        MenuBar.MenuItem exploreSimilarDataRootItem=exploreSimilarDataMenuBar.addItem("探索相似数据", VaadinIcons.SEARCH, null);
+        exploreSimilarDataRootItem.addItem("探索与所有已选维度关联的数据", FontAwesome.PLAY, visualizationAnalyzeMenuItemCommand);
+        exploreSimilarDataRootItem.addItem("探索与任一已选维度关联的数据", FontAwesome.PLAY, visualizationAnalyzeMenuItemCommand);
+        actionButtonsContainerLayout.addComponent(exploreSimilarDataMenuBar);
 
         VerticalLayout spacingDivLayout0=new VerticalLayout();
         spacingDivLayout0.setHeight(100,Unit.PERCENTAGE);
@@ -80,7 +99,7 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
         similarDataTableLayout.setWidth(400,Unit.PIXELS);
         this.addComponent(similarDataTableLayout);
 
-        Label similarDataTableTitle= new Label(VaadinIcons.TABLE.getHtml() +" 相似的数据", ContentMode.HTML);
+        similarDataTableTitle= new Label(VaadinIcons.TABLE.getHtml() +" 相似的数据", ContentMode.HTML);
         similarDataTableTitle.addStyleName(ValoTheme.LABEL_SMALL);
         similarDataTableTitle.setWidth(100,Unit.PERCENTAGE);
         similarDataTableLayout.addComponent(similarDataTableTitle);
@@ -142,7 +161,7 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
         return this.processingData;
     }
 
-    private void doExploreSimilarData(){
+    private void doExploreAllMatchedSimilarData(){
         List<String> dimensionList=new ArrayList<>();
         Set<CheckBox> checkboxSet=analyzingDimensionCheckBoxMap.keySet();
         Iterator<CheckBox> checkboxIterator=checkboxSet.iterator();
@@ -152,14 +171,62 @@ public class ExploreProcessingDataSimilarInfoPanel extends HorizontalLayout {
                 dimensionList.add(analyzingDimensionCheckBoxMap.get(currentCheckBox));
             }
         }
+        if(dimensionList.size()==0){
+            Notification errorNotification = new Notification("数据校验错误","请选择至少一项关联的维度", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
         List<RelationableValueVO> similarRelationableValues=
-                InfoDiscoverSpaceOperationUtil.getSimilarRelationableConnectedSameDimensions(processingData.getDiscoverSpaceName(),processingData.getId(),dimensionList);
-        System.out.println(similarRelationableValues);
+                InfoDiscoverSpaceOperationUtil.getSimilarRelationableConnectedSameDimensions(processingData.getDiscoverSpaceName(),processingData.getId(),dimensionList,"ALL");
+        this.similarRelationablesList.renderSimilarRelationablesList(similarRelationableValues);
+        this.similarDataInfoBrowserFrame.setSource(new ExternalResource(getGraphLocationFullAddress(dimensionList,"ALL")));
+    }
 
+    private void doExploreAnyMatchedSimilarData(){
+        List<String> dimensionList=new ArrayList<>();
+        Set<CheckBox> checkboxSet=analyzingDimensionCheckBoxMap.keySet();
+        Iterator<CheckBox> checkboxIterator=checkboxSet.iterator();
+        while(checkboxIterator.hasNext()){
+            CheckBox currentCheckBox=checkboxIterator.next();
+            if(currentCheckBox.getValue()){
+                dimensionList.add(analyzingDimensionCheckBoxMap.get(currentCheckBox));
+            }
+        }
+        if(dimensionList.size()==0){
+            Notification errorNotification = new Notification("数据校验错误","请选择至少一项关联的维度", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        List<RelationableValueVO> similarRelationableValues=
+                InfoDiscoverSpaceOperationUtil.getSimilarRelationableConnectedSameDimensions(processingData.getDiscoverSpaceName(),processingData.getId(),dimensionList,"ANY");
+        this.similarRelationablesList.renderSimilarRelationablesList(similarRelationableValues);
+        this.similarDataInfoBrowserFrame.setSource(new ExternalResource(getGraphLocationFullAddress(dimensionList,"ANY")));
+    }
 
+    private String getGraphLocationFullAddress(List<String> dimensionsList,String filteringPattern){
+        long timeStampPostValue=new Date().getTime();
+        String dataId=this.processingData.getId();
+        String sourceDataInstanceId=dataId.replaceAll("#","%23");
+        sourceDataInstanceId=sourceDataInstanceId.replaceAll(":","%3a");
 
-        similarRelationablesList.renderSimilarRelationablesList(similarRelationableValues);
-
-
+        StringBuffer dimensionsListStr=new StringBuffer();
+        for(int i=0;i<dimensionsList.size();i++){
+            String currentDataId=dimensionsList.get(i);
+            String enCodedID=currentDataId.replaceFirst("#","%23").replaceFirst(":","%3a");
+            if(i!=dimensionsList.size()-1){
+                dimensionsListStr.append(enCodedID+",");
+            }else{
+                dimensionsListStr.append(enCodedID);
+            }
+        }
+        String graphLocationFullAddress=
+                this.similarInfoGraphBaseAddress+"?discoverSpace="+this.processingData.getDiscoverSpaceName()+
+                        "&sourceDataInstanceId="+sourceDataInstanceId+"&dimensionsIdList="+dimensionsListStr+
+                        "&filteringPattern="+filteringPattern+"&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-200);
+        return graphLocationFullAddress;
     }
 }

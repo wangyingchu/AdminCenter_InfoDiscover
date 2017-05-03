@@ -2152,13 +2152,19 @@ public class InfoDiscoverSpaceOperationUtil {
         return null;
     }
 
-    public static List<RelationableValueVO> getSimilarRelationableConnectedSameDimensions(String spaceName,String sourceRelationableId,List<String> relatedDimensionsList){
+    public static List<RelationableValueVO> getSimilarRelationableConnectedSameDimensions(String spaceName,String sourceRelationableId,List<String> relatedDimensionsList,String filteringPattern){
         List<RelationableValueVO> relationableValueVOList=new ArrayList<>();
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
             InformationExplorer ie=targetSpace.getInformationExplorer();
-            List<Relationable> similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList,InformationExplorer.FilteringPattern.AND);
+            List<Relationable> similarRelationableList=null;
+            if("ALL".equals(filteringPattern)){
+                similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList,InformationExplorer.FilteringPattern.AND);
+            }
+            if("ANY".equals(filteringPattern)){
+                similarRelationableList=ie.discoverSimilarRelationablesRelatedToSameDimensions(sourceRelationableId,relatedDimensionsList,InformationExplorer.FilteringPattern.OR);
+            }
             if(similarRelationableList!=null) {
                 for (Relationable currentRelationable : similarRelationableList) {
                     RelationableValueVO currentRelationableValueVO=new RelationableValueVO();
@@ -2190,6 +2196,58 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return relationableValueVOList;
     }
+
+    public static void xxx(String spaceName,String relationable1Id,String relationable2Id){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            System.out.println(relationable1Id);
+            System.out.println(relationable2Id);
+            Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id,RelationDirection.TWO_WAY);
+
+            System.out.println(shortestPathRelationsStack);
+
+
+
+
+
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+    }
+
+    public static void yyy(String spaceName,String relationable1Id,String relationable2Id){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            System.out.println("START");
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            System.out.println(relationable1Id);
+            System.out.println(relationable2Id);
+            List<Stack<Relation>> shortestPathRelationsStackList=ie.discoverRelationablesAllPaths(relationable1Id,relationable2Id);
+
+            System.out.println(shortestPathRelationsStackList);
+
+
+
+            System.out.println("STOP");
+
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+    }
+
+
+
 
     public static void clearItemAliasNameCache(){
         TYPEKIND_AliasNameMap.clear();

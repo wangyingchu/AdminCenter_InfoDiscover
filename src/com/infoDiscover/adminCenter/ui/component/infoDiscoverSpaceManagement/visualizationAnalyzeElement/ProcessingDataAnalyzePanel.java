@@ -247,6 +247,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
         visualizationAnalyzeSplitPanel.setSecondComponent(dataAnalyzePageTabs);
 
         findRelationInfoOfTwoAnalyzingDataPanel=new FindRelationInfoOfTwoAnalyzingDataPanel(this.currentUserClientInfo);
+        findRelationInfoOfTwoAnalyzingDataPanel.setDiscoverSpaceName(this.discoverSpaceName);
         TabSheet.Tab findRelationInfoOfTwoItemActionLayoutTab =dataAnalyzePageTabs.addTab(findRelationInfoOfTwoAnalyzingDataPanel, "两项数据间关联关系发现");
         findRelationInfoOfTwoItemActionLayoutTab.setIcon(VaadinIcons.SPECIALIST);
 

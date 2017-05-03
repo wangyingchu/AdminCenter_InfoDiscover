@@ -1,7 +1,10 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement;
 
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -12,6 +15,7 @@ import com.vaadin.ui.themes.ValoTheme;
 public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
+    private String discoverSpaceName;
     private Label analyzingData1IdLabel;
     private Label analyzingData2IdLabel;
 
@@ -58,12 +62,12 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         analyzingDataInfoContainerLayout.addComponent(showShortPathRelationButton);
         showShortPathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         showShortPathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
-
-        Button showLongPathRelationButton=new Button("发现最长路径关系");
-        showLongPathRelationButton.setIcon(FontAwesome.SEARCH);
-        analyzingDataInfoContainerLayout.addComponent(showLongPathRelationButton);
-        showLongPathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        showLongPathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        showShortPathRelationButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                showShortestPathRelation();
+            }
+        });
 
         Button showAllPathRelationButton=new Button("发现所有路径关系");
         showAllPathRelationButton.setIcon(FontAwesome.SEARCH);
@@ -71,6 +75,12 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         showAllPathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         showAllPathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
         analyzingDataInfoContainerLayout.setComponentAlignment(showAllPathRelationButton, Alignment.TOP_LEFT);
+        showAllPathRelationButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                showAllPathRelations();
+            }
+        });
 
         twoAnalyzingDataInfoContainerLayout.addComponent(analyzingDataInfoContainerLayout);
     }
@@ -81,5 +91,35 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
 
     public void addSecondAnalyzingData(String processingDataId){
         analyzingData2IdLabel.setValue(processingDataId);
+    }
+
+    private void showShortestPathRelation(){
+        if(analyzingData1IdLabel.getValue().equals("-")||analyzingData2IdLabel.getValue().equals("-")){
+            Notification errorNotification = new Notification("数据校验错误","请选择待发现关联关系的两项数据项", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        InfoDiscoverSpaceOperationUtil.xxx(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+    }
+
+    private void showAllPathRelations(){
+        if(analyzingData1IdLabel.getValue().equals("-")||analyzingData2IdLabel.getValue().equals("-")){
+            Notification errorNotification = new Notification("数据校验错误","请选择待发现关联关系的两项数据项", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        InfoDiscoverSpaceOperationUtil.yyy(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+    }
+
+    public String getDiscoverSpaceName() {
+        return discoverSpaceName;
+    }
+
+    public void setDiscoverSpaceName(String discoverSpaceName) {
+        this.discoverSpaceName = discoverSpaceName;
     }
 }
