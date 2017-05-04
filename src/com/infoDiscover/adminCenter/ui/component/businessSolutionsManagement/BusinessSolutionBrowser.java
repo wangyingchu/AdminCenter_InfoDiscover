@@ -68,7 +68,16 @@ public class BusinessSolutionBrowser extends VerticalLayout {
             UI.getCurrent().addWindow(window);
         }
         if(itemId==importBusinessSolutionMenuItem.getId()){
-
+            ImportBusinessSolutionPanel importBusinessSolutionPanel=new ImportBusinessSolutionPanel(this.currentUserClientInfo);
+            final Window window = new Window();
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setHeight(205.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(importBusinessSolutionPanel);
+            importBusinessSolutionPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
         }
     }
 }
