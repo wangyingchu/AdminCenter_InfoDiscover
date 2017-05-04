@@ -1,10 +1,12 @@
 package com.infoDiscover.adminCenter.ui.component;
 
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.BusinessSolutionsManagementPanel;
 import com.infoDiscover.adminCenter.ui.component.dataCollectionBusManagement.DataCollectionBusManagementPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceManagementPanel;
 
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.RuleEngineManagementPanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet;
@@ -28,6 +30,12 @@ public class ApplicationContent extends HorizontalLayout {
         infoDiscoverSpaceManagementTab.setIcon(FontAwesome.CUBES);
         infoDiscoverSpaceManagementTab.setClosable(false);
         infoDiscoverSpaceManagementTab.setEnabled(true);
+
+        BusinessSolutionsManagementPanel businessSolutionsManagementPanel=new BusinessSolutionsManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab businessSolutionsManagementTab = applicationContentTabSheet.addTab(businessSolutionsManagementPanel, "业务解决方案管理");
+        businessSolutionsManagementTab.setIcon(VaadinIcons.SUITCASE);
+        businessSolutionsManagementTab.setClosable(false);
+        businessSolutionsManagementTab.setEnabled(true);
 
         DataCollectionBusManagementPanel dataCollectionBusManagementPanel=new DataCollectionBusManagementPanel(this.currentUserClientInfo);
         TabSheet.Tab dataCollectionBusManagementTab = applicationContentTabSheet.addTab(dataCollectionBusManagementPanel, "数据采集总线管理");

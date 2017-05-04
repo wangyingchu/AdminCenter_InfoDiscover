@@ -1,4 +1,4 @@
-package com.infoDiscover.adminCenter.ui.component.event;
+package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event;
 
 import com.github.wolfie.blackboard.Event;
 import com.github.wolfie.blackboard.Listener;
@@ -6,11 +6,11 @@ import com.github.wolfie.blackboard.Listener;
 /**
  * Created by wangychu on 10/1/16.
  */
-public class DiscoverSpaceComponentSelectedEvent implements Event {
+public class DiscoverSpaceCreatedEvent implements Event {
 
     private String discoverSpaceName;
 
-    public DiscoverSpaceComponentSelectedEvent(String discoverSpaceName){
+    public DiscoverSpaceCreatedEvent(String discoverSpaceName){
         this.setDiscoverSpaceName(discoverSpaceName);
     }
 
@@ -22,7 +22,7 @@ public class DiscoverSpaceComponentSelectedEvent implements Event {
         this.discoverSpaceName = discoverSpaceName;
     }
 
-    public interface DiscoverSpaceComponentSelectedListener extends Listener {
-        public void receivedDiscoverSpaceComponentSelectedEvent(final DiscoverSpaceComponentSelectedEvent event);
+    public interface DiscoverSpaceCreatedListener extends Listener {
+        public void receivedDiscoverSpaceCreatedEvent(final DiscoverSpaceCreatedEvent event);
     }
 }

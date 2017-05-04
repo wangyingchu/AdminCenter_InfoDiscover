@@ -3,7 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.co
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceRemoveProcessingDataEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceRemoveProcessingDataEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement.VisualizationAnalyzePanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.addon.pagination.Pagination;

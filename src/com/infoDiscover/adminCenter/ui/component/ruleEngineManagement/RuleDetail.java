@@ -1,20 +1,9 @@
 package com.infoDiscover.adminCenter.ui.component.ruleEngineManagement;
 
 import com.info.discover.ruleengine.base.vo.RuleVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo
-        .ProcessingDataListVO;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.RuleEngineOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
-import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
-import com.infoDiscover.adminCenter.ui.component.event.*;
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement
-        .DataAnalyzeApplicationBrowserPanel;
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement
-        .ProcessingDataOperationPanel;
-import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement
-        .QueryTypeDataInstancePanel;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineDeletedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.navigator.View;

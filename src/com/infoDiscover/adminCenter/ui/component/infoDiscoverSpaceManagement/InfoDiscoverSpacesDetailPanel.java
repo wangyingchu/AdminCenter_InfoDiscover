@@ -2,8 +2,8 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 
 import com.infoDiscover.adminCenter.ui.component.common.ElementStatusBar;
 import com.infoDiscover.adminCenter.ui.component.common.GeneralInfoView;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceComponentSelectedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceDeletedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.ComponentContainer;

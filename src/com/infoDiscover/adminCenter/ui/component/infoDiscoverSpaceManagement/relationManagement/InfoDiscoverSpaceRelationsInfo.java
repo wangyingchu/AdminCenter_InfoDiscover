@@ -1,8 +1,8 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.relationManagement;
 
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionActionBarTitle;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceLaunchDataAnalyzeApplicationEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceOpenProcessingDataListEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceLaunchDataAnalyzeApplicationEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceOpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;

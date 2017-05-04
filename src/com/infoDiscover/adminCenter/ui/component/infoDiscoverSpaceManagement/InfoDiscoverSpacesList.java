@@ -2,9 +2,9 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 
 import com.info.discover.ruleengine.manager.database.RuleEngineDatabaseConstants;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceComponentSelectedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceComponentSelectedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceCreatedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceDeletedEvent;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;

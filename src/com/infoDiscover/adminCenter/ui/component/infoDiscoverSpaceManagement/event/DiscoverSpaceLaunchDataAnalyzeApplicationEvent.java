@@ -1,4 +1,4 @@
-package com.infoDiscover.adminCenter.ui.component.event;
+package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event;
 
 import com.github.wolfie.blackboard.Event;
 import com.github.wolfie.blackboard.Listener;

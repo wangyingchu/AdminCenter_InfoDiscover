@@ -2202,8 +2202,6 @@ public class InfoDiscoverSpaceOperationUtil {
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
             InformationExplorer ie=targetSpace.getInformationExplorer();
-            System.out.println(relationable1Id);
-            System.out.println(relationable2Id);
             Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id,RelationDirection.TWO_WAY);
 
             if(shortestPathRelationsStack!=null){

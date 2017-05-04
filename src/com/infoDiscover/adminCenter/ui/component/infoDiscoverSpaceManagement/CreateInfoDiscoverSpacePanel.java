@@ -3,7 +3,7 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
-import com.infoDiscover.adminCenter.ui.component.event.DiscoverSpaceCreatedEvent;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceCreatedEvent;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.FontAwesome;
