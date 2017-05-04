@@ -2197,7 +2197,7 @@ public class InfoDiscoverSpaceOperationUtil {
         return relationableValueVOList;
     }
 
-    public static void xxx(String spaceName,String relationable1Id,String relationable2Id){
+    public static boolean hasShortestPathBwtweenTwoRelationables(String spaceName,String relationable1Id,String relationable2Id){
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
@@ -2206,12 +2206,11 @@ public class InfoDiscoverSpaceOperationUtil {
             System.out.println(relationable2Id);
             Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id,RelationDirection.TWO_WAY);
 
-            System.out.println(shortestPathRelationsStack);
-
-
-
-
-
+            if(shortestPathRelationsStack!=null){
+                return true;
+            }else{
+                return false;
+            }
         } catch (InfoDiscoveryEngineRuntimeException e) {
             e.printStackTrace();
         } finally {
@@ -2219,35 +2218,8 @@ public class InfoDiscoverSpaceOperationUtil {
                 targetSpace.closeSpace();
             }
         }
+        return false;
     }
-
-    public static void yyy(String spaceName,String relationable1Id,String relationable2Id){
-        InfoDiscoverSpace targetSpace=null;
-        try {
-            System.out.println("START");
-            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
-            InformationExplorer ie=targetSpace.getInformationExplorer();
-            System.out.println(relationable1Id);
-            System.out.println(relationable2Id);
-            List<Stack<Relation>> shortestPathRelationsStackList=ie.discoverRelationablesAllPaths(relationable1Id,relationable2Id);
-
-            System.out.println(shortestPathRelationsStackList);
-
-
-
-            System.out.println("STOP");
-
-        } catch (InfoDiscoveryEngineRuntimeException e) {
-            e.printStackTrace();
-        } finally {
-            if(targetSpace!=null){
-                targetSpace.closeSpace();
-            }
-        }
-    }
-
-
-
 
     public static void clearItemAliasNameCache(){
         TYPEKIND_AliasNameMap.clear();

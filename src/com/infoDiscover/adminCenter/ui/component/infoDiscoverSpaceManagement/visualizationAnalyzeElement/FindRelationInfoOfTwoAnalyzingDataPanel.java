@@ -1,13 +1,17 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Date;
 
 /**
  * Created by wangychu on 4/13/17.
@@ -18,11 +22,17 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
     private String discoverSpaceName;
     private Label analyzingData1IdLabel;
     private Label analyzingData2IdLabel;
+    private BrowserFrame pathsDetailGraphBrowserFrame;
+    private int browserWindowHeight;
+    private final static String shortestPathInfoGraphBaseAddress= AdminCenterPropertyHandler.
+            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesShortestPathExploreGraph.html";
+    private final static String allPathsInfoGraphBaseAddress= AdminCenterPropertyHandler.
+            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesAllPathsExploreGraph.html";
 
     public FindRelationInfoOfTwoAnalyzingDataPanel(UserClientInfo userClientInfo){
         this.setMargin(true);
         this.currentUserClientInfo = userClientInfo;
-
+        browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
         HorizontalLayout twoAnalyzingDataInfoContainerLayout=new HorizontalLayout();
         twoAnalyzingDataInfoContainerLayout.setWidth(100,Unit.PERCENTAGE);
         twoAnalyzingDataInfoContainerLayout.addStyleName("ui_appSectionLightDiv");
@@ -83,6 +93,11 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         });
 
         twoAnalyzingDataInfoContainerLayout.addComponent(analyzingDataInfoContainerLayout);
+
+        pathsDetailGraphBrowserFrame = new BrowserFrame();
+        pathsDetailGraphBrowserFrame.setSizeFull();
+        pathsDetailGraphBrowserFrame.setHeight(browserWindowHeight-200,Unit.PIXELS);
+        this.addComponent(pathsDetailGraphBrowserFrame);
     }
 
     public void addFirstAnalyzingData(String processingDataId){
@@ -101,7 +116,28 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        InfoDiscoverSpaceOperationUtil.xxx(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBwtweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        if(hasShortestPath){
+            long timeStampPostValue=new Date().getTime();
+            String relationableAId=analyzingData1IdLabel.getValue();
+            String relationableBId=analyzingData2IdLabel.getValue();
+            String relationableAIdCode=relationableAId.replaceAll("#","%23");
+            relationableAIdCode=relationableAIdCode.replaceAll(":","%3a");
+            String relationableBIdCode=relationableBId.replaceAll("#","%23");
+            relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
+            String graphLocationFullAddress=
+                    this.shortestPathInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+
+                            "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+            this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
+        }else{
+            this.pathsDetailGraphBrowserFrame.setSource(null);
+            Notification resultNotification = new Notification("未发现关联路径",
+                    "在数据项　"+analyzingData1IdLabel.getValue()+" 与　"+analyzingData2IdLabel.getValue()+"之间未发现关联路径", Notification.Type.WARNING_MESSAGE);
+            resultNotification.setPosition(Position.BOTTOM_RIGHT);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+        }
     }
 
     private void showAllPathRelations(){
@@ -112,7 +148,28 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        InfoDiscoverSpaceOperationUtil.yyy(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBwtweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        if(hasShortestPath){
+            long timeStampPostValue=new Date().getTime();
+            String relationableAId=analyzingData1IdLabel.getValue();
+            String relationableBId=analyzingData2IdLabel.getValue();
+            String relationableAIdCode=relationableAId.replaceAll("#","%23");
+            relationableAIdCode=relationableAIdCode.replaceAll(":","%3a");
+            String relationableBIdCode=relationableBId.replaceAll("#","%23");
+            relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
+            String graphLocationFullAddress=
+                    this.allPathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+
+                            "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+            this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
+        }else{
+            this.pathsDetailGraphBrowserFrame.setSource(null);
+            Notification resultNotification = new Notification("未发现关联路径",
+                    "在数据项　"+analyzingData1IdLabel.getValue()+" 与　"+analyzingData2IdLabel.getValue()+"之间未发现关联路径", Notification.Type.WARNING_MESSAGE);
+            resultNotification.setPosition(Position.BOTTOM_RIGHT);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+        }
     }
 
     public String getDiscoverSpaceName() {

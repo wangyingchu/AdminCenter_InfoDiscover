@@ -224,7 +224,7 @@ public class ProcessingDataAnalyzePanel extends VerticalLayout {
                     return new Action[]{exploreRelatedInfoAction,exploreSimilarInfoAction,findRelationInfoOfTwoItem_1Action,findRelationInfoOfTwoItem_2Action,compareInfoOfManyItemsAction,showDataDetailInfoAction};
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION.equals(dataKind)){
-                    return new Action[]{exploreRelatedInfoAction,showDataDetailInfoAction};
+                    return new Action[]{exploreRelatedInfoAction,findRelationInfoOfTwoItem_1Action,findRelationInfoOfTwoItem_2Action,showDataDetailInfoAction};
                 }
                 if(InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION.equals(dataKind)){
                     return new Action[]{exploreRelationDataInfoAction,showDataDetailInfoAction};
