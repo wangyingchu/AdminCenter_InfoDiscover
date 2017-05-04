@@ -5,6 +5,9 @@ import com.infoDiscover.adminCenter.logic.common.CustomizedConverterFactory;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionComponentSelectedEvent;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionCreatedEvent;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionDeletedEvent;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
@@ -52,6 +55,7 @@ public class AdminCenterApplicationUI extends UI {
 
         Blackboard BLACKBOARD = new Blackboard();
         BLACKBOARD.enableLogging();
+        //DiscoverSpace Management
         BLACKBOARD.register(DiscoverSpaceComponentSelectedEvent.DiscoverSpaceComponentSelectedListener.class,
                 DiscoverSpaceComponentSelectedEvent.class);
         BLACKBOARD.register(DiscoverSpaceCreatedEvent.DiscoverSpaceCreatedListener.class,
@@ -68,7 +72,15 @@ public class AdminCenterApplicationUI extends UI {
                 DiscoverSpaceRemoveProcessingDataEvent.class);
         BLACKBOARD.register(DiscoverSpaceLaunchDataAnalyzeApplicationEvent.DiscoverSpaceLaunchDataAnalyzeApplicationListener.class,
                 DiscoverSpaceLaunchDataAnalyzeApplicationEvent.class);
-                currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
+        //BusinessSolution Management
+        BLACKBOARD.register(BusinessSolutionCreatedEvent.BusinessSolutionCreatedListener.class,
+                BusinessSolutionCreatedEvent.class);
+        BLACKBOARD.register(BusinessSolutionDeletedEvent.BusinessSolutionDeletedListener.class,
+                BusinessSolutionDeletedEvent.class);
+        BLACKBOARD.register(BusinessSolutionComponentSelectedEvent.BusinessSolutionComponentSelectedListener.class,
+                BusinessSolutionComponentSelectedEvent.class);
+
+        currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 
          // rule engine
         BLACKBOARD.register(RuleEngineComponentSelectedEvent.RuleEngineComponentSelectedListener

@@ -17,8 +17,17 @@ public class BusinessSolutionsManagementPanel extends VerticalLayout {
         String windowsHeight=""+(screenHeight-230)+"px";
         this.setHeight(windowsHeight);
 
-        HorizontalSplitPanel activityManagementSplitPanel = new HorizontalSplitPanel();
-        activityManagementSplitPanel.setSizeFull();
-        activityManagementSplitPanel.setSplitPosition(250, Unit.PIXELS);
+        HorizontalSplitPanel businessSolutionsManagementSplitPanel = new HorizontalSplitPanel();
+        businessSolutionsManagementSplitPanel.setSizeFull();
+        businessSolutionsManagementSplitPanel.setSplitPosition(200, Unit.PIXELS);
+
+        this.addComponent(businessSolutionsManagementSplitPanel);
+        this.setExpandRatio(businessSolutionsManagementSplitPanel, 1.0F);
+
+        BusinessSolutionBrowser businessSolutionBrowser=new BusinessSolutionBrowser(this.currentUserClientInfo);
+        businessSolutionsManagementSplitPanel.setFirstComponent(businessSolutionBrowser);
+
+        BusinessSolutionsDetailPanel businessSolutionsDetailPanel =new BusinessSolutionsDetailPanel(this.currentUserClientInfo);
+        businessSolutionsManagementSplitPanel.setSecondComponent(businessSolutionsDetailPanel);
     }
 }
