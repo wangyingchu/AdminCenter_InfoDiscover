@@ -15,6 +15,7 @@ public class BusinessSolutionFactTypesInfo extends VerticalLayout {
     private BusinessSolutionDetail parentBusinessSolutionDetail;
     private String businessSolutionName;
     private BusinessSolutionOperationsBar businessSolutionOperationsBar;
+    private FactTypeDefinitionsManagementPanel factTypeDefinitionsManagementPanel;
 
     public BusinessSolutionFactTypesInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -22,6 +23,8 @@ public class BusinessSolutionFactTypesInfo extends VerticalLayout {
         this.businessSolutionOperationsBar=new BusinessSolutionOperationsBar(this.currentUserClientInfo);
         addComponent(businessSolutionOperationsBar);
 
+        factTypeDefinitionsManagementPanel=new FactTypeDefinitionsManagementPanel(this.currentUserClientInfo);
+        addComponent(factTypeDefinitionsManagementPanel);
     }
 
     public BusinessSolutionDetail getParentBusinessSolutionDetail() {
@@ -34,6 +37,7 @@ public class BusinessSolutionFactTypesInfo extends VerticalLayout {
 
     public void renderFactTypesInfo(){
         businessSolutionOperationsBar.setupOperationsBarInfo(getBusinessSolutionName());
+        factTypeDefinitionsManagementPanel.renderFactTypeDefinitionsManagementInfo(getBusinessSolutionName());
     }
 
     public String getBusinessSolutionName() {
