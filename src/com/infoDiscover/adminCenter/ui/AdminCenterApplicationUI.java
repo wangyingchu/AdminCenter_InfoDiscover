@@ -5,9 +5,7 @@ import com.infoDiscover.adminCenter.logic.common.CustomizedConverterFactory;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
-import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionComponentSelectedEvent;
-import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionCreatedEvent;
-import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionDeletedEvent;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
@@ -79,6 +77,8 @@ public class AdminCenterApplicationUI extends UI {
                 BusinessSolutionDeletedEvent.class);
         BLACKBOARD.register(BusinessSolutionComponentSelectedEvent.BusinessSolutionComponentSelectedListener.class,
                 BusinessSolutionComponentSelectedEvent.class);
+        BLACKBOARD.register(BusinessSolutionExportEvent.BusinessSolutionExportListener.class,
+                BusinessSolutionExportEvent.class);
 
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 

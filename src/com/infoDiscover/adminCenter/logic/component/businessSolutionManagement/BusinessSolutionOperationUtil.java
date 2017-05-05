@@ -112,4 +112,37 @@ public class BusinessSolutionOperationUtil {
         }
         return businessSolutionsList;
     }
+
+    public static boolean deleteBusinessSolutionDefinition(String businessSolutionName){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDefinitionFactType)){
+                ExploreParameters solutionDefinitionRecordEP = new ExploreParameters();
+                solutionDefinitionRecordEP.setType(BUSINESSSOLUTION_SolutionDefinitionFactType);
+                solutionDefinitionRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                solutionDefinitionRecordEP.setResultNumber(1);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP);
+                if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                    Fact targetBusinessSolution=solutionDefinitionRecordFactsList.get(0);
+                    return metaConfigSpace.removeFact(targetBusinessSolution.getId());
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
 }

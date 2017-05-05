@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.ui.component.common;
 
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
@@ -8,7 +9,7 @@ import com.vaadin.ui.Label;
 
 public class ElementStatusBar extends HorizontalLayout {
 
-    private Label infoDiscoverSpaceNameProp;
+    private Label elementTypeNameProp;
     private HorizontalLayout statusElementsBarLayout;
 
     public ElementStatusBar(){
@@ -20,9 +21,9 @@ public class ElementStatusBar extends HorizontalLayout {
         HorizontalLayout statusElementContainer=new HorizontalLayout();
         this.addComponent(statusElementContainer);
 
-        infoDiscoverSpaceNameProp = new Label( FontAwesome.TERMINAL.getHtml(), ContentMode.HTML);
-        infoDiscoverSpaceNameProp.setStyleName("ui_appLightDarkMessage");
-        statusElementContainer.addComponent(infoDiscoverSpaceNameProp);
+        elementTypeNameProp = new Label( FontAwesome.TERMINAL.getHtml(), ContentMode.HTML);
+        elementTypeNameProp.setStyleName("ui_appLightDarkMessage");
+        statusElementContainer.addComponent(elementTypeNameProp);
 
         statusElementsBarLayout=new HorizontalLayout();
         statusElementsBarLayout.setWidth("100%");
@@ -31,21 +32,29 @@ public class ElementStatusBar extends HorizontalLayout {
     }
 
     public void setInfoDiscoverSpaceName(String discoverSpaceName){
-        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + FontAwesome.CUBE.getHtml()+ " " +discoverSpaceName);
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + FontAwesome.CUBE.getHtml()+ " " +discoverSpaceName);
     }
 
     public void clearInfoDiscoverSpaceName(){
-        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml());
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml());
+    }
+
+    public void setBusinessSolutionName(String businessSolutionName){
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + VaadinIcons.CLIPBOARD_TEXT.getHtml()+ " " +businessSolutionName);
+    }
+
+    public void clearBusinessSolutionName(){
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml());
     }
 
     // rule engine
     public void setRuleName(String ruleName) {
-        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + FontAwesome
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml()  + FontAwesome
                 .CUBE.getHtml()+ " " +ruleName);
     }
 
     public void clearRuleName(){
-        this.infoDiscoverSpaceNameProp.setValue(FontAwesome.TERMINAL.getHtml());
+        this.elementTypeNameProp.setValue(FontAwesome.TERMINAL.getHtml());
     }
 
     public void addStatusElement(Component barElementComponent){
