@@ -2197,7 +2197,7 @@ public class InfoDiscoverSpaceOperationUtil {
         return relationableValueVOList;
     }
 
-    public static boolean hasShortestPathBwtweenTwoRelationables(String spaceName,String relationable1Id,String relationable2Id){
+    public static boolean hasShortestPathBetweenTwoRelationables(String spaceName, String relationable1Id, String relationable2Id){
         InfoDiscoverSpace targetSpace=null;
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);

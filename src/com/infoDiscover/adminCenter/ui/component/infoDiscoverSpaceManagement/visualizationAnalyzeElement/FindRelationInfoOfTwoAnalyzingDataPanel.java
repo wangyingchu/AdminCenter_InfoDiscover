@@ -116,7 +116,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBwtweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
         if(hasShortestPath){
             long timeStampPostValue=new Date().getTime();
             String relationableAId=analyzingData1IdLabel.getValue();
@@ -148,7 +148,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBwtweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
         if(hasShortestPath){
             long timeStampPostValue=new Date().getTime();
             String relationableAId=analyzingData1IdLabel.getValue();

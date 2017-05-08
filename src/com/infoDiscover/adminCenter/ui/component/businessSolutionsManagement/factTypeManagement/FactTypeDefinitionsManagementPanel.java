@@ -2,13 +2,16 @@ package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.fa
 
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.FactTypeDefinitionVO;
+import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.SolutionTypePropertyTypeDefinitionVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
-import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.commonUseElement.CreateTypePropertyDefinitionPanel;
+import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
-import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -16,6 +19,8 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
 
 /**
  * Created by wangychu on 5/5/17.
@@ -44,7 +49,7 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
     private Button removeFactTypeButton;
     private Button deleteFactTypePropertyButton;
 
-    private Map<String,PropertyTypeVO> currentFactTypePropertiesMap;
+    private Map<String,SolutionTypePropertyTypeDefinitionVO> currentFactTypePropertiesMap;
     private String currentSelectedFactTypeName;
     private String currentSelectedFactTypePropertyName;
 
@@ -106,7 +111,7 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
         this.removeFactTypeButton.addClickListener(new Button.ClickListener(){
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //executeDeleteFactTypeOperation();
+                executeDeleteFactTypeOperation();
             }
         });
 
@@ -174,7 +179,7 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
         addFactTypePropertyButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //executeAddFactTypePropertyOperation();
+                executeAddFactTypePropertyOperation();
             }
         });
 
@@ -191,7 +196,7 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
         this.deleteFactTypePropertyButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                //executeDeleteFactTypePropertyOperation();
+                executeDeleteFactTypePropertyOperation();
             }
         });
 
@@ -221,7 +226,7 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
                 String selectedFactTypeName=itemClickEvent.getItem().getItemProperty(PROPERTYNAME_PROPERTY).getValue().toString();
-                //renderFactTypePropertySelectedUIElements(selectedFactTypeName);
+                renderFactTypePropertySelectedUIElements(selectedFactTypeName);
             }
         });
         this.rightSideUIElementsBox.addComponent(factTypePropertiesTable);
@@ -242,17 +247,103 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
         UI.getCurrent().addWindow(window);
     }
 
+    private void executeDeleteFactTypeOperation(){
+        if(this.currentSelectedFactTypeName !=null){
+            //do delete logic
+            String deleteConfirmMessage=FontAwesome.INFO.getHtml()+
+                    " 请确认是否删除事实类型定义  <b>"+this.currentSelectedFactTypeName +"</b>。";
+            Label confirmMessage= new Label(deleteConfirmMessage, ContentMode.HTML);
+            final ConfirmDialog deleteFactTypeConfirmDialog = new ConfirmDialog();
+            deleteFactTypeConfirmDialog.setConfirmMessage(confirmMessage);
 
+            Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+                @Override
+                public void buttonClick(final Button.ClickEvent event) {
+                    //close confirm dialog
+                    deleteFactTypeConfirmDialog.close();
 
+                    boolean deleteFactTypeResult=BusinessSolutionOperationUtil.deleteBusinessSolutionFactType(businessSolutionName, currentSelectedFactTypeName);
+                    if(deleteFactTypeResult){
+                        renderFactTypeDefinitionsManagementInfo(businessSolutionName);
+                        Notification resultNotification = new Notification("删除数据操作成功",
+                                "删除事实类型定义成功", Notification.Type.HUMANIZED_MESSAGE);
+                        resultNotification.setPosition(Position.MIDDLE_CENTER);
+                        resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                        resultNotification.show(Page.getCurrent());
+                    }else{
+                        Notification errorNotification = new Notification("删除事实类型定义错误",
+                                "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                        errorNotification.setPosition(Position.MIDDLE_CENTER);
+                        errorNotification.show(Page.getCurrent());
+                        errorNotification.setIcon(FontAwesome.WARNING);
+                    }
+                }
+            };
+            deleteFactTypeConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+            UI.getCurrent().addWindow(deleteFactTypeConfirmDialog);
+        }
+    }
 
+    private void executeAddFactTypePropertyOperation(){
+        if(this.currentSelectedFactTypeName !=null){
+            CreateTypePropertyDefinitionPanel createTypePropertyPanel=new CreateTypePropertyDefinitionPanel(this.currentUserClientInfo);
+            createTypePropertyPanel.setBusinessSolutionName(this.getBusinessSolutionName());
+            createTypePropertyPanel.setPropertyTypeKind(InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT);
+            createTypePropertyPanel.setTypeName(this.currentSelectedFactTypeName);
+            createTypePropertyPanel.setCreateTypePropertyPanelInvoker(this);
 
+            final Window window = new Window();
+            window.setHeight(380.0f, Unit.PIXELS);
+            window.setWidth(550.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(createTypePropertyPanel);
+            createTypePropertyPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
 
-
-
+    private void executeDeleteFactTypePropertyOperation(){
+        if(this.currentSelectedFactTypeName !=null&&this.currentSelectedFactTypePropertyName !=null){
+            //do delete logic
+            Label confirmMessage= new Label(FontAwesome.INFO.getHtml()+
+                    " 请确认是否删除事实类型定义 "+this.currentSelectedFactTypeName +" 中的属性定义 <b>"+this.currentSelectedFactTypePropertyName +"</b>.", ContentMode.HTML);
+            final ConfirmDialog deleteFactTypeConfirmDialog = new ConfirmDialog();
+            deleteFactTypeConfirmDialog.setConfirmMessage(confirmMessage);
+            Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+                @Override
+                public void buttonClick(final Button.ClickEvent event) {
+                    //close confirm dialog
+                    deleteFactTypeConfirmDialog.close();
+                    boolean deleteFactTypePropertyResult=
+                            BusinessSolutionOperationUtil.deleteSolutionTypePropertyDefinition(businessSolutionName, InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,currentSelectedFactTypeName, currentSelectedFactTypePropertyName);
+                    if(deleteFactTypePropertyResult){
+                        renderFactTypeSelectedUIElements(currentSelectedFactTypeName);
+                        Notification resultNotification = new Notification("删除数据操作成功",
+                                "删除事实类型属性定义成功", Notification.Type.HUMANIZED_MESSAGE);
+                        resultNotification.setPosition(Position.MIDDLE_CENTER);
+                        resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                        resultNotification.show(Page.getCurrent());
+                    }else{
+                        Notification errorNotification = new Notification("删除事实类型属性定义错误",
+                                "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                        errorNotification.setPosition(Position.MIDDLE_CENTER);
+                        errorNotification.show(Page.getCurrent());
+                        errorNotification.setIcon(FontAwesome.WARNING);
+                    }
+                }
+            };
+            deleteFactTypeConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+            UI.getCurrent().addWindow(deleteFactTypeConfirmDialog);
+        }
+    }
 
     @Override
     public void createTypePropertyActionFinish(boolean actionResult) {
-
+        if(this.currentSelectedFactTypeName !=null){
+            renderFactTypeSelectedUIElements(this.currentSelectedFactTypeName);
+        }
     }
 
     public void renderFactTypeDefinitionsManagementInfo(String businessSolutionName){
@@ -262,7 +353,6 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
 
         List<FactTypeDefinitionVO> factTypeDefinitionsList= BusinessSolutionOperationUtil.getBusinessSolutionFactTypeList(getBusinessSolutionName());
         for(FactTypeDefinitionVO currentFactTypeDefinition:factTypeDefinitionsList){
-
             Object[] factTypeInfo=new Object[]{
                     currentFactTypeDefinition.getTypeName(),currentFactTypeDefinition.getTypeAliasName()
             };
@@ -287,10 +377,11 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIElementsBox);
         this.currentFactTypePropertiesMap =null;
         this.factTypePropertiesTable.getContainerDataSource().removeAllItems();
-        /*
-        List<PropertyTypeVO> factTypePropertiesList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(this.discoverSpaceName, factTypeName);
-        this.currentFactTypePropertiesMap =new HashMap<String,PropertyTypeVO>();
-        for(PropertyTypeVO currentPropertyTypeVO:factTypePropertiesList){
+        List<SolutionTypePropertyTypeDefinitionVO> factTypePropertiesList=
+                BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(getBusinessSolutionName(), InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,factTypeName);
+        this.currentFactTypePropertiesMap =new HashMap<>();
+
+        for(SolutionTypePropertyTypeDefinitionVO currentPropertyTypeVO:factTypePropertiesList){
             this.currentFactTypePropertiesMap.put(currentPropertyTypeVO.getPropertyName(), currentPropertyTypeVO);
             Object[] currentFactTypePropertiesInfo=new Object[]{
                     " "+currentPropertyTypeVO.getPropertyName(),
@@ -301,18 +392,31 @@ public class FactTypeDefinitionsManagementPanel extends VerticalLayout implement
                     ""+ currentPropertyTypeVO.isNullable()
             };
             final Object currentFactTypeInfoKey = this.factTypePropertiesTable.addItem(currentFactTypePropertiesInfo, null);
-            if(factTypeName.equals(currentPropertyTypeVO.getPropertySourceOwner())){
-                this.factTypePropertiesTable.setItemIcon(currentFactTypeInfoKey, FontAwesome.CIRCLE_O);
-            }else{
-                this.factTypePropertiesTable.setItemIcon(currentFactTypeInfoKey, FontAwesome.REPLY_ALL);
-            }
+
+            this.factTypePropertiesTable.setItemIcon(currentFactTypeInfoKey, FontAwesome.CIRCLE_O);
+
             this.factTypePropertiesTable.setChildrenAllowed(currentFactTypeInfoKey, false);
             this.factTypePropertiesTable.setColumnCollapsible(currentFactTypeInfoKey, false);
         }
-        */
+
         this.currentSelectedFactTypeName =factTypeName;
         this.removeFactTypeButton.setEnabled(true);
         this.deleteFactTypePropertyButton.setEnabled(false);
+    }
+
+    private void renderFactTypePropertySelectedUIElements(String propertyName){
+        this.currentSelectedFactTypePropertyName =propertyName.trim();
+        this.deleteFactTypePropertyButton.setEnabled(false);
+        if(this.currentFactTypePropertiesMap !=null){
+            SolutionTypePropertyTypeDefinitionVO currentSelectedPropertyTypeVO=this.currentFactTypePropertiesMap.get(propertyName.trim());
+            if(currentSelectedPropertyTypeVO!=null){
+                if(this.currentSelectedFactTypeName.equals(currentSelectedPropertyTypeVO.getPropertySourceOwner())){
+                    this.deleteFactTypePropertyButton.setEnabled(true);
+                }else{
+                    this.deleteFactTypePropertyButton.setEnabled(false);
+                }
+            }
+        }
     }
 
     public String getBusinessSolutionName() {
