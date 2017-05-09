@@ -2202,7 +2202,7 @@ public class InfoDiscoverSpaceOperationUtil {
         try {
             targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
             InformationExplorer ie=targetSpace.getInformationExplorer();
-            Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id,RelationDirection.TWO_WAY);
+            Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id);
 
             if(shortestPathRelationsStack!=null){
                 return true;
@@ -2217,6 +2217,71 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return false;
+    }
+
+    public static RelationablesPathVO getShortestPathBetweenTwoRelationables(String spaceName, String relationable1Id, String relationable2Id){
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            Stack<Relation> shortestPathRelationsStack=ie.discoverRelationablesShortestPath(relationable1Id,relationable2Id);
+
+            if(shortestPathRelationsStack!=null){
+                RelationablesPathVO currentRelationablesPathVO=new RelationablesPathVO();
+                currentRelationablesPathVO.setEndPointRelationableAId(relationable1Id);
+                currentRelationablesPathVO.setEndPointRelationableBId(relationable2Id);
+                Stack<RelationValueVO> pathRelationRouteStack=new Stack();
+                currentRelationablesPathVO.setPathRelationRoute(pathRelationRouteStack);
+                for(int i=0;i<shortestPathRelationsStack.size();i++){
+                    Relation currentRelation=shortestPathRelationsStack.elementAt(i);
+                    RelationValueVO currentRelationValueVO=generateRelationValueVO(spaceName,currentRelation);
+                    pathRelationRouteStack.push(currentRelationValueVO);
+                }
+                return currentRelationablesPathVO;
+            }else{
+                return null;
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return null;
+    }
+
+    public static List<RelationablesPathVO> getAllPathsBetweenTwoRelationables(String spaceName, String relationable1Id, String relationable2Id){
+        List<RelationablesPathVO> relationablesPathList=new ArrayList<>();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            List<Stack<Relation>> relationStackList=ie.discoverRelationablesAllPaths(relationable1Id,relationable2Id);
+            if(relationStackList!=null){
+                for(Stack<Relation> currentpathStack:relationStackList){
+                    RelationablesPathVO currentRelationablesPathVO=new RelationablesPathVO();
+                    currentRelationablesPathVO.setEndPointRelationableAId(relationable1Id);
+                    currentRelationablesPathVO.setEndPointRelationableBId(relationable2Id);
+
+                    Stack<RelationValueVO> pathRelationRouteStack=new Stack();
+                    currentRelationablesPathVO.setPathRelationRoute(pathRelationRouteStack);
+                    for(int i=0;i<currentpathStack.size();i++){
+                        Relation currentRelation=currentpathStack.elementAt(i);
+                        RelationValueVO currentRelationValueVO=generateRelationValueVO(spaceName,currentRelation);
+                        pathRelationRouteStack.push(currentRelationValueVO);
+                    }
+                    relationablesPathList.add(currentRelationablesPathVO);
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return relationablesPathList;
     }
 
     public static void clearItemAliasNameCache(){
@@ -2328,5 +2393,66 @@ public class InfoDiscoverSpaceOperationUtil {
                 metaConfigSpace.closeSpace();
             }
         }
+    }
+
+    private static RelationValueVO generateRelationValueVO(String spaceName,Relation currentRelation){
+        RelationValueVO currentRelationValueVO=new RelationValueVO();
+        currentRelationValueVO.setId(currentRelation.getId());
+        currentRelationValueVO.setRelationTypeName(currentRelation.getType());
+        currentRelationValueVO.setDiscoverSpaceName(spaceName);
+
+        Relationable fromRelationable=currentRelation.getFromRelationable();
+        if(fromRelationable!=null){
+            RelationableValueVO fromRelationableValueVO=new RelationableValueVO();
+            fromRelationableValueVO.setDiscoverSpaceName(spaceName);
+            fromRelationableValueVO.setId(fromRelationable.getId());
+            if(fromRelationable instanceof Dimension){
+                Dimension dimensionRelationable=(Dimension)fromRelationable;
+                fromRelationableValueVO.setRelationableTypeName(dimensionRelationable.getType());
+                fromRelationableValueVO.setRelationableTypeKind(TYPEKIND_DIMENSION);
+            }
+            if(fromRelationable instanceof Fact){
+                Fact factRelationable=(Fact)fromRelationable;
+                fromRelationableValueVO.setRelationableTypeName(factRelationable.getType());
+                fromRelationableValueVO.setRelationableTypeKind(TYPEKIND_FACT);
+            }
+            currentRelationValueVO.setFromRelationable(fromRelationableValueVO);
+        }
+
+        Relationable toRelationable=currentRelation.getToRelationable();
+        if(toRelationable!=null){
+            RelationableValueVO toRelationableValueVO=new RelationableValueVO();
+            toRelationableValueVO.setDiscoverSpaceName(spaceName);
+            toRelationableValueVO.setId(toRelationable.getId());
+            if(toRelationable instanceof Dimension){
+                Dimension dimensionRelationable=(Dimension)toRelationable;
+                toRelationableValueVO.setRelationableTypeName(dimensionRelationable.getType());
+                toRelationableValueVO.setRelationableTypeKind(TYPEKIND_DIMENSION);
+            }
+            if(toRelationable instanceof Fact){
+                Fact factRelationable=(Fact)toRelationable;
+                toRelationableValueVO.setRelationableTypeName(factRelationable.getType());
+                toRelationableValueVO.setRelationableTypeKind(TYPEKIND_FACT);
+            }
+            currentRelationValueVO.setToRelationable(toRelationableValueVO);
+        }
+
+        List<PropertyValueVO> propertyValueVOList=new ArrayList<PropertyValueVO>();
+        currentRelationValueVO.setProperties(propertyValueVOList);
+        /*
+        List<Property> propertiesList=currentRelation.getProperties();
+        if(propertiesList!=null){
+            for(Property currentProperty:propertiesList){
+                if(currentProperty.getPropertyType()!=null){
+                    PropertyValueVO currentPropertyValueVO=new PropertyValueVO();
+                    currentPropertyValueVO.setPropertyName(currentProperty.getPropertyName());
+                    currentPropertyValueVO.setPropertyType(currentProperty.getPropertyType().toString());
+                    currentPropertyValueVO.setPropertyValue(currentProperty.getPropertyValue());
+                    propertyValueVOList.add(currentPropertyValueVO);
+                }
+            }
+        }
+        */
+        return currentRelationValueVO;
     }
 }

@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.visualizationAnalyzeElement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationablesPathVO;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.ExternalResource;
@@ -11,7 +12,9 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangychu on 4/13/17.
@@ -23,6 +26,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
     private Label analyzingData1IdLabel;
     private Label analyzingData2IdLabel;
     private BrowserFrame pathsDetailGraphBrowserFrame;
+    private RelationablesPathInfoList relationablesPathInfoList;
     private int browserWindowHeight;
     private final static String shortestPathInfoGraphBaseAddress= AdminCenterPropertyHandler.
             getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesShortestPathExploreGraph.html";
@@ -94,10 +98,20 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
 
         twoAnalyzingDataInfoContainerLayout.addComponent(analyzingDataInfoContainerLayout);
 
+        HorizontalLayout pathsDetailInfoContainerLayout=new HorizontalLayout();
+        pathsDetailInfoContainerLayout.setWidth(100,Unit.PERCENTAGE);
+        pathsDetailInfoContainerLayout.setHeight(browserWindowHeight-200,Unit.PIXELS);
+        this.addComponent(pathsDetailInfoContainerLayout);
+        this.addComponent(pathsDetailInfoContainerLayout);
+
+        relationablesPathInfoList=new RelationablesPathInfoList(this.currentUserClientInfo);
+        relationablesPathInfoList.setContainerFindRelationInfoOfTwoAnalyzingDataPanel(this);
+        pathsDetailInfoContainerLayout.addComponent(relationablesPathInfoList);
         pathsDetailGraphBrowserFrame = new BrowserFrame();
         pathsDetailGraphBrowserFrame.setSizeFull();
         pathsDetailGraphBrowserFrame.setHeight(browserWindowHeight-200,Unit.PIXELS);
-        this.addComponent(pathsDetailGraphBrowserFrame);
+        pathsDetailInfoContainerLayout.addComponent(pathsDetailGraphBrowserFrame);
+        pathsDetailInfoContainerLayout.setExpandRatio(pathsDetailGraphBrowserFrame,1f);
     }
 
     public void addFirstAnalyzingData(String processingDataId){
@@ -116,8 +130,11 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
-        if(hasShortestPath){
+        RelationablesPathVO shortestPath=InfoDiscoverSpaceOperationUtil.getShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        if(shortestPath!=null){
+            List<RelationablesPathVO> pathInfoList=new ArrayList<>();
+            pathInfoList.add(shortestPath);
+            relationablesPathInfoList.renderRelationablesPathsList(pathInfoList);
             long timeStampPostValue=new Date().getTime();
             String relationableAId=analyzingData1IdLabel.getValue();
             String relationableBId=analyzingData2IdLabel.getValue();
@@ -150,6 +167,10 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         }
         boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
         if(hasShortestPath){
+            List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getAllPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+            relationablesPathInfoList.renderRelationablesPathsList(pathInfoList);
+            this.pathsDetailGraphBrowserFrame.setSource(null);
+            /*
             long timeStampPostValue=new Date().getTime();
             String relationableAId=analyzingData1IdLabel.getValue();
             String relationableBId=analyzingData2IdLabel.getValue();
@@ -162,6 +183,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
                             "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+
                             "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
             this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
+            */
         }else{
             this.pathsDetailGraphBrowserFrame.setSource(null);
             Notification resultNotification = new Notification("未发现关联路径",
@@ -170,6 +192,10 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
             resultNotification.show(Page.getCurrent());
         }
+    }
+
+    public void showRelationablesPathGraph(RelationablesPathVO pahthInfo){
+        System.out.println(pahthInfo);System.out.println(pahthInfo);
     }
 
     public String getDiscoverSpaceName() {
