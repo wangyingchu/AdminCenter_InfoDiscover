@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationablesPathVO;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -27,6 +28,8 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
     private String discoverSpaceName;
     private Label analyzingData1IdLabel;
     private Label analyzingData2IdLabel;
+    private Label pathDataInfoLabel;
+    private List<String> pathDataIdList;
     private BrowserFrame pathsDetailGraphBrowserFrame;
     private RelationablesPathInfoList relationablesPathInfoList;
     private int browserWindowHeight;
@@ -39,6 +42,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
     public FindRelationInfoOfTwoAnalyzingDataPanel(UserClientInfo userClientInfo){
         this.setMargin(true);
         this.currentUserClientInfo = userClientInfo;
+        this.pathDataIdList = new ArrayList<>();
         browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
         HorizontalLayout twoAnalyzingDataInfoContainerLayout=new HorizontalLayout();
         twoAnalyzingDataInfoContainerLayout.setWidth(100,Unit.PERCENTAGE);
@@ -48,82 +52,157 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         HorizontalLayout analyzingDataInfoContainerLayout=new HorizontalLayout();
         Label analyzingData_1Label=new Label(FontAwesome.SQUARE_O.getHtml()+" 数据项 (1) : ", ContentMode.HTML);
         analyzingDataInfoContainerLayout.addComponent(analyzingData_1Label);
+        analyzingDataInfoContainerLayout.setComponentAlignment(analyzingData_1Label, Alignment.MIDDLE_LEFT);
 
         HorizontalLayout spacingDiv01Layout=new HorizontalLayout();
         spacingDiv01Layout.setWidth(10,Unit.PIXELS);
         analyzingDataInfoContainerLayout.addComponent(spacingDiv01Layout);
+        analyzingDataInfoContainerLayout.setComponentAlignment(spacingDiv01Layout, Alignment.MIDDLE_LEFT);
 
         analyzingData1IdLabel=new Label("-");
         analyzingDataInfoContainerLayout.addComponent(analyzingData1IdLabel);
+        analyzingDataInfoContainerLayout.setComponentAlignment(analyzingData1IdLabel, Alignment.MIDDLE_LEFT);
 
         HorizontalLayout spacingDiv02Layout=new HorizontalLayout();
         spacingDiv02Layout.setWidth(20,Unit.PIXELS);
         analyzingDataInfoContainerLayout.addComponent(spacingDiv02Layout);
+        analyzingDataInfoContainerLayout.setComponentAlignment(spacingDiv02Layout, Alignment.MIDDLE_LEFT);
 
         Label analyzingData_2Label=new Label(FontAwesome.SQUARE_O.getHtml()+" 数据项 (2) : ", ContentMode.HTML);
         analyzingDataInfoContainerLayout.addComponent(analyzingData_2Label);
+        analyzingDataInfoContainerLayout.setComponentAlignment(analyzingData_2Label, Alignment.MIDDLE_LEFT);
 
         HorizontalLayout spacingDiv03Layout=new HorizontalLayout();
         spacingDiv03Layout.setWidth(10,Unit.PIXELS);
         analyzingDataInfoContainerLayout.addComponent(spacingDiv03Layout);
+        analyzingDataInfoContainerLayout.setComponentAlignment(spacingDiv03Layout, Alignment.MIDDLE_LEFT);
 
         analyzingData2IdLabel=new Label("-");
         analyzingDataInfoContainerLayout.addComponent(analyzingData2IdLabel);
+        analyzingDataInfoContainerLayout.setComponentAlignment(analyzingData2IdLabel, Alignment.MIDDLE_LEFT);
 
         HorizontalLayout spacingDiv04Layout=new HorizontalLayout();
         spacingDiv04Layout.setWidth(10,Unit.PIXELS);
         analyzingDataInfoContainerLayout.addComponent(spacingDiv04Layout);
+        analyzingDataInfoContainerLayout.setComponentAlignment(spacingDiv04Layout, Alignment.MIDDLE_LEFT);
 
-        Button showShortPathRelationButton=new Button("发现最短路径关系");
-        showShortPathRelationButton.setIcon(FontAwesome.SEARCH);
-        analyzingDataInfoContainerLayout.addComponent(showShortPathRelationButton);
-        showShortPathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        showShortPathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        showShortPathRelationButton.addClickListener(new Button.ClickListener() {
+        MenuBar.Command pathExploreMenuItemCommand = new MenuBar.Command() {
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                String selectedCommandName=selectedItem.getText();
+                if("发现算法默认最短关联路径".equals(selectedCommandName)){
+                    showShortestPathRelation();
+                }
+                if("发现所有关联路径".equals(selectedCommandName)){
+                    showAllPathRelations();
+                }
+                if("发现最短５条关联路径".equals(selectedCommandName)){
+                    showShortest5PathRelations();
+                }
+                if("发现最长５条关联路径".equals(selectedCommandName)){
+                    showLongest5PathRelations();
+                }
+            }
+        };
+
+        MenuBar basicRelationExploreMenuBar = new MenuBar();
+        basicRelationExploreMenuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        basicRelationExploreMenuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+        analyzingDataInfoContainerLayout.addComponent(basicRelationExploreMenuBar);
+        MenuBar.MenuItem pathExploreRootItem=basicRelationExploreMenuBar.addItem("基础路径关系发现", VaadinIcons.SEARCH, null);
+        pathExploreRootItem.addItem("发现算法默认最短关联路径", FontAwesome.CIRCLE_THIN, pathExploreMenuItemCommand);
+        pathExploreRootItem.addItem("发现所有关联路径", FontAwesome.CIRCLE_THIN, pathExploreMenuItemCommand);
+        pathExploreRootItem.addItem("发现最短５条关联路径", FontAwesome.CIRCLE_THIN, pathExploreMenuItemCommand);
+        pathExploreRootItem.addItem("发现最长５条关联路径", FontAwesome.CIRCLE_THIN, pathExploreMenuItemCommand);
+        analyzingDataInfoContainerLayout.setComponentAlignment(basicRelationExploreMenuBar, Alignment.TOP_LEFT);
+
+        Label operationSpaceDivLabel=new Label("<span style='color:#AAAAAA;padding-left:10px;padding-right:5px;'>|</span>",ContentMode.HTML);
+        analyzingDataInfoContainerLayout.addComponent(operationSpaceDivLabel);
+        analyzingDataInfoContainerLayout.setComponentAlignment(operationSpaceDivLabel, Alignment.MIDDLE_RIGHT);
+
+        Label findPathsCrossNodesLabel=new Label(VaadinIcons.INPUT.getHtml()+" 发现通过指定节点的路径关系",ContentMode.HTML);
+        findPathsCrossNodesLabel.addStyleName(ValoTheme.LABEL_SMALL);
+        analyzingDataInfoContainerLayout.addComponent(findPathsCrossNodesLabel);
+        analyzingDataInfoContainerLayout.setComponentAlignment(findPathsCrossNodesLabel, Alignment.MIDDLE_RIGHT);
+
+        Button addPathedNodesButton=new Button();
+        addPathedNodesButton.setIcon(FontAwesome.PLUS_SQUARE);
+        addPathedNodesButton.setDescription("添加路径通过的数据节点");
+        addPathedNodesButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        analyzingDataInfoContainerLayout.addComponent(addPathedNodesButton);
+        addPathedNodesButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        analyzingDataInfoContainerLayout.setComponentAlignment(addPathedNodesButton, Alignment.TOP_LEFT);
+        FindRelationInfoOfTwoAnalyzingDataPanel self=this;
+        addPathedNodesButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                showShortestPathRelation();
+                AddNewDataForPathsExplorePanel addNewDataForPathsExplorePanel=new AddNewDataForPathsExplorePanel(currentUserClientInfo);
+                addNewDataForPathsExplorePanel.setDiscoverSpaceName(discoverSpaceName);
+                addNewDataForPathsExplorePanel.setRelatedFindRelationInfoOfTwoAnalyzingDataPanel(self);
+                final Window window = new Window();
+                window.setWidth(360.0f, Unit.PIXELS);
+                window.setHeight(180.0f, Unit.PIXELS);
+                window.setResizable(false);
+                window.center();
+                window.setModal(true);
+                window.setContent(addNewDataForPathsExplorePanel);
+                addNewDataForPathsExplorePanel.setContainerDialog(window);
+                UI.getCurrent().addWindow(window);
             }
         });
 
-        Button showAllPathRelationButton=new Button("发现所有路径关系");
-        showAllPathRelationButton.setIcon(FontAwesome.SEARCH);
-        analyzingDataInfoContainerLayout.addComponent(showAllPathRelationButton);
-        showAllPathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        showAllPathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        analyzingDataInfoContainerLayout.setComponentAlignment(showAllPathRelationButton, Alignment.TOP_LEFT);
-        showAllPathRelationButton.addClickListener(new Button.ClickListener() {
+        Button clearPathedNodesButton=new Button();
+        clearPathedNodesButton.setIcon(FontAwesome.ERASER);
+        clearPathedNodesButton.setDescription("清除路径通过的数据节点");
+        clearPathedNodesButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+        analyzingDataInfoContainerLayout.addComponent(clearPathedNodesButton);
+        clearPathedNodesButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        analyzingDataInfoContainerLayout.setComponentAlignment(clearPathedNodesButton, Alignment.TOP_LEFT);
+
+        clearPathedNodesButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                showAllPathRelations();
+                pathDataIdList.clear();
+                pathDataInfoLabel.setValue("-");
             }
         });
 
-        Button showShortest5PathRelationButton=new Button("发现最短５条路径关系");
-        showShortest5PathRelationButton.setIcon(FontAwesome.SEARCH);
-        analyzingDataInfoContainerLayout.addComponent(showShortest5PathRelationButton);
-        showShortest5PathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        showShortest5PathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        analyzingDataInfoContainerLayout.setComponentAlignment(showShortest5PathRelationButton, Alignment.TOP_LEFT);
-        showShortest5PathRelationButton.addClickListener(new Button.ClickListener() {
+        Label findPathsCrossNodesLabel2=new Label("&nbsp;&nbsp;:&nbsp;&nbsp;",ContentMode.HTML);
+        analyzingDataInfoContainerLayout.addComponent(findPathsCrossNodesLabel2);
+        analyzingDataInfoContainerLayout.setComponentAlignment(findPathsCrossNodesLabel2, Alignment.MIDDLE_LEFT);
+
+        Panel pathDataInfoPanel=new Panel();
+        pathDataInfoPanel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        pathDataInfoPanel.setWidth(350,Unit.PIXELS);
+        HorizontalLayout pathDataInfoLayout=new HorizontalLayout();
+        pathDataInfoLayout.setSpacing(false);
+        pathDataInfoLayout.setMargin(false);
+        pathDataInfoPanel.setContent(pathDataInfoLayout);
+
+        pathDataInfoLabel=new Label("-");
+        pathDataInfoLabel.addStyleName(ValoTheme.LABEL_TINY);
+        pathDataInfoLabel.addStyleName("ui_appFriendlyElement");
+        pathDataInfoLayout.addComponent(pathDataInfoLabel);
+
+        analyzingDataInfoContainerLayout.addComponent(pathDataInfoPanel);
+        analyzingDataInfoContainerLayout.setComponentAlignment(pathDataInfoPanel, Alignment.MIDDLE_LEFT);
+
+        Button showPathsCrossSpecificNodesRelationButton=new Button();
+        showPathsCrossSpecificNodesRelationButton.setIcon(VaadinIcons.PLAY_CIRCLE);
+        showPathsCrossSpecificNodesRelationButton.setDescription("搜索通过指定节点的路径关系");
+        analyzingDataInfoContainerLayout.addComponent(showPathsCrossSpecificNodesRelationButton);
+        showPathsCrossSpecificNodesRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        showPathsCrossSpecificNodesRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
+        analyzingDataInfoContainerLayout.setComponentAlignment(showPathsCrossSpecificNodesRelationButton, Alignment.TOP_LEFT);
+        showPathsCrossSpecificNodesRelationButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                showShortest5PathRelations();
+                showPathsConnectedWithSpecialData();
             }
         });
 
-        Button showLongest5PathRelationButton=new Button("发现最长５条路径关系");
-        showLongest5PathRelationButton.setIcon(FontAwesome.SEARCH);
-        analyzingDataInfoContainerLayout.addComponent(showLongest5PathRelationButton);
-        showLongest5PathRelationButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
-        showLongest5PathRelationButton.addStyleName(ValoTheme.BUTTON_SMALL);
-        analyzingDataInfoContainerLayout.setComponentAlignment(showLongest5PathRelationButton, Alignment.TOP_LEFT);
-        showLongest5PathRelationButton.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent clickEvent) {
-                showLongest5PathRelations();
-            }
-        });
+        Label operationSpaceDivLabel2=new Label("<span style='color:#AAAAAA;'>|</span>",ContentMode.HTML);
+        analyzingDataInfoContainerLayout.addComponent(operationSpaceDivLabel2);
+        analyzingDataInfoContainerLayout.setComponentAlignment(operationSpaceDivLabel2, Alignment.MIDDLE_RIGHT);
 
         twoAnalyzingDataInfoContainerLayout.addComponent(analyzingDataInfoContainerLayout);
 
@@ -153,9 +232,27 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
         cleanCurrentResult();
     }
 
+    public void addPathExploreDatas(String dataId){
+        if(!this.pathDataIdList.contains(dataId)){
+            this.pathDataIdList.add(dataId);
+        }
+        StringBuffer dataIdsListStr=new StringBuffer();
+        for(int i=0;i<pathDataIdList.size();i++){
+            String currentDataId=pathDataIdList.get(i);
+            if(i!=pathDataIdList.size()-1){
+                dataIdsListStr.append(currentDataId+",");
+            }else{
+                dataIdsListStr.append(currentDataId);
+            }
+        }
+        this.pathDataInfoLabel.setValue(dataIdsListStr.toString());
+    }
+
     private void cleanCurrentResult(){
-        relationablesPathInfoList.renderRelationablesPathsList(null);
+        this.relationablesPathInfoList.renderRelationablesPathsList(null);
         this.pathsDetailGraphBrowserFrame.setSource(null);
+        this.pathDataIdList.clear();
+        this.pathDataInfoLabel.setValue("-");
     }
 
     private void showShortestPathRelation(){
@@ -284,6 +381,40 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             String graphLocationFullAddress=
                     this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
                             "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=LONGEST"+
+                            "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+            this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
+            List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getLongestPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),5);
+            relationablesPathInfoList.renderRelationablesPathsList(pathInfoList);
+        }else{
+            this.pathsDetailGraphBrowserFrame.setSource(null);
+            Notification resultNotification = new Notification("未发现关联路径",
+                    "在数据项　"+analyzingData1IdLabel.getValue()+" 与　"+analyzingData2IdLabel.getValue()+"之间未发现关联路径", Notification.Type.WARNING_MESSAGE);
+            resultNotification.setPosition(Position.BOTTOM_RIGHT);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+        }
+    }
+
+    private void showPathsConnectedWithSpecialData(){
+        if(analyzingData1IdLabel.getValue().equals("-")||analyzingData2IdLabel.getValue().equals("-")){
+            Notification errorNotification = new Notification("数据校验错误","请选择待发现关联关系的两项数据项", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean hasShortestPath=InfoDiscoverSpaceOperationUtil.hasShortestPathBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue());
+        if(hasShortestPath){
+            long timeStampPostValue=new Date().getTime();
+            String relationableAId=analyzingData1IdLabel.getValue();
+            String relationableBId=analyzingData2IdLabel.getValue();
+            String relationableAIdCode=relationableAId.replaceAll("#","%23");
+            relationableAIdCode=relationableAIdCode.replaceAll(":","%3a");
+            String relationableBIdCode=relationableBId.replaceAll("#","%23");
+            relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
+            String graphLocationFullAddress=
+                    this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=ALL"+
                             "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
             this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
             List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getLongestPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),5);
