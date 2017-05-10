@@ -34,13 +34,8 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesShortestPathExploreGraph.html";
     private final static String specifiedPathInfoGraphBaseAddress= AdminCenterPropertyHandler.
             getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesSpecifiedPathExploreGraph.html";
-    private final static String allPathsInfoGraphBaseAddress= AdminCenterPropertyHandler.
-            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesAllPathsExploreGraph.html";
-    private final static String shortest5PathsInfoGraphBaseAddress= AdminCenterPropertyHandler.
-            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesShortestPathsExploreGraph.html";
-    private final static String longest5PathsInfoGraphBaseAddress= AdminCenterPropertyHandler.
-            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesLongestPathsExploreGraph.html";
-
+    private final static String pathsInfoGraphBaseAddress= AdminCenterPropertyHandler.
+            getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"infoAnalysePages/typeInstanceRelationAnalyse/typeInstancesPathsExploreGraph.html";
     public FindRelationInfoOfTwoAnalyzingDataPanel(UserClientInfo userClientInfo){
         this.setMargin(true);
         this.currentUserClientInfo = userClientInfo;
@@ -253,8 +248,8 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             String relationableBIdCode=relationableBId.replaceAll("#","%23");
             relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
             String graphLocationFullAddress=
-                    this.shortest5PathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
-                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5"+
+                    this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=SHORTEST"+
                             "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
             this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
             List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getShortestPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),5);
@@ -287,8 +282,8 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             String relationableBIdCode=relationableBId.replaceAll("#","%23");
             relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
             String graphLocationFullAddress=
-                    this.longest5PathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
-                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5"+
+                    this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=LONGEST"+
                             "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
             this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
             List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getLongestPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),5);
