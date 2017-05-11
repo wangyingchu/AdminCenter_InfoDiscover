@@ -26,13 +26,13 @@ public class RelationablesPathInfoList extends VerticalLayout {
     public RelationablesPathInfoList(UserClientInfo userClientInfo){
         this.setMargin(new MarginInfo(true,false,true,false));
         int browserWindowHeight= UI.getCurrent().getPage().getBrowserWindowHeight();
-        this.setHeight(browserWindowHeight-200,Unit.PIXELS);
+        this.setHeight(browserWindowHeight-210,Unit.PIXELS);
         this.setWidth(280,Unit.PIXELS);
         this.currentUserClientInfo = userClientInfo;
 
         this.relationablesPathInfoTable =new Table();
         this.relationablesPathInfoTable.setWidth(100, Unit.PERCENTAGE);
-        this.relationablesPathInfoTable.setHeight(browserWindowHeight-200,Unit.PIXELS);
+        this.relationablesPathInfoTable.setHeight(browserWindowHeight-210,Unit.PIXELS);
         this.relationablesPathInfoTable.addStyleName(ValoTheme.TABLE_SMALL);
         this.relationablesPathInfoTable.setSelectable(true);
         this.relationablesPathInfoTable.addContainerProperty(" 路径信息 ",RelationablesPathInfoTableActions.class,null);

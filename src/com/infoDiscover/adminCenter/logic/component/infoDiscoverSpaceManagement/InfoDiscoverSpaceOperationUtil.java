@@ -2350,6 +2350,42 @@ public class InfoDiscoverSpaceOperationUtil {
         return relationablesPathList;
     }
 
+    public static List<RelationablesPathVO> getPathsContainPointedDatasBetweenTwoRelationables(String spaceName, String relationable1Id, String relationable2Id,List<String> pathDataIdList){
+        List<RelationablesPathVO> relationablesPathList=new ArrayList<>();
+        InfoDiscoverSpace targetSpace=null;
+        try {
+            targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(spaceName);
+            InformationExplorer ie=targetSpace.getInformationExplorer();
+            List<Stack<Relation>> relationStackList=ie.discoverPathsConnectedWithSpecifiedRelationables(relationable1Id,relationable2Id,pathDataIdList);
+            if(relationStackList!=null){
+                for(Stack<Relation> currentpathStack:relationStackList){
+                    RelationablesPathVO currentRelationablesPathVO=new RelationablesPathVO();
+                    currentRelationablesPathVO.setEndPointRelationableAId(relationable1Id);
+                    currentRelationablesPathVO.setEndPointRelationableBId(relationable2Id);
+
+                    Stack<RelationValueVO> pathRelationRouteStack=new Stack();
+                    currentRelationablesPathVO.setPathRelationRoute(pathRelationRouteStack);
+                    for(int i=0;i<currentpathStack.size();i++){
+                        Relation currentRelation=currentpathStack.elementAt(i);
+                        RelationValueVO currentRelationValueVO=generateRelationValueVO(spaceName,currentRelation);
+                        pathRelationRouteStack.push(currentRelationValueVO);
+                    }
+                    relationablesPathList.add(currentRelationablesPathVO);
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(targetSpace!=null){
+                targetSpace.closeSpace();
+            }
+        }
+        return relationablesPathList;
+    }
+
+
+
+
     public static void clearItemAliasNameCache(){
         TYPEKIND_AliasNameMap.clear();
         TypeProperty_AliasNameMap.clear();

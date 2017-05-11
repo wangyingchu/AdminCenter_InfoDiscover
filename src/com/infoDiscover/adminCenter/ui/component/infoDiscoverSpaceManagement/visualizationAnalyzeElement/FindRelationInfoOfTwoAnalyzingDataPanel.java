@@ -208,7 +208,7 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
 
         HorizontalLayout pathsDetailInfoContainerLayout=new HorizontalLayout();
         pathsDetailInfoContainerLayout.setWidth(100,Unit.PERCENTAGE);
-        pathsDetailInfoContainerLayout.setHeight(browserWindowHeight-200,Unit.PIXELS);
+        pathsDetailInfoContainerLayout.setHeight(browserWindowHeight-210,Unit.PIXELS);
         this.addComponent(pathsDetailInfoContainerLayout);
         this.addComponent(pathsDetailInfoContainerLayout);
 
@@ -412,12 +412,32 @@ public class FindRelationInfoOfTwoAnalyzingDataPanel extends VerticalLayout {
             relationableAIdCode=relationableAIdCode.replaceAll(":","%3a");
             String relationableBIdCode=relationableBId.replaceAll("#","%23");
             relationableBIdCode=relationableBIdCode.replaceAll(":","%3a");
-            String graphLocationFullAddress=
-                    this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
-                            "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=ALL"+
-                            "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+
+            String graphLocationFullAddress=null;
+            if(pathDataIdList.size()==0){
+                graphLocationFullAddress=
+                        this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                                "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathNumber=5&pathType=ALL"+
+                                "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+            }else{
+                StringBuffer pathNodeIdsListStr=new StringBuffer();
+                for(int i=0;i<pathDataIdList.size();i++){
+                    String currentDataId=pathDataIdList.get(i);
+                    String enCodedID=currentDataId.replaceFirst("#","%23").replaceFirst(":","%3a");
+                    if(i!=pathDataIdList.size()-1){
+                        pathNodeIdsListStr.append(enCodedID+",");
+                    }else{
+                        pathNodeIdsListStr.append(enCodedID);
+                    }
+                }
+                graphLocationFullAddress=
+                        this.pathsInfoGraphBaseAddress+"?discoverSpace="+discoverSpaceName+
+                                "&relationableAId="+relationableAIdCode+"&relationableBId="+relationableBIdCode+"&pathType=PATHDATA"+
+                                "&pathDataIds="+pathNodeIdsListStr.toString()+
+                                "&timestamp="+timeStampPostValue+"&graphHeight="+(browserWindowHeight-220);
+            }
             this.pathsDetailGraphBrowserFrame.setSource(new ExternalResource(graphLocationFullAddress));
-            List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getLongestPathsBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),5);
+            List<RelationablesPathVO> pathInfoList= InfoDiscoverSpaceOperationUtil.getPathsContainPointedDatasBetweenTwoRelationables(this.getDiscoverSpaceName(),analyzingData1IdLabel.getValue(),analyzingData2IdLabel.getValue(),pathDataIdList);
             relationablesPathInfoList.renderRelationablesPathsList(pathInfoList);
         }else{
             this.pathsDetailGraphBrowserFrame.setSource(null);
