@@ -42,7 +42,7 @@ public class ApplicationContent extends HorizontalLayout {
         dataCollectionBusManagementTab.setIcon(FontAwesome.SITEMAP);
         dataCollectionBusManagementTab.setClosable(false);
         dataCollectionBusManagementTab.setEnabled(true);
-
+/*
         // rule engine
         RuleEngineManagementPanel ruleEngineManagementPanel=new
                 RuleEngineManagementPanel(this.currentUserClientInfo);
@@ -51,7 +51,7 @@ public class ApplicationContent extends HorizontalLayout {
         ruleEngineManagementTab.setIcon(FontAwesome.CUBES);
         ruleEngineManagementTab.setClosable(false);
         ruleEngineManagementTab.setEnabled(true);
-
+*/
         applicationContentTabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
             @Override
             public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {

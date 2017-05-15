@@ -5,6 +5,8 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanelInvoker;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -27,7 +29,7 @@ import java.util.*;
 /**
  * Created by wangychu on 10/6/16.
  */
-public class DimensionTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker {
+public class DimensionTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker,AliasNameEditPanelInvoker {
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
     private TreeTable dimensionTypesTreeTable;
@@ -52,7 +54,9 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
 
     private Button createChildDimensionTypeButton;
     private Button removeDimensionTypeButton;
+    private Button editTypeAliasNameButton;
     private Button deleteDimensionTypePropertyButton;
+    private Button editDimensionTypePropertyAliasNameButton;
     private String currentSelectedDimensionTypeName;
     private String currentSelectedDimensionTypePropertyName;
     private DiscoverSpaceStatisticMetrics currentDiscoverSpaceStatisticMetrics;
@@ -106,6 +110,21 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
 
         Label spaceDivLabel1=new Label("|");
         leftSideActionButtonPlacementLayout. addComponent(spaceDivLabel1);
+
+        this.editTypeAliasNameButton=new Button("修改类型别名");
+        this.editTypeAliasNameButton.setEnabled(false);
+        this.editTypeAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editTypeAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editTypeAliasNameButton.addClickListener(new Button.ClickListener(){
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditDimensionTypeAliasNameOperation();
+            }
+        });
+
+        leftSideActionButtonPlacementLayout.addComponent(editTypeAliasNameButton);
 
         this.removeDimensionTypeButton=new Button("删除维度类型");
         this.removeDimensionTypeButton.setEnabled(false);
@@ -199,6 +218,19 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
 
         Label spaceDivLabel2=new Label("|");
         rightSideActionButtonPlacementLayout. addComponent(spaceDivLabel2);
+
+        this.editDimensionTypePropertyAliasNameButton=new Button("修改属性别名");
+        this.editDimensionTypePropertyAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editDimensionTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editDimensionTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editDimensionTypePropertyAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editDimensionTypePropertyAliasNameButton.addClickListener(new Button.ClickListener(){
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditDimensionTypePropertyAliasNameOperation();
+            }
+        });
+        rightSideActionButtonPlacementLayout.addComponent(this.editDimensionTypePropertyAliasNameButton);
 
         this.deleteDimensionTypePropertyButton=new Button("删除类型属性");
         this.deleteDimensionTypePropertyButton.setIcon(FontAwesome.TRASH_O);
@@ -295,6 +327,7 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIPromptBox);
         this.createChildDimensionTypeButton.setEnabled(false);
         this.removeDimensionTypeButton.setEnabled(false);
+        this.editTypeAliasNameButton.setEnabled(false);
         this.currentSelectedDimensionTypeName=null;
     }
 
@@ -334,10 +367,12 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
         this.createChildDimensionTypeButton.setEnabled(true);
         if(dimensionTypeName.equals(InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME)){
             this.removeDimensionTypeButton.setEnabled(false);
+            this.editTypeAliasNameButton.setEnabled(false);
         }else{
             DataTypeStatisticMetrics dimensionTypeStatisticMetrics=getDimensionTypeStatisticMetrics(dimensionTypeName);
             if(dimensionTypeStatisticMetrics==null){
                 this.removeDimensionTypeButton.setEnabled(false);
+                this.editTypeAliasNameButton.setEnabled(false);
             }else{
                 long typeDataCount=dimensionTypeStatisticMetrics.getTypeDataCount();
                 int childTypeCount=getChildDimensionTypeCount(dimensionTypeName);
@@ -346,21 +381,26 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
                 }else{
                     this.removeDimensionTypeButton.setEnabled(true);
                 }
+                this.editTypeAliasNameButton.setEnabled(true);
             }
         }
         this.deleteDimensionTypePropertyButton.setEnabled(false);
+        this.editDimensionTypePropertyAliasNameButton.setEnabled(false);
     }
 
     private void renderDimensionTypePropertySelectedUIElements(String propertyName){
         this.currentSelectedDimensionTypePropertyName=propertyName.trim();
         this.deleteDimensionTypePropertyButton.setEnabled(false);
+        this.editDimensionTypePropertyAliasNameButton.setEnabled(false);
         if(this.currentDimensionTypePropertiesMap!=null){
             PropertyTypeVO currentSelectedPropertyTypeVO=this.currentDimensionTypePropertiesMap.get(propertyName.trim());
             if(currentSelectedPropertyTypeVO!=null){
                 if(this.currentSelectedDimensionTypeName.equals(currentSelectedPropertyTypeVO.getPropertySourceOwner())){
                     this.deleteDimensionTypePropertyButton.setEnabled(true);
+                    editDimensionTypePropertyAliasNameButton.setEnabled(true);
                 }else{
                     this.deleteDimensionTypePropertyButton.setEnabled(false);
+                    this.editDimensionTypePropertyAliasNameButton.setEnabled(false);
                 }
             }
         }
@@ -560,6 +600,102 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
     public void createTypePropertyActionFinish(boolean actionResult) {
         if(this.currentSelectedDimensionTypeName!=null){
             renderDimensionTypeSelectedUIElements(this.currentSelectedDimensionTypeName);
+        }
+    }
+
+    private void executeEditDimensionTypeAliasNameOperation(){
+        if(this.currentSelectedDimensionTypeName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.getTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,this.currentSelectedDimensionTypeName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_TYPE);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypeAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.updateTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,this.currentSelectedDimensionTypeName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改类型别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.dimensionTypesTreeTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.dimensionTypesTreeTable.getItem(itemId);
+                String currentDimensionTypeName=currentItem.getItemProperty(NAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypeName.equals(this.currentSelectedDimensionTypeName)){
+                    currentItem.getItemProperty(ALIASNAME_PROPERTY).setValue(aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改类型别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+        }
+    }
+
+    private void executeEditDimensionTypePropertyAliasNameOperation(){
+        if(this.currentSelectedDimensionTypeName!=null&&this.currentSelectedDimensionTypePropertyName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.
+                    getTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,this.currentSelectedDimensionTypeName,this.currentSelectedDimensionTypePropertyName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_PROPERTY);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypePropertyAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.
+                updateTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,this.currentSelectedDimensionTypeName,this.currentSelectedDimensionTypePropertyName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改属性别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.dimensionTypePropertiesTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.dimensionTypePropertiesTable.getItem(itemId);
+                String currentDimensionTypePropertyName=currentItem.getItemProperty(PROPERTYNAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypePropertyName.trim().equals(this.currentSelectedDimensionTypePropertyName)){
+                    currentItem.getItemProperty(PROPERTYALIASNAME_PROPERTY).setValue(""+aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改属性别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
         }
     }
 }

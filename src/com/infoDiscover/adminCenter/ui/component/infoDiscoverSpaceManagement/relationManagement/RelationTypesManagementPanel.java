@@ -4,6 +4,8 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.RelationTypeVO;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanelInvoker;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -24,7 +26,7 @@ import java.util.*;
 /**
  * Created by wangychu on 10/25/16.
  */
-public class RelationTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker {
+public class RelationTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker,AliasNameEditPanelInvoker {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -51,6 +53,8 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
     private Button createChildRelationTypeButton;
     private Button removeRelationTypeButton;
     private Button deleteRelationTypePropertyButton;
+    private Button editTypeAliasNameButton;
+    private Button editRelationTypePropertyAliasNameButton;
     private String currentSelectedRelationTypeName;
     private String currentSelectedRelationTypePropertyName;
     private DiscoverSpaceStatisticMetrics currentDiscoverSpaceStatisticMetrics;
@@ -104,6 +108,21 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
 
         Label spaceDivLabel1=new Label("|");
         leftSideActionButtonPlacementLayout. addComponent(spaceDivLabel1);
+
+        this.editTypeAliasNameButton =new Button("修改类型别名");
+        this.editTypeAliasNameButton.setEnabled(false);
+        this.editTypeAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editTypeAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editTypeAliasNameButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditRelationTypeAliasNameOperation();
+            }
+        });
+
+        leftSideActionButtonPlacementLayout.addComponent(editTypeAliasNameButton);
 
         this.removeRelationTypeButton =new Button("删除关系类型");
         this.removeRelationTypeButton.setEnabled(false);
@@ -197,6 +216,20 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
 
         Label spaceDivLabel2=new Label("|");
         rightSideActionButtonPlacementLayout. addComponent(spaceDivLabel2);
+
+        this.editRelationTypePropertyAliasNameButton =new Button("修改属性别名");
+        this.editRelationTypePropertyAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editRelationTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editRelationTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editRelationTypePropertyAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editRelationTypePropertyAliasNameButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditRelationTypePropertyAliasNameOperation();
+            }
+        });
+
+        rightSideActionButtonPlacementLayout.addComponent(this.editRelationTypePropertyAliasNameButton);
 
         this.deleteRelationTypePropertyButton =new Button("删除类型属性");
         this.deleteRelationTypePropertyButton.setIcon(FontAwesome.TRASH_O);
@@ -294,6 +327,7 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIPromptBox);
         this.createChildRelationTypeButton.setEnabled(false);
         this.removeRelationTypeButton.setEnabled(false);
+        this.editTypeAliasNameButton.setEnabled(false);
         this.currentSelectedRelationTypeName =null;
     }
 
@@ -333,10 +367,12 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
         this.createChildRelationTypeButton.setEnabled(true);
         if(relationTypeName.equals(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME)){
             this.removeRelationTypeButton.setEnabled(false);
+            this.editTypeAliasNameButton.setEnabled(false);
         }else{
             DataTypeStatisticMetrics relationTypeStatisticMetrics= getRelationTypeStatisticMetrics(relationTypeName);
             if(relationTypeStatisticMetrics==null){
                 this.removeRelationTypeButton.setEnabled(false);
+                this.editTypeAliasNameButton.setEnabled(false);
             }else{
                 long typeDataCount=relationTypeStatisticMetrics.getTypeDataCount();
                 int childTypeCount= getChildRelationTypeCount(relationTypeName);
@@ -345,21 +381,26 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
                 }else{
                     this.removeRelationTypeButton.setEnabled(true);
                 }
+                this.editTypeAliasNameButton.setEnabled(true);
             }
         }
         this.deleteRelationTypePropertyButton.setEnabled(false);
+        this.editRelationTypePropertyAliasNameButton.setEnabled(false);
     }
 
     private void renderRelationTypePropertySelectedUIElements(String propertyName){
         this.currentSelectedRelationTypePropertyName =propertyName.trim();
         this.deleteRelationTypePropertyButton.setEnabled(false);
+        this.editRelationTypePropertyAliasNameButton.setEnabled(false);
         if(this.currentRelationTypePropertiesMap !=null){
             PropertyTypeVO currentSelectedPropertyTypeVO=this.currentRelationTypePropertiesMap.get(propertyName.trim());
             if(currentSelectedPropertyTypeVO!=null){
                 if(this.currentSelectedRelationTypeName.equals(currentSelectedPropertyTypeVO.getPropertySourceOwner())){
                     this.deleteRelationTypePropertyButton.setEnabled(true);
+                    this.editRelationTypePropertyAliasNameButton.setEnabled(true);
                 }else{
                     this.deleteRelationTypePropertyButton.setEnabled(false);
+                    this.editRelationTypePropertyAliasNameButton.setEnabled(false);
                 }
             }
         }
@@ -558,6 +599,102 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
     public void createTypePropertyActionFinish(boolean actionResult) {
         if(this.currentSelectedRelationTypeName !=null){
             renderRelationTypeSelectedUIElements(this.currentSelectedRelationTypeName);
+        }
+    }
+
+    private void executeEditRelationTypeAliasNameOperation(){
+        if(this.currentSelectedRelationTypeName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.getTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,this.currentSelectedRelationTypeName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_TYPE);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypeAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.updateTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,this.currentSelectedRelationTypeName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改类型别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.relationTypesTreeTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.relationTypesTreeTable.getItem(itemId);
+                String currentDimensionTypeName=currentItem.getItemProperty(NAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypeName.equals(this.currentSelectedRelationTypeName)){
+                    currentItem.getItemProperty(ALIASNAME_PROPERTY).setValue(aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改类型别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+        }
+    }
+
+    private void executeEditRelationTypePropertyAliasNameOperation(){
+        if(this.currentSelectedRelationTypeName!=null&&this.currentSelectedRelationTypePropertyName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.
+                    getTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,this.currentSelectedRelationTypeName,this.currentSelectedRelationTypePropertyName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_PROPERTY);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypePropertyAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.
+                updateTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,this.currentSelectedRelationTypeName,this.currentSelectedRelationTypePropertyName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改属性别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.relationTypePropertiesTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.relationTypePropertiesTable.getItem(itemId);
+                String currentDimensionTypePropertyName=currentItem.getItemProperty(PROPERTYNAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypePropertyName.trim().equals(this.currentSelectedRelationTypePropertyName)){
+                    currentItem.getItemProperty(PROPERTYALIASNAME_PROPERTY).setValue(""+aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改属性别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
         }
     }
 }

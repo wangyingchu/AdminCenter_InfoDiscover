@@ -3,12 +3,15 @@ package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.fa
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanel;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.AliasNameEditPanelInvoker;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.CreateTypePropertyPanelInvoker;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.InfoDiscoverEngineConstant;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.vaadin.data.Item;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -17,14 +20,12 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangychu on 10/21/16.
  */
-public class FactTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker {
+public class FactTypesManagementPanel extends VerticalLayout implements CreateTypePropertyPanelInvoker ,AliasNameEditPanelInvoker {
 
     private UserClientInfo currentUserClientInfo;
     private String discoverSpaceName;
@@ -48,6 +49,8 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
     private Button createFactTypeButton;
     private Button removeFactTypeButton;
     private Button deleteFactTypePropertyButton;
+    private Button editTypeAliasNameButton;
+    private Button editFactTypePropertyAliasNameButton;
     private DiscoverSpaceStatisticMetrics currentDiscoverSpaceStatisticMetrics;
     private Map<String,PropertyTypeVO> currentFactTypePropertiesMap;
     private String currentSelectedFactTypeName;
@@ -101,6 +104,21 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
 
         Label spaceDivLabel1=new Label("|");
         leftSideActionButtonPlacementLayout. addComponent(spaceDivLabel1);
+
+        this.editTypeAliasNameButton=new Button("修改类型别名");
+        this.editTypeAliasNameButton.setEnabled(false);
+        this.editTypeAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editTypeAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editTypeAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editTypeAliasNameButton.addClickListener(new Button.ClickListener(){
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditFactTypeAliasNameOperation();
+            }
+        });
+
+        leftSideActionButtonPlacementLayout.addComponent(editTypeAliasNameButton);
 
         this.removeFactTypeButton=new Button("删除事实类型");
         this.removeFactTypeButton.setEnabled(false);
@@ -190,6 +208,20 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         Label spaceDivLabel2=new Label("|");
         rightSideActionButtonPlacementLayout. addComponent(spaceDivLabel2);
 
+        this.editFactTypePropertyAliasNameButton =new Button("修改属性别名");
+        this.editFactTypePropertyAliasNameButton.setIcon(FontAwesome.EDIT);
+        this.editFactTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.editFactTypePropertyAliasNameButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.editFactTypePropertyAliasNameButton.addStyleName("ui_appElementBottomSpacing");
+        this.editFactTypePropertyAliasNameButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeEditDimensionTypePropertyAliasNameOperation();
+            }
+        });
+
+        rightSideActionButtonPlacementLayout.addComponent(this.editFactTypePropertyAliasNameButton);
+
         this.deleteFactTypePropertyButton =new Button("删除类型属性");
         this.deleteFactTypePropertyButton.setIcon(FontAwesome.TRASH_O);
         this.deleteFactTypePropertyButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
@@ -265,6 +297,7 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         this.rightSideUIElementsContainer.removeComponent(this.rightSideUIElementsBox);
         this.rightSideUIElementsContainer.addComponent(this.rightSideUIPromptBox);
         this.removeFactTypeButton.setEnabled(false);
+        this.editTypeAliasNameButton.setEnabled(false);
         this.currentSelectedFactTypeName =null;
     }
 
@@ -298,22 +331,28 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
         DataTypeStatisticMetrics factTypeStatisticMetrics= getFactTypeStatisticMetrics(factTypeName);
         if(factTypeStatisticMetrics==null){
             this.removeFactTypeButton.setEnabled(false);
+            this.editTypeAliasNameButton.setEnabled(false);
         }else{
             this.removeFactTypeButton.setEnabled(true);
+            this.editTypeAliasNameButton.setEnabled(true);
         }
         this.deleteFactTypePropertyButton.setEnabled(false);
+        this.editFactTypePropertyAliasNameButton.setEnabled(false);
     }
 
     private void renderFactTypePropertySelectedUIElements(String propertyName){
         this.currentSelectedFactTypePropertyName =propertyName.trim();
         this.deleteFactTypePropertyButton.setEnabled(false);
+        this.editFactTypePropertyAliasNameButton.setEnabled(false);
         if(this.currentFactTypePropertiesMap !=null){
             PropertyTypeVO currentSelectedPropertyTypeVO=this.currentFactTypePropertiesMap.get(propertyName.trim());
             if(currentSelectedPropertyTypeVO!=null){
                 if(this.currentSelectedFactTypeName.equals(currentSelectedPropertyTypeVO.getPropertySourceOwner())){
                     this.deleteFactTypePropertyButton.setEnabled(true);
+                    this.editFactTypePropertyAliasNameButton.setEnabled(true);
                 }else{
                     this.deleteFactTypePropertyButton.setEnabled(false);
+                    this.editFactTypePropertyAliasNameButton.setEnabled(false);
                 }
             }
         }
@@ -451,6 +490,102 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
     public void createTypePropertyActionFinish(boolean actionResult) {
         if(this.currentSelectedFactTypeName !=null){
             renderFactTypeSelectedUIElements(this.currentSelectedFactTypeName);
+        }
+    }
+
+    private void executeEditFactTypeAliasNameOperation(){
+        if(this.currentSelectedFactTypeName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.getTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,this.currentSelectedFactTypeName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_TYPE);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypeAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.updateTypeKindAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,this.currentSelectedFactTypeName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改类型别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.factTypesTreeTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.factTypesTreeTable.getItem(itemId);
+                String currentDimensionTypeName=currentItem.getItemProperty(NAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypeName.equals(this.currentSelectedFactTypeName)){
+                    currentItem.getItemProperty(ALIASNAME_PROPERTY).setValue(aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改类型别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+        }
+    }
+
+    private void executeEditDimensionTypePropertyAliasNameOperation(){
+        if(this.currentSelectedFactTypeName!=null&&this.currentSelectedFactTypePropertyName!=null){
+            String currentAliasName=InfoDiscoverSpaceOperationUtil.
+                    getTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,this.currentSelectedFactTypeName,this.currentSelectedFactTypePropertyName);
+            AliasNameEditPanel aliasNameEditPanel=new AliasNameEditPanel(this.currentUserClientInfo,currentAliasName);
+            aliasNameEditPanel.setAliasNameType(AliasNameEditPanel.AliasNameType_PROPERTY);
+            aliasNameEditPanel.setAliasNameEditPanelInvoker(this);
+            final Window window = new Window();
+            window.setHeight(200.0f, Unit.PIXELS);
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setResizable(false);
+            window.center();
+            window.setModal(true);
+            window.setContent(aliasNameEditPanel);
+            aliasNameEditPanel.setContainerDialog(window);
+            UI.getCurrent().addWindow(window);
+        }
+    }
+
+    @Override
+    public void editTypePropertyAliasNameAction(String aliasName) {
+        boolean updateTypeAliasNameResult=InfoDiscoverSpaceOperationUtil.
+                updateTypePropertyAliasName(this.discoverSpaceName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,this.currentSelectedFactTypeName,this.currentSelectedFactTypePropertyName,aliasName);
+        if(updateTypeAliasNameResult){
+            Notification resultNotification = new Notification("更新数据操作成功",
+                    "修改属性别名成功", Notification.Type.HUMANIZED_MESSAGE);
+            resultNotification.setPosition(Position.MIDDLE_CENTER);
+            resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+            resultNotification.show(Page.getCurrent());
+
+            Collection objectIdCollection=this.factTypePropertiesTable.getContainerDataSource().getItemIds();
+            Iterator idIterator=objectIdCollection.iterator();
+            while(idIterator.hasNext()){
+                Object itemId=idIterator.next();
+                Item currentItem=this.factTypePropertiesTable.getItem(itemId);
+                String currentDimensionTypePropertyName=currentItem.getItemProperty(PROPERTYNAME_PROPERTY).getValue().toString();
+                if(currentDimensionTypePropertyName.trim().equals(this.currentSelectedFactTypePropertyName)){
+                    currentItem.getItemProperty(PROPERTYALIASNAME_PROPERTY).setValue(""+aliasName);
+                }
+            }
+        }else{
+            Notification errorNotification = new Notification("修改属性别名错误",
+                    "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
         }
     }
 }
