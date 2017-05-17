@@ -11,6 +11,7 @@ import javax.servlet.ServletContextListener;
 public class ApplicationResourceInitializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        InfoDiscoverSpaceOperationUtil.initMetaConfigDiscoverSpace();
         InfoDiscoverSpaceOperationUtil.refreshItemAliasNameCache();
     }
 
