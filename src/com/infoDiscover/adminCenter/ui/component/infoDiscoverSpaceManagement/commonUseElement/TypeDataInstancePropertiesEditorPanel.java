@@ -280,55 +280,65 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
             String propertyName=propertyType.getPropertyName();
             String propertyDataType=propertyType.getPropertyType();
             Field currentPropertyEditor=null;
+
+            String propertyAliasName=InfoDiscoverSpaceOperationUtil.getTypePropertyAliasName(
+                    this.measurableValue.getDiscoverSpaceName(),
+                    this.measurableValue.getMeasurableTypeKind(),
+                    this.measurableValue.getMeasurableTypeName(),propertyName);
+            String propertyDisplayName=propertyName;
+            if(propertyAliasName!=null&&!propertyAliasName.equals("")){
+                propertyDisplayName=propertyAliasName;
+            }
+
             switch(propertyDataType){
                 case ApplicationConstant.DataFieldType_STRING:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_STRING+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_STRING+"] "+propertyDisplayName);
                     break;
                 case ApplicationConstant.DataFieldType_BOOLEAN:
-                    currentPropertyEditor=new ComboBox("["+ApplicationConstant.DataFieldType_BOOLEAN+"] "+propertyName);
+                    currentPropertyEditor=new ComboBox("["+ApplicationConstant.DataFieldType_BOOLEAN+"] "+propertyDisplayName);
                     ((ComboBox)currentPropertyEditor).addItem("true");
                     ((ComboBox)currentPropertyEditor).addItem("false");
                     break;
                 case ApplicationConstant.DataFieldType_DATE:
-                    currentPropertyEditor= new PopupDateField("["+ApplicationConstant.DataFieldType_DATE+"] "+propertyName);
+                    currentPropertyEditor= new PopupDateField("["+ApplicationConstant.DataFieldType_DATE+"] "+propertyDisplayName);
                     ((DateField)currentPropertyEditor).setDateFormat("yyyy-MM-dd hh:mm:ss");
                     ((DateField)currentPropertyEditor).setResolution(Resolution.SECOND);
                     break;
                 case ApplicationConstant.DataFieldType_INT:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_INT+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_INT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Integer.class);
                     currentPropertyEditor.addValidator(new IntegerRangeValidator("该项属性值必须为INT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_LONG:
-                    currentPropertyEditor=new TextField("["+ ApplicationConstant.DataFieldType_LONG+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ ApplicationConstant.DataFieldType_LONG+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Long.class);
                     currentPropertyEditor.addValidator(new LongRangeValidator("该项属性值必须为LONG类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_DOUBLE:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_DOUBLE+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_DOUBLE+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Double.class);
                     currentPropertyEditor.addValidator(new DoubleRangeValidator("该项属性值必须为DOUBLE类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0.0");
                     break;
                 case ApplicationConstant.DataFieldType_FLOAT:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_FLOAT+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_FLOAT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Float.class);
                     currentPropertyEditor.addValidator(new FloatRangeValidator("该项属性值必须为FLOAT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0.0");
                     break;
                 case ApplicationConstant.DataFieldType_SHORT:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_SHORT+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_SHORT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Short.class);
                     currentPropertyEditor.addValidator(new ShortRangeValidator("该项属性值必须为SHORT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
                     break;
                 case ApplicationConstant.DataFieldType_BYTE:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BYTE+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BYTE+"] "+propertyDisplayName);
                     break;
                 case ApplicationConstant.DataFieldType_BINARY:
-                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BINARY+"] "+propertyName);
+                    currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BINARY+"] "+propertyDisplayName);
                     break;
             }
             setTypePropertyEditorValue(currentPropertyEditor,propertyDataType,propertyValue);
