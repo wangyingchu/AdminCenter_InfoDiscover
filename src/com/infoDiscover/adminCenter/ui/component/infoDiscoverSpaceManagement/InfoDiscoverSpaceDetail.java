@@ -5,6 +5,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.businessDataDefinitionManagement.InfoDiscoverSpaceBusinessDataDefinitionsInfo;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.DataAnalyzeApplicationBrowserPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.commonUseElement.ProcessingDataOperationPanel;
@@ -16,6 +17,7 @@ import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.run
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -39,6 +41,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
     private InfoDiscoverSpaceDimensionsInfo infoDiscoverSpaceDimensionsInfo;
     private InfoDiscoverSpaceFactsInfo infoDiscoverSpaceFactsInfo;
     private InfoDiscoverSpaceRelationsInfo infoDiscoverSpaceRelationsInfo;
+    private InfoDiscoverSpaceBusinessDataDefinitionsInfo infoDiscoverSpaceBusinessDataDefinitionsInfo;
     private String dataAnalyzeApplicationBaseAddress;
 
     public InfoDiscoverSpaceDetail(UserClientInfo currentUserClientInfo){
@@ -83,6 +86,14 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         infoDiscoverSpaceRelationsInfo.setParentInfoDiscoverSpaceDetail(this);
         discoverSpaceRelationsInfoLayout.addComponent(infoDiscoverSpaceRelationsInfo);
 
+
+        VerticalLayout discoverSpaceBusinessDataDefinitionsInfoLayout=new VerticalLayout();
+        TabSheet.Tab discoverSpaceBusinessDataDefinitionsInfoLayoutTab =tabs.addTab(discoverSpaceBusinessDataDefinitionsInfoLayout, "业务数据定义管理");
+        discoverSpaceBusinessDataDefinitionsInfoLayoutTab.setIcon(VaadinIcons.COG);
+        infoDiscoverSpaceBusinessDataDefinitionsInfo=new InfoDiscoverSpaceBusinessDataDefinitionsInfo(this.currentUserClientInfo);
+        infoDiscoverSpaceBusinessDataDefinitionsInfo.setParentInfoDiscoverSpaceDetail(this);
+        discoverSpaceBusinessDataDefinitionsInfoLayout.addComponent(infoDiscoverSpaceBusinessDataDefinitionsInfo);
+
         dataAnalyzeApplicationBaseAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+
                 "infoAnalyseApp/index.html";
     }
@@ -107,6 +118,9 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
         this.infoDiscoverSpaceRelationsInfo.setDiscoverSpaceName(this.discoverSpaceName);
         this.infoDiscoverSpaceRelationsInfo.renderRelationsInfo(discoverSpaceStatisticMetrics);
+
+        this.infoDiscoverSpaceBusinessDataDefinitionsInfo.setDiscoverSpaceName(this.discoverSpaceName);
+        this.infoDiscoverSpaceBusinessDataDefinitionsInfo.renderBusinessDataDefinitionsInfo();
     }
 
     public void deleteCurrentDiscoverSpace(){

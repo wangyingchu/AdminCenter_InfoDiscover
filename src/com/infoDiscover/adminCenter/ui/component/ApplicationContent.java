@@ -33,7 +33,7 @@ public class ApplicationContent extends HorizontalLayout {
 
         BusinessSolutionsManagementPanel businessSolutionsManagementPanel=new BusinessSolutionsManagementPanel(this.currentUserClientInfo);
         TabSheet.Tab businessSolutionsManagementTab = applicationContentTabSheet.addTab(businessSolutionsManagementPanel, "业务解决方案管理");
-        businessSolutionsManagementTab.setIcon(VaadinIcons.SUITCASE);
+        businessSolutionsManagementTab.setIcon(VaadinIcons.RECORDS);
         businessSolutionsManagementTab.setClosable(false);
         businessSolutionsManagementTab.setEnabled(true);
 

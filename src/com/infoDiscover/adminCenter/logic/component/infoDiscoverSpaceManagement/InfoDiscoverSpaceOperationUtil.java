@@ -35,6 +35,7 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String RELATION_DIRECTION_BOTH="BOTH";
     public static final String TYPEKIND_AliasNameFactType="TypeKind_AliasName";
     public static final String TYPEPROPERTY_AliasNameFactType="TypeProperty_AliasName";
+    public static final String CUSTOMPROPERTY_AliasNameFactType="CustomProperty_AliasName";
 
     public static final String MetaConfig_PropertyName_DiscoverSpace="discoverSpace";
     public static final String MetaConfig_PropertyName_TypeKind="typeKind";
@@ -42,9 +43,13 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String MetaConfig_PropertyName_TypeAliasName="typeAliasName";
     public static final String MetaConfig_PropertyName_TypePropertyName="typePropertyName";
     public static final String MetaConfig_PropertyName_TypePropertyAliasName="typePropertyAliasName";
+    public static final String MetaConfig_PropertyName_CustomPropertyName="customPropertyName";
+    public static final String MetaConfig_PropertyName_CustomPropertyType="customPropertyType";
+    public static final String MetaConfig_PropertyName_CustomPropertyAliasName="customPropertyAliasName";
 
     private static HashMap<String,String> TYPEKIND_AliasNameMap=new HashMap<>();
     private static HashMap<String,String> TypeProperty_AliasNameMap=new HashMap<>();
+    private static HashMap<String,String> CustomProperty_AliasNameMap=new HashMap<>();
 
     public static boolean checkDiscoverSpaceExistence(String spaceName){
         return DiscoverEngineComponentFactory.checkDiscoverSpaceExistence(spaceName);
@@ -2480,6 +2485,7 @@ public class InfoDiscoverSpaceOperationUtil {
     public static void clearItemAliasNameCache(){
         TYPEKIND_AliasNameMap.clear();
         TypeProperty_AliasNameMap.clear();
+        CustomProperty_AliasNameMap.clear();
     }
 
     public static void refreshItemAliasNameCache(){
@@ -2577,6 +2583,54 @@ public class InfoDiscoverSpaceOperationUtil {
                     }
                 }
             }
+
+            if(metaConfigSpace.hasFactType(CUSTOMPROPERTY_AliasNameFactType)){
+                ExploreParameters typeKindRecordEP = new ExploreParameters();
+                typeKindRecordEP.setType(CUSTOMPROPERTY_AliasNameFactType);
+                typeKindRecordEP.setResultNumber(100000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> typePropertyAliasRecordFact = ie.discoverFacts(typeKindRecordEP);
+                if(typePropertyAliasRecordFact!=null) {
+                    String spaceName=null;
+                    String customPropertyName=null;
+                    String customPropertyType=null;
+                    String customPropertyAliasName=null;
+                    for(Fact currentFact:typePropertyAliasRecordFact){
+                        Property _DiscoverSpace=currentFact.getProperty(MetaConfig_PropertyName_DiscoverSpace);
+                        if(_DiscoverSpace!=null){
+                            spaceName=_DiscoverSpace.getPropertyValue().toString();
+                        }else{
+                            spaceName=null;
+                        }
+                        Property _CustomPropertyName=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyName);
+                        if(_CustomPropertyName!=null){
+                            customPropertyName=_CustomPropertyName.getPropertyValue().toString();
+                        }else{
+                            customPropertyName=null;
+                        }
+                        Property _CustomPropertyType=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyType);
+                        if(_CustomPropertyType!=null){
+                            customPropertyType=_CustomPropertyType.getPropertyValue().toString();
+                        }else{
+                            customPropertyType=null;
+                        }
+                        Property _CustomPropertyAliasName=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyAliasName);
+                        if(_CustomPropertyAliasName!=null){
+                            customPropertyAliasName=_CustomPropertyAliasName.getPropertyValue().toString();
+                        }else{
+                            customPropertyAliasName=null;
+                        }
+                        if(_CustomPropertyAliasName!=null){
+                            String propertyRecordKey=spaceName+"_"+customPropertyName+"_"+customPropertyType;
+                            String typePropertyAliasName=customPropertyAliasName;
+                            if(CustomProperty_AliasNameMap.containsKey(propertyRecordKey)) {
+                                CustomProperty_AliasNameMap.remove(propertyRecordKey);
+                            }
+                            CustomProperty_AliasNameMap.put(propertyRecordKey,typePropertyAliasName);
+                        }
+                    }
+                }
+            }
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         } catch (InfoDiscoveryEngineRuntimeException e) {
@@ -2585,6 +2639,185 @@ public class InfoDiscoverSpaceOperationUtil {
             if(metaConfigSpace!=null){
                 metaConfigSpace.closeSpace();
             }
+        }
+    }
+
+    public static boolean checkCustomPropertyAliasNameExistence(String spaceName, String customPropertyName,String customPropertyType){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(CUSTOMPROPERTY_AliasNameFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(CUSTOMPROPERTY_AliasNameFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyName, customPropertyName), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyType, customPropertyType), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.setResultNumber(1);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasRecordFact!=null&&customPropertyAliasRecordFact.size()>0){
+                    return true;
+                }
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+                e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+                e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                    metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean recordCustomPropertyAliasName(String spaceName, String customPropertyName,String customPropertyType,String customPropertyAliasName){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(CUSTOMPROPERTY_AliasNameFactType)){
+                FactType customPropertyAliasNameFactType=metaConfigSpace.addFactType(CUSTOMPROPERTY_AliasNameFactType);
+                TypeProperty discoverSpaceProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_DiscoverSpace,PropertyType.STRING);
+                discoverSpaceProperty.setMandatory(true);
+                TypeProperty customPropertyNameProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyName,PropertyType.STRING);
+                customPropertyNameProperty.setMandatory(true);
+                TypeProperty customPropertyTypeProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyType,PropertyType.STRING);
+                customPropertyTypeProperty.setMandatory(true);
+                TypeProperty customPropertyAliasNameNameProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyAliasName,PropertyType.STRING);
+                customPropertyAliasNameNameProperty.setMandatory(true);
+            }
+            Fact typeKind_AliasNameFact=DiscoverEngineComponentFactory.createFact(CUSTOMPROPERTY_AliasNameFactType);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_DiscoverSpace,spaceName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyName,customPropertyName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyType,customPropertyType);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyAliasName,customPropertyAliasName);
+            Fact resultRecord=metaConfigSpace.addFact(typeKind_AliasNameFact);
+            if(resultRecord!=null){
+                String propertyRecordKey=spaceName+"_"+customPropertyName+"_"+customPropertyType;
+                CustomProperty_AliasNameMap.put(propertyRecordKey,customPropertyAliasName);
+                return true;
+            }
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static List<CustomPropertyAliasNameVO> queryCustomPropertyAliasNames(String discoverSpaceName){
+        List<CustomPropertyAliasNameVO> resultList=new ArrayList<>();
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(CUSTOMPROPERTY_AliasNameFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(CUSTOMPROPERTY_AliasNameFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, discoverSpaceName));
+                customPropertyAliasNameRecordEP.setResultNumber(10000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasRecordFact!=null){
+                    String spaceName=null;
+                    String customPropertyName=null;
+                    String customPropertyType=null;
+                    String customPropertyAliasName=null;
+                    for(Fact currentFact:customPropertyAliasRecordFact){
+                        Property _DiscoverSpace=currentFact.getProperty(MetaConfig_PropertyName_DiscoverSpace);
+                        if(_DiscoverSpace!=null){
+                            spaceName=_DiscoverSpace.getPropertyValue().toString();
+                        }else{
+                            spaceName=null;
+                        }
+                        Property _CustomPropertyName=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyName);
+                        if(_CustomPropertyName!=null){
+                            customPropertyName=_CustomPropertyName.getPropertyValue().toString();
+                        }else{
+                            customPropertyName=null;
+                        }
+                        Property _CustomPropertyType=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyType);
+                        if(_CustomPropertyType!=null){
+                            customPropertyType=_CustomPropertyType.getPropertyValue().toString();
+                        }else{
+                            customPropertyType=null;
+                        }
+                        Property _CustomPropertyAliasName=currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyAliasName);
+                        if(_CustomPropertyAliasName!=null){
+                            customPropertyAliasName=_CustomPropertyAliasName.getPropertyValue().toString();
+                        }else{
+                            customPropertyAliasName=null;
+                        }
+                        if(_CustomPropertyAliasName!=null){
+                            CustomPropertyAliasNameVO currentCustomPropertyAliasNameVO=new CustomPropertyAliasNameVO();
+                            currentCustomPropertyAliasNameVO.setDiscoverSpaceName(spaceName);
+                            currentCustomPropertyAliasNameVO.setCustomPropertyName(customPropertyName);
+                            currentCustomPropertyAliasNameVO.setCustomPropertyType(customPropertyType);
+                            currentCustomPropertyAliasNameVO.setCustomPropertyAliasName(customPropertyAliasName);
+                            resultList.add(currentCustomPropertyAliasNameVO);
+                        }
+                    }
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return resultList;
+    }
+
+    public static boolean deleteCustomPropertyAliasName(String spaceName,String customPropertyName,String customPropertyType) {
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(CUSTOMPROPERTY_AliasNameFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(CUSTOMPROPERTY_AliasNameFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DiscoverSpace, spaceName));
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyName, customPropertyName), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyType, customPropertyType), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.setResultNumber(1000000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasNameRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasNameRecordFact!=null) {
+                    for (Fact currentRecordFact : customPropertyAliasNameRecordFact) {
+                        metaConfigSpace.removeFact(currentRecordFact.getId());
+                    }
+                }
+                String propertyRecordKey=spaceName+"_"+customPropertyName+"_"+customPropertyType;
+                CustomProperty_AliasNameMap.remove(propertyRecordKey);
+                return true;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static String getCustomPropertyAliasName(String spaceName,String customPropertyName,String customPropertyType) {
+        String propertyRecordKey=spaceName+"_"+customPropertyName+"_"+customPropertyType;
+        if(CustomProperty_AliasNameMap.get(propertyRecordKey)!=null){
+            return CustomProperty_AliasNameMap.get(propertyRecordKey);
+        }else{
+            return "";
         }
     }
 }

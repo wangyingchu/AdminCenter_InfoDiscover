@@ -285,60 +285,76 @@ public class TypeDataInstancePropertiesEditorPanel extends VerticalLayout implem
                     this.measurableValue.getDiscoverSpaceName(),
                     this.measurableValue.getMeasurableTypeKind(),
                     this.measurableValue.getMeasurableTypeName(),propertyName);
+            if(propertyAliasName==null||propertyAliasName.equals("")){
+                propertyAliasName=InfoDiscoverSpaceOperationUtil.getCustomPropertyAliasName(
+                        this.measurableValue.getDiscoverSpaceName(),propertyName,propertyDataType);
+            }
             String propertyDisplayName=propertyName;
+            String propertyDescriptionAliasName="-";
             if(propertyAliasName!=null&&!propertyAliasName.equals("")){
                 propertyDisplayName=propertyAliasName;
+                propertyDescriptionAliasName=propertyAliasName;
             }
 
             switch(propertyDataType){
                 case ApplicationConstant.DataFieldType_STRING:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_STRING+"] "+propertyDisplayName);
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_BOOLEAN:
                     currentPropertyEditor=new ComboBox("["+ApplicationConstant.DataFieldType_BOOLEAN+"] "+propertyDisplayName);
                     ((ComboBox)currentPropertyEditor).addItem("true");
                     ((ComboBox)currentPropertyEditor).addItem("false");
+                    ((ComboBox)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_DATE:
                     currentPropertyEditor= new PopupDateField("["+ApplicationConstant.DataFieldType_DATE+"] "+propertyDisplayName);
                     ((DateField)currentPropertyEditor).setDateFormat("yyyy-MM-dd hh:mm:ss");
                     ((DateField)currentPropertyEditor).setResolution(Resolution.SECOND);
+                    ((DateField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_INT:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_INT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Integer.class);
                     currentPropertyEditor.addValidator(new IntegerRangeValidator("该项属性值必须为INT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_LONG:
                     currentPropertyEditor=new TextField("["+ ApplicationConstant.DataFieldType_LONG+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Long.class);
                     currentPropertyEditor.addValidator(new LongRangeValidator("该项属性值必须为LONG类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_DOUBLE:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_DOUBLE+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Double.class);
                     currentPropertyEditor.addValidator(new DoubleRangeValidator("该项属性值必须为DOUBLE类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0.0");
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_FLOAT:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_FLOAT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Float.class);
                     currentPropertyEditor.addValidator(new FloatRangeValidator("该项属性值必须为FLOAT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0.0");
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_SHORT:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_SHORT+"] "+propertyDisplayName);
                     ((TextField)currentPropertyEditor).setConverter(Short.class);
                     currentPropertyEditor.addValidator(new ShortRangeValidator("该项属性值必须为SHORT类型", null,null));
                     ((TextField)currentPropertyEditor).setValue("0");
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_BYTE:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BYTE+"] "+propertyDisplayName);
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
                 case ApplicationConstant.DataFieldType_BINARY:
                     currentPropertyEditor=new TextField("["+ApplicationConstant.DataFieldType_BINARY+"] "+propertyDisplayName);
+                    ((TextField)currentPropertyEditor).setDescription(propertyName+" ("+propertyDescriptionAliasName+")");
                     break;
             }
             setTypePropertyEditorValue(currentPropertyEditor,propertyDataType,propertyValue);
