@@ -50,6 +50,8 @@ public class GeographicalCoordinatesChartParametersInput extends BaseChartParame
         lngPropertyComboBox.setNullSelectionAllowed(false);
         lngPropertyComboBox.setInputPrompt("选择或输入属性名称");
         lngPropertyComboBox.addItems(this.geographicalCoordinatesPropertiesNameList);
+        lngPropertyComboBox.setTextInputAllowed(true);
+        lngPropertyComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(lngPropertyComboBox);
 
         latPropertyComboBox = new ComboBox("纬度属性");
@@ -60,6 +62,8 @@ public class GeographicalCoordinatesChartParametersInput extends BaseChartParame
         latPropertyComboBox.setNullSelectionAllowed(false);
         latPropertyComboBox.setInputPrompt("选择或输入属性名称");
         latPropertyComboBox.addItems(this.geographicalCoordinatesPropertiesNameList);
+        latPropertyComboBox.setTextInputAllowed(true);
+        latPropertyComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(latPropertyComboBox);
 
         locationTitleComboBox = new ComboBox("标题属性");
@@ -70,6 +74,8 @@ public class GeographicalCoordinatesChartParametersInput extends BaseChartParame
         locationTitleComboBox.setNullSelectionAllowed(false);
         locationTitleComboBox.setInputPrompt("选择或输入属性名称");
         locationTitleComboBox.addItems(this.stringPropertiesNameList);
+        locationTitleComboBox.setTextInputAllowed(true);
+        locationTitleComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(locationTitleComboBox);
 
         locationDescComboBox = new ComboBox("描述属性");
@@ -80,6 +86,8 @@ public class GeographicalCoordinatesChartParametersInput extends BaseChartParame
         locationDescComboBox.setNullSelectionAllowed(false);
         locationDescComboBox.setInputPrompt("选择或输入属性名称");
         locationDescComboBox.addItems(this.stringPropertiesNameList);
+        locationDescComboBox.setTextInputAllowed(true);
+        locationDescComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(locationDescComboBox);
 
         this.addComponent(coordinateAxisPropertiesForm);

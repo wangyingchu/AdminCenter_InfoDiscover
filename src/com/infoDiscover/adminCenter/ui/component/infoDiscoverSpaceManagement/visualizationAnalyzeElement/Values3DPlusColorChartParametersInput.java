@@ -46,6 +46,8 @@ public class Values3DPlusColorChartParametersInput extends BaseChartParametersIn
         xAxisComboBox.setNullSelectionAllowed(false);
         xAxisComboBox.setInputPrompt("选择或输入属性名称");
         xAxisComboBox.addItems(this.measurablePropertiesNameList);
+        xAxisComboBox.setTextInputAllowed(true);
+        xAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(xAxisComboBox);
 
         yAxisComboBox = new ComboBox("Y 轴属性");
@@ -56,6 +58,8 @@ public class Values3DPlusColorChartParametersInput extends BaseChartParametersIn
         yAxisComboBox.setNullSelectionAllowed(false);
         yAxisComboBox.setInputPrompt("选择或输入属性名称");
         yAxisComboBox.addItems(this.measurablePropertiesNameList);
+        yAxisComboBox.setTextInputAllowed(true);
+        yAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(yAxisComboBox);
 
         zAxisComboBox = new ComboBox("Z 轴属性");
@@ -66,6 +70,8 @@ public class Values3DPlusColorChartParametersInput extends BaseChartParametersIn
         zAxisComboBox.setNullSelectionAllowed(false);
         zAxisComboBox.setInputPrompt("选择或输入属性名称");
         zAxisComboBox.addItems(this.measurablePropertiesNameList);
+        zAxisComboBox.setTextInputAllowed(true);
+        zAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(zAxisComboBox);
 
         cAxisComboBox = new ComboBox("数值密度属性");
@@ -76,6 +82,8 @@ public class Values3DPlusColorChartParametersInput extends BaseChartParametersIn
         cAxisComboBox.setNullSelectionAllowed(true);
         cAxisComboBox.setInputPrompt("选择或输入属性名称");
         cAxisComboBox.addItems(this.measurablePropertiesNameList);
+        cAxisComboBox.setTextInputAllowed(true);
+        cAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(cAxisComboBox);
 
         VerticalLayout spacingLayout=new VerticalLayout();

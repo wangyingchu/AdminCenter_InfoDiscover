@@ -56,6 +56,8 @@ public class Scatter2DPlusSizeChartParametersInput extends BaseChartParametersIn
         xAxisComboBox.setNullSelectionAllowed(false);
         xAxisComboBox.setInputPrompt("选择或输入属性名");
         xAxisComboBox.addItems(this.measurablePropertiesNameList);
+        xAxisComboBox.setTextInputAllowed(true);
+        xAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(xAxisComboBox);
 
         yAxisComboBox = new ComboBox("Y 轴属性");
@@ -66,6 +68,8 @@ public class Scatter2DPlusSizeChartParametersInput extends BaseChartParametersIn
         yAxisComboBox.setNullSelectionAllowed(false);
         yAxisComboBox.setInputPrompt("选择或输入属性名");
         yAxisComboBox.addItems(this.measurablePropertiesNameList);
+        yAxisComboBox.setTextInputAllowed(true);
+        yAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(yAxisComboBox);
 
         sizeAxisComboBox = new ComboBox("数值密度属性");
@@ -76,6 +80,8 @@ public class Scatter2DPlusSizeChartParametersInput extends BaseChartParametersIn
         sizeAxisComboBox.setNullSelectionAllowed(false);
         sizeAxisComboBox.setInputPrompt("选择或输入属性名");
         sizeAxisComboBox.addItems(this.measurablePropertiesNameList);
+        sizeAxisComboBox.setTextInputAllowed(true);
+        sizeAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(sizeAxisComboBox);
 
         scatterPropertyComboBox = new ComboBox("散点属性");
@@ -86,6 +92,8 @@ public class Scatter2DPlusSizeChartParametersInput extends BaseChartParametersIn
         scatterPropertyComboBox.setNullSelectionAllowed(false);
         scatterPropertyComboBox.setInputPrompt("选择或输入属性名");
         scatterPropertyComboBox.addItems(this.stringPropertiesNameList);
+        scatterPropertyComboBox.setTextInputAllowed(true);
+        scatterPropertyComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(scatterPropertyComboBox);
 
         VerticalLayout spacingLayout=new VerticalLayout();

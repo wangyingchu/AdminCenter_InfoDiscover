@@ -58,6 +58,8 @@ public class TimeValuesChartParametersInput extends BaseChartParametersInput{
         timeAxisComboBox.setNullSelectionAllowed(false);
         timeAxisComboBox.setInputPrompt("选择或输入属性名称");
         timeAxisComboBox.addItems(this.datePropertiesNameList);
+        timeAxisComboBox.setTextInputAllowed(true);
+        timeAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(timeAxisComboBox);
 
         startDateField=new DateField("开始时间");
@@ -158,6 +160,8 @@ public class TimeValuesChartParametersInput extends BaseChartParametersInput{
         propertySelector.setNullSelectionAllowed(false);
         propertySelector.setInputPrompt("选择或输入属性名称");
         propertySelector.addItems(this.measurablePropertiesNameList);
+        propertySelector.setTextInputAllowed(true);
+        propertySelector.setNewItemsAllowed(true);
         chartPropertyForm.addComponent(propertySelector);
         this.valuePropertiesSelectorList.add(propertySelector);
 

@@ -51,6 +51,8 @@ public class BubbleChartParametersInput extends BaseChartParametersInput {
         xAxisComboBox.setNullSelectionAllowed(false);
         xAxisComboBox.setInputPrompt("选择或输入属性名称");
         xAxisComboBox.addItems(this.measurablePropertiesNameList);
+        xAxisComboBox.setTextInputAllowed(true);
+        xAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(xAxisComboBox);
 
         yAxisComboBox = new ComboBox("Y 轴属性");
@@ -61,6 +63,8 @@ public class BubbleChartParametersInput extends BaseChartParametersInput {
         yAxisComboBox.setNullSelectionAllowed(false);
         yAxisComboBox.setInputPrompt("选择或输入属性名称");
         yAxisComboBox.addItems(this.measurablePropertiesNameList);
+        yAxisComboBox.setTextInputAllowed(true);
+        yAxisComboBox.setNewItemsAllowed(true);
         coordinateAxisPropertiesForm.addComponent(yAxisComboBox);
 
         VerticalLayout spacingLayout=new VerticalLayout();
@@ -157,6 +161,8 @@ public class BubbleChartParametersInput extends BaseChartParametersInput {
         propertySelector.setNullSelectionAllowed(false);
         propertySelector.setInputPrompt("选择或输入属性名称");
         propertySelector.addItems(this.measurablePropertiesNameList);
+        propertySelector.setTextInputAllowed(true);
+        propertySelector.setNewItemsAllowed(true);
         chartPropertyForm.addComponent(propertySelector);
         this.additionalChartPropertiesSelectorList.add(propertySelector);
 
