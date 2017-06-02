@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
+import com.infoDiscover.adminCenter.ui.util.RuntimeEnvironmentUtil;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
@@ -18,6 +19,9 @@ import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentF
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 import java.util.*;
@@ -46,6 +50,8 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String MetaConfig_PropertyName_CustomPropertyName="customPropertyName";
     public static final String MetaConfig_PropertyName_CustomPropertyType="customPropertyType";
     public static final String MetaConfig_PropertyName_CustomPropertyAliasName="customPropertyAliasName";
+    public static final String ExistedPropertyAliasNameHandleMethod_IGNORE="IGNORE";
+    public static final String ExistedPropertyAliasNameHandleMethod_REPLACE="REPLACE";
 
     private static HashMap<String,String> TYPEKIND_AliasNameMap=new HashMap<>();
     private static HashMap<String,String> TypeProperty_AliasNameMap=new HashMap<>();
@@ -2147,7 +2153,6 @@ public class InfoDiscoverSpaceOperationUtil {
         return relationablesPathList;
     }
 
-
     private static RelationValueVO generateRelationValueVO(String spaceName,Relation currentRelation){
         RelationValueVO currentRelationValueVO=new RelationValueVO();
         currentRelationValueVO.setId(currentRelation.getId());
@@ -2819,5 +2824,75 @@ public class InfoDiscoverSpaceOperationUtil {
         }else{
             return "";
         }
+    }
+
+    private final static String tempFileDir = RuntimeEnvironmentUtil.getBinaryTempFileDirLocation();
+
+    public static File generateCustomPropertyAliasNamesJsonFile(String discoverSpaceName){
+        File customPropertyAliasNamesFile=new File(tempFileDir+discoverSpaceName+"_"+"CustomPropertyAliasNames.json");
+        List<CustomPropertyAliasNameVO> aliasNamesList=queryCustomPropertyAliasNames(discoverSpaceName);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(aliasNamesList);
+            try(PrintStream ps = new PrintStream(customPropertyAliasNamesFile)) {
+                ps.println(json);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return customPropertyAliasNamesFile;
+    }
+
+    public static boolean importCustomPropertyAliasNamesFromJsonFile(String discoverSpaceName,String aliasNameDataFileLocation,String existAliasNameHandleMethod){
+        File file = new File(aliasNameDataFileLocation);
+        if(file.exists()){
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode dataNode=mapper.readTree(file);
+                if(dataNode.isArray()){
+                    Iterator<JsonNode> aliasDataIterator = dataNode.getElements();
+                    while(aliasDataIterator.hasNext()){
+                        JsonNode currentAliasDefinition=aliasDataIterator.next();
+                        if(!currentAliasDefinition.isArray()){
+                            JsonNode spaceNameProp=currentAliasDefinition.get("discoverSpaceName");
+                            JsonNode customPropertyNameProp=currentAliasDefinition.get("customPropertyName");
+                            JsonNode customPropertyTypeProp=currentAliasDefinition.get("customPropertyType");
+                            JsonNode customPropertyAliasNameProp=currentAliasDefinition.get("customPropertyAliasName");
+                            if(spaceNameProp!=null&&customPropertyNameProp!=null&&customPropertyTypeProp!=null&&customPropertyAliasNameProp!=null){
+                                String spaceName=spaceNameProp.getTextValue();
+                                if(spaceName.equals(discoverSpaceName)){
+                                    String customPropertyName=customPropertyNameProp.getTextValue();
+                                    String customPropertyType=customPropertyTypeProp.getTextValue();
+                                    String customPropertyAliasName=customPropertyAliasNameProp.getTextValue();
+                                    if(getCustomPropertyAliasName(spaceName,customPropertyName,customPropertyType)!=null){
+                                        if(ExistedPropertyAliasNameHandleMethod_REPLACE.equals(existAliasNameHandleMethod)){
+                                            deleteCustomPropertyAliasName(spaceName, customPropertyName,customPropertyType);
+                                            recordCustomPropertyAliasName(spaceName, customPropertyName,customPropertyType,customPropertyAliasName);
+                                        }
+                                    }else{
+                                        recordCustomPropertyAliasName(spaceName, customPropertyName,customPropertyType,customPropertyAliasName);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    FileUtils.forceDelete(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 }

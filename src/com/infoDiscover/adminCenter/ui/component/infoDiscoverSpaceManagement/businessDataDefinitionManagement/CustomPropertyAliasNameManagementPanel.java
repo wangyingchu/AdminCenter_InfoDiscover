@@ -5,14 +5,14 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.event.ItemClickEvent;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
+import com.vaadin.server.*;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -29,6 +29,9 @@ public class CustomPropertyAliasNameManagementPanel extends VerticalLayout {
     private String PROPERTYTYPE_PROPERTY="自定义属性类型";
     private String currentSelectedCustomPropertyName;
     private String currentSelectedCustomPropertyType;
+    private File cusomtPropertyAliasNamesFile;
+    private FileDownloader cusomtPropertyAliasNamesFileDownloader;
+    private Button exportCustomPropertyAliasNamesButton;
 
     public CustomPropertyAliasNameManagementPanel(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -64,6 +67,26 @@ public class CustomPropertyAliasNameManagementPanel extends VerticalLayout {
             }
         });
         actionButtonPlacementLayout.addComponent(addCustomPropertyAliasNameButton);
+
+        Button importCustomPropertyAliasNamesButton=new Button("导入属性别名");
+        importCustomPropertyAliasNamesButton.setIcon(FontAwesome.DOWNLOAD);
+        importCustomPropertyAliasNamesButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        importCustomPropertyAliasNamesButton.addStyleName(ValoTheme.BUTTON_TINY);
+        importCustomPropertyAliasNamesButton.addStyleName("ui_appElementBottomSpacing");
+        importCustomPropertyAliasNamesButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeImportCustomPropertyAliasNamesOperation();
+            }
+        });
+        actionButtonPlacementLayout.addComponent(importCustomPropertyAliasNamesButton);
+
+        exportCustomPropertyAliasNamesButton=new Button("导出属性别名");
+        exportCustomPropertyAliasNamesButton.setIcon(FontAwesome.UPLOAD);
+        exportCustomPropertyAliasNamesButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        exportCustomPropertyAliasNamesButton.addStyleName(ValoTheme.BUTTON_TINY);
+        exportCustomPropertyAliasNamesButton.addStyleName("ui_appElementBottomSpacing");
+        actionButtonPlacementLayout.addComponent(exportCustomPropertyAliasNamesButton);
 
         Label spaceDivLabel2=new Label("|");
         actionButtonPlacementLayout. addComponent(spaceDivLabel2);
@@ -127,6 +150,18 @@ public class CustomPropertyAliasNameManagementPanel extends VerticalLayout {
             this.CustomPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
             this.CustomPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
         }
+        setupFileDownloader();
+    }
+
+    private void setupFileDownloader(){
+        this.cusomtPropertyAliasNamesFile=InfoDiscoverSpaceOperationUtil.generateCustomPropertyAliasNamesJsonFile(this.getDiscoverSpaceName());
+        Resource res = new FileResource(this.cusomtPropertyAliasNamesFile);
+        if(this.cusomtPropertyAliasNamesFileDownloader==null){
+            this.cusomtPropertyAliasNamesFileDownloader = new FileDownloader(res);
+            this.cusomtPropertyAliasNamesFileDownloader.extend(exportCustomPropertyAliasNamesButton);
+        }else{
+            this.cusomtPropertyAliasNamesFileDownloader.setFileDownloadResource(res);
+        }
     }
 
     private void clearPropertyAliasSelectStatus(){
@@ -151,6 +186,21 @@ public class CustomPropertyAliasNameManagementPanel extends VerticalLayout {
         UI.getCurrent().addWindow(window);
     }
 
+    private void executeImportCustomPropertyAliasNamesOperation(){
+        ImportCustomPropertyAliasNamesPanel importCustomPropertyAliasNamesPanel=new ImportCustomPropertyAliasNamesPanel(this.currentUserClientInfo);
+        importCustomPropertyAliasNamesPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        importCustomPropertyAliasNamesPanel.setRelatedCustomPropertyAliasNameManagementPanel(this);
+        final Window window = new Window();
+        window.setHeight(270.0f, Unit.PIXELS);
+        window.setWidth(550.0f, Unit.PIXELS);
+        window.setResizable(false);
+        window.center();
+        window.setModal(true);
+        window.setContent(importCustomPropertyAliasNamesPanel);
+        importCustomPropertyAliasNamesPanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
+    }
+
     public void addNewCustomPropertyAliasName(String propertyName,String propertyType,String propertyAliasName){
         Object[] newCustomPropertyAliasInfo=new Object[]{
                 " "+propertyName,
@@ -160,6 +210,7 @@ public class CustomPropertyAliasNameManagementPanel extends VerticalLayout {
         final Object newDataItemKey = this.CustomPropertyAliasNamesTable.addItem(newCustomPropertyAliasInfo, null);
         this.CustomPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
         this.CustomPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
+        this.cusomtPropertyAliasNamesFile=InfoDiscoverSpaceOperationUtil.generateCustomPropertyAliasNamesJsonFile(this.getDiscoverSpaceName());
     }
 
     private void executeDeleteCustomPropertyAliasNameOperation(){
