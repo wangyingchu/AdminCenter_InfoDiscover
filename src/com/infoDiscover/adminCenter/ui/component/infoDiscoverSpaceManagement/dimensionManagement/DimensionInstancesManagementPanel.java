@@ -287,7 +287,7 @@ public class DimensionInstancesManagementPanel extends VerticalLayout implements
     private void setDimensionTypesTreeTableData(String parentDataKey,int currentDataIndex,DimensionTypeVO currentDimensionTypeVO){
         String currentDataId=parentDataKey+currentDataIndex;
         Item currentDimensionTypeItem =  this.dimensionTypesInfoContainer.addItem(currentDataId);
-        if(currentDimensionTypeItem.getItemProperty(NAME_PROPERTY)==null){
+        if(currentDimensionTypeItem==null||currentDimensionTypeItem.getItemProperty(NAME_PROPERTY)==null){
             return;
         }
         currentDimensionTypeItem.getItemProperty(NAME_PROPERTY).setValue(currentDimensionTypeVO.getTypeName());
