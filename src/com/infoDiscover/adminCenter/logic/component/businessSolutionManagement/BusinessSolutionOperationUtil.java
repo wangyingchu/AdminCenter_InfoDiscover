@@ -1,15 +1,9 @@
 package com.infoDiscover.adminCenter.logic.component.businessSolutionManagement;
 
-import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.DimensionTypeDefinitionVO;
-import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.FactTypeDefinitionVO;
-import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.RelationTypeDefinitionVO;
-import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.SolutionTypePropertyTypeDefinitionVO;
+import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.*;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
-import com.infoDiscover.infoDiscoverEngine.dataMart.Fact;
-import com.infoDiscover.infoDiscoverEngine.dataMart.FactType;
-import com.infoDiscover.infoDiscoverEngine.dataMart.PropertyType;
-import com.infoDiscover.infoDiscoverEngine.dataMart.TypeProperty;
+import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationFiltering.EqualFilteringItem;
@@ -31,8 +25,8 @@ public class BusinessSolutionOperationUtil {
     public static final String BUSINESSSOLUTION_SolutionFactTypeFactType="BusinessSolution_SolutionFactType";
     public static final String BUSINESSSOLUTION_SolutionDimensionTypeFactType="BusinessSolution_SolutionDimensionType";
     public static final String BUSINESSSOLUTION_SolutionRelationTypeFactType="BusinessSolution_SolutionRelationType";
-
     public static final String BUSINESSSOLUTION_SolutionTypePropertyFactType="BusinessSolution_SolutionTypePropertyType";
+    public static final String BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType="BusinessSolution_SolutionCustomPropertyAliasType";
 
     public static final String MetaConfig_PropertyName_SolutionName="solutionName";
     public static final String MetaConfig_PropertyName_FactTypeName="factTypeName";
@@ -55,6 +49,10 @@ public class BusinessSolutionOperationUtil {
     public static final String MetaConfig_PropertyName_IsMandatoryProperty="isMandatory";
     public static final String MetaConfig_PropertyName_IsNullableProperty="isNullable";
     public static final String MetaConfig_PropertyName_IsReadOnlyProperty="isReadOnly";
+
+    public static final String MetaConfig_PropertyName_CustomPropertyName="customPropertyName";
+    public static final String MetaConfig_PropertyName_CustomPropertyType="customPropertyType";
+    public static final String MetaConfig_PropertyName_CustomPropertyAliasName="customPropertyAliasName";
 
     public static boolean checkBusinessSolutionExistence(String businessSolutionName){
         String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
@@ -931,6 +929,142 @@ public class BusinessSolutionOperationUtil {
         } catch (InfoDiscoveryEngineInfoExploreException e) {
             e.printStackTrace();
         } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static List<CustomPropertyAliasDefinitionVO> getSolutionCustomPropertyAliasNames(String solutionName){
+        List<CustomPropertyAliasDefinitionVO> resultList=new ArrayList<>();
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, solutionName));
+                customPropertyAliasNameRecordEP.setResultNumber(10000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasRecordFact!=null){
+                    for(Fact currentFact:customPropertyAliasRecordFact){
+                        CustomPropertyAliasDefinitionVO currentCustomPropertyAliasDefinitionVO=new CustomPropertyAliasDefinitionVO();
+                        currentCustomPropertyAliasDefinitionVO.setSolutionName(currentFact.getProperty(MetaConfig_PropertyName_SolutionName).getPropertyValue().toString());
+                        currentCustomPropertyAliasDefinitionVO.setCustomPropertyName(currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyName).getPropertyValue().toString());
+                        currentCustomPropertyAliasDefinitionVO.setCustomPropertyType(currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyType).getPropertyValue().toString());
+                        currentCustomPropertyAliasDefinitionVO.setCustomPropertyAliasName(currentFact.getProperty(MetaConfig_PropertyName_CustomPropertyAliasName).getPropertyValue().toString());
+                        resultList.add(currentCustomPropertyAliasDefinitionVO);
+                    }
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return resultList;
+    }
+
+    public static boolean checkCustomPropertyAliasDefinitionExistence(String solutionName, String customPropertyName,String customPropertyType){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, solutionName));
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyName, customPropertyName), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyType, customPropertyType), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.setResultNumber(1);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasRecordFact!=null&&customPropertyAliasRecordFact.size()>0){
+                    return true;
+                }
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean addCustomPropertyAliasDefinition(String solutionName, String customPropertyName,String customPropertyType,String customPropertyAliasName){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType)){
+                FactType customPropertyAliasNameFactType=metaConfigSpace.addFactType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType);
+                TypeProperty solutionNameProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_SolutionName,PropertyType.STRING);
+                solutionNameProperty.setMandatory(true);
+                TypeProperty customPropertyNameProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyName,PropertyType.STRING);
+                customPropertyNameProperty.setMandatory(true);
+                TypeProperty customPropertyTypeProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyType,PropertyType.STRING);
+                customPropertyTypeProperty.setMandatory(true);
+                TypeProperty customPropertyAliasNameNameProperty=customPropertyAliasNameFactType.addTypeProperty(MetaConfig_PropertyName_CustomPropertyAliasName,PropertyType.STRING);
+                customPropertyAliasNameNameProperty.setMandatory(true);
+            }
+            Fact typeKind_AliasNameFact=DiscoverEngineComponentFactory.createFact(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_SolutionName,solutionName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyName,customPropertyName);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyType,customPropertyType);
+            typeKind_AliasNameFact.setInitProperty(MetaConfig_PropertyName_CustomPropertyAliasName,customPropertyAliasName);
+            Fact resultRecord=metaConfigSpace.addFact(typeKind_AliasNameFact);
+            if(resultRecord!=null){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean deleteCustomPropertyAliasDefinition(String solutionName,String customPropertyName,String customPropertyType) {
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType)){
+                ExploreParameters customPropertyAliasNameRecordEP = new ExploreParameters();
+                customPropertyAliasNameRecordEP.setType(BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType);
+                customPropertyAliasNameRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, solutionName));
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyName, customPropertyName), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_CustomPropertyType, customPropertyType), ExploreParameters.FilteringLogic.AND);
+                customPropertyAliasNameRecordEP.setResultNumber(1000000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> customPropertyAliasNameRecordFact = ie.discoverFacts(customPropertyAliasNameRecordEP);
+                if(customPropertyAliasNameRecordFact!=null) {
+                    for (Fact currentRecordFact : customPropertyAliasNameRecordFact) {
+                        metaConfigSpace.removeFact(currentRecordFact.getId());
+                    }
+                }
+                return true;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
             if(metaConfigSpace!=null){
                 metaConfigSpace.closeSpace();
             }

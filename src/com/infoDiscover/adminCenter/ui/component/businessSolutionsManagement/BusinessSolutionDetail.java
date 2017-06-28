@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement;
 
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.customPropertyAliasManagement.BusinessSolutionPropertiesAliasInfo;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.dataMappingManagement.BusinessSolutionDataMappingsInfo;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.dimensionTypeManagement.BusinessSolutionDimensionTypesInfo;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.factTypeManagement.BusinessSolutionFactTypesInfo;
@@ -23,6 +24,7 @@ public class BusinessSolutionDetail extends VerticalLayout implements View {
     private BusinessSolutionFactTypesInfo businessSolutionFactTypesInfo;
     private BusinessSolutionRelationTypesInfo businessSolutionRelationTypesInfo;
     private BusinessSolutionDataMappingsInfo businessSolutionDataMappingsInfo;
+    private BusinessSolutionPropertiesAliasInfo businessSolutionPropertiesAliasInfo;
 
     public BusinessSolutionDetail(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -64,6 +66,13 @@ public class BusinessSolutionDetail extends VerticalLayout implements View {
         businessSolutionDataMappingsInfo=new BusinessSolutionDataMappingsInfo(this.currentUserClientInfo);
         businessSolutionDataMappingsInfo.setParentBusinessSolutionDetail(this);
         businessSolutionDataMappingInfoLayout.addComponent(businessSolutionDataMappingsInfo);
+
+        VerticalLayout customPropertyAliasInfoLayout=new VerticalLayout();
+        TabSheet.Tab customPropertyAliasInfoLayoutTab =tabs.addTab(customPropertyAliasInfoLayout, "自定义属性别名管理");
+        customPropertyAliasInfoLayoutTab.setIcon(VaadinIcons.COINS);
+        businessSolutionPropertiesAliasInfo=new BusinessSolutionPropertiesAliasInfo(this.currentUserClientInfo);
+        businessSolutionPropertiesAliasInfo.setParentBusinessSolutionDetail(this);
+        customPropertyAliasInfoLayout.addComponent(businessSolutionPropertiesAliasInfo);
     }
 
     public void renderBusinessSolutionDetail(){
@@ -78,6 +87,9 @@ public class BusinessSolutionDetail extends VerticalLayout implements View {
 
         businessSolutionDataMappingsInfo.setBusinessSolutionName(getBusinessSolutionName());
         businessSolutionDataMappingsInfo.renderDataMappingsInfo();
+
+        businessSolutionPropertiesAliasInfo.setBusinessSolutionName(getBusinessSolutionName());
+        businessSolutionPropertiesAliasInfo.renderPropertiesAliasInfo();
     }
 
     @Override
