@@ -14,6 +14,7 @@ public class BusinessSolutionDimensionTypesInfo extends VerticalLayout {
     private BusinessSolutionDetail parentBusinessSolutionDetail;
     private String businessSolutionName;
     private BusinessSolutionOperationsBar businessSolutionOperationsBar;
+    private DimensionTypeDefinitionsManagementPanel dimensionTypeDefinitionsManagementPanel;
 
     public BusinessSolutionDimensionTypesInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -21,6 +22,8 @@ public class BusinessSolutionDimensionTypesInfo extends VerticalLayout {
         this.businessSolutionOperationsBar=new BusinessSolutionOperationsBar(this.currentUserClientInfo);
         addComponent(businessSolutionOperationsBar);
 
+        this.dimensionTypeDefinitionsManagementPanel=new DimensionTypeDefinitionsManagementPanel(this.currentUserClientInfo);
+        addComponent(dimensionTypeDefinitionsManagementPanel);
     }
 
     public BusinessSolutionDetail getParentBusinessSolutionDetail() {
@@ -33,6 +36,7 @@ public class BusinessSolutionDimensionTypesInfo extends VerticalLayout {
 
     public void renderDimensionTypesInfo(){
         businessSolutionOperationsBar.setupOperationsBarInfo(getBusinessSolutionName());
+        dimensionTypeDefinitionsManagementPanel.renderDimensionTypeDefinitionsManagementInfo(getBusinessSolutionName());
     }
 
     public String getBusinessSolutionName() {
