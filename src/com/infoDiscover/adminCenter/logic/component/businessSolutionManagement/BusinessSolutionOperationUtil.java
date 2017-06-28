@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.logic.component.businessSolutionManagement;
 
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.DimensionTypeDefinitionVO;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.FactTypeDefinitionVO;
+import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.RelationTypeDefinitionVO;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.SolutionTypePropertyTypeDefinitionVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
@@ -484,6 +485,164 @@ public class BusinessSolutionOperationUtil {
                     List<Fact> solutionDimensionTypePropertyDefinitionRecordFactsList = ie.discoverFacts(solutionDimensionTypePropertyRecordEP);
                     if(solutionDimensionTypePropertyDefinitionRecordFactsList!=null){
                         for(Fact currentFact:solutionDimensionTypePropertyDefinitionRecordFactsList){
+                            metaConfigSpace.removeFact(currentFact.getId());
+                        }
+                    }
+                }
+                return true;
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static List<RelationTypeDefinitionVO> getBusinessSolutionRelationTypeList(String businessSolutionName){
+        List<RelationTypeDefinitionVO> relationTypeDefinitionList=new ArrayList<>();
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionRelationTypeFactType)){
+                ExploreParameters solutionFactTypeRecordEP = new ExploreParameters();
+                solutionFactTypeRecordEP.setType(BUSINESSSOLUTION_SolutionRelationTypeFactType);
+                solutionFactTypeRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                solutionFactTypeRecordEP.setResultNumber(100000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> solutionRelationTypeDefinitionRecordFactsList = ie.discoverFacts(solutionFactTypeRecordEP);
+                if(solutionRelationTypeDefinitionRecordFactsList!=null){
+                    for(Fact currentFact:solutionRelationTypeDefinitionRecordFactsList){
+                        RelationTypeDefinitionVO currentRelationTypeDefinitionVO=new RelationTypeDefinitionVO();
+                        currentRelationTypeDefinitionVO.setSolutionName(currentFact.getProperty(MetaConfig_PropertyName_SolutionName).getPropertyValue().toString());
+                        currentRelationTypeDefinitionVO.setTypeName(currentFact.getProperty(MetaConfig_PropertyName_RelationTypeName).getPropertyValue().toString());
+                        currentRelationTypeDefinitionVO.setTypeAliasName(currentFact.getProperty(MetaConfig_PropertyName_RelationTypeAliasName).getPropertyValue().toString());
+                        currentRelationTypeDefinitionVO.setParentTypeName(currentFact.getProperty(MetaConfig_PropertyName_ParentRelationTypeName).getPropertyValue().toString());
+                        relationTypeDefinitionList.add(currentRelationTypeDefinitionVO);
+                    }
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return relationTypeDefinitionList;
+    }
+
+    public static boolean checkSolutionRelationTypeExistence(String businessSolutionName,String relationTypeName){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionRelationTypeFactType)){
+                return false;
+            }
+            else{
+                ExploreParameters solutionRelationTypeRecordEP = new ExploreParameters();
+                solutionRelationTypeRecordEP.setType(BUSINESSSOLUTION_SolutionRelationTypeFactType);
+                solutionRelationTypeRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                solutionRelationTypeRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName, relationTypeName), ExploreParameters.FilteringLogic.AND);
+                solutionRelationTypeRecordEP.setResultNumber(1);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> solutionRelationTypeDefinitionRecordFactsList = ie.discoverFacts(solutionRelationTypeRecordEP);
+                if(solutionRelationTypeDefinitionRecordFactsList!=null&&solutionRelationTypeDefinitionRecordFactsList.size()>0){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean createBusinessSolutionRelationType(String businessSolutionName,String parentRelationTypeName,String relationTypeName,String relationTypeAliasName){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionRelationTypeFactType)){
+                FactType solutionRelationTypeFactType=metaConfigSpace.addFactType(BUSINESSSOLUTION_SolutionRelationTypeFactType);
+                TypeProperty solutionNameProperty=solutionRelationTypeFactType.addTypeProperty(MetaConfig_PropertyName_SolutionName, PropertyType.STRING);
+                solutionNameProperty.setMandatory(true);
+
+                TypeProperty relationTypeNameProperty=solutionRelationTypeFactType.addTypeProperty(MetaConfig_PropertyName_RelationTypeName, PropertyType.STRING);
+                relationTypeNameProperty.setMandatory(true);
+
+                TypeProperty relationTypeAliasNameProperty=solutionRelationTypeFactType.addTypeProperty(MetaConfig_PropertyName_RelationTypeAliasName, PropertyType.STRING);
+                relationTypeAliasNameProperty.setMandatory(true);
+
+                TypeProperty parentRelationTypeAliasNameProperty=solutionRelationTypeFactType.addTypeProperty(MetaConfig_PropertyName_ParentRelationTypeName, PropertyType.STRING);
+                parentRelationTypeAliasNameProperty.setMandatory(true);
+            }
+            Fact solutionRelationTypeFact=DiscoverEngineComponentFactory.createFact(BUSINESSSOLUTION_SolutionRelationTypeFactType);
+            solutionRelationTypeFact.setInitProperty(MetaConfig_PropertyName_SolutionName,businessSolutionName);
+            solutionRelationTypeFact.setInitProperty(MetaConfig_PropertyName_ParentRelationTypeName,parentRelationTypeName);
+            solutionRelationTypeFact.setInitProperty(MetaConfig_PropertyName_RelationTypeName,relationTypeName);
+            solutionRelationTypeFact.setInitProperty(MetaConfig_PropertyName_RelationTypeAliasName,relationTypeAliasName);
+            Fact resultRecord=metaConfigSpace.addFact(solutionRelationTypeFact);
+            if(resultRecord!=null){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean deleteBusinessSolutionRelationType(String businessSolutionName,String relationTypeName){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionRelationTypeFactType)){
+                return false;
+            }else{
+                ExploreParameters solutionRelationTypeRecordEP = new ExploreParameters();
+                solutionRelationTypeRecordEP.setType(BUSINESSSOLUTION_SolutionRelationTypeFactType);
+                solutionRelationTypeRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                solutionRelationTypeRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName, relationTypeName), ExploreParameters.FilteringLogic.AND);
+                solutionRelationTypeRecordEP.setResultNumber(10000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> solutionRelationTypeDefinitionRecordFactsList = ie.discoverFacts(solutionRelationTypeRecordEP);
+                if(solutionRelationTypeDefinitionRecordFactsList!=null){
+                    for(Fact currentFact:solutionRelationTypeDefinitionRecordFactsList){
+                        metaConfigSpace.removeFact(currentFact.getId());
+                    }
+                }
+                if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionTypePropertyFactType)){
+                    ExploreParameters solutionRelationTypePropertyRecordEP = new ExploreParameters();
+                    solutionRelationTypePropertyRecordEP.setType(BUSINESSSOLUTION_SolutionTypePropertyFactType);
+                    solutionRelationTypePropertyRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                    solutionRelationTypePropertyRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_PropertyTypeKind, InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION), ExploreParameters.FilteringLogic.AND);
+                    solutionRelationTypePropertyRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_PropertyTypeName, relationTypeName), ExploreParameters.FilteringLogic.AND);
+                    solutionRelationTypePropertyRecordEP.setResultNumber(10000);
+                    List<Fact> solutionRelationTypePropertyDefinitionRecordFactsList = ie.discoverFacts(solutionRelationTypePropertyRecordEP);
+                    if(solutionRelationTypePropertyDefinitionRecordFactsList!=null){
+                        for(Fact currentFact:solutionRelationTypePropertyDefinitionRecordFactsList){
                             metaConfigSpace.removeFact(currentFact.getId());
                         }
                     }

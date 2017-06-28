@@ -2,6 +2,7 @@ package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.re
 
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.BusinessSolutionDetail;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.commonUseElement.BusinessSolutionOperationsBar;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.dimensionTypeManagement.DimensionTypeDefinitionsManagementPanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.ui.VerticalLayout;
 
@@ -14,6 +15,7 @@ public class BusinessSolutionRelationTypesInfo extends VerticalLayout {
     private BusinessSolutionDetail parentBusinessSolutionDetail;
     private String businessSolutionName;
     private BusinessSolutionOperationsBar businessSolutionOperationsBar;
+    private RelationTypeDefinitionsManagementPanel relationTypeDefinitionsManagementPanel;
 
     public BusinessSolutionRelationTypesInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -21,6 +23,8 @@ public class BusinessSolutionRelationTypesInfo extends VerticalLayout {
         this.businessSolutionOperationsBar=new BusinessSolutionOperationsBar(this.currentUserClientInfo);
         addComponent(businessSolutionOperationsBar);
 
+        this.relationTypeDefinitionsManagementPanel=new RelationTypeDefinitionsManagementPanel(this.currentUserClientInfo);
+        addComponent(relationTypeDefinitionsManagementPanel);
     }
 
     public BusinessSolutionDetail getParentBusinessSolutionDetail() {
@@ -33,6 +37,7 @@ public class BusinessSolutionRelationTypesInfo extends VerticalLayout {
 
     public void renderRelationTypesInfo(){
         businessSolutionOperationsBar.setupOperationsBarInfo(getBusinessSolutionName());
+        relationTypeDefinitionsManagementPanel.renderRelationTypeDefinitionsManagementInfo(getBusinessSolutionName());
     }
 
     public String getBusinessSolutionName() {
