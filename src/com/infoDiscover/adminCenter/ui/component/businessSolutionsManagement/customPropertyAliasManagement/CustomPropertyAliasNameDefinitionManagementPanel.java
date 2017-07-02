@@ -23,7 +23,7 @@ public class CustomPropertyAliasNameDefinitionManagementPanel extends VerticalLa
     private UserClientInfo currentUserClientInfo;
     private String businessSolutionName;
     private Button deletePropertyAliasNameButton;
-    private TreeTable CustomPropertyAliasNamesTable;
+    private TreeTable customPropertyAliasNamesTable;
     private String PROPERTYNAME_PROPERTY="自定义属性名称";
     private String PROPERTYALIASNAME_PROPERTY="自定义属性别名";
     private String PROPERTYTYPE_PROPERTY="自定义属性类型";
@@ -81,19 +81,19 @@ public class CustomPropertyAliasNameDefinitionManagementPanel extends VerticalLa
         });
         actionButtonPlacementLayout.addComponent(this.deletePropertyAliasNameButton);
 
-        this.CustomPropertyAliasNamesTable = new TreeTable();
-        this.CustomPropertyAliasNamesTable.addStyleName(ValoTheme.TABLE_COMPACT);
-        this.CustomPropertyAliasNamesTable.addStyleName(ValoTheme.TABLE_BORDERLESS);
-        this.CustomPropertyAliasNamesTable.setSizeFull();
-        this.CustomPropertyAliasNamesTable.setSelectable(true);
-        this.CustomPropertyAliasNamesTable.setHeight(dataDisplayElementHeight, Unit.PIXELS);
-        this.CustomPropertyAliasNamesTable.setNullSelectionAllowed(false);
-        this.CustomPropertyAliasNamesTable.addContainerProperty(PROPERTYNAME_PROPERTY, String.class, "");
-        this.CustomPropertyAliasNamesTable.addContainerProperty(PROPERTYTYPE_PROPERTY, String.class, "");
-        this.CustomPropertyAliasNamesTable.addContainerProperty(PROPERTYALIASNAME_PROPERTY, String.class, "");
-        this.CustomPropertyAliasNamesTable.setColumnWidth(PROPERTYTYPE_PROPERTY,120);
+        this.customPropertyAliasNamesTable = new TreeTable();
+        this.customPropertyAliasNamesTable.addStyleName(ValoTheme.TABLE_COMPACT);
+        this.customPropertyAliasNamesTable.addStyleName(ValoTheme.TABLE_BORDERLESS);
+        this.customPropertyAliasNamesTable.setSizeFull();
+        this.customPropertyAliasNamesTable.setSelectable(true);
+        this.customPropertyAliasNamesTable.setHeight(dataDisplayElementHeight, Unit.PIXELS);
+        this.customPropertyAliasNamesTable.setNullSelectionAllowed(false);
+        this.customPropertyAliasNamesTable.addContainerProperty(PROPERTYNAME_PROPERTY, String.class, "");
+        this.customPropertyAliasNamesTable.addContainerProperty(PROPERTYTYPE_PROPERTY, String.class, "");
+        this.customPropertyAliasNamesTable.addContainerProperty(PROPERTYALIASNAME_PROPERTY, String.class, "");
+        this.customPropertyAliasNamesTable.setColumnWidth(PROPERTYTYPE_PROPERTY,120);
 
-        this.CustomPropertyAliasNamesTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+        this.customPropertyAliasNamesTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
                 currentSelectedCustomPropertyName=itemClickEvent.getItem().getItemProperty(PROPERTYNAME_PROPERTY).getValue().toString();
@@ -101,7 +101,7 @@ public class CustomPropertyAliasNameDefinitionManagementPanel extends VerticalLa
                 deletePropertyAliasNameButton.setEnabled(true);
             }
         });
-        this.addComponent(this.CustomPropertyAliasNamesTable);
+        this.addComponent(this.customPropertyAliasNamesTable);
     }
 
     public void renderCustomPropertyAliasInfo(String businessSolutionName){
@@ -114,14 +114,14 @@ public class CustomPropertyAliasNameDefinitionManagementPanel extends VerticalLa
                     currentCustomPropertyAliasNameVO.getCustomPropertyType(),
                     currentCustomPropertyAliasNameVO.getCustomPropertyAliasName()
             };
-            final Object newDataItemKey = this.CustomPropertyAliasNamesTable.addItem(newCustomPropertyAliasInfo, null);
-            this.CustomPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
-            this.CustomPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
+            final Object newDataItemKey = this.customPropertyAliasNamesTable.addItem(newCustomPropertyAliasInfo, null);
+            this.customPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
+            this.customPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
         }
     }
 
     private void clearPropertyAliasSelectStatus(){
-        this.CustomPropertyAliasNamesTable.getContainerDataSource().removeAllItems();
+        this.customPropertyAliasNamesTable.getContainerDataSource().removeAllItems();
         this.deletePropertyAliasNameButton.setEnabled(false);
         this.currentSelectedCustomPropertyName=null;
         this.currentSelectedCustomPropertyType=null;
@@ -156,9 +156,9 @@ public class CustomPropertyAliasNameDefinitionManagementPanel extends VerticalLa
                 propertyType,
                 propertyAliasName
         };
-        final Object newDataItemKey = this.CustomPropertyAliasNamesTable.addItem(newCustomPropertyAliasInfo, null);
-        this.CustomPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
-        this.CustomPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
+        final Object newDataItemKey = this.customPropertyAliasNamesTable.addItem(newCustomPropertyAliasInfo, null);
+        this.customPropertyAliasNamesTable.setChildrenAllowed(newDataItemKey, false);
+        this.customPropertyAliasNamesTable.setColumnCollapsible(newDataItemKey, false);
     }
 
     private void executeDeleteCustomPropertyAliasNameOperation(){

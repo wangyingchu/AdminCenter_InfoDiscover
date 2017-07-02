@@ -14,6 +14,7 @@ public class BusinessSolutionDataMappingsInfo extends VerticalLayout {
     private BusinessSolutionDetail parentBusinessSolutionDetail;
     private String businessSolutionName;
     private BusinessSolutionOperationsBar businessSolutionOperationsBar;
+    private DataMappingDefinitionsManagementPanel dataMappingDefinitionsManagementPanel;
 
     public BusinessSolutionDataMappingsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -21,6 +22,8 @@ public class BusinessSolutionDataMappingsInfo extends VerticalLayout {
         this.businessSolutionOperationsBar=new BusinessSolutionOperationsBar(this.currentUserClientInfo);
         addComponent(businessSolutionOperationsBar);
 
+        this.dataMappingDefinitionsManagementPanel=new DataMappingDefinitionsManagementPanel(this.currentUserClientInfo);
+        addComponent(dataMappingDefinitionsManagementPanel);
     }
 
     public BusinessSolutionDetail getParentBusinessSolutionDetail() {
@@ -33,6 +36,7 @@ public class BusinessSolutionDataMappingsInfo extends VerticalLayout {
 
     public void renderDataMappingsInfo(){
         businessSolutionOperationsBar.setupOperationsBarInfo(getBusinessSolutionName());
+        this.dataMappingDefinitionsManagementPanel.renderDataMappingDefinitionsInfo(getBusinessSolutionName());
     }
 
     public String getBusinessSolutionName() {
