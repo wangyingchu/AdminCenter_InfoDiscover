@@ -12,6 +12,7 @@ public class DataMappingDefinitionVO {
     private String relationTypeName;
     private String relationDirection;
     private String mappingNotExistHandleMethod;
+    private String existingPropertyHandleMethod;
     private String targetDataTypeName;
     private String targetDataTypeKind;
     private String targetDataPropertyName;
@@ -130,5 +131,13 @@ public class DataMappingDefinitionVO {
 
     public void setSolutionName(String solutionName) {
         this.solutionName = solutionName;
+    }
+
+    public String getExistingPropertyHandleMethod() {
+        return existingPropertyHandleMethod;
+    }
+
+    public void setExistingPropertyHandleMethod(String existingPropertyHandleMethod) {
+        this.existingPropertyHandleMethod = existingPropertyHandleMethod;
     }
 }

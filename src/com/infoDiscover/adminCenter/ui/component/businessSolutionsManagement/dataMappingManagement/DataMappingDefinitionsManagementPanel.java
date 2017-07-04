@@ -14,6 +14,7 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
     private String businessSolutionName;
     private CommonDataRelationMappingDefinitionEditPanel commonDataRelationMappingDefinitionEditPanel;
     private DataAndDateDimensionMappingDefinitionEditPanel dataAndDateDimensionMappingDefinitionEditPanel;
+    private DataPropertiesDuplicateMappingDefinitionEditorPanel dataPropertiesDuplicateMappingDefinitionEditorPanel;
 
     public DataMappingDefinitionsManagementPanel(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -33,6 +34,12 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
         factAndDateDimensionMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.CLOCK_O);
         dataAndDateDimensionMappingDefinitionEditPanel =new DataAndDateDimensionMappingDefinitionEditPanel(this.currentUserClientInfo);
         factAndDateDimensionMappingDefinitionInfoLayout.addComponent(dataAndDateDimensionMappingDefinitionEditPanel);
+
+        VerticalLayout dataPropertiesDuplicateMappingDefinitionInfoLayout=new VerticalLayout();
+        TabSheet.Tab dataPropertiesDuplicateMappingDefinitionInfoLayoutTab =tabs.addTab(dataPropertiesDuplicateMappingDefinitionInfoLayout, "数据属性复制规则定义管理");
+        dataPropertiesDuplicateMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.COPY);
+        dataPropertiesDuplicateMappingDefinitionEditorPanel=new DataPropertiesDuplicateMappingDefinitionEditorPanel(this.currentUserClientInfo);
+        dataPropertiesDuplicateMappingDefinitionInfoLayout.addComponent(dataPropertiesDuplicateMappingDefinitionEditorPanel);
     }
 
     public String getBusinessSolutionName() {
@@ -45,6 +52,8 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
         commonDataRelationMappingDefinitionEditPanel.renderCommonDataRelationMappingDefinitionInfo(getBusinessSolutionName());
         dataAndDateDimensionMappingDefinitionEditPanel.setBusinessSolutionName(getBusinessSolutionName());
         dataAndDateDimensionMappingDefinitionEditPanel.renderDataAndDateDimensionMappingDefinitionInfo(businessSolutionName);
+        dataPropertiesDuplicateMappingDefinitionEditorPanel.setBusinessSolutionName(getBusinessSolutionName());
+        dataPropertiesDuplicateMappingDefinitionEditorPanel.renderDataPropertiesDuplicateMappingDefinitionInfo(getBusinessSolutionName());
     }
 
     public void setBusinessSolutionName(String businessSolutionName) {
