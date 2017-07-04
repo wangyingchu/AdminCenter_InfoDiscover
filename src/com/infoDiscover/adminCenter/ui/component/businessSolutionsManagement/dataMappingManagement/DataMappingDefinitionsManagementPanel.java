@@ -13,7 +13,7 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private String businessSolutionName;
     private CommonDataRelationMappingDefinitionEditPanel commonDataRelationMappingDefinitionEditPanel;
-    private FactAndDateDimensionMappingDefinitionEditPanel factAndDateDimensionMappingDefinitionEditPanel;
+    private DataAndDateDimensionMappingDefinitionEditPanel dataAndDateDimensionMappingDefinitionEditPanel;
 
     public DataMappingDefinitionsManagementPanel(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -29,10 +29,10 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
         commonDataRelationMappingDefinitionInfoLayout.addComponent(commonDataRelationMappingDefinitionEditPanel);
 
         VerticalLayout factAndDateDimensionMappingDefinitionInfoLayout=new VerticalLayout();
-        TabSheet.Tab factAndDateDimensionMappingDefinitionInfoLayoutTab =tabs.addTab(factAndDateDimensionMappingDefinitionInfoLayout, "事实与时间维度关联定义管理");
+        TabSheet.Tab factAndDateDimensionMappingDefinitionInfoLayoutTab =tabs.addTab(factAndDateDimensionMappingDefinitionInfoLayout, "数据与时间维度关联定义管理");
         factAndDateDimensionMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.CLOCK_O);
-        factAndDateDimensionMappingDefinitionEditPanel=new FactAndDateDimensionMappingDefinitionEditPanel(this.currentUserClientInfo);
-        factAndDateDimensionMappingDefinitionInfoLayout.addComponent(factAndDateDimensionMappingDefinitionEditPanel);
+        dataAndDateDimensionMappingDefinitionEditPanel =new DataAndDateDimensionMappingDefinitionEditPanel(this.currentUserClientInfo);
+        factAndDateDimensionMappingDefinitionInfoLayout.addComponent(dataAndDateDimensionMappingDefinitionEditPanel);
     }
 
     public String getBusinessSolutionName() {
@@ -43,8 +43,8 @@ public class DataMappingDefinitionsManagementPanel extends VerticalLayout {
         setBusinessSolutionName(businessSolutionName);
         commonDataRelationMappingDefinitionEditPanel.setBusinessSolutionName(getBusinessSolutionName());
         commonDataRelationMappingDefinitionEditPanel.renderCommonDataRelationMappingDefinitionInfo(getBusinessSolutionName());
-        factAndDateDimensionMappingDefinitionEditPanel.setBusinessSolutionName(getBusinessSolutionName());
-        factAndDateDimensionMappingDefinitionEditPanel.renderFactAndDateDimensionMappingDefinitionInfo();
+        dataAndDateDimensionMappingDefinitionEditPanel.setBusinessSolutionName(getBusinessSolutionName());
+        dataAndDateDimensionMappingDefinitionEditPanel.renderDataAndDateDimensionMappingDefinitionInfo(businessSolutionName);
     }
 
     public void setBusinessSolutionName(String businessSolutionName) {

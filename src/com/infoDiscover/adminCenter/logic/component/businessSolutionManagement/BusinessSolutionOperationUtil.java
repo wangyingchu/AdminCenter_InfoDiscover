@@ -29,6 +29,7 @@ public class BusinessSolutionOperationUtil {
     public static final String BUSINESSSOLUTION_SolutionTypePropertyFactType="BusinessSolution_SolutionTypePropertyType";
     public static final String BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType="BusinessSolution_SolutionCustomPropertyAliasType";
     public static final String BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType="BusinessSolution_SolutionDataRelationMappingDefinition";
+    public static final String BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType="BusinessSolution_SolutionDataDateDimensionMappingDefinition";
 
     public static final String MetaConfig_PropertyName_SolutionName="solutionName";
     public static final String MetaConfig_PropertyName_FactTypeName="factTypeName";
@@ -1354,6 +1355,141 @@ public class BusinessSolutionOperationUtil {
             else{
                 solutionDefinitionRecordEP.addFilteringItem(new NullValueFilteringItem(MetaConfig_PropertyName_MappingMaxValue),ExploreParameters.FilteringLogic.AND);
             }
+            solutionDefinitionRecordEP.setResultNumber(10000);
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+            List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP);
+            if(solutionDefinitionRecordFactsList!=null){
+                for(Fact currentFact:solutionDefinitionRecordFactsList){
+                    metaConfigSpace.removeFact(currentFact.getId());
+                }
+            }
+            return true;
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean createDataDateDimensionMappingDefinition(String solutionName, DataMappingDefinitionVO dataMappingDefinitionVO){
+        String metaConfigSpaceName= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace=null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType)){
+                FactType dataRelationMappingFactType=metaConfigSpace.addFactType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+                TypeProperty solutionNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_SolutionName, PropertyType.STRING);
+                solutionNameProperty.setMandatory(true);
+                TypeProperty sourceDataTypeNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_SourceDataTypeName, PropertyType.STRING);
+                sourceDataTypeNameProperty.setMandatory(true);
+                TypeProperty sourceDataTypeKindProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_SourceDataTypeKind, PropertyType.STRING);
+                sourceDataTypeKindProperty.setMandatory(true);
+                TypeProperty sourceDataPropertyNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_SourceDataPropertyName, PropertyType.STRING);
+                sourceDataPropertyNameProperty.setMandatory(true);
+                TypeProperty relationTypeNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_RelationTypeName, PropertyType.STRING);
+                relationTypeNameProperty.setMandatory(true);
+                TypeProperty relationDirectionProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_RelationDirection, PropertyType.STRING);
+                relationDirectionProperty.setMandatory(true);
+                TypeProperty mappingNotExistHandleMethodProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod, PropertyType.STRING);
+                mappingNotExistHandleMethodProperty.setMandatory(true);
+                TypeProperty targetDataTypeNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataTypeName, PropertyType.STRING);
+                targetDataTypeNameProperty.setMandatory(false);
+                TypeProperty targetDataPropertyNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataPropertyName, PropertyType.STRING);
+                targetDataPropertyNameProperty.setMandatory(true);
+            }
+
+            Fact dataRelationMappingDefinitionFact=DiscoverEngineComponentFactory.createFact(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SolutionName,solutionName);
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataTypeName,dataMappingDefinitionVO.getSourceDataTypeName());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataTypeKind,dataMappingDefinitionVO.getSourceDataTypeKind());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataPropertyName,dataMappingDefinitionVO.getSourceDataPropertyName());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_RelationTypeName,dataMappingDefinitionVO.getRelationTypeName());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_RelationDirection,dataMappingDefinitionVO.getRelationDirection());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod,dataMappingDefinitionVO.getMappingNotExistHandleMethod());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataTypeName,dataMappingDefinitionVO.getTargetDataTypeName());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataPropertyName,dataMappingDefinitionVO.getTargetDataPropertyName());
+            Fact resultRecord=metaConfigSpace.addFact(dataRelationMappingDefinitionFact);
+            if(resultRecord!=null){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineDataMartException e) {
+            e.printStackTrace();
+        } finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static List<DataMappingDefinitionVO> getDataDateDimensionMappingDefinitionList(String businessSolutionName){
+        List<DataMappingDefinitionVO> dataRelationMappingDefinitionList=new ArrayList<>();
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType)){
+                ExploreParameters dataMaooingDefinitionRecordEP = new ExploreParameters();
+                dataMaooingDefinitionRecordEP.setType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+                dataMaooingDefinitionRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+                dataMaooingDefinitionRecordEP.setResultNumber(10000);
+                InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+                List<Fact> dataMappingDefinitionRecordFactsList = ie.discoverFacts(dataMaooingDefinitionRecordEP);
+
+                if(dataMappingDefinitionRecordFactsList!=null){
+                    for(Fact currentFact:dataMappingDefinitionRecordFactsList){
+                        DataMappingDefinitionVO currentDataMappingDefinitionVO=new DataMappingDefinitionVO();
+                        currentDataMappingDefinitionVO.setSolutionName(businessSolutionName);
+                        currentDataMappingDefinitionVO.setSourceDataTypeName(currentFact.getProperty(MetaConfig_PropertyName_SourceDataTypeName).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setSourceDataTypeKind(currentFact.getProperty(MetaConfig_PropertyName_SourceDataTypeKind).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setSourceDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_SourceDataPropertyName).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setRelationTypeName(currentFact.getProperty(MetaConfig_PropertyName_RelationTypeName).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setRelationDirection(currentFact.getProperty(MetaConfig_PropertyName_RelationDirection).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setMappingNotExistHandleMethod(currentFact.getProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setTargetDataTypeName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataTypeName).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setTargetDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataPropertyName).getPropertyValue().toString());
+                        dataRelationMappingDefinitionList.add(currentDataMappingDefinitionVO);
+                    }
+                }
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return dataRelationMappingDefinitionList;
+    }
+
+    public static boolean deleteDataDateDimensionMappingDefinition(String businessSolutionName, DataMappingDefinitionVO dataMappingDefinitionVO){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType)){
+                return false;
+            }
+            ExploreParameters solutionDefinitionRecordEP = new ExploreParameters();
+            solutionDefinitionRecordEP.setType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+            solutionDefinitionRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeName, dataMappingDefinitionVO.getSourceDataTypeName()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeKind, dataMappingDefinitionVO.getSourceDataTypeKind()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName, dataMappingDefinitionVO.getSourceDataPropertyName()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName, dataMappingDefinitionVO.getRelationTypeName()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationDirection, dataMappingDefinitionVO.getRelationDirection()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_MappingNotExistHandleMethod, dataMappingDefinitionVO.getMappingNotExistHandleMethod()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName, dataMappingDefinitionVO.getTargetDataTypeName()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName, dataMappingDefinitionVO.getTargetDataPropertyName()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.setResultNumber(10000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();
             List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP);
