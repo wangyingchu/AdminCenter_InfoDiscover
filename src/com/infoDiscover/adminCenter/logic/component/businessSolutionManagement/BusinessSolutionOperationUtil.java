@@ -1652,4 +1652,183 @@ public class BusinessSolutionOperationUtil {
         }
         return false;
     }
+
+    public static boolean checkInfoUsedInCommonDataRelationMappingDefinition(String businessSolutionName,String dataTypeKind,String dataTypeName,String dataPropertyName,String dataPropertyType){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType)){
+                return false;
+            }
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+
+            ExploreParameters solutionDefinitionRecordEP1 = new ExploreParameters();
+            solutionDefinitionRecordEP1.setType(BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType);
+            solutionDefinitionRecordEP1.setResultNumber(1);
+            solutionDefinitionRecordEP1.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeName,dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeKind, dataTypeKind), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyType!=null) {
+                solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyType, dataPropertyType), ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName,dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP1);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+
+            ExploreParameters solutionDefinitionRecordEP2 = new ExploreParameters();
+            solutionDefinitionRecordEP2.setType(BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType);
+            solutionDefinitionRecordEP2.setResultNumber(1);
+            solutionDefinitionRecordEP2.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+
+            solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName,dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeKind, dataTypeKind), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyType!=null) {
+                solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyType, dataPropertyType), ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName,dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP2);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+
+            ExploreParameters solutionDefinitionRecordEP3 = new ExploreParameters();
+            solutionDefinitionRecordEP3.setType(BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType);
+            solutionDefinitionRecordEP3.setResultNumber(1);
+            solutionDefinitionRecordEP3.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP3.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName,dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP3);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkInfoUsedInDataDateDimensionMappingDefinition(String businessSolutionName,String dataTypeKind,String dataTypeName,String dataPropertyName){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType)){
+                return false;
+            }
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+            ExploreParameters solutionDefinitionRecordEP1 = new ExploreParameters();
+            solutionDefinitionRecordEP1.setType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+            solutionDefinitionRecordEP1.setResultNumber(1);
+            solutionDefinitionRecordEP1.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeName, dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeKind,dataTypeKind), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName, dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP1);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+
+            ExploreParameters solutionDefinitionRecordEP2 = new ExploreParameters();
+            solutionDefinitionRecordEP2.setType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+            solutionDefinitionRecordEP2.setResultNumber(1);
+            solutionDefinitionRecordEP2.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName, dataTypeName), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName, dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP2);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+
+            ExploreParameters solutionDefinitionRecordEP3 = new ExploreParameters();
+            solutionDefinitionRecordEP3.setType(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
+            solutionDefinitionRecordEP3.setResultNumber(1);
+            solutionDefinitionRecordEP3.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP3.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName,dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP3);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkInfoUsedInDataPropertiesDuplicateMappingDefinition(String businessSolutionName,String dataTypeKind,String dataTypeName,String dataPropertyName,String dataPropertyType){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        InfoDiscoverSpace metaConfigSpace = null;
+        try {
+            metaConfigSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(metaConfigSpaceName);
+            if(!metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionDataPropertiesDuplicateMappingDefinitionFactType)){
+                return false;
+            }
+            InformationExplorer ie = metaConfigSpace.getInformationExplorer();
+
+            ExploreParameters solutionDefinitionRecordEP1 = new ExploreParameters();
+            solutionDefinitionRecordEP1.setType(BUSINESSSOLUTION_SolutionDataPropertiesDuplicateMappingDefinitionFactType);
+            solutionDefinitionRecordEP1.setResultNumber(1);
+            solutionDefinitionRecordEP1.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeName, dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataTypeKind,dataTypeKind), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName,dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataPropertyType!=null){
+                solutionDefinitionRecordEP1.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyType, dataPropertyType), ExploreParameters.FilteringLogic.AND);
+            }
+            List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP1);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+
+            ExploreParameters solutionDefinitionRecordEP2 = new ExploreParameters();
+            solutionDefinitionRecordEP2.setType(BUSINESSSOLUTION_SolutionDataPropertiesDuplicateMappingDefinitionFactType);
+            solutionDefinitionRecordEP2.setResultNumber(1);
+            solutionDefinitionRecordEP2.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
+            solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName, dataTypeName), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeKind,dataTypeKind), ExploreParameters.FilteringLogic.AND);
+            if(dataPropertyName!=null){
+                solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName,dataPropertyName), ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataPropertyType!=null){
+                solutionDefinitionRecordEP2.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyType, dataPropertyType), ExploreParameters.FilteringLogic.AND);
+            }
+            solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP2);
+            if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
+                return true;
+            }
+        } catch (InfoDiscoveryEngineInfoExploreException e) {
+            e.printStackTrace();
+        } catch (InfoDiscoveryEngineRuntimeException e) {
+            e.printStackTrace();
+        }finally {
+            if(metaConfigSpace!=null){
+                metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
 }
