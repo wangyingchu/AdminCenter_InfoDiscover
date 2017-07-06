@@ -1,5 +1,7 @@
 package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement;
 
+import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.*;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
@@ -2894,5 +2896,325 @@ public class InfoDiscoverSpaceOperationUtil {
             }
         }
         return false;
+    }
+
+    public static boolean applyBusinessSolution(String discoverSpaceName,String businessSolutionName){
+        if(!checkDiscoverSpaceExistence(discoverSpaceName)){
+            return false;
+        }
+        if(!BusinessSolutionOperationUtil.checkBusinessSolutionExistence(businessSolutionName)){
+            return false;
+        }
+        //Apply Fact Type Data
+        List<FactTypeDefinitionVO> factTypeDefinitionList=BusinessSolutionOperationUtil.getBusinessSolutionFactTypeList(businessSolutionName);
+        if(factTypeDefinitionList!=null) {
+            InfoDiscoverSpace targetSpace=null;
+            try {
+                targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                for (FactTypeDefinitionVO currentFactTypeDefinitionVO:factTypeDefinitionList) {
+                    String factTypeName=currentFactTypeDefinitionVO.getTypeName();
+                    if(!targetSpace.hasFactType(factTypeName)){
+                        targetSpace.addFactType(factTypeName);
+                    }
+                }
+            } catch (InfoDiscoveryEngineDataMartException e) {
+                e.printStackTrace();
+            }finally {
+                if(targetSpace!=null){
+                    targetSpace.closeSpace();
+                }
+            }
+            for (FactTypeDefinitionVO currentFactTypeDefinitionVO:factTypeDefinitionList) {
+                String factTypeAliasName=currentFactTypeDefinitionVO.getTypeAliasName();
+                String factTypeName=currentFactTypeDefinitionVO.getTypeName();
+                recordTypeKindAliasName(discoverSpaceName,TYPEKIND_FACT,factTypeName,factTypeAliasName);
+            }
+            Map<String, List<SolutionTypePropertyTypeDefinitionVO>> factTypePropertiesMap=new HashMap<>();
+            for(FactTypeDefinitionVO currentFactTypeDefinitionVO:factTypeDefinitionList) {
+               String factType= currentFactTypeDefinitionVO.getTypeName();
+                List<SolutionTypePropertyTypeDefinitionVO> factPropertiesList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(businessSolutionName,InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,factType);
+                factTypePropertiesMap.put(factType,factPropertiesList);
+                if(factPropertiesList!=null){
+                    targetSpace=null;
+                    try {
+                        targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                        FactType targetFactType=targetSpace.getFactType(factType);
+                        if(targetFactType!=null){
+                            for (SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:factPropertiesList){
+                                String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                                PropertyType propertyType=getPropertyTypeByCode(currentSolutionTypePropertyTypeDefinitionVO.getPropertyType());
+                                TypeProperty currentTypeProperty=targetFactType.addTypeProperty(propertyName,propertyType);
+                                currentTypeProperty.setMandatory(currentSolutionTypePropertyTypeDefinitionVO.isMandatory());
+                                currentTypeProperty.setNullable(currentSolutionTypePropertyTypeDefinitionVO.isNullable());
+                                currentTypeProperty.setReadOnly(currentSolutionTypePropertyTypeDefinitionVO.isReadOnly());
+                            }
+                        }
+                    } catch (InfoDiscoveryEngineRuntimeException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if(targetSpace!=null){
+                            targetSpace.closeSpace();
+                        }
+                    }
+                }
+            }
+            Set<String> factTypeSet=factTypePropertiesMap.keySet();
+            Iterator<String> factTypeIterator= factTypeSet.iterator();
+            while(factTypeIterator.hasNext()){
+                String currentFactType=factTypeIterator.next();
+                List<SolutionTypePropertyTypeDefinitionVO> factTypePropertiesList=factTypePropertiesMap.get(currentFactType);
+                if(factTypePropertiesList!=null){
+                    for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:factTypePropertiesList){
+                        String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                        String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
+                        recordTypePropertyAliasName(discoverSpaceName,TYPEKIND_FACT,currentFactType,propertyName,propertyAlias);
+                    }
+                }
+            }
+        }
+        //Apply Dimension Type Data
+        List<DimensionTypeDefinitionVO> dimensionTypeDefinitionList=BusinessSolutionOperationUtil.getBusinessSolutionDimensionTypeList(businessSolutionName);
+        if(dimensionTypeDefinitionList!=null) {
+            List<String> alreadyRenderedTypeList=new ArrayList<>();
+            InfoDiscoverSpace targetSpace=null;
+            try {
+                targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                for(DimensionTypeDefinitionVO currentDimensionTypeDefinitionVO:dimensionTypeDefinitionList){
+                    applyDimensionTypeData(targetSpace,alreadyRenderedTypeList,InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME,currentDimensionTypeDefinitionVO,dimensionTypeDefinitionList);
+                }
+            } catch (InfoDiscoveryEngineDataMartException e) {
+                e.printStackTrace();
+            }finally {
+                if(targetSpace!=null){
+                    targetSpace.closeSpace();
+                }
+            }
+            for (DimensionTypeDefinitionVO currentDimensionTypeDefinitionVO:dimensionTypeDefinitionList) {
+                String dimensionTypeAliasName=currentDimensionTypeDefinitionVO.getTypeAliasName();
+                String dimensionTypeName=currentDimensionTypeDefinitionVO.getTypeName();
+                recordTypeKindAliasName(discoverSpaceName,TYPEKIND_DIMENSION,dimensionTypeName,dimensionTypeAliasName);
+            }
+            Map<String, List<SolutionTypePropertyTypeDefinitionVO>> dimensionTypePropertiesMap=new HashMap<>();
+            for(DimensionTypeDefinitionVO currentDimensionTypeDefinitionVO:dimensionTypeDefinitionList) {
+                String dimensionType= currentDimensionTypeDefinitionVO.getTypeName();
+                List<SolutionTypePropertyTypeDefinitionVO> dimensionPropertiesList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(businessSolutionName,InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,dimensionType);
+                dimensionTypePropertiesMap.put(dimensionType,dimensionPropertiesList);
+                if(dimensionPropertiesList!=null){
+                    targetSpace=null;
+                    try {
+                        targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                        DimensionType targetDimensionType=targetSpace.getDimensionType(dimensionType);
+                        if(targetDimensionType!=null){
+                            for (SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:dimensionPropertiesList){
+                                String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                                PropertyType propertyType=getPropertyTypeByCode(currentSolutionTypePropertyTypeDefinitionVO.getPropertyType());
+                                TypeProperty currentTypeProperty=targetDimensionType.addTypeProperty(propertyName,propertyType);
+                                currentTypeProperty.setMandatory(currentSolutionTypePropertyTypeDefinitionVO.isMandatory());
+                                currentTypeProperty.setNullable(currentSolutionTypePropertyTypeDefinitionVO.isNullable());
+                                currentTypeProperty.setReadOnly(currentSolutionTypePropertyTypeDefinitionVO.isReadOnly());
+                            }
+                        }
+                    } catch (InfoDiscoveryEngineRuntimeException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if(targetSpace!=null){
+                            targetSpace.closeSpace();
+                        }
+                    }
+                }
+            }
+            Set<String> dimensionTypeSet=dimensionTypePropertiesMap.keySet();
+            Iterator<String> dimensionTypeIterator= dimensionTypeSet.iterator();
+            while(dimensionTypeIterator.hasNext()){
+                String currentDimensionType=dimensionTypeIterator.next();
+                List<SolutionTypePropertyTypeDefinitionVO> dimensionTypePropertiesList=dimensionTypePropertiesMap.get(currentDimensionType);
+                if(dimensionTypePropertiesList!=null){
+                    for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:dimensionTypePropertiesList){
+                        String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                        String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
+                        recordTypePropertyAliasName(discoverSpaceName,TYPEKIND_DIMENSION,currentDimensionType,propertyName,propertyAlias);
+                    }
+                }
+            }
+        }
+        //Apply Relation Type Data
+        List<RelationTypeDefinitionVO> relationDefinitionList=BusinessSolutionOperationUtil.getBusinessSolutionRelationTypeList(businessSolutionName);
+        if(relationDefinitionList!=null) {
+            List<String> alreadyRenderedTypeList=new ArrayList<>();
+            InfoDiscoverSpace targetSpace=null;
+            try {
+                targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                for(RelationTypeDefinitionVO currentRelationTypeDefinitionVO:relationDefinitionList){
+                    applyRelationTypeData(targetSpace,alreadyRenderedTypeList,InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME,currentRelationTypeDefinitionVO,relationDefinitionList);
+                }
+            } catch (InfoDiscoveryEngineDataMartException e) {
+                e.printStackTrace();
+            }finally {
+                if(targetSpace!=null){
+                    targetSpace.closeSpace();
+                }
+            }
+            for (RelationTypeDefinitionVO currentRelationTypeDefinitionVO:relationDefinitionList) {
+                String relationTypeAliasName=currentRelationTypeDefinitionVO.getTypeAliasName();
+                String relationTypeName=currentRelationTypeDefinitionVO.getTypeName();
+                recordTypeKindAliasName(discoverSpaceName,TYPEKIND_RELATION,relationTypeName,relationTypeAliasName);
+            }
+            Map<String, List<SolutionTypePropertyTypeDefinitionVO>> relationTypePropertiesMap=new HashMap<>();
+            for(RelationTypeDefinitionVO currentRelationTypeDefinitionVO:relationDefinitionList) {
+                String relationType= currentRelationTypeDefinitionVO.getTypeName();
+                List<SolutionTypePropertyTypeDefinitionVO> relationPropertiesList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(businessSolutionName,InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION,relationType);
+                relationTypePropertiesMap.put(relationType,relationPropertiesList);
+                if(relationPropertiesList!=null){
+                    targetSpace=null;
+                    try {
+                        targetSpace = DiscoverEngineComponentFactory.connectInfoDiscoverSpace(discoverSpaceName);
+                        RelationType targetRelationType=targetSpace.getRelationType(relationType);
+                        if(targetRelationType!=null){
+                            for (SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:relationPropertiesList){
+                                String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                                PropertyType propertyType=getPropertyTypeByCode(currentSolutionTypePropertyTypeDefinitionVO.getPropertyType());
+                                TypeProperty currentTypeProperty=targetRelationType.addTypeProperty(propertyName,propertyType);
+                                currentTypeProperty.setMandatory(currentSolutionTypePropertyTypeDefinitionVO.isMandatory());
+                                currentTypeProperty.setNullable(currentSolutionTypePropertyTypeDefinitionVO.isNullable());
+                                currentTypeProperty.setReadOnly(currentSolutionTypePropertyTypeDefinitionVO.isReadOnly());
+                            }
+                        }
+                    } catch (InfoDiscoveryEngineRuntimeException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if(targetSpace!=null){
+                            targetSpace.closeSpace();
+                        }
+                    }
+                }
+            }
+            Set<String> relationTypeSet=relationTypePropertiesMap.keySet();
+            Iterator<String> relationTypeIterator= relationTypeSet.iterator();
+            while(relationTypeIterator.hasNext()){
+                String currentRelationType=relationTypeIterator.next();
+                List<SolutionTypePropertyTypeDefinitionVO> relationTypePropertiesList=relationTypePropertiesMap.get(currentRelationType);
+                if(relationTypePropertiesList!=null){
+                    for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:relationTypePropertiesList){
+                        String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
+                        String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
+                        recordTypePropertyAliasName(discoverSpaceName,TYPEKIND_RELATION,currentRelationType,propertyName,propertyAlias);
+                    }
+                }
+            }
+            //Apply Custom Property Alias Data
+            List<CustomPropertyAliasDefinitionVO> customPropertyAliasNameList=BusinessSolutionOperationUtil.getSolutionCustomPropertyAliasNames(businessSolutionName);
+            if(customPropertyAliasNameList!=null){
+                for(CustomPropertyAliasDefinitionVO currentCustomPropertyAliasDefinitionVO:customPropertyAliasNameList){
+                    recordCustomPropertyAliasName(discoverSpaceName,currentCustomPropertyAliasDefinitionVO.getCustomPropertyName(),
+                            currentCustomPropertyAliasDefinitionVO.getCustomPropertyType(),currentCustomPropertyAliasDefinitionVO.getCustomPropertyAliasName());
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void applyDimensionTypeData(InfoDiscoverSpace targetSpace,List<String> alreadyRenderedTypeList,String parentDimensionType,DimensionTypeDefinitionVO currentDimensionTypeVO,List<DimensionTypeDefinitionVO> dimensionTypeDefinitionsList) throws InfoDiscoveryEngineDataMartException {
+        if(!currentDimensionTypeVO.getParentTypeName().equals(parentDimensionType)){
+            return;
+        }
+        if(alreadyRenderedTypeList.contains(currentDimensionTypeVO.getTypeName())){
+            return;
+        }
+        if(!targetSpace.hasDimensionType(currentDimensionTypeVO.getTypeName())){
+            if(InfoDiscoverEngineConstant.DIMENSION_ROOTCLASSNAME.equals(parentDimensionType)){
+                targetSpace.addDimensionType(currentDimensionTypeVO.getTypeName());
+            }else{
+                targetSpace.addChildDimensionType(currentDimensionTypeVO.getTypeName(),parentDimensionType);
+            }
+            alreadyRenderedTypeList.add(currentDimensionTypeVO.getTypeName());
+            List<DimensionTypeDefinitionVO> childDimensionTypesList= getChildDimensionTypeList(currentDimensionTypeVO.getTypeName(),dimensionTypeDefinitionsList);
+            for(DimensionTypeDefinitionVO currentChildDimensionType:childDimensionTypesList){
+                applyDimensionTypeData(targetSpace,alreadyRenderedTypeList,currentDimensionTypeVO.getTypeName(),currentChildDimensionType,dimensionTypeDefinitionsList);
+            }
+        }
+    }
+
+    private static List<DimensionTypeDefinitionVO> getChildDimensionTypeList(String dimensionTypeName, List<DimensionTypeDefinitionVO> dimensionTypeDefinitionsList){
+        List<DimensionTypeDefinitionVO> childDimensionTypeList=new ArrayList<>();
+        if(dimensionTypeDefinitionsList==null){
+            return childDimensionTypeList;
+        }else{
+            for(DimensionTypeDefinitionVO currentTypeDefinition:dimensionTypeDefinitionsList){
+                if(currentTypeDefinition.getParentTypeName().equals(dimensionTypeName)){
+                    childDimensionTypeList.add(currentTypeDefinition);
+                }
+            }
+            return childDimensionTypeList;
+        }
+    }
+
+    private static void applyRelationTypeData(InfoDiscoverSpace targetSpace,List<String> alreadyRenderedTypeList,String parentRelationType,RelationTypeDefinitionVO currentRelationTypeVO,List<RelationTypeDefinitionVO> relationTypeDefinitionsList) throws InfoDiscoveryEngineDataMartException {
+        if(!currentRelationTypeVO.getParentTypeName().equals(parentRelationType)){
+            return;
+        }
+        if(alreadyRenderedTypeList.contains(currentRelationTypeVO.getTypeName())){
+            return;
+        }
+        if(!targetSpace.hasRelationType(currentRelationTypeVO.getTypeName())){
+            if(InfoDiscoverEngineConstant.RELATION_ROOTCLASSNAME.equals(parentRelationType)){
+                targetSpace.addRelationType(currentRelationTypeVO.getTypeName());
+            }else{
+                targetSpace.addChildRelationType(currentRelationTypeVO.getTypeName(),parentRelationType);
+            }
+            alreadyRenderedTypeList.add(currentRelationTypeVO.getTypeName());
+            List<RelationTypeDefinitionVO> childRelationTypesList= getChildRelationTypeList(currentRelationTypeVO.getTypeName(),relationTypeDefinitionsList);
+            for(RelationTypeDefinitionVO currentChildRelationType:childRelationTypesList){
+                applyRelationTypeData(targetSpace,alreadyRenderedTypeList,currentRelationTypeVO.getTypeName(),currentChildRelationType,relationTypeDefinitionsList);
+            }
+        }
+    }
+
+    private static List<RelationTypeDefinitionVO> getChildRelationTypeList(String relationTypeName, List<RelationTypeDefinitionVO> relationTypeDefinitionsList){
+        List<RelationTypeDefinitionVO> childRelationTypeList=new ArrayList<>();
+        if(relationTypeDefinitionsList==null){
+            return childRelationTypeList;
+        }else{
+            for(RelationTypeDefinitionVO currentTypeDefinition:relationTypeDefinitionsList){
+                if(currentTypeDefinition.getParentTypeName().equals(relationTypeName)){
+                    childRelationTypeList.add(currentTypeDefinition);
+                }
+            }
+            return childRelationTypeList;
+        }
+    }
+
+    private static PropertyType getPropertyTypeByCode(String propertyType){
+        PropertyType targetPropertyType=null;
+        if(ApplicationConstant.DataFieldType_BOOLEAN.equals(propertyType)){
+            targetPropertyType=PropertyType.BOOLEAN;
+        }
+        if(ApplicationConstant.DataFieldType_INT.equals(propertyType)){
+            targetPropertyType=PropertyType.INT;
+        }
+        if(ApplicationConstant.DataFieldType_SHORT.equals(propertyType)){
+            targetPropertyType=PropertyType.SHORT;
+        }
+        if(ApplicationConstant.DataFieldType_LONG.equals(propertyType)){
+            targetPropertyType=PropertyType.LONG;
+        }
+        if(ApplicationConstant.DataFieldType_FLOAT.equals(propertyType)){
+            targetPropertyType=PropertyType.FLOAT;
+        }
+        if(ApplicationConstant.DataFieldType_DOUBLE.equals(propertyType)){
+            targetPropertyType=PropertyType.DOUBLE;
+        }
+        if(ApplicationConstant.DataFieldType_DATE.equals(propertyType)){
+            targetPropertyType=PropertyType.DATE;
+        }
+        if(ApplicationConstant.DataFieldType_STRING.equals(propertyType)){
+            targetPropertyType=PropertyType.STRING;
+        }
+        if(ApplicationConstant.DataFieldType_BINARY.equals(propertyType)){
+            targetPropertyType=PropertyType.BINARY;
+        }
+        if(ApplicationConstant.DataFieldType_BYTE.equals(propertyType)){
+            targetPropertyType=PropertyType.BYTE;
+        }
+        return targetPropertyType;
     }
 }

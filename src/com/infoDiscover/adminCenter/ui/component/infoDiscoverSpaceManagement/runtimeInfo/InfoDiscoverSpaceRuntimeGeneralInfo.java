@@ -1,14 +1,18 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.runtimeInfo;
 
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionTitle;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceDetail;
+import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceComponentSelectedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -219,6 +223,22 @@ public class InfoDiscoverSpaceRuntimeGeneralInfo extends VerticalLayout {
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 applyBusinessSolutionConfirmDialog.close();
+                boolean applySolutionResult=InfoDiscoverSpaceOperationUtil.applyBusinessSolution(discoverSpaceName,businessSolutionName);
+                if(applySolutionResult){
+                    DiscoverSpaceComponentSelectedEvent discoverSpaceComponentSelectedEvent=new DiscoverSpaceComponentSelectedEvent(discoverSpaceName);
+                    currentUserClientInfo.getEventBlackBoard().fire(discoverSpaceComponentSelectedEvent);
+                    Notification resultNotification = new Notification("添加数据操作成功",
+                            "启用业务解决方案成功", Notification.Type.HUMANIZED_MESSAGE);
+                    resultNotification.setPosition(Position.MIDDLE_CENTER);
+                    resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                    resultNotification.show(Page.getCurrent());
+                }else{
+                    Notification errorNotification = new Notification("启用业务解决方案错误",
+                            "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                    errorNotification.setPosition(Position.MIDDLE_CENTER);
+                    errorNotification.show(Page.getCurrent());
+                    errorNotification.setIcon(FontAwesome.WARNING);
+                }
             }
         };
         applyBusinessSolutionConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
