@@ -71,6 +71,7 @@ public class BusinessSolutionOperationUtil {
     public static final String MetaConfig_PropertyName_MappingMinValue="minValue";
     public static final String MetaConfig_PropertyName_MappingMaxValue="maxValue";
     public static final String MetaConfig_PropertyName_ExistingPropertyHandleMethod="existingPropertyHandleMethod";
+    public static final String MetaConfig_PropertyName_DateDimensionTypePrefix="dateDimensionTypePrefix";
 
     public static boolean checkBusinessSolutionExistence(String businessSolutionName){
         String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
@@ -1397,14 +1398,9 @@ public class BusinessSolutionOperationUtil {
                 relationTypeNameProperty.setMandatory(true);
                 TypeProperty relationDirectionProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_RelationDirection, PropertyType.STRING);
                 relationDirectionProperty.setMandatory(true);
-                TypeProperty mappingNotExistHandleMethodProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod, PropertyType.STRING);
-                mappingNotExistHandleMethodProperty.setMandatory(true);
-                TypeProperty targetDataTypeNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataTypeName, PropertyType.STRING);
-                targetDataTypeNameProperty.setMandatory(false);
-                TypeProperty targetDataPropertyNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataPropertyName, PropertyType.STRING);
-                targetDataPropertyNameProperty.setMandatory(true);
+                TypeProperty dateDimensionPerfixNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_DateDimensionTypePrefix, PropertyType.STRING);
+                dateDimensionPerfixNameProperty.setMandatory(true);
             }
-
             Fact dataRelationMappingDefinitionFact=DiscoverEngineComponentFactory.createFact(BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType);
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SolutionName,solutionName);
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataTypeName,dataMappingDefinitionVO.getSourceDataTypeName());
@@ -1412,9 +1408,7 @@ public class BusinessSolutionOperationUtil {
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataPropertyName,dataMappingDefinitionVO.getSourceDataPropertyName());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_RelationTypeName,dataMappingDefinitionVO.getRelationTypeName());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_RelationDirection,dataMappingDefinitionVO.getRelationDirection());
-            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod,dataMappingDefinitionVO.getMappingNotExistHandleMethod());
-            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataTypeName,dataMappingDefinitionVO.getTargetDataTypeName());
-            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataPropertyName,dataMappingDefinitionVO.getTargetDataPropertyName());
+            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_DateDimensionTypePrefix,dataMappingDefinitionVO.getDateDimensionTypePrefix());
             Fact resultRecord=metaConfigSpace.addFact(dataRelationMappingDefinitionFact);
             if(resultRecord!=null){
                 return true;
@@ -1454,9 +1448,7 @@ public class BusinessSolutionOperationUtil {
                         currentDataMappingDefinitionVO.setSourceDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_SourceDataPropertyName).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setRelationTypeName(currentFact.getProperty(MetaConfig_PropertyName_RelationTypeName).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setRelationDirection(currentFact.getProperty(MetaConfig_PropertyName_RelationDirection).getPropertyValue().toString());
-                        currentDataMappingDefinitionVO.setMappingNotExistHandleMethod(currentFact.getProperty(MetaConfig_PropertyName_MappingNotExistHandleMethod).getPropertyValue().toString());
-                        currentDataMappingDefinitionVO.setTargetDataTypeName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataTypeName).getPropertyValue().toString());
-                        currentDataMappingDefinitionVO.setTargetDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataPropertyName).getPropertyValue().toString());
+                        currentDataMappingDefinitionVO.setDateDimensionTypePrefix(currentFact.getProperty(MetaConfig_PropertyName_DateDimensionTypePrefix).getPropertyValue().toString());
                         dataRelationMappingDefinitionList.add(currentDataMappingDefinitionVO);
                     }
                 }
@@ -1489,9 +1481,7 @@ public class BusinessSolutionOperationUtil {
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName, dataMappingDefinitionVO.getSourceDataPropertyName()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationTypeName, dataMappingDefinitionVO.getRelationTypeName()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_RelationDirection, dataMappingDefinitionVO.getRelationDirection()), ExploreParameters.FilteringLogic.AND);
-            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_MappingNotExistHandleMethod, dataMappingDefinitionVO.getMappingNotExistHandleMethod()), ExploreParameters.FilteringLogic.AND);
-            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName, dataMappingDefinitionVO.getTargetDataTypeName()), ExploreParameters.FilteringLogic.AND);
-            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName, dataMappingDefinitionVO.getTargetDataPropertyName()), ExploreParameters.FilteringLogic.AND);
+            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_DateDimensionTypePrefix, dataMappingDefinitionVO.getDateDimensionTypePrefix()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.setResultNumber(10000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();
             List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP);
@@ -1534,8 +1524,6 @@ public class BusinessSolutionOperationUtil {
                 existingPropertyHandleMethodProperty.setMandatory(true);
                 TypeProperty targetDataTypeNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataTypeName, PropertyType.STRING);
                 targetDataTypeNameProperty.setMandatory(false);
-                TypeProperty targetDataTypeKindProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataTypeKind, PropertyType.STRING);
-                targetDataTypeKindProperty.setMandatory(true);
                 TypeProperty targetDataPropertyNameProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataPropertyName, PropertyType.STRING);
                 targetDataPropertyNameProperty.setMandatory(true);
                 TypeProperty targetDataPropertyTypeProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataPropertyType, PropertyType.STRING);
@@ -1550,7 +1538,6 @@ public class BusinessSolutionOperationUtil {
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_SourceDataPropertyType,dataMappingDefinitionVO.getSourceDataPropertyType());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_ExistingPropertyHandleMethod,dataMappingDefinitionVO.getExistingPropertyHandleMethod());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataTypeName,dataMappingDefinitionVO.getTargetDataTypeName());
-            dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataTypeKind,dataMappingDefinitionVO.getTargetDataTypeKind());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataPropertyName,dataMappingDefinitionVO.getTargetDataPropertyName());
             dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataPropertyType,dataMappingDefinitionVO.getTargetDataPropertyType());
             Fact resultRecord=metaConfigSpace.addFact(dataRelationMappingDefinitionFact);
@@ -1593,7 +1580,6 @@ public class BusinessSolutionOperationUtil {
                         currentDataMappingDefinitionVO.setSourceDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_SourceDataPropertyName).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setExistingPropertyHandleMethod(currentFact.getProperty(MetaConfig_PropertyName_ExistingPropertyHandleMethod).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setTargetDataTypeName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataTypeName).getPropertyValue().toString());
-                        currentDataMappingDefinitionVO.setTargetDataTypeKind(currentFact.getProperty(MetaConfig_PropertyName_TargetDataTypeKind).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setTargetDataPropertyType(currentFact.getProperty(MetaConfig_PropertyName_TargetDataPropertyType).getPropertyValue().toString());
                         currentDataMappingDefinitionVO.setTargetDataPropertyName(currentFact.getProperty(MetaConfig_PropertyName_TargetDataPropertyName).getPropertyValue().toString());
                         dataRelationMappingDefinitionList.add(currentDataMappingDefinitionVO);
@@ -1629,7 +1615,6 @@ public class BusinessSolutionOperationUtil {
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SourceDataPropertyName, dataMappingDefinitionVO.getSourceDataPropertyName()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_ExistingPropertyHandleMethod, dataMappingDefinitionVO.getExistingPropertyHandleMethod()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeName, dataMappingDefinitionVO.getTargetDataTypeName()), ExploreParameters.FilteringLogic.AND);
-            solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataTypeKind, dataMappingDefinitionVO.getTargetDataTypeKind()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyType, dataMappingDefinitionVO.getTargetDataPropertyType()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_TargetDataPropertyName, dataMappingDefinitionVO.getTargetDataPropertyName()), ExploreParameters.FilteringLogic.AND);
             solutionDefinitionRecordEP.setResultNumber(10000);

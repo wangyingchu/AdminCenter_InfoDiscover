@@ -20,6 +20,7 @@ public class DataMappingDefinitionVO {
     private String minValue;
     private String maxValue;
     private String solutionName;
+    private String dateDimensionTypePrefix;
 
     public String getSourceDataTypeName() {
         return sourceDataTypeName;
@@ -139,5 +140,13 @@ public class DataMappingDefinitionVO {
 
     public void setExistingPropertyHandleMethod(String existingPropertyHandleMethod) {
         this.existingPropertyHandleMethod = existingPropertyHandleMethod;
+    }
+
+    public String getDateDimensionTypePrefix() {
+        return dateDimensionTypePrefix;
+    }
+
+    public void setDateDimensionTypePrefix(String dateDimensionTypePrefix) {
+        this.dateDimensionTypePrefix = dateDimensionTypePrefix;
     }
 }

@@ -88,12 +88,11 @@ public class DataPropertiesDuplicateMappingDefinitionEditorPanel extends Vertica
         this.dataRelationMappingDefinitionsTable.setNullSelectionAllowed(false);
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源数据类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源类型名称", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("源数据复制匹配属性", String.class, "");
+        this.dataRelationMappingDefinitionsTable.addContainerProperty("数据匹配外键属性", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源属性数据类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("已存在属性处理策略", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标数据类型", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标类型名称", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标数据复制匹配属性", String.class, "");
+        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标事实类型名称", String.class, "");
+        this.dataRelationMappingDefinitionsTable.addContainerProperty("数据匹配主键属性", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("目标属性数据类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
@@ -126,7 +125,6 @@ public class DataPropertiesDuplicateMappingDefinitionEditorPanel extends Vertica
                     currentDataMappingDefinitionVO.getSourceDataPropertyName(),
                     currentDataMappingDefinitionVO.getSourceDataPropertyType(),
                     currentDataMappingDefinitionVO.getExistingPropertyHandleMethod(),
-                    currentDataMappingDefinitionVO.getTargetDataTypeKind(),
                     currentDataMappingDefinitionVO.getTargetDataTypeName(),
                     currentDataMappingDefinitionVO.getTargetDataPropertyName(),
                     currentDataMappingDefinitionVO.getTargetDataPropertyType()
@@ -142,7 +140,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditorPanel extends Vertica
         dataPropertiesDuplicateMappingDefinitionEditor.setRelatedDataPropertiesDuplicateMappingDefinitionEditorPanel(this);
         final Window window = new Window();
         window.setWidth(750.0f, Unit.PIXELS);
-        window.setHeight(500.0f, Unit.PIXELS);
+        window.setHeight(460.0f, Unit.PIXELS);
         window.setResizable(false);
         window.center();
         window.setModal(true);
@@ -165,15 +163,14 @@ public class DataPropertiesDuplicateMappingDefinitionEditorPanel extends Vertica
 
                     DataMappingDefinitionVO definitionToDelete=new DataMappingDefinitionVO();
                     definitionToDelete.setSolutionName(getBusinessSolutionName());
-                    definitionToDelete.setSourceDataPropertyName(currentSelectedDefinitionItem.getItemProperty("源数据复制匹配属性").getValue().toString());
+                    definitionToDelete.setSourceDataPropertyName(currentSelectedDefinitionItem.getItemProperty("数据匹配外键属性").getValue().toString());
                     definitionToDelete.setSourceDataPropertyType(currentSelectedDefinitionItem.getItemProperty("源属性数据类型").getValue().toString());
                     definitionToDelete.setSourceDataTypeKind(currentSelectedDefinitionItem.getItemProperty("源数据类型").getValue().toString());
                     definitionToDelete.setSourceDataTypeName(currentSelectedDefinitionItem.getItemProperty("源类型名称").getValue().toString());
                     definitionToDelete.setExistingPropertyHandleMethod(currentSelectedDefinitionItem.getItemProperty("已存在属性处理策略").getValue().toString());
-                    definitionToDelete.setTargetDataPropertyName(currentSelectedDefinitionItem.getItemProperty("目标数据复制匹配属性").getValue().toString());
+                    definitionToDelete.setTargetDataPropertyName(currentSelectedDefinitionItem.getItemProperty("数据匹配主键属性").getValue().toString());
                     definitionToDelete.setTargetDataPropertyType(currentSelectedDefinitionItem.getItemProperty("目标属性数据类型").getValue().toString());
-                    definitionToDelete.setTargetDataTypeKind(currentSelectedDefinitionItem.getItemProperty("目标数据类型").getValue().toString());
-                    definitionToDelete.setTargetDataTypeName(currentSelectedDefinitionItem.getItemProperty("目标类型名称").getValue().toString());
+                    definitionToDelete.setTargetDataTypeName(currentSelectedDefinitionItem.getItemProperty("目标事实类型名称").getValue().toString());
 
                     boolean deleteDefinitionResult=BusinessSolutionOperationUtil.deleteDataPropertiesDuplicateMappingDefinition(getBusinessSolutionName(),definitionToDelete);
                     if(deleteDefinitionResult){

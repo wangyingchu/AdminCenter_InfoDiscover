@@ -32,7 +32,6 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
     private OptionGroup sourceDataType;
     private ComboBox sourceDataTypeField;
     private ComboBox sourceDataPropertyField;
-    private OptionGroup targetDataType;
     private OptionGroup duplicatePropertyHandleMethod;
     private ComboBox targetDataTypeField;
     private ComboBox targetDataPropertyField;
@@ -103,21 +102,6 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         this.duplicatePropertyHandleMethod.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
         form.addComponent(this.duplicatePropertyHandleMethod);
 
-        this.targetDataType = new OptionGroup("关联目标数据类型");
-        this.targetDataType.setRequired(true);
-        this.targetDataType.addItems("事实", "维度");
-        this.targetDataType.setValue("维度");
-        this.targetDataType.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
-        form.addComponent(this.targetDataType);
-        this.targetDataType.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                if(valueChangeEvent.getProperty().getValue()!=null){
-                    setTargetDataTypeChooseList(valueChangeEvent.getProperty().getValue().toString());
-                }
-            }
-        });
-
         this.targetDataTypeField=new ComboBox("-");
         this.targetDataTypeField.setRequired(true);
         this.targetDataTypeField.setWidth("100%");
@@ -184,7 +168,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         initFactSelectData(BusinessSolutionOperationUtil.getFactTypeDefinitionList(getBusinessSolutionName()));
         initDimensionSelectData(BusinessSolutionOperationUtil.getDimensionTypeDefinitionList(getBusinessSolutionName()));
         setSourceDataTypeChooseList("事实");
-        setTargetDataTypeChooseList("维度");
+        setTargetDataTypeChooseList("事实");
     }
 
     private void initFactSelectData(List<FactTypeDefinitionVO> factTypeDefinitionList){
@@ -222,7 +206,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         if("事实".equals(dataType)){
             this.sourceDataTypeField.setCaption("源事实类型名称");
             this.sourceDataTypeField.setInputPrompt("请选择源事实类型名称");
-            this.sourceDataPropertyField.setCaption("源事实复制匹配属性");
+            this.sourceDataPropertyField.setCaption("数据匹配外键属性");
             this.sourceDataPropertyField.setInputPrompt("请选择源事实属性名称");
             if(this.factTypeDefinitionMap!=null){
                 Set<String> labelSet=this.factTypeDefinitionMap.keySet();
@@ -232,7 +216,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         if("维度".equals(dataType)){
             this.sourceDataTypeField.setCaption("源维度类型名称");
             this.sourceDataTypeField.setInputPrompt("请选择源维度类型名称");
-            this.sourceDataPropertyField.setCaption("源维度复制匹配属性");
+            this.sourceDataPropertyField.setCaption("数据匹配外键属性");
             this.sourceDataPropertyField.setInputPrompt("请选择源维度属性名称");
             if(this.dimensionTypeDefinitionMap!=null) {
                 Set<String> labelSet = this.dimensionTypeDefinitionMap.keySet();
@@ -282,7 +266,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         if("事实".equals(dataType)){
             this.targetDataTypeField.setCaption("目标事实类型名称");
             this.targetDataTypeField.setInputPrompt("请选择目标事实类型名称");
-            this.targetDataPropertyField.setCaption("目标事实复制匹配属性");
+            this.targetDataPropertyField.setCaption("数据匹配主键属性");
             this.targetDataPropertyField.setInputPrompt("请选择目标事实属性名称");
             if(this.factTypeDefinitionMap!=null){
                 Set<String> labelSet=this.factTypeDefinitionMap.keySet();
@@ -292,7 +276,7 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         if("维度".equals(dataType)){
             this.targetDataTypeField.setCaption("目标维度类型名称");
             this.targetDataTypeField.setInputPrompt("请选择目标维度类型名称");
-            this.targetDataPropertyField.setCaption("目标维度复制匹配属性");
+            this.targetDataPropertyField.setCaption("数据匹配主键属性");
             this.targetDataPropertyField.setInputPrompt("请选择目标维度属性名称");
             if(this.dimensionTypeDefinitionMap!=null) {
                 Set<String> labelSet = this.dimensionTypeDefinitionMap.keySet();
@@ -307,16 +291,8 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
     private void setTargetDataTypePropertySelectChooseList(String propertyTypeLabel){
         this.targetDataPropertyField.removeAllItems();
         String solutionName=this.getBusinessSolutionName();
-        String propertyTypeKind=null;
-        String propertyTypeName=null;
-        if("事实".equals(this.targetDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT;
-            propertyTypeName=this.factTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
-        }
-        if("维度".equals(this.targetDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION;
-            propertyTypeName=this.dimensionTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
-        }
+        String propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT;
+        String propertyTypeName=this.factTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
         if(this.targetDataTypePropertiesMap==null){
             this.targetDataTypePropertiesMap=new HashMap<>();
         }else{
@@ -403,26 +379,15 @@ public class DataPropertiesDuplicateMappingDefinitionEditor extends VerticalLayo
         }
         dataMappingDefinitionVO.setExistingPropertyHandleMethod(mappingNotExistHandleMethod);
 
-        String targetDataTypeOption=targetDataType.getValue().toString();
         String targetDataTypeLabel=targetDataTypeField.getValue().toString();
-        String targetDataTypeName=null;
-        String targetDataType="FACT";
-        if("事实".equals(targetDataTypeOption)){
-            targetDataType="FACT";
-            targetDataTypeName=factTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
-        }
-        if("维度".equals(targetDataTypeOption)){
-            targetDataType="DIMENSION";
-            targetDataTypeName=dimensionTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
-        }
+        String targetDataTypeName=factTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
         String targetDataTypePropertyLabel=targetDataPropertyField.getValue().toString();
         String targetDataPropertyName=targetDataTypePropertiesMap.get(targetDataTypePropertyLabel).getPropertyName();
         String targetDataPropertyType=targetDataTypePropertiesMap.get(targetDataTypePropertyLabel).getPropertyType();
 
+        dataMappingDefinitionVO.setTargetDataTypeName(targetDataTypeName);
         dataMappingDefinitionVO.setTargetDataPropertyName(targetDataPropertyName);
         dataMappingDefinitionVO.setTargetDataPropertyType(targetDataPropertyType);
-        dataMappingDefinitionVO.setTargetDataTypeKind(targetDataType);
-        dataMappingDefinitionVO.setTargetDataTypeName(targetDataTypeName);
 
         String confirmMessageString=" 请确认在业务解决方案 "+getBusinessSolutionName()+" 中添加数据属性复制规则";
         Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);

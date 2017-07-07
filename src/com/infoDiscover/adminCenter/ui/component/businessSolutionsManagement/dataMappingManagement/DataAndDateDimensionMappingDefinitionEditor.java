@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
+import com.infoDiscover.adminCenter.ui.component.common.UICommonElementsUtil;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.Property;
@@ -30,19 +31,16 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
     private Window containerDialog;
     private DataAndDateDimensionMappingDefinitionEditPanel relatedDataAndDateDimensionMappingDefinitionEditPanel;
     private SectionActionsBar dataFieldActionsBar;
+    private TextField dateDimensionPerfix;
     private OptionGroup sourceDataType;
     private ComboBox sourceDataTypeField;
     private ComboBox sourceDataPropertyField;
     private ComboBox relationTypeField;
     private OptionGroup relationDirection;
-    private OptionGroup mappingNotFoundHandleMethod;
-    private ComboBox targetDataTypeField;
-    private ComboBox targetDataPropertyField;
     private Map<String,FactTypeDefinitionVO> factTypeDefinitionMap;
     private Map<String,DimensionTypeDefinitionVO> dimensionTypeDefinitionMap;
     private Map<String,RelationTypeDefinitionVO> relationTypeDefinitionMap;
     private Map<String,SolutionTypePropertyTypeDefinitionVO> sourceDataTypePropertiesMap;
-    private Map<String,SolutionTypePropertyTypeDefinitionVO> targetDataTypePropertiesMap;
 
     public DataAndDateDimensionMappingDefinitionEditor(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -109,41 +107,14 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
 
         this.relationDirection = new OptionGroup("数据关联方向");
         this.relationDirection.setRequired(true);
-        this.relationDirection.addItems("指向源数据", "指向目标数据","双向关联");
+        this.relationDirection.addItems("指向源数据", "指向目标数据");
         this.relationDirection.setValue("指向目标数据");
         this.relationDirection.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
         form.addComponent(this.relationDirection);
 
-        this.mappingNotFoundHandleMethod = new OptionGroup("不匹配数据映射处理策略");
-        this.mappingNotFoundHandleMethod.setRequired(true);
-        this.mappingNotFoundHandleMethod.addItems("忽略建立关联操作", "创建目标数据并建立关联");
-        this.mappingNotFoundHandleMethod.setValue("忽略建立关联操作");
-        this.mappingNotFoundHandleMethod.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
-        form.addComponent(this.mappingNotFoundHandleMethod);
-
-        this.targetDataTypeField=new ComboBox("-");
-        this.targetDataTypeField.setRequired(true);
-        this.targetDataTypeField.setWidth("100%");
-        this.targetDataTypeField.setTextInputAllowed(true);
-        this.targetDataTypeField.setNullSelectionAllowed(false);
-        this.targetDataTypeField.setInputPrompt("-");
-        form.addComponent(this.targetDataTypeField);
-        this.targetDataTypeField.addValueChangeListener(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                if(valueChangeEvent.getProperty().getValue()!=null){
-                    setTargetDataTypePropertySelectChooseList(valueChangeEvent.getProperty().getValue().toString());
-                }
-            }
-        });
-
-        this.targetDataPropertyField=new ComboBox("-");
-        this.targetDataPropertyField.setRequired(true);
-        this.targetDataPropertyField.setWidth("100%");
-        this.targetDataPropertyField.setTextInputAllowed(true);
-        this.targetDataPropertyField.setNullSelectionAllowed(false);
-        this.targetDataPropertyField.setInputPrompt("-");
-        form.addComponent(this.targetDataPropertyField);
+        this.dateDimensionPerfix=new TextField("时间维度类型前缀");
+        this.dateDimensionPerfix.setRequired(true);
+        form.addComponent(this.dateDimensionPerfix);
 
         HorizontalLayout footer = new HorizontalLayout();
         footer.setMargin(new MarginInfo(true, false, true, false));
@@ -171,7 +142,6 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
         initFactSelectData(BusinessSolutionOperationUtil.getFactTypeDefinitionList(getBusinessSolutionName()));
         initDimensionSelectData(BusinessSolutionOperationUtil.getDimensionTypeDefinitionList(getBusinessSolutionName()));
         setSourceDataTypeChooseList("事实");
-        setTargetDataTypeChooseList("维度");
     }
 
     public String getBusinessSolutionName() {
@@ -273,31 +243,6 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
         }
     }
 
-    private void setTargetDataTypePropertySelectChooseList(String propertyTypeLabel){
-        this.targetDataPropertyField.removeAllItems();
-        String solutionName=this.getBusinessSolutionName();
-        String propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION;
-        String propertyTypeName=this.dimensionTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
-        if(this.targetDataTypePropertiesMap==null){
-            this.targetDataTypePropertiesMap=new HashMap<>();
-        }else{
-            this.targetDataTypePropertiesMap.clear();
-        }
-        List<SolutionTypePropertyTypeDefinitionVO> currentTypePropertyList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(solutionName,propertyTypeKind,propertyTypeName);
-        if(currentTypePropertyList!=null){
-            for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:currentTypePropertyList){
-                if(ApplicationConstant.DataFieldType_DATE.equals(currentSolutionTypePropertyTypeDefinitionVO.getPropertyType())){
-                    String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
-                    String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
-                    String propertyType=currentSolutionTypePropertyTypeDefinitionVO.getPropertyType();
-                    String selectorItem=propertyName+" ("+propertyAlias+")"+" - "+propertyType;
-                    this.targetDataPropertyField.addItem(selectorItem);
-                    this.targetDataTypePropertiesMap.put(selectorItem,currentSolutionTypePropertyTypeDefinitionVO);
-                }
-            }
-        }
-    }
-
     private void setSourceDataTypePropertySelectChooseList(String propertyTypeLabel){
         this.sourceDataPropertyField.removeAllItems();
         String solutionName=this.getBusinessSolutionName();
@@ -331,35 +276,6 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
         }
     }
 
-    private void setTargetDataTypeChooseList(String dataType){
-        this.targetDataTypeField.removeAllItems();
-        this.targetDataPropertyField.removeAllItems();
-        Iterator<String> iterator=null;
-        if("事实".equals(dataType)){
-            this.targetDataTypeField.setCaption("目标事实类型名称");
-            this.targetDataTypeField.setInputPrompt("请选择目标事实类型名称");
-            this.targetDataPropertyField.setCaption("目标事实属性名称");
-            this.targetDataPropertyField.setInputPrompt("请选择目标事实属性名称");
-            if(this.factTypeDefinitionMap!=null){
-                Set<String> labelSet=this.factTypeDefinitionMap.keySet();
-                iterator=labelSet.iterator();
-            }
-        }
-        if("维度".equals(dataType)){
-            this.targetDataTypeField.setCaption("目标维度类型名称");
-            this.targetDataTypeField.setInputPrompt("请选择目标维度类型名称");
-            this.targetDataPropertyField.setCaption("目标维度属性名称");
-            this.targetDataPropertyField.setInputPrompt("请选择目标维度属性名称");
-            if(this.dimensionTypeDefinitionMap!=null) {
-                Set<String> labelSet = this.dimensionTypeDefinitionMap.keySet();
-                iterator = labelSet.iterator();
-            }
-        }
-        while(iterator.hasNext()){
-            this.targetDataTypeField.addItem(iterator.next());
-        }
-    }
-
     private void addNewMappingDefinition(){
         if(sourceDataTypeField.getValue()==null){
             Notification errorNotification = new Notification("数据校验错误",
@@ -385,17 +301,28 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        if(targetDataTypeField.getValue()==null){
+
+        if(dateDimensionPerfix.getValue()==null||dateDimensionPerfix.getValue().equals("")){
             Notification errorNotification = new Notification("数据校验错误",
-                    "请选择目标数据类型名称", Notification.Type.ERROR_MESSAGE);
+                    "请输入时间维度类型前缀", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
-        if(targetDataPropertyField.getValue()==null){
+        boolean isSingleByteString= UICommonElementsUtil.checkIsSingleByteString(dateDimensionPerfix.getValue());
+        if(!isSingleByteString){
             Notification errorNotification = new Notification("数据校验错误",
-                    "请选择目标数据属性名称", Notification.Type.ERROR_MESSAGE);
+                    "当前输入时间维度类型前缀 "+dateDimensionPerfix.getValue()+" 中包含非ASCII字符", Notification.Type.ERROR_MESSAGE);
+            errorNotification.setPosition(Position.MIDDLE_CENTER);
+            errorNotification.show(Page.getCurrent());
+            errorNotification.setIcon(FontAwesome.WARNING);
+            return;
+        }
+        boolean containsSpecialChars= UICommonElementsUtil.checkContainsSpecialChars(dateDimensionPerfix.getValue());
+        if(containsSpecialChars){
+            Notification errorNotification = new Notification("数据校验错误",
+                    "当前输入时间维度类型前缀 "+dateDimensionPerfix.getValue()+" 中包含禁止使用字符: ` = , ; : \" ' . [ ] < > & 空格", Notification.Type.ERROR_MESSAGE);
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);
@@ -436,31 +363,10 @@ public class DataAndDateDimensionMappingDefinitionEditor extends VerticalLayout 
         if("指向目标数据".equals(relationDirectionOption)){
             relationDirection="ToTarget";
         }
-        if("双向关联".equals(relationDirectionOption)){
-            relationDirection="ToBoth";
-        }
-        String mappingNotExistMethodOption=mappingNotFoundHandleMethod.getValue().toString();
-        String mappingNotExistHandleMethod="Ignore";
-        if("忽略建立关联操作".equals(mappingNotExistMethodOption)){
-            mappingNotExistHandleMethod="Ignore";
-        }
-        if("创建目标数据并建立关联".equals(mappingNotExistMethodOption)){
-            mappingNotExistHandleMethod="CreateDimension";
-        }
 
         dataMappingDefinitionVO.setRelationDirection(relationDirection);
         dataMappingDefinitionVO.setRelationTypeName(relationTypeName);
-        dataMappingDefinitionVO.setMappingNotExistHandleMethod(mappingNotExistHandleMethod);
-
-        String targetDataTypeLabel=targetDataTypeField.getValue().toString();
-        String targetDataTypeName=dimensionTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
-        String targetDataTypePropertyLabel=targetDataPropertyField.getValue().toString();
-        String targetDataPropertyName=targetDataTypePropertiesMap.get(targetDataTypePropertyLabel).getPropertyName();
-        String targetDataPropertyType=targetDataTypePropertiesMap.get(targetDataTypePropertyLabel).getPropertyType();
-
-        dataMappingDefinitionVO.setTargetDataPropertyName(targetDataPropertyName);
-        dataMappingDefinitionVO.setTargetDataPropertyType(targetDataPropertyType);
-        dataMappingDefinitionVO.setTargetDataTypeName(targetDataTypeName);
+        dataMappingDefinitionVO.setDateDimensionTypePrefix(dateDimensionPerfix.getValue());
 
         String confirmMessageString=" 请确认在业务解决方案 "+getBusinessSolutionName()+" 中添加数据与时间维度关联定义规则";
         Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);

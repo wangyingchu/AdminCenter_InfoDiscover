@@ -95,9 +95,7 @@ public class DataAndDateDimensionMappingDefinitionEditPanel extends VerticalLayo
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源属性名称", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("关联关系类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("数据关联方向", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("不存在映射处理策略", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标类型名称", String.class, "");
-        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标属性名称", String.class, "");
+        this.dataRelationMappingDefinitionsTable.addContainerProperty("时间维度类型前缀", String.class, "");
         this.dataRelationMappingDefinitionsTable.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent itemClickEvent) {
@@ -128,9 +126,7 @@ public class DataAndDateDimensionMappingDefinitionEditPanel extends VerticalLayo
                     currentDataMappingDefinitionVO.getSourceDataPropertyName(),
                     currentDataMappingDefinitionVO.getRelationTypeName(),
                     currentDataMappingDefinitionVO.getRelationDirection(),
-                    currentDataMappingDefinitionVO.getMappingNotExistHandleMethod(),
-                    currentDataMappingDefinitionVO.getTargetDataTypeName(),
-                    currentDataMappingDefinitionVO.getTargetDataPropertyName()
+                    currentDataMappingDefinitionVO.getDateDimensionTypePrefix()
             };
             final Object newDataItemKey =this.dataRelationMappingDefinitionsTable.addItem(newDefinitionInfo,null);
             this.dataRelationMappingDefinitionsTable.setChildrenAllowed(newDataItemKey, false);
@@ -143,7 +139,7 @@ public class DataAndDateDimensionMappingDefinitionEditPanel extends VerticalLayo
         dataAndDateDimensionMappingDefinitionEditor.setRelatedDataAndDateDimensionMappingDefinitionEditPanel(this);
         final Window window = new Window();
         window.setWidth(750.0f, Unit.PIXELS);
-        window.setHeight(530.0f, Unit.PIXELS);
+        window.setHeight(450.0f, Unit.PIXELS);
         window.setResizable(false);
         window.center();
         window.setModal(true);
@@ -171,9 +167,7 @@ public class DataAndDateDimensionMappingDefinitionEditPanel extends VerticalLayo
                     definitionToDelete.setSourceDataTypeName(currentSelectedDefinitionItem.getItemProperty("源类型名称").getValue().toString());
                     definitionToDelete.setRelationDirection(currentSelectedDefinitionItem.getItemProperty("数据关联方向").getValue().toString());
                     definitionToDelete.setRelationTypeName(currentSelectedDefinitionItem.getItemProperty("关联关系类型").getValue().toString());
-                    definitionToDelete.setMappingNotExistHandleMethod(currentSelectedDefinitionItem.getItemProperty("不存在映射处理策略").getValue().toString());
-                    definitionToDelete.setTargetDataPropertyName(currentSelectedDefinitionItem.getItemProperty("目标属性名称").getValue().toString());
-                    definitionToDelete.setTargetDataTypeName(currentSelectedDefinitionItem.getItemProperty("目标类型名称").getValue().toString());
+                    definitionToDelete.setDateDimensionTypePrefix(currentSelectedDefinitionItem.getItemProperty("时间维度类型前缀").getValue().toString());
                     boolean deleteDefinitionResult=BusinessSolutionOperationUtil.deleteDataDateDimensionMappingDefinition(getBusinessSolutionName(),definitionToDelete);
                     if(deleteDefinitionResult){
                         renderDataAndDateDimensionMappingDefinitionInfo(getBusinessSolutionName());
