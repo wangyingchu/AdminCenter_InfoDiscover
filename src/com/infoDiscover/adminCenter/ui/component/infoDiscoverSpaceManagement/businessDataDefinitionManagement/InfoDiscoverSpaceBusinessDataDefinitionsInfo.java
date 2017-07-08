@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.eve
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.DiscoverSpaceOpenProcessingDataListEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
@@ -21,6 +22,9 @@ public class InfoDiscoverSpaceBusinessDataDefinitionsInfo  extends VerticalLayou
     private InfoDiscoverSpaceDetail parentInfoDiscoverSpaceDetail;
     private SecondarySectionActionBarTitle secondarySectionActionBarTitle;
     private CustomPropertyAliasNameManagementPanel customPropertyAliasNameManagementPanel;
+    private CommonDataRelationMappingManagementPanel commonDataRelationMappingManagementPanel;
+    private DataAndDateDimensionMappingManagementPanel dataAndDateDimensionMappingManagementPanel;
+    private DataPropertiesDuplicateMappingManagementPanel dataPropertiesDuplicateMappingManagementPanel;
 
     public InfoDiscoverSpaceBusinessDataDefinitionsInfo(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -59,6 +63,18 @@ public class InfoDiscoverSpaceBusinessDataDefinitionsInfo  extends VerticalLayou
         this.customPropertyAliasNameManagementPanel =new CustomPropertyAliasNameManagementPanel(this.currentUserClientInfo);
         TabSheet.Tab customPropertyAliasManagementPanelTab =tabs.addTab(this.customPropertyAliasNameManagementPanel, "自定义属性别名管理");
         customPropertyAliasManagementPanelTab.setIcon(VaadinIcons.COINS);
+
+        this.commonDataRelationMappingManagementPanel=new CommonDataRelationMappingManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab commonDataRelationMappingDefinitionInfoLayoutTab =tabs.addTab(this.commonDataRelationMappingManagementPanel, "常规数据属性关联映射管理");
+        commonDataRelationMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.COGS);
+
+        this.dataAndDateDimensionMappingManagementPanel=new DataAndDateDimensionMappingManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab factAndDateDimensionMappingDefinitionInfoLayoutTab =tabs.addTab(this.dataAndDateDimensionMappingManagementPanel, "数据与时间维度关联定义管理");
+        factAndDateDimensionMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.CLOCK_O);
+
+        this.dataPropertiesDuplicateMappingManagementPanel=new DataPropertiesDuplicateMappingManagementPanel(this.currentUserClientInfo);
+        TabSheet.Tab dataPropertiesDuplicateMappingDefinitionInfoLayoutTab =tabs.addTab(this.dataPropertiesDuplicateMappingManagementPanel, "数据属性复制规则定义管理");
+        dataPropertiesDuplicateMappingDefinitionInfoLayoutTab.setIcon(FontAwesome.COPY);
     }
 
     public void setDiscoverSpaceName(String discoverSpaceName) {
@@ -73,5 +89,11 @@ public class InfoDiscoverSpaceBusinessDataDefinitionsInfo  extends VerticalLayou
         this.secondarySectionActionBarTitle.updateSectionTitle(this.discoverSpaceName);
         this.customPropertyAliasNameManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
         this.customPropertyAliasNameManagementPanel.renderCustomPropertyAliasInfo();
+        this.commonDataRelationMappingManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        this.commonDataRelationMappingManagementPanel.renderCommonDataRelationMappingInfo();
+        this.dataAndDateDimensionMappingManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        this.dataAndDateDimensionMappingManagementPanel.renderDataAndDateDimensionMappingInfo();
+        this.dataPropertiesDuplicateMappingManagementPanel.setDiscoverSpaceName(this.discoverSpaceName);
+        this.dataPropertiesDuplicateMappingManagementPanel.renderDataPropertiesDuplicateMappingInfo();
     }
 }

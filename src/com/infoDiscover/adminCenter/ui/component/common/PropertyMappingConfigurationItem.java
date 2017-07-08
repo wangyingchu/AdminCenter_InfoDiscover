@@ -1,6 +1,7 @@
-package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.dataMappingManagement;
+package com.infoDiscover.adminCenter.ui.component.common;
 
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.SolutionTypePropertyTypeDefinitionVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.validator.*;
@@ -17,6 +18,7 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
     private UserClientInfo currentUserClientInfo;
     private HorizontalLayout configItemsContainerLayout;
     private SolutionTypePropertyTypeDefinitionVO sourceSolutionTypePropertyTypeDefinitionVO;
+    private PropertyTypeVO propertyTypeVO;
     private TextField minValueTextField;
     private TextField maxValueTextField;
 
@@ -38,6 +40,25 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
         }
         this.sourceSolutionTypePropertyTypeDefinitionVO=sourceSolutionTypePropertyTypeDefinitionVO;
         String propertyType=this.sourceSolutionTypePropertyTypeDefinitionVO.getPropertyType();
+        setUpElement(propertyType);
+    }
+
+    public void setMappingConfigUI(PropertyTypeVO propertyTypeVO){
+        this.configItemsContainerLayout.removeAllComponents();
+        if(this.minValueTextField!=null){
+            this.minValueTextField.setValue(null);
+            this.minValueTextField.setConvertedValue(null);
+        }
+        if(this.maxValueTextField!=null){
+            this.maxValueTextField.setValue(null);
+            this.maxValueTextField.setConvertedValue(null);
+        }
+        this.propertyTypeVO=propertyTypeVO;
+        String propertyType=this.propertyTypeVO.getPropertyType();
+        setUpElement(propertyType);
+    }
+
+    private void setUpElement(String propertyType){
         if(ApplicationConstant.DataFieldType_INT.equals(propertyType)||
                 ApplicationConstant.DataFieldType_INT.equals(propertyType)||
                 ApplicationConstant.DataFieldType_SHORT.equals(propertyType)||
@@ -79,27 +100,27 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
                     break;
                 case ApplicationConstant.DataFieldType_LONG:
                     this.minValueTextField.setConverter(Long.class);
-                    this.minValueTextField.addValidator(new IntegerRangeValidator("该项值必须为LONG类型", null, null));
+                    this.minValueTextField.addValidator(new LongRangeValidator("该项值必须为LONG类型", null, null));
                     this.maxValueTextField.setConverter(Long.class);
-                    this.maxValueTextField.addValidator(new IntegerRangeValidator("该项值必须为LONG类型", null, null));
+                    this.maxValueTextField.addValidator(new LongRangeValidator("该项值必须为LONG类型", null, null));
                     break;
                 case ApplicationConstant.DataFieldType_DOUBLE:
                     this.minValueTextField.setConverter(Double.class);
-                    this.minValueTextField.addValidator(new IntegerRangeValidator("该项值必须为DOUBLE类型", null, null));
+                    this.minValueTextField.addValidator(new DoubleRangeValidator("该项值必须为DOUBLE类型", null, null));
                     this.maxValueTextField.setConverter(Double.class);
-                    this.maxValueTextField.addValidator(new IntegerRangeValidator("该项值必须为DOUBLE类型", null, null));
+                    this.maxValueTextField.addValidator(new DoubleRangeValidator("该项值必须为DOUBLE类型", null, null));
                     break;
                 case ApplicationConstant.DataFieldType_FLOAT:
                     this.minValueTextField.setConverter(Float.class);
-                    this.minValueTextField.addValidator(new IntegerRangeValidator("该项值必须为FLOAT类型", null, null));
+                    this.minValueTextField.addValidator(new FloatRangeValidator("该项值必须为FLOAT类型", null, null));
                     this.maxValueTextField.setConverter(Float.class);
-                    this.maxValueTextField.addValidator(new IntegerRangeValidator("该项值必须为FLOAT类型", null, null));
+                    this.maxValueTextField.addValidator(new FloatRangeValidator("该项值必须为FLOAT类型", null, null));
                     break;
                 case ApplicationConstant.DataFieldType_SHORT:
                     this.minValueTextField.setConverter(Short.class);
-                    this.minValueTextField.addValidator(new IntegerRangeValidator("该项值必须为SHORT类型", null, null));
+                    this.minValueTextField.addValidator(new ShortRangeValidator("该项值必须为SHORT类型", null, null));
                     this.maxValueTextField.setConverter(Short.class);
-                    this.maxValueTextField.addValidator(new IntegerRangeValidator("该项值必须为SHORT类型", null, null));
+                    this.maxValueTextField.addValidator(new ShortRangeValidator("该项值必须为SHORT类型", null, null));
                     break;
                 case ApplicationConstant.DataFieldType_BYTE: break;
                 case ApplicationConstant.DataFieldType_BINARY: break;
@@ -109,6 +130,7 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
 
     public void clearMappingConfigUI(){
         this.sourceSolutionTypePropertyTypeDefinitionVO=null;
+        this.propertyTypeVO=null;
         this.configItemsContainerLayout.removeAllComponents();
     }
 

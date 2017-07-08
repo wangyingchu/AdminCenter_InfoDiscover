@@ -88,7 +88,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
 
         VerticalLayout discoverSpaceBusinessDataDefinitionsInfoLayout=new VerticalLayout();
-        TabSheet.Tab discoverSpaceBusinessDataDefinitionsInfoLayoutTab =tabs.addTab(discoverSpaceBusinessDataDefinitionsInfoLayout, "业务数据定义管理");
+        TabSheet.Tab discoverSpaceBusinessDataDefinitionsInfoLayoutTab =tabs.addTab(discoverSpaceBusinessDataDefinitionsInfoLayout, "业务数据规则管理");
         discoverSpaceBusinessDataDefinitionsInfoLayoutTab.setIcon(VaadinIcons.COG);
         infoDiscoverSpaceBusinessDataDefinitionsInfo=new InfoDiscoverSpaceBusinessDataDefinitionsInfo(this.currentUserClientInfo);
         infoDiscoverSpaceBusinessDataDefinitionsInfo.setParentInfoDiscoverSpaceDetail(this);

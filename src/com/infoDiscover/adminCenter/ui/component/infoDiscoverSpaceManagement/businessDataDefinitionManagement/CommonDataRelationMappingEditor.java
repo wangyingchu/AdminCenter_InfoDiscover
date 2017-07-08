@@ -1,11 +1,12 @@
-package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.dataMappingManagement;
+package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.businessDataDefinitionManagement;
 
-import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.*;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.PropertyTypeVO;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.TypeSummaryVO;
+import com.infoDiscover.adminCenter.ui.component.common.PropertyMappingConfigurationItem;
 import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
-import com.infoDiscover.adminCenter.ui.component.common.PropertyMappingConfigurationItem;
 import com.infoDiscover.adminCenter.ui.component.common.SectionActionsBar;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.data.Property;
@@ -23,14 +24,13 @@ import java.util.*;
 /**
  * Created by wangychu on 6/30/17.
  */
-public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
+public class CommonDataRelationMappingEditor extends VerticalLayout {
 
     private UserClientInfo currentUserClientInfo;
-    private String businessSolutionName;
+    private String discoverSpaceName;
     private Window containerDialog;
-    private CommonDataRelationMappingDefinitionEditPanel relatedCommonDataRelationMappingDefinitionEditPanel;
+    private CommonDataRelationMappingManagementPanel relatedCommonDataRelationMappingManagementPanel;
     private SectionActionsBar dataFieldActionsBar;
-
     private OptionGroup sourceDataType;
     private ComboBox sourceDataTypeField;
     private ComboBox sourceDataPropertyField;
@@ -38,20 +38,16 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
     private OptionGroup relationDirection;
     private OptionGroup targetDataType;
     private OptionGroup mappingNotFoundHandleMethod;
-
     private ComboBox targetDataTypeField;
     private ComboBox targetDataPropertyField;
-
-    private Map<String,FactTypeDefinitionVO> factTypeDefinitionMap;
-    private Map<String,DimensionTypeDefinitionVO> dimensionTypeDefinitionMap;
-    private Map<String,RelationTypeDefinitionVO> relationTypeDefinitionMap;
-
-    private Map<String,SolutionTypePropertyTypeDefinitionVO> sourceDataTypePropertiesMap;
-    private Map<String,SolutionTypePropertyTypeDefinitionVO> targetDataTypePropertiesMap;
-
+    private Map<String,PropertyTypeVO> sourceDataTypePropertiesMap;
+    private Map<String,PropertyTypeVO> targetDataTypePropertiesMap;
     private PropertyMappingConfigurationItem propertyMappingConfigurationItem;
+    private Map<String,TypeSummaryVO> factTypeMap;
+    private Map<String,TypeSummaryVO> dimensionTypeMap;
+    private Map<String,TypeSummaryVO> relationTypeMap;
 
-    public CommonDataRelationMappingDefinitionEditor(UserClientInfo currentUserClientInfo){
+    public CommonDataRelationMappingEditor(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
         setSpacing(true);
         setMargin(true);
@@ -196,14 +192,6 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         footer.addComponent(addButton);
     }
 
-    public String getBusinessSolutionName() {
-        return businessSolutionName;
-    }
-
-    public void setBusinessSolutionName(String businessSolutionName) {
-        this.businessSolutionName = businessSolutionName;
-    }
-
     public Window getContainerDialog() {
         return containerDialog;
     }
@@ -212,69 +200,61 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         this.containerDialog = containerDialog;
     }
 
-    public CommonDataRelationMappingDefinitionEditPanel getRelatedCommonDataRelationMappingDefinitionEditPanel() {
-        return relatedCommonDataRelationMappingDefinitionEditPanel;
-    }
-
-    public void setRelatedCommonDataRelationMappingDefinitionEditPanel(CommonDataRelationMappingDefinitionEditPanel relatedCommonDataRelationMappingDefinitionEditPanel) {
-        this.relatedCommonDataRelationMappingDefinitionEditPanel = relatedCommonDataRelationMappingDefinitionEditPanel;
-    }
-
     @Override
     public void attach() {
         super.attach();
-        Label sectionActionBarLabel=new Label(VaadinIcons.CLIPBOARD_TEXT.getHtml()+" "+getBusinessSolutionName(), ContentMode.HTML);
+        Label sectionActionBarLabel=new Label(VaadinIcons.CLIPBOARD_TEXT.getHtml()+" "+getDiscoverSpaceName(), ContentMode.HTML);
         dataFieldActionsBar.resetSectionActionsBarContent(sectionActionBarLabel);
-        initRelationSelectData(BusinessSolutionOperationUtil.getRelationTypeDefinitionList(getBusinessSolutionName()));
-        initFactSelectData(BusinessSolutionOperationUtil.getFactTypeDefinitionList(getBusinessSolutionName()));
-        initDimensionSelectData(BusinessSolutionOperationUtil.getDimensionTypeDefinitionList(getBusinessSolutionName()));
+        initRelationSelectData(InfoDiscoverSpaceOperationUtil.getTypeDataSummary(getDiscoverSpaceName(),InfoDiscoverSpaceOperationUtil.TYPEKIND_RELATION));
+        initFactSelectData(InfoDiscoverSpaceOperationUtil.getTypeDataSummary(getDiscoverSpaceName(),InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT));
+        initDimensionSelectData(InfoDiscoverSpaceOperationUtil.getTypeDataSummary(getDiscoverSpaceName(),InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION));
         setSourceDataTypeChooseList("事实");
         setTargetDataTypeChooseList("维度");
     }
 
-    private void initFactSelectData(List<FactTypeDefinitionVO> factTypeDefinitionList){
-        if(this.factTypeDefinitionMap==null){
-            this.factTypeDefinitionMap=new HashMap<>();
+    private void initFactSelectData(List<TypeSummaryVO> factTypeList){
+        if(this.factTypeMap==null){
+            this.factTypeMap=new HashMap<>();
         }else{
-            this.factTypeDefinitionMap.clear();
+            this.factTypeMap.clear();
         }
-        for(FactTypeDefinitionVO currentFactTypeDefinitionVO:factTypeDefinitionList){
-            String typeName=currentFactTypeDefinitionVO.getTypeName();
-            String typeAlias=currentFactTypeDefinitionVO.getTypeAliasName();
+        for(TypeSummaryVO currentFactTypeVO:factTypeList){
+            String typeName=currentFactTypeVO.getTypeName();
+            String typeAlias=currentFactTypeVO.getTypeAliasName();
             String selectorItem=typeName+" ("+typeAlias+")";
-            this.factTypeDefinitionMap.put(selectorItem,currentFactTypeDefinitionVO);
+            this.factTypeMap.put(selectorItem,currentFactTypeVO);
         }
     }
 
-    private void initDimensionSelectData(List<DimensionTypeDefinitionVO> dimensionTypeDefinitionList){
-        if(this.dimensionTypeDefinitionMap==null){
-            this.dimensionTypeDefinitionMap=new HashMap<>();
+    private void initDimensionSelectData(List<TypeSummaryVO> dimensionTypeList){
+        if(this.dimensionTypeMap==null){
+            this.dimensionTypeMap=new HashMap<>();
         }else{
-            this.dimensionTypeDefinitionMap.clear();
+            this.dimensionTypeMap.clear();
         }
-        for(DimensionTypeDefinitionVO currentDimensionTypeDefinitionVO:dimensionTypeDefinitionList){
-            String typeName=currentDimensionTypeDefinitionVO.getTypeName();
-            String typeAlias=currentDimensionTypeDefinitionVO.getTypeAliasName();
+        for(TypeSummaryVO currentDimensionTypeVO:dimensionTypeList){
+            String typeName=currentDimensionTypeVO.getTypeName();
+            String typeAlias=currentDimensionTypeVO.getTypeAliasName();
             String selectorItem=typeName+" ("+typeAlias+")";
-            this.dimensionTypeDefinitionMap.put(selectorItem,currentDimensionTypeDefinitionVO);
+            this.dimensionTypeMap.put(selectorItem,currentDimensionTypeVO);
         }
     }
 
-    private void initRelationSelectData(List<RelationTypeDefinitionVO> relationTypeDefinitionList){
+    private void initRelationSelectData(List<TypeSummaryVO> relationTypeSummaryList){
         if(this.relationTypeField!=null){
             this.relationTypeField.removeAllItems();
         }
-        if(this.relationTypeDefinitionMap==null){
-            this.relationTypeDefinitionMap=new HashMap<>();
+        if(this.relationTypeMap==null){
+            this.relationTypeMap=new HashMap<>();
         }else{
-            this.relationTypeDefinitionMap.clear();
+            this.relationTypeMap.clear();
         }
-        for(RelationTypeDefinitionVO currentRelationTypeDefinitionVO:relationTypeDefinitionList){
-            String typeName=currentRelationTypeDefinitionVO.getTypeName();
-            String typeAlias=currentRelationTypeDefinitionVO.getTypeAliasName();
+        for(TypeSummaryVO currentRelationTypeVO:relationTypeSummaryList){
+            String typeName=currentRelationTypeVO.getTypeName();
+            String typeAlias=currentRelationTypeVO.getTypeAliasName();
             String selectorItem=typeName+" ("+typeAlias+")";
             this.relationTypeField.addItem(selectorItem);
-            this.relationTypeDefinitionMap.put(selectorItem,currentRelationTypeDefinitionVO);
+            this.relationTypeMap.put(selectorItem,currentRelationTypeVO);
         }
     }
 
@@ -288,8 +268,8 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
             this.sourceDataTypeField.setInputPrompt("请选择源事实类型名称");
             this.sourceDataPropertyField.setCaption("源事实属性名称");
             this.sourceDataPropertyField.setInputPrompt("请选择源事实属性名称");
-            if(this.factTypeDefinitionMap!=null){
-                Set<String> labelSet=this.factTypeDefinitionMap.keySet();
+            if(this.factTypeMap!=null){
+                Set<String> labelSet=this.factTypeMap.keySet();
                 iterator=labelSet.iterator();
             }
         }
@@ -298,8 +278,8 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
             this.sourceDataTypeField.setInputPrompt("请选择源维度类型名称");
             this.sourceDataPropertyField.setCaption("源维度属性名称");
             this.sourceDataPropertyField.setInputPrompt("请选择源维度属性名称");
-            if(this.dimensionTypeDefinitionMap!=null) {
-                Set<String> labelSet = this.dimensionTypeDefinitionMap.keySet();
+            if(this.dimensionTypeMap!=null) {
+                Set<String> labelSet = this.dimensionTypeMap.keySet();
                 iterator = labelSet.iterator();
             }
         }
@@ -311,31 +291,29 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
     private void setSourceDataTypePropertySelectChooseList(String propertyTypeLabel){
         this.sourceDataPropertyField.removeAllItems();
         this.propertyMappingConfigurationItem.clearMappingConfigUI();
-        String solutionName=this.getBusinessSolutionName();
-        String propertyTypeKind=null;
-        String propertyTypeName=null;
+        String propertyTypeName;
+        List<PropertyTypeVO> propertyTypeVOList=null;
         if("事实".equals(this.sourceDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT;
-            propertyTypeName=this.factTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeName=this.factTypeMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeVOList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(discoverSpaceName,propertyTypeName);
         }
         if("维度".equals(this.sourceDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION;
-            propertyTypeName=this.dimensionTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeName=this.dimensionTypeMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeVOList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(discoverSpaceName,propertyTypeName);
         }
         if(this.sourceDataTypePropertiesMap==null){
             this.sourceDataTypePropertiesMap=new HashMap<>();
         }else{
             this.sourceDataTypePropertiesMap.clear();
         }
-        List<SolutionTypePropertyTypeDefinitionVO> currentTypePropertyList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(solutionName,propertyTypeKind,propertyTypeName);
-        if(currentTypePropertyList!=null){
-            for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:currentTypePropertyList){
-                String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
-                String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
-                String propertyType=currentSolutionTypePropertyTypeDefinitionVO.getPropertyType();
+        if(propertyTypeVOList!=null){
+            for(PropertyTypeVO currentPropertyTypeVO:propertyTypeVOList){
+                String propertyName=currentPropertyTypeVO.getPropertyName();
+                String propertyAlias=currentPropertyTypeVO.getPropertyAliasName();
+                String propertyType=currentPropertyTypeVO.getPropertyType();
                 String selectorItem=propertyName+" ("+propertyAlias+")"+" - "+propertyType;
                 this.sourceDataPropertyField.addItem(selectorItem);
-                this.sourceDataTypePropertiesMap.put(selectorItem,currentSolutionTypePropertyTypeDefinitionVO);
+                this.sourceDataTypePropertiesMap.put(selectorItem,currentPropertyTypeVO);
             }
         }
     }
@@ -349,8 +327,8 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
             this.targetDataTypeField.setInputPrompt("请选择目标事实类型名称");
             this.targetDataPropertyField.setCaption("目标事实属性名称");
             this.targetDataPropertyField.setInputPrompt("请选择目标事实属性名称");
-            if(this.factTypeDefinitionMap!=null){
-                Set<String> labelSet=this.factTypeDefinitionMap.keySet();
+            if(this.factTypeMap!=null){
+                Set<String> labelSet=this.factTypeMap.keySet();
                 iterator=labelSet.iterator();
             }
         }
@@ -359,8 +337,8 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
             this.targetDataTypeField.setInputPrompt("请选择目标维度类型名称");
             this.targetDataPropertyField.setCaption("目标维度属性名称");
             this.targetDataPropertyField.setInputPrompt("请选择目标维度属性名称");
-            if(this.dimensionTypeDefinitionMap!=null) {
-                Set<String> labelSet = this.dimensionTypeDefinitionMap.keySet();
+            if(this.dimensionTypeMap!=null) {
+                Set<String> labelSet = this.dimensionTypeMap.keySet();
                 iterator = labelSet.iterator();
             }
         }
@@ -371,38 +349,36 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
 
     private void setTargetDataTypePropertySelectChooseList(String propertyTypeLabel){
         this.targetDataPropertyField.removeAllItems();
-        String solutionName=this.getBusinessSolutionName();
-        String propertyTypeKind=null;
-        String propertyTypeName=null;
+        String propertyTypeName;
+        List<PropertyTypeVO> propertyTypeVOList=null;
         if("事实".equals(this.targetDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT;
-            propertyTypeName=this.factTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeName=this.factTypeMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeVOList=InfoDiscoverSpaceOperationUtil.retrieveFactTypePropertiesInfo(discoverSpaceName,propertyTypeName);
         }
         if("维度".equals(this.targetDataType.getValue().toString())){
-            propertyTypeKind=InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION;
-            propertyTypeName=this.dimensionTypeDefinitionMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeName=this.dimensionTypeMap.get(propertyTypeLabel).getTypeName();
+            propertyTypeVOList=InfoDiscoverSpaceOperationUtil.retrieveDimensionTypePropertiesInfo(discoverSpaceName,propertyTypeName);
         }
         if(this.targetDataTypePropertiesMap==null){
             this.targetDataTypePropertiesMap=new HashMap<>();
         }else{
             this.targetDataTypePropertiesMap.clear();
         }
-        List<SolutionTypePropertyTypeDefinitionVO> currentTypePropertyList=BusinessSolutionOperationUtil.getSolutionTypePropertiesInfo(solutionName,propertyTypeKind,propertyTypeName);
-        if(currentTypePropertyList!=null){
-            for(SolutionTypePropertyTypeDefinitionVO currentSolutionTypePropertyTypeDefinitionVO:currentTypePropertyList){
-                String propertyName=currentSolutionTypePropertyTypeDefinitionVO.getPropertyName();
-                String propertyAlias=currentSolutionTypePropertyTypeDefinitionVO.getPropertyAliasName();
-                String propertyType=currentSolutionTypePropertyTypeDefinitionVO.getPropertyType();
+        if(propertyTypeVOList!=null){
+            for(PropertyTypeVO currentPropertyTypeVO:propertyTypeVOList){
+                String propertyName=currentPropertyTypeVO.getPropertyName();
+                String propertyAlias=currentPropertyTypeVO.getPropertyAliasName();
+                String propertyType=currentPropertyTypeVO.getPropertyType();
                 String selectorItem=propertyName+" ("+propertyAlias+")"+" - "+propertyType;
                 this.targetDataPropertyField.addItem(selectorItem);
-                this.targetDataTypePropertiesMap.put(selectorItem,currentSolutionTypePropertyTypeDefinitionVO);
+                this.targetDataTypePropertiesMap.put(selectorItem,currentPropertyTypeVO);
             }
         }
     }
 
     private void setPropertyMappingConfigurationItem(String propertyLabel){
-        SolutionTypePropertyTypeDefinitionVO propertyTypeDefinitionVO=this.sourceDataTypePropertiesMap.get(propertyLabel);
-        this.propertyMappingConfigurationItem.setMappingConfigUI(propertyTypeDefinitionVO);
+        PropertyTypeVO propertyTypeVO=this.sourceDataTypePropertiesMap.get(propertyLabel);
+        this.propertyMappingConfigurationItem.setMappingConfigUI(propertyTypeVO);
     }
 
     private void addNewMappingDefinition(){
@@ -455,12 +431,12 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         String sourceDataType="FACT";
         if("事实".equals(sourceDataTypeOption)){
             sourceDataType="FACT";
-            sourceDataTypeName=factTypeDefinitionMap.get(sourceDataTypeLabel).getTypeName();
+            sourceDataTypeName=factTypeMap.get(sourceDataTypeLabel).getTypeName();
 
         }
         if("维度".equals(sourceDataTypeOption)){
             sourceDataType="DIMENSION";
-            sourceDataTypeName=dimensionTypeDefinitionMap.get(sourceDataTypeLabel).getTypeName();
+            sourceDataTypeName=dimensionTypeMap.get(sourceDataTypeLabel).getTypeName();
         }
         String sourceDataTypePropertyLabel=sourceDataPropertyField.getValue().toString();
         String sourceDataPropertyName=sourceDataTypePropertiesMap.get(sourceDataTypePropertyLabel).getPropertyName();
@@ -472,7 +448,7 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         dataMappingDefinitionVO.setSourceDataTypeName(sourceDataTypeName);
 
         String relationTypeLabel=relationTypeField.getValue().toString();
-        String relationTypeName=relationTypeDefinitionMap.get(relationTypeLabel).getTypeName();
+        String relationTypeName=relationTypeMap.get(relationTypeLabel).getTypeName();
         String relationDirectionOption=relationDirection.getValue().toString();
         String relationDirection="ToTarget";
         if("指向源数据".equals(relationDirectionOption)){
@@ -503,11 +479,11 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         String targetDataType="FACT";
         if("事实".equals(targetDataTypeOption)){
             targetDataType="FACT";
-            targetDataTypeName=factTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
+            targetDataTypeName=factTypeMap.get(targetDataTypeLabel).getTypeName();
         }
         if("维度".equals(targetDataTypeOption)){
             targetDataType="DIMENSION";
-            targetDataTypeName=dimensionTypeDefinitionMap.get(targetDataTypeLabel).getTypeName();
+            targetDataTypeName=dimensionTypeMap.get(targetDataTypeLabel).getTypeName();
         }
         String targetDataTypePropertyLabel=targetDataPropertyField.getValue().toString();
         String targetDataPropertyName=targetDataTypePropertiesMap.get(targetDataTypePropertyLabel).getPropertyName();
@@ -521,22 +497,22 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         dataMappingDefinitionVO.setMinValue(propertyMappingConfigurationItem.getMinValue());
         dataMappingDefinitionVO.setMaxValue(propertyMappingConfigurationItem.getMaxValue());
 
-        String confirmMessageString=" 请确认在业务解决方案 "+getBusinessSolutionName()+" 中添加数据属性关联映射规则";
+        String confirmMessageString=" 请确认在信息发现空间 "+getDiscoverSpaceName()+" 中添加数据属性关联映射规则";
         Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);
 
         final ConfirmDialog addDefinitionConfirmDialog = new ConfirmDialog();
         addDefinitionConfirmDialog.setConfirmMessage(confirmMessage);
 
-        final CommonDataRelationMappingDefinitionEditor self=this;
+        final CommonDataRelationMappingEditor self=this;
         Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 //close confirm dialog
                 addDefinitionConfirmDialog.close();
-                boolean createTypePropertyResult= BusinessSolutionOperationUtil.createCommonDataRelationMappingDefinition(getBusinessSolutionName(),dataMappingDefinitionVO);;
+                boolean createTypePropertyResult= InfoDiscoverSpaceOperationUtil.createCommonDataRelationMapping(getDiscoverSpaceName(),dataMappingDefinitionVO);;
                 if(createTypePropertyResult){
                     self.containerDialog.close();
-                    getRelatedCommonDataRelationMappingDefinitionEditPanel().renderCommonDataRelationMappingDefinitionInfo(getBusinessSolutionName());
+                    getRelatedCommonDataRelationMappingManagementPanel().renderCommonDataRelationMappingInfo();
                     Notification resultNotification = new Notification("添加数据操作成功",
                             "创建数据属性关联映射规则成功", Notification.Type.HUMANIZED_MESSAGE);
                     resultNotification.setPosition(Position.MIDDLE_CENTER);
@@ -553,5 +529,21 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         };
         addDefinitionConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(addDefinitionConfirmDialog);
+    }
+
+    public String getDiscoverSpaceName() {
+        return discoverSpaceName;
+    }
+
+    public void setDiscoverSpaceName(String discoverSpaceName) {
+        this.discoverSpaceName = discoverSpaceName;
+    }
+
+    public CommonDataRelationMappingManagementPanel getRelatedCommonDataRelationMappingManagementPanel() {
+        return relatedCommonDataRelationMappingManagementPanel;
+    }
+
+    public void setRelatedCommonDataRelationMappingManagementPanel(CommonDataRelationMappingManagementPanel relatedCommonDataRelationMappingManagementPanel) {
+        this.relatedCommonDataRelationMappingManagementPanel = relatedCommonDataRelationMappingManagementPanel;
     }
 }
