@@ -391,6 +391,36 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
 
     private void executeDeleteFactTypeOperation(){
         if(this.currentSelectedFactTypeName !=null){
+            boolean isUsedInCommonDataRelationDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInCommonDataRelationMappingDefinition(discoverSpaceName,"FACT",this.currentSelectedFactTypeName,null,null);
+            if(isUsedInCommonDataRelationDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性关联映射规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataDateDimensionDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataDateDimensionMappingDefinition(discoverSpaceName,"FACT",this.currentSelectedFactTypeName,null);
+            if(isUsedInDataDateDimensionDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据与时间维度关联定义规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataPropertiesDuplicateDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataPropertiesDuplicateMappingDefinition(discoverSpaceName,"FACT",this.currentSelectedFactTypeName,null,null);
+            if(isUsedInDataPropertiesDuplicateDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性复制规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             //do delete logic
             String deleteConfirmMessage=FontAwesome.INFO.getHtml()+
                     " 请确认是否删除事实类型  <b>"+this.currentSelectedFactTypeName +"</b>。";
@@ -453,6 +483,36 @@ public class FactTypesManagementPanel extends VerticalLayout implements CreateTy
 
     private void executeDeleteFactTypePropertyOperation(){
         if(this.currentSelectedFactTypeName !=null&&this.currentSelectedFactTypePropertyName !=null){
+            boolean isUsedInCommonDataRelationDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInCommonDataRelationMappingDefinition(this.discoverSpaceName,"FACT",this.currentSelectedFactTypeName,this.currentSelectedFactTypePropertyName,null);
+            if(isUsedInCommonDataRelationDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性关联映射规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataDateDimensionDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataDateDimensionMappingDefinition(this.discoverSpaceName,"FACT",this.currentSelectedFactTypeName,this.currentSelectedFactTypePropertyName);
+            if(isUsedInDataDateDimensionDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据与时间维度关联定义规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataPropertiesDuplicateDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataPropertiesDuplicateMappingDefinition(this.discoverSpaceName,"FACT",this.currentSelectedFactTypeName,this.currentSelectedFactTypePropertyName,null);
+            if(isUsedInDataPropertiesDuplicateDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性复制规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             //do delete logic
             Label confirmMessage= new Label(FontAwesome.INFO.getHtml()+
                     " 请确认是否删除事实类型 "+this.currentSelectedFactTypeName +" 中的属性 <b>"+this.currentSelectedFactTypePropertyName +"</b>.", ContentMode.HTML);

@@ -426,6 +426,36 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
 
     private void executeDeleteDimensionTypeOperation(){
         if(this.currentSelectedDimensionTypeName!=null){
+            boolean isUsedInCommonDataRelationDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInCommonDataRelationMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,null,null);
+            if(isUsedInCommonDataRelationDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性关联映射规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataDateDimensionDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataDateDimensionMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,null);
+            if(isUsedInDataDateDimensionDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据与时间维度关联定义规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataPropertiesDuplicateDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataPropertiesDuplicateMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,null,null);
+            if(isUsedInDataPropertiesDuplicateDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性复制规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             //do delete logic
             String deleteConfirmMessage=FontAwesome.INFO.getHtml()+
                     " 请确认是否删除维度类型  <b>"+this.currentSelectedDimensionTypeName +"</b>。";
@@ -563,6 +593,36 @@ public class DimensionTypesManagementPanel extends VerticalLayout implements Cre
 
     private void executeDeleteDimensionTypePropertyOperation(){
         if(this.currentSelectedDimensionTypeName!=null&&this.currentSelectedDimensionTypePropertyName!=null){
+            boolean isUsedInCommonDataRelationDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInCommonDataRelationMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,this.currentSelectedDimensionTypePropertyName,null);
+            if(isUsedInCommonDataRelationDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性关联映射规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataDateDimensionDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataDateDimensionMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,this.currentSelectedDimensionTypePropertyName);
+            if(isUsedInDataDateDimensionDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据与时间维度关联定义规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataPropertiesDuplicateDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataPropertiesDuplicateMappingDefinition(this.discoverSpaceName,"DIMENSION",this.currentSelectedDimensionTypeName,this.currentSelectedDimensionTypePropertyName,null);
+            if(isUsedInDataPropertiesDuplicateDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性复制规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             //do delete logic
             Label confirmMessage= new Label(FontAwesome.INFO.getHtml()+
                     " 请确认是否删除维度类型 "+this.currentSelectedDimensionTypeName+" 中的属性 <b>"+this.currentSelectedDimensionTypePropertyName +"</b>.", ContentMode.HTML);

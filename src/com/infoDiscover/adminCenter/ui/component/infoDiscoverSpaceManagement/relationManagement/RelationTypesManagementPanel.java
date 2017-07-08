@@ -426,6 +426,26 @@ public class RelationTypesManagementPanel extends VerticalLayout implements Crea
 
     private void executeDeleteRelationTypeOperation(){
         if(this.currentSelectedRelationTypeName !=null){
+            boolean isUsedInCommonDataRelationDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInCommonDataRelationMappingDefinition(discoverSpaceName,"RELATION",this.currentSelectedRelationTypeName,null,null);
+            if(isUsedInCommonDataRelationDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据属性关联映射规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+            boolean isUsedInDataDateDimensionDefinition=
+                    InfoDiscoverSpaceOperationUtil.checkInfoUsedInDataDateDimensionMappingDefinition(discoverSpaceName,"RELATION",this.currentSelectedRelationTypeName,null);
+            if(isUsedInDataDateDimensionDefinition){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "本项数据已在数据与时间维度关联定义规则定义中使用", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
             //do delete logic
             String deleteConfirmMessage=FontAwesome.INFO.getHtml()+
                     " 请确认是否删除关系类型  <b>"+this.currentSelectedRelationTypeName +"</b>。";
