@@ -21,6 +21,7 @@ public class DataMappingDefinitionVO {
     private String maxValue;
     private String solutionName;
     private String dateDimensionTypePrefix;
+    private String rangeResult;
 
     public String getSourceDataTypeName() {
         return sourceDataTypeName;
@@ -148,5 +149,13 @@ public class DataMappingDefinitionVO {
 
     public void setDateDimensionTypePrefix(String dateDimensionTypePrefix) {
         this.dateDimensionTypePrefix = dateDimensionTypePrefix;
+    }
+
+    public String getRangeResult() {
+        return rangeResult;
+    }
+
+    public void setRangeResult(String rangeResult) {
+        this.rangeResult = rangeResult;
     }
 }

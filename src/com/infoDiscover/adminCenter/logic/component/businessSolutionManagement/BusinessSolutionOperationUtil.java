@@ -1194,6 +1194,8 @@ public class BusinessSolutionOperationUtil {
                 mappingMinValueProperty.setMandatory(false);
                 TypeProperty mappingMaxValueProperty=dataRelationMappingFactType.addTypeProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue, PropertyType.STRING);
                 mappingMaxValueProperty.setMandatory(false);
+                TypeProperty targetDataPropertyValueProperty=dataRelationMappingFactType.addTypeProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue, PropertyType.STRING);
+                targetDataPropertyValueProperty.setMandatory(false);
             }
 
             Fact dataRelationMappingDefinitionFact=DiscoverEngineComponentFactory.createFact(BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType);
@@ -1214,6 +1216,9 @@ public class BusinessSolutionOperationUtil {
             }
             if(dataMappingDefinitionVO.getMaxValue()!=null){
                 dataRelationMappingDefinitionFact.setInitProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue,dataMappingDefinitionVO.getMaxValue());
+            }
+            if(dataMappingDefinitionVO.getRangeResult()!=null){
+                dataRelationMappingDefinitionFact.setInitProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue,dataMappingDefinitionVO.getRangeResult());
             }
             Fact resultRecord=metaConfigSpace.addFact(dataRelationMappingDefinitionFact);
             if(resultRecord!=null){
@@ -1269,6 +1274,9 @@ public class BusinessSolutionOperationUtil {
                         if(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue)!=null){
                             currentDataMappingDefinitionVO.setMaxValue(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue).getPropertyValue().toString());
                         }
+                        if(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue)!=null){
+                            currentDataMappingDefinitionVO.setRangeResult(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue).getPropertyValue().toString());
+                        }
                         dataRelationMappingDefinitionList.add(currentDataMappingDefinitionVO);
                     }
                 }
@@ -1318,6 +1326,12 @@ public class BusinessSolutionOperationUtil {
             }
             else{
                 solutionDefinitionRecordEP.addFilteringItem(new NullValueFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue),ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataMappingDefinitionVO.getRangeResult()!=null&&!dataMappingDefinitionVO.getRangeResult().equals("")){
+                solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue, dataMappingDefinitionVO.getRangeResult()), ExploreParameters.FilteringLogic.AND);
+            }
+            else{
+                solutionDefinitionRecordEP.addFilteringItem(new NullValueFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue),ExploreParameters.FilteringLogic.AND);
             }
             solutionDefinitionRecordEP.setResultNumber(10000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();

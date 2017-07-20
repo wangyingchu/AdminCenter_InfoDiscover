@@ -95,6 +95,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源属性数据类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源属性最小值", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("源属性最大值", String.class, "");
+        this.dataRelationMappingDefinitionsTable.addContainerProperty("目标属性值", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("关联关系类型", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("数据关联方向", String.class, "");
         this.dataRelationMappingDefinitionsTable.addContainerProperty("不存在映射处理策略", String.class, "");
@@ -129,6 +130,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
         for(DataMappingDefinitionVO currentDataMappingDefinitionVO:dataMappingDefinitionsList){
             String sourceMinValue=currentDataMappingDefinitionVO.getMinValue()!=null?currentDataMappingDefinitionVO.getMinValue():"";
             String sourceMaxValue=currentDataMappingDefinitionVO.getMaxValue()!=null?currentDataMappingDefinitionVO.getMaxValue():"";
+            String targetPropertyValue=currentDataMappingDefinitionVO.getRangeResult()!=null?currentDataMappingDefinitionVO.getRangeResult():"";
             Object[] newDefinitionInfo=new Object[]{
                     currentDataMappingDefinitionVO.getSourceDataTypeKind(),
                     currentDataMappingDefinitionVO.getSourceDataTypeName(),
@@ -136,6 +138,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
                     currentDataMappingDefinitionVO.getSourceDataPropertyType(),
                     sourceMinValue,
                     sourceMaxValue,
+                    targetPropertyValue,
                     currentDataMappingDefinitionVO.getRelationTypeName(),
                     currentDataMappingDefinitionVO.getRelationDirection(),
                     currentDataMappingDefinitionVO.getMappingNotExistHandleMethod(),
@@ -154,7 +157,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
         commonDataRelationMappingEditor.setDiscoverSpaceName(this.discoverSpaceName);
         commonDataRelationMappingEditor.setRelatedCommonDataRelationMappingManagementPanel(this);
         final Window window = new Window();
-        window.setWidth(750.0f, Unit.PIXELS);
+        window.setWidth(780.0f, Unit.PIXELS);
         window.setHeight(600.0f, Unit.PIXELS);
         window.setResizable(false);
         window.center();
@@ -194,6 +197,9 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
                     }
                     if(currentSelectedDefinitionItem.getItemProperty("源属性最大值")!=null){
                         definitionToDelete.setMaxValue(currentSelectedDefinitionItem.getItemProperty("源属性最大值").getValue().toString());
+                    }
+                    if(currentSelectedDefinitionItem.getItemProperty("目标属性值")!=null){
+                        definitionToDelete.setRangeResult(currentSelectedDefinitionItem.getItemProperty("目标属性值").getValue().toString());
                     }
                     boolean deleteDefinitionResult=InfoDiscoverSpaceOperationUtil.deleteCommonDataRelationMappingDefinition(discoverSpaceName,definitionToDelete);
                     if(deleteDefinitionResult){

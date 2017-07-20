@@ -72,7 +72,6 @@ public class SolutionTypePropertyTypeDefinitionVO {
         this.solutionName = solutionName;
     }
 
-
     public String getPropertyTypeKind() {
         return propertyTypeKind;
     }

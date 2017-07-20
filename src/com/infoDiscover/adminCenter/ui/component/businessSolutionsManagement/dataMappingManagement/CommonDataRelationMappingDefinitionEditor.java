@@ -446,8 +446,21 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
             errorNotification.setIcon(FontAwesome.WARNING);
             return;
         }
+        if(propertyMappingConfigurationItem.getMinValue()!=null||propertyMappingConfigurationItem.getMaxValue()!=null){
+            if(propertyMappingConfigurationItem.getRangeResultValue()==null){
+                Notification errorNotification = new Notification("数据校验错误",
+                        "请输入目标数据属性值", Notification.Type.ERROR_MESSAGE);
+                errorNotification.setPosition(Position.MIDDLE_CENTER);
+                errorNotification.show(Page.getCurrent());
+                errorNotification.setIcon(FontAwesome.WARNING);
+                return;
+            }
+        }
 
         DataMappingDefinitionVO dataMappingDefinitionVO=new DataMappingDefinitionVO();
+        dataMappingDefinitionVO.setMinValue(propertyMappingConfigurationItem.getMinValue());
+        dataMappingDefinitionVO.setMaxValue(propertyMappingConfigurationItem.getMaxValue());
+        dataMappingDefinitionVO.setRangeResult(propertyMappingConfigurationItem.getRangeResultValue());
 
         String sourceDataTypeOption=sourceDataType.getValue().toString();
         String sourceDataTypeLabel=sourceDataTypeField.getValue().toString();
@@ -517,9 +530,6 @@ public class CommonDataRelationMappingDefinitionEditor extends VerticalLayout {
         dataMappingDefinitionVO.setTargetDataPropertyType(targetDataPropertyType);
         dataMappingDefinitionVO.setTargetDataTypeKind(targetDataType);
         dataMappingDefinitionVO.setTargetDataTypeName(targetDataTypeName);
-
-        dataMappingDefinitionVO.setMinValue(propertyMappingConfigurationItem.getMinValue());
-        dataMappingDefinitionVO.setMaxValue(propertyMappingConfigurationItem.getMaxValue());
 
         String confirmMessageString=" 请确认在业务解决方案 "+getBusinessSolutionName()+" 中添加数据属性关联映射规则";
         Label confirmMessage=new Label(FontAwesome.INFO.getHtml()+confirmMessageString, ContentMode.HTML);

@@ -90,6 +90,7 @@ public class InfoDiscoverSpaceOperationUtil {
     public static final String MetaConfig_PropertyName_TargetDataTypeName="targetDataTypeName";
     public static final String MetaConfig_PropertyName_TargetDataTypeKind="targetDataTypeKind";
     public static final String MetaConfig_PropertyName_TargetDataPropertyName="targetDataPropertyName";
+    public static final String MetaConfig_PropertyName_TargetDataPropertyValue="targetDataPropertyValue";
     public static final String MetaConfig_PropertyName_TargetDataPropertyType="targetDataPropertyType";
     public static final String MetaConfig_PropertyName_MappingMinValue="minValue";
     public static final String MetaConfig_PropertyName_MappingMaxValue="maxValue";
@@ -3343,6 +3344,8 @@ public class InfoDiscoverSpaceOperationUtil {
                 mappingMinValueProperty.setMandatory(false);
                 TypeProperty mappingMaxValueProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_MappingMaxValue, PropertyType.STRING);
                 mappingMaxValueProperty.setMandatory(false);
+                TypeProperty targetPropertyValueProperty=dataRelationMappingFactType.addTypeProperty(MetaConfig_PropertyName_TargetDataPropertyValue, PropertyType.STRING);
+                targetPropertyValueProperty.setMandatory(false);
             }
 
             Fact dataRelationMappingDefinitionFact=DiscoverEngineComponentFactory.createFact(DATAMAPPING_SpaceDataRelationMappingDefinitionFactType);
@@ -3363,6 +3366,9 @@ public class InfoDiscoverSpaceOperationUtil {
             }
             if(dataMappingDefinitionVO.getMaxValue()!=null){
                 dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_MappingMaxValue,dataMappingDefinitionVO.getMaxValue());
+            }
+            if(dataMappingDefinitionVO.getRangeResult()!=null){
+                dataRelationMappingDefinitionFact.setInitProperty(MetaConfig_PropertyName_TargetDataPropertyValue,dataMappingDefinitionVO.getRangeResult());
             }
             Fact resultRecord=metaConfigSpace.addFact(dataRelationMappingDefinitionFact);
             if(resultRecord!=null){
@@ -3418,6 +3424,9 @@ public class InfoDiscoverSpaceOperationUtil {
                         if(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue)!=null){
                             currentDataMappingDefinitionVO.setMaxValue(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue).getPropertyValue().toString());
                         }
+                        if(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue)!=null){
+                            currentDataMappingDefinitionVO.setRangeResult(currentFact.getProperty(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue).getPropertyValue().toString());
+                        }
                         dataRelationMappingDefinitionList.add(currentDataMappingDefinitionVO);
                     }
                 }
@@ -3467,6 +3476,12 @@ public class InfoDiscoverSpaceOperationUtil {
             }
             else{
                 solutionDefinitionRecordEP.addFilteringItem(new NullValueFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_MappingMaxValue),ExploreParameters.FilteringLogic.AND);
+            }
+            if(dataMappingDefinitionVO.getRangeResult()!=null&&!dataMappingDefinitionVO.getRangeResult().equals("")){
+                solutionDefinitionRecordEP.addFilteringItem(new EqualFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue, dataMappingDefinitionVO.getRangeResult()), ExploreParameters.FilteringLogic.AND);
+            }
+            else{
+                solutionDefinitionRecordEP.addFilteringItem(new NullValueFilteringItem(InfoDiscoverSpaceOperationUtil.MetaConfig_PropertyName_TargetDataPropertyValue),ExploreParameters.FilteringLogic.AND);
             }
             solutionDefinitionRecordEP.setResultNumber(10000);
             InformationExplorer ie = metaConfigSpace.getInformationExplorer();

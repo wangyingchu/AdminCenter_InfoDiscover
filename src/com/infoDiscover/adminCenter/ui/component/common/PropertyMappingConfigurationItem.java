@@ -21,6 +21,7 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
     private PropertyTypeVO propertyTypeVO;
     private TextField minValueTextField;
     private TextField maxValueTextField;
+    private TextField rangeResultTextField;
 
     public PropertyMappingConfigurationItem(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
@@ -70,6 +71,7 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
             this.minValueTextField=new TextField();
             this.minValueTextField.addStyleName(ValoTheme.TEXTFIELD_TINY);
             this.minValueTextField.setInputPrompt("最小值");
+            this.minValueTextField.setWidth(150,Unit.PIXELS);
             this.configItemsContainerLayout.addComponent(this.minValueTextField);
 
             HorizontalLayout spacingDiv1=new HorizontalLayout();
@@ -86,7 +88,25 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
             this.maxValueTextField=new TextField();
             this.maxValueTextField.addStyleName(ValoTheme.TEXTFIELD_TINY);
             this.maxValueTextField.setInputPrompt("最大值");
+            this.maxValueTextField.setWidth(150,Unit.PIXELS);
             this.configItemsContainerLayout.addComponent(this.maxValueTextField);
+
+            HorizontalLayout spacingDiv3=new HorizontalLayout();
+            spacingDiv3.setWidth(10,Unit.PIXELS);
+            this.configItemsContainerLayout.addComponent(spacingDiv3);
+
+            Label sectionDivLabel2=new Label(" "+VaadinIcons.ANGLE_DOUBLE_RIGHT.getHtml()+" ", ContentMode.HTML);
+            this.configItemsContainerLayout.addComponent(sectionDivLabel2);
+
+            HorizontalLayout spacingDiv4=new HorizontalLayout();
+            spacingDiv4.setWidth(10,Unit.PIXELS);
+            this.configItemsContainerLayout.addComponent(spacingDiv4);
+
+            this.rangeResultTextField=new TextField();
+            this.rangeResultTextField.addStyleName(ValoTheme.TEXTFIELD_TINY);
+            this.rangeResultTextField.setInputPrompt("目标数据属性值");
+            this.rangeResultTextField.setWidth(150,Unit.PIXELS);
+            this.configItemsContainerLayout.addComponent(this.rangeResultTextField);
 
             switch (propertyType) {
                 case ApplicationConstant.DataFieldType_STRING: break;
@@ -150,5 +170,17 @@ public class PropertyMappingConfigurationItem extends VerticalLayout {
             }
         }
         return null;
+    }
+
+    public String getRangeResultValue(){
+        if(this.rangeResultTextField!=null){
+            if(this.rangeResultTextField.getValue()!=null&&!this.rangeResultTextField.getValue().equals("")) {
+                return this.rangeResultTextField.getValue();
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 }
