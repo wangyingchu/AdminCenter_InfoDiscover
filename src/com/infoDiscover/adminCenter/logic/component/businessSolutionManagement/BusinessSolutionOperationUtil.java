@@ -142,21 +142,20 @@ public class BusinessSolutionOperationUtil {
                 List<Fact> solutionDefinitionRecordFactsList = ie.discoverFacts(solutionDefinitionRecordEP);
                 if(solutionDefinitionRecordFactsList!=null&&solutionDefinitionRecordFactsList.size()>0){
                     Fact targetBusinessSolution=solutionDefinitionRecordFactsList.get(0);
-                     metaConfigSpace.removeFact(targetBusinessSolution.getId());
+                    metaConfigSpace.removeFact(targetBusinessSolution.getId());
                     //also need delete other data related to this solution
                     //remove type properties
-                    if(metaConfigSpace.hasFactType(BUSINESSSOLUTION_SolutionTypePropertyFactType)){
-                        ExploreParameters solutionFactTypePropertyRecordEP = new ExploreParameters();
-                        solutionFactTypePropertyRecordEP.setType(BUSINESSSOLUTION_SolutionTypePropertyFactType);
-                        solutionFactTypePropertyRecordEP.setDefaultFilteringItem(new EqualFilteringItem(MetaConfig_PropertyName_SolutionName, businessSolutionName));
-                        solutionFactTypePropertyRecordEP.setResultNumber(10000);
-                        List<Fact> solutionFactTypePropertyDefinitionRecordFactsList = ie.discoverFacts(solutionFactTypePropertyRecordEP);
-                        if(solutionFactTypePropertyDefinitionRecordFactsList!=null){
-                            for(Fact currentFact:solutionFactTypePropertyDefinitionRecordFactsList){
-                                metaConfigSpace.removeFact(currentFact.getId());
-                            }
-                        }
-                    }
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionTypePropertyFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    //remove type definition
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionFactTypeFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionDimensionTypeFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionRelationTypeFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    //remove alias names definition
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionCustomPropertyAliasFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    //remove data mapping configuration items
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionDataRelationMappingDefinitionFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionDataDateDimensionMappingDefinitionFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
+                    removeRecordByTypeProperty(metaConfigSpace,ie,BUSINESSSOLUTION_SolutionDataPropertiesDuplicateMappingDefinitionFactType,MetaConfig_PropertyName_SolutionName,businessSolutionName);
                     return true;
                 }else{
                     return false;
@@ -174,6 +173,21 @@ public class BusinessSolutionOperationUtil {
             }
         }
         return false;
+    }
+
+    private static void removeRecordByTypeProperty(InfoDiscoverSpace metaConfigSpace,InformationExplorer ie,String recordTypeName,String keyPropertyName,Object keyPropertyValue) throws InfoDiscoveryEngineRuntimeException, InfoDiscoveryEngineInfoExploreException {
+        if(metaConfigSpace.hasFactType(recordTypeName)){
+            ExploreParameters solutionFactTypePropertyRecordEP = new ExploreParameters();
+            solutionFactTypePropertyRecordEP.setType(recordTypeName);
+            solutionFactTypePropertyRecordEP.setDefaultFilteringItem(new EqualFilteringItem(keyPropertyName, keyPropertyValue));
+            solutionFactTypePropertyRecordEP.setResultNumber(10000);
+            List<Fact> solutionFactTypePropertyDefinitionRecordFactsList = ie.discoverFacts(solutionFactTypePropertyRecordEP);
+            if(solutionFactTypePropertyDefinitionRecordFactsList!=null){
+                for(Fact currentFact:solutionFactTypePropertyDefinitionRecordFactsList){
+                    metaConfigSpace.removeFact(currentFact.getId());
+                }
+            }
+        }
     }
 
     public static boolean checkSolutionFactTypeExistence(String businessSolutionName,String factTypeName){
