@@ -77,8 +77,6 @@ public class AdminCenterApplicationUI extends UI {
                 BusinessSolutionDeletedEvent.class);
         BLACKBOARD.register(BusinessSolutionComponentSelectedEvent.BusinessSolutionComponentSelectedListener.class,
                 BusinessSolutionComponentSelectedEvent.class);
-        BLACKBOARD.register(BusinessSolutionExportEvent.BusinessSolutionExportListener.class,
-                BusinessSolutionExportEvent.class);
 
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
 

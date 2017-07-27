@@ -1,16 +1,14 @@
 package com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.commonUseElement;
 
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
+import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.ExportBusinessSolutionPanel;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionDeletedEvent;
-import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.BusinessSolutionExportEvent;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.SecondarySectionActionBarTitle;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.*;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
@@ -36,8 +34,7 @@ public class BusinessSolutionOperationsBar extends HorizontalLayout {
         exportBusinessSolutionButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
-                BusinessSolutionExportEvent businessSolutionExportEvent =new BusinessSolutionExportEvent(businessSolutionName);
-                currentUserClientInfo.getEventBlackBoard().fire(businessSolutionExportEvent);
+                doExportBusinessSolutionData();
             }
         });
 
@@ -95,5 +92,18 @@ public class BusinessSolutionOperationsBar extends HorizontalLayout {
         };
         deleteSolutionConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(deleteSolutionConfirmDialog);
+    }
+
+    private void doExportBusinessSolutionData(){
+        ExportBusinessSolutionPanel exportBusinessSolutionPanel=new ExportBusinessSolutionPanel(this.currentUserClientInfo,this.businessSolutionName);
+        final Window window = new Window();
+        window.setWidth(450.0f, Unit.PIXELS);
+        window.setHeight(260.0f, Unit.PIXELS);
+        window.setResizable(false);
+        window.center();
+        window.setModal(true);
+        window.setContent(exportBusinessSolutionPanel);
+        exportBusinessSolutionPanel.setContainerDialog(window);
+        UI.getCurrent().addWindow(window);
     }
 }

@@ -3,6 +3,7 @@ package com.infoDiscover.adminCenter.logic.component.businessSolutionManagement;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.*;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
+import com.infoDiscover.adminCenter.ui.util.RuntimeEnvironmentUtil;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
@@ -13,7 +14,12 @@ import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineDat
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineInfoExploreException;
 import com.infoDiscover.infoDiscoverEngine.util.exception.InfoDiscoveryEngineRuntimeException;
 import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentFactory;
+import com.infoDiscover.solution.template.TemplateExporter;
+import com.infoDiscover.solution.template.TemplateImporter;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1774,6 +1780,41 @@ public class BusinessSolutionOperationUtil {
         }finally {
             if(metaConfigSpace!=null){
                 metaConfigSpace.closeSpace();
+            }
+        }
+        return false;
+    }
+
+    private final static String tempFileDir = RuntimeEnvironmentUtil.getBinaryTempFileDirLocation();
+
+    public static File generateBusinessSolutionTemplateFile(String solutionName){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        TemplateExporter templateExporter=new TemplateExporter(metaConfigSpaceName,solutionName);
+        try {
+            String fileFullName=templateExporter.exportSolutionTemplate(tempFileDir);
+            return new File(fileFullName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static boolean importBusinessSolutionTemplateFromZipFile(String solutionZipFileLocation){
+        String metaConfigSpaceName = AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.META_CONFIG_DISCOVERSPACE);
+        TemplateImporter templateImporter=new TemplateImporter(metaConfigSpaceName);
+        try {
+            templateImporter.importSolution(solutionZipFileLocation,false);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            File file = new File(solutionZipFileLocation);
+            if(file.exists()) {
+                try {
+                    FileUtils.forceDelete(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return false;

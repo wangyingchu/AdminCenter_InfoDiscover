@@ -71,7 +71,7 @@ public class BusinessSolutionBrowser extends VerticalLayout {
             ImportBusinessSolutionPanel importBusinessSolutionPanel=new ImportBusinessSolutionPanel(this.currentUserClientInfo);
             final Window window = new Window();
             window.setWidth(450.0f, Unit.PIXELS);
-            window.setHeight(205.0f, Unit.PIXELS);
+            window.setHeight(240.0f, Unit.PIXELS);
             window.setResizable(false);
             window.center();
             window.setModal(true);
