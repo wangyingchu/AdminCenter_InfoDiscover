@@ -11,7 +11,7 @@ import com.infoDiscover.adminCenter.ui.component.common.ConfirmDialog;
 import com.infoDiscover.adminCenter.ui.component.common.MainSectionTitle;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.RuleEngineCreatedEvent;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
-import com.infoDiscover.common.util.JsonUtil;
+//import com.infoDiscover.common.util.JsonUtil;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.data.Property;
@@ -267,8 +267,13 @@ public class CreateRulePanel extends VerticalLayout {
 
         final CreateRulePanel self = this;
         Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+
+
+
             @Override
             public void buttonClick(final Button.ClickEvent event) {
+
+            /*
                 //close confirm dialog
                 addRuleConfirmDialog.close();
 
@@ -306,7 +311,14 @@ public class CreateRulePanel extends VerticalLayout {
                     errorNotification.show(Page.getCurrent());
                     errorNotification.setIcon(FontAwesome.WARNING);
                 }
+
+
+                */
             }
+
+
+
+
         };
         addRuleConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
         UI.getCurrent().addWindow(addRuleConfirmDialog);

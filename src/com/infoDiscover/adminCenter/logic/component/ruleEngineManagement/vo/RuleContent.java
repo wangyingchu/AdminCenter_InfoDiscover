@@ -1,7 +1,7 @@
 package com.infoDiscover.adminCenter.logic.component.ruleEngineManagement.vo;
 
 import com.info.discover.ruleengine.plugins.propertymapping.PropertyMappingConstants;
-import com.infoDiscover.common.util.JsonUtil;
+//import com.infoDiscover.common.util.JsonUtil;
 
 /**
  * Created by sun.
@@ -23,6 +23,8 @@ public class RuleContent {
     }
 
     public RuleContent(String content) {
+
+        /*
         this.spaceName = JsonUtil.getPropertyValues(PropertyMappingConstants.JSON_SPACE,
                 content);
         this.sourceType = JsonUtil.getPropertyValues(PropertyMappingConstants.JSON_SOURCE_TYPE,
@@ -34,6 +36,9 @@ public class RuleContent {
                 content);
         this.targetProperty = JsonUtil.getPropertyValues(PropertyMappingConstants.JSON_TARGET_PROPERTY,
                 content);
+
+        */
+
     }
 
     public String getSpaceName() {
