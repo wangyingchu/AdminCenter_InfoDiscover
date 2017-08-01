@@ -7,11 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9615d0b3-7f05-4ac2-94d0-8ff5aa983a96" name="Default" comment="fix a bug">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/ApplicationResourceInitializer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleDetail.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleDetail.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -32,47 +30,16 @@
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="AdminCenter_InfoDiscover" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="InfoDiscoverSpaceOperationUtil.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+      <file leaf-file-name="DataTransferUtil.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="2075" column="9" lean-forward="false" selection-start-line="2075" selection-start-column="9" selection-end-line="2075" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProcessingDataAnalyzePanel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/visualizationAnalyzeElement/ProcessingDataAnalyzePanel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="283">
-              <caret line="437" column="0" lean-forward="false" selection-start-line="437" selection-start-column="0" selection-end-line="437" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TypeDataInstanceDetailPanel.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/TypeDataInstanceDetailPanel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="43" column="22" lean-forward="false" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ApplicationResourceInitializer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/ApplicationResourceInitializer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="49" lean-forward="false" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="49" />
+            <state relative-caret-position="649">
+              <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -80,11 +47,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="web.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
+      <file leaf-file-name="DataImporter.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/DataImporter.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="96" lean-forward="false" selection-start-line="6" selection-start-column="96" selection-end-line="6" selection-end-column="96" />
+            <state relative-caret-position="3114">
+              <caret line="209" column="73" lean-forward="false" selection-start-line="209" selection-start-column="69" selection-end-line="209" selection-end-column="73" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CreateRulePanel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateRulePanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4608">
+              <caret line="281" column="36" lean-forward="false" selection-start-line="281" selection-start-column="36" selection-end-line="281" selection-end-column="36" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RuleContent.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="22" column="5" lean-forward="false" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataTypePropertyInfoVO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTypePropertyInfoVO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -101,41 +100,42 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>RuleEngineComponentSelectedEvent</find>
-      <find>DiscoverSpaceCreatedEvent</find>
-      <find>ruleType</find>
-      <find>事实数据基本信息</find>
-      <find>FactsRuntimeGeneralInfoPanel</find>
-      <find> 事实数据运行时信息</find>
-      <find>事实类型名称</find>
-      <find>renderFactsRuntimeGeneralInfo</find>
-      <find>renderFactsInfo</find>
-      <find>允许空值</find>
-      <find>类型数据总量</find>
-      <find>PropertyTypeVO</find>
-      <find>factTypesDataGrid</find>
-      <find>ruleDetail</find>
-      <find>elementPlacementLayout</find>
-      <find>删除</find>
-      <find>规则引擎管理</find>
-      <find>空间运行</find>
-      <find>renderRuntimeGeneralInfo</find>
-      <find>renderDiscoverSpaceDetail</find>
-      <find>RuleDetail</find>
-      <find>parentInfoDiscoverSpaceDetail</find>
-      <find>ruleName</find>
-      <find>deleteCurrentDiscoverSpace</find>
-      <find>RuleEngineDeletedEvent</find>
-      <find>spaceDimensionTypesTreeDataCountTreeMap</find>
-      <find>等待</find>
-      <find>待</find>
-      <find>待处理数据</find>
-      <find>showDataDetailInfoActionName</find>
+      <find>时间维度</find>
+      <find>D</find>
+      <find>Da</find>
+      <find>Dat</find>
+      <find>Data</find>
+      <find>DataT</find>
+      <find>DataTy</find>
+      <find>DataTyp</find>
+      <find>DataType</find>
+      <find>DataTypeK</find>
+      <find>DataTypeKibd</find>
+      <find>DataTypeKib</find>
+      <find>DataTypeKi</find>
+      <find>DataTypeKin</find>
+      <find>DataTypeKind</find>
+      <find>MetaConfig_PropertyName_CustomPropertyName</find>
+      <find>executeCreateDataMappingRuleOperation</find>
+      <find>CreateDimension</find>
+      <find>业务数据</find>
+      <find>业务数据定义</find>
+      <find>业务数据定义管理</find>
+      <find>setSourceDataTypePropertySelectChooseList</find>
+      <find>executeDeleteRelationMappingDefinitionOperation</find>
+      <find>executeDeleteRelationTypeOperation</find>
+      <find>executeDeleteDimensionTypeOperation</find>
+      <find>导出</find>
+      <find>导入业务解决方案模板</find>
+      <find>JsonF</find>
+      <find>Upl</find>
+      <find>delete</find>
     </findStrings>
     <replaceStrings>
       <replace />
     </replaceStrings>
     <dirStrings>
+      <dir>$PROJECT_DIR$/src</dir>
       <dir>$PROJECT_DIR$</dir>
     </dirStrings>
   </component>
@@ -150,41 +150,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/UserClientInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceBrowser.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ApplicationContent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/event/DiscoverSpaceComponentSelectedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/DiscoverSpaceComponentSelectedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleEngineComponentSelectedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/common/ElementStatusBar.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleEngineManagementPanel.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateInfoRulePanel.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineCreatedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleVO.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/manager/database/FactManager.class" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineComponentSelectedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/base/RuleEngineImpl.class" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpacesList.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineDeletedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleEngineBrowser.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/manager/database/RuleEngineFactManager.class" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateRulePanel.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleGeneralInfo.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineExecutedEvent.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/AdminCenterApplicationUI.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RulesDetailPanel.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/plugins/propertymapping/PropertyMappingRuleEngineImpl.class" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/RuleEngineOperationUtil.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/manager/database/RelationManager.class" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RulesList.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/classes/AdminCenterCfg.properties" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleDetail.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/visualizationAnalyzeElement/ProcessingDataAnalyzePanel.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/TypeDataInstancePropertiesEditorPanel.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/ApplicationResourceInitializer.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/web.xml" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionDetail.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/customPropertyAliasManagement/BusinessSolutionPropertiesAliasInfo.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/vo/CustomPropertyAliasNameVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/CustomPropertyAliasDefinitionVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/customPropertyAliasManagement/CreateCustomPropertyAliasDefinitionPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/commonDataRelationMappingDefinitionEditPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/BusinessSolutionDataMappingsInfo.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/PropertyConfigurationItem.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/customPropertyAliasManagement/CustomPropertyAliasNameDefinitionManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/FactAndDateDimensionMappingDefinitionEditPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataMappingDefinitionsManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dimensionTypeManagement/DimensionTypeDefinitionsManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/factTypeManagement/FactTypeDefinitionsManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/relationTypeManagement/RelationTypeDefinitionsManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/runtimeInfo/InfoDiscoverSpaceRuntimeGeneralInfo.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/InfoDiscoverSpaceBusinessDataDefinitionsInfo.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataPropertiesDuplicateMappingDefinitionEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/vo/TypeSummaryVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataAndDateDimensionMappingDefinitionEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataAndDateDimensionMappingDefinitionEditPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataPropertiesDuplicateMappingDefinitionEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataPropertiesDuplicateMappingDefinitionEditorPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/PropertyMappingConfigurationItem.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataAndDateDimensionMappingEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataAndDateDimensionMappingManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataPropertiesDuplicateMappingEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataPropertiesDuplicateMappingManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/relationManagement/RelationTypesManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/DimensionTypesManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/factManagement/FactTypesManagementPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/SolutionTypePropertyTypeDefinitionVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/DataMappingDefinitionVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/CommonDataRelationMappingDefinitionEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingEditor.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/CommonDataRelationMappingDefinitionEditPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/common/PropertyMappingConfigurationItem.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingManagementPanel.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/AdminCenterApplicationUI.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/commonUseElement/BusinessSolutionOperationsBar.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionBrowser.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/ImportBusinessSolutionPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/ExportBusinessSolutionPanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/BusinessSolutionOperationUtil.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/infoDiscoverEngine/util/config/PropertyHandler.java" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTypePropertyInfoVO.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateRulePanel.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java" />
       </list>
     </option>
   </component>
@@ -223,271 +239,100 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WEB-INF" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="adminCenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="adminCenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="component" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="adminCenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="component" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscoverSpaceManagement" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="com" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="infoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="adminCenter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="logic" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
+          <expand>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="runtimeDataOperation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="runtimeDataOperation" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="Scratches" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AdminCenter_InfoDiscover" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DiscoverEngine_InfoDiscover" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/web/WEB-INF/lib" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.infoDiscover.adminCenter.ui.component.common" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event" />
       <recent name="com.infoDiscover.adminCenter.ui.component.ruleEngineManagement" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement" />
       <recent name="$PROJECT_DIR$/web/WEB-INF/lib" />
     </key>
   </component>
@@ -504,8 +349,28 @@
     </option>
   </component>
   <component name="RunManager" selected="Tomcat Server.Tomcat 8.5.8">
-    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.8" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="UPDATING_POLICY" value="restart-server" />
+    <configuration name="DataTransferUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.infoDiscover.runtimeDataOperation.util.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.infoDiscover.runtimeDataOperation.util.DataTransferUtil" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="AdminCenter_InfoDiscover" />
+      <envs />
+    </configuration>
+    <configuration name="Tomcat 8.5.8" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.8" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="SHOW_DIALOG_ON_UPDATE" value="false" />
+      <option name="UPDATING_POLICY" value="redeploy-artifacts" />
       <deployment>
         <artifact name="AdminCenter_InfoDiscover:war exploded">
           <settings>
@@ -514,8 +379,10 @@
         </artifact>
       </deployment>
       <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="_AdminCenter_InfoDiscover" />
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_AdminCenter_InfoDiscover_2" />
         <option name="DEPLOY_TOMCAT_APPS" value="true" />
+        <option name="HTTP_PORT" value="8099" />
+        <option name="JNDI_PORT" value="1299" />
       </server-settings>
       <predefined_log_file id="Tomcat" enabled="true" />
       <predefined_log_file id="Tomcat Catalina" enabled="true" />
@@ -577,29 +444,21 @@
         </option>
       </method>
     </configuration>
-    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="LOCAL" value="false" />
-      <deployment />
-      <server-settings>
-        <data>
-          <option name="transportHostId" value="" />
-          <host-id />
-        </data>
-      </server-settings>
-      <predefined_log_file id="Tomcat" enabled="true" />
-      <predefined_log_file id="TOMCAT_LOCALHOST_LOG_ID" enabled="true" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="54646" />
-        <option name="LOCAL" value="false" />
-      </RunnerSettings>
-      <method />
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="passParentEnv" value="true" />
+      <setting name="launchBrowser" value="true" />
+      <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-      <method />
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
     </configuration>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
@@ -656,20 +515,12 @@
       </Profilers>
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
-      <method />
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -779,7 +630,7 @@
           <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
           <option name="newPlayerInstance" value="false" />
-          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+          <option name="playerPath" value="/usr/bin/flashplayerdebugger" />
         </LauncherParameters>
       </option>
       <option name="mobileRunTarget" value="Emulator" />
@@ -802,7 +653,7 @@
           <option name="browser" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
           <option name="launcherType" value="OSDefault" />
           <option name="newPlayerInstance" value="false" />
-          <option name="playerPath" value="/Applications/Flash Player Debugger.app" />
+          <option name="playerPath" value="/usr/bin/flashplayerdebugger" />
         </LauncherParameters>
       </option>
       <option name="moduleName" value="" />
@@ -825,15 +676,6 @@
       </ExternalSystemSettings>
       <method />
     </configuration>
-    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
-      <setting name="passParentEnv" value="true" />
-      <setting name="launchBrowser" value="true" />
-      <setting name="launchBrowserUrl" value="" />
-      <setting name="depsClasspath" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -843,9 +685,9 @@
       <option name="MAIN_CLASS_NAME" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="WORKING_DIRECTORY" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
@@ -917,14 +759,6 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="true" type="Remote" factoryName="Remote">
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" value="javadebug" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-      <method />
-    </configuration>
     <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -942,9 +776,9 @@
       <option name="METHOD_NAME" />
       <option name="GROUP_NAME" />
       <option name="TEST_OBJECT" value="CLASS" />
-      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="VM_PARAMETERS" />
       <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="WORKING_DIRECTORY" />
       <option name="OUTPUT_DIRECTORY" />
       <option name="ANNOTATION_TYPE" />
       <option name="ENV_VARIABLES" />
@@ -959,74 +793,15 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="TomeeConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
       <deployment />
-      <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="_AdminCenter_InfoDiscover_2" />
-      </server-settings>
+      <server-settings />
       <predefined_log_file id="Tomcat" enabled="true" />
       <predefined_log_file id="Tomcat Catalina" enabled="true" />
       <predefined_log_file id="Tomcat Manager" enabled="false" />
       <predefined_log_file id="Tomcat Host Manager" enabled="false" />
       <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="54626" />
-      </RunnerSettings>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -1042,83 +817,15 @@
     <configuration default="true" type="osgi.bnd.run" factoryName="Test Launcher (JUnit)">
       <method />
     </configuration>
-    <configuration default="false" name="Tomcat 8.5.8" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.5.8" ALTERNATIVE_JRE_ENABLED="false">
-      <option name="UPDATING_POLICY" value="restart-server" />
-      <deployment>
-        <artifact name="AdminCenter_InfoDiscover:war exploded">
-          <settings>
-            <option name="CONTEXT_PATH" value="/" />
-          </settings>
-        </artifact>
-      </deployment>
-      <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="Unnamed_AdminCenter_InfoDiscover_2" />
-        <option name="DEPLOY_TOMCAT_APPS" value="true" />
-      </server-settings>
-      <predefined_log_file id="Tomcat" enabled="true" />
-      <predefined_log_file id="Tomcat Catalina" enabled="true" />
-      <predefined_log_file id="Tomcat Manager" enabled="false" />
-      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
-      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="53938" />
-      </RunnerSettings>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
-        <option name="USE_ENV_VARIABLES" value="true" />
-        <STARTUP>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </STARTUP>
-        <SHUTDOWN>
-          <option name="USE_DEFAULT" value="true" />
-          <option name="SCRIPT" value="" />
-          <option name="VM_PARAMETERS" value="" />
-          <option name="PROGRAM_PARAMETERS" value="" />
-        </SHUTDOWN>
-      </ConfigurationWrapper>
-      <method>
-        <option name="Make" enabled="true" />
-        <option name="BuildArtifacts" enabled="true">
-          <artifact name="AdminCenter_InfoDiscover:war exploded" />
-        </option>
-      </method>
-    </configuration>
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Tomcat Server.Tomcat 8.5.8" />
+      <item index="1" class="java.lang.String" itemvalue="Application.DataTransferUtil" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Application.DataTransferUtil" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -1151,6 +858,59 @@
       <workItem from="1492856440133" duration="523000" />
       <workItem from="1493255620525" duration="972000" />
       <workItem from="1493256603494" duration="6681000" />
+      <workItem from="1496555856596" duration="1826000" />
+      <workItem from="1496590302352" duration="3200000" />
+      <workItem from="1496639373782" duration="2943000" />
+      <workItem from="1496756251222" duration="690000" />
+      <workItem from="1496800774242" duration="18000" />
+      <workItem from="1496800809046" duration="2350000" />
+      <workItem from="1496973879207" duration="272000" />
+      <workItem from="1497070078299" duration="11000" />
+      <workItem from="1497177301841" duration="1483000" />
+      <workItem from="1497248122830" duration="2742000" />
+      <workItem from="1497319449640" duration="1112000" />
+      <workItem from="1497334124427" duration="1621000" />
+      <workItem from="1497842684721" duration="835000" />
+      <workItem from="1497877006469" duration="5395000" />
+      <workItem from="1497952086164" duration="2897000" />
+      <workItem from="1498011145976" duration="1915000" />
+      <workItem from="1498458627266" duration="22498000" />
+      <workItem from="1498528218338" duration="5957000" />
+      <workItem from="1498570308456" duration="7539000" />
+      <workItem from="1498612061922" duration="29222000" />
+      <workItem from="1498751528564" duration="231000" />
+      <workItem from="1498791165947" duration="20628000" />
+      <workItem from="1498893266719" duration="20881000" />
+      <workItem from="1498978077040" duration="13259000" />
+      <workItem from="1498997015375" duration="8628000" />
+      <workItem from="1499057340254" duration="643000" />
+      <workItem from="1499088059617" duration="8005000" />
+      <workItem from="1499132761424" duration="25321000" />
+      <workItem from="1499217985710" duration="7650000" />
+      <workItem from="1499241716901" duration="18198000" />
+      <workItem from="1499307954392" duration="24715000" />
+      <workItem from="1499393943203" duration="1085000" />
+      <workItem from="1499414739495" duration="20105000" />
+      <workItem from="1499477254255" duration="17058000" />
+      <workItem from="1499774592815" duration="8000" />
+      <workItem from="1500360288446" duration="138000" />
+      <workItem from="1500476137442" duration="700000" />
+      <workItem from="1500478812600" duration="53000" />
+      <workItem from="1500478887553" duration="144000" />
+      <workItem from="1500479051237" duration="140000" />
+      <workItem from="1500513606939" duration="328000" />
+      <workItem from="1500513950585" duration="8154000" />
+      <workItem from="1500864959475" duration="140000" />
+      <workItem from="1500950656145" duration="1218000" />
+      <workItem from="1501058816824" duration="121000" />
+      <workItem from="1501058946961" duration="15806000" />
+      <workItem from="1501111432524" duration="11306000" />
+      <workItem from="1501142732625" duration="1806000" />
+      <workItem from="1501334533887" duration="8318000" />
+      <workItem from="1501465802917" duration="3273000" />
+      <workItem from="1501469465523" duration="6165000" />
+      <workItem from="1501573290468" duration="5872000" />
+      <workItem from="1501593512836" duration="90000" />
     </task>
     <task id="LOCAL-00001" summary="list rules and details">
       <created>1492093648117</created>
@@ -1229,11 +989,151 @@
       <option name="project" value="LOCAL" />
       <updated>1493258787252</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="fix a nullpoint exception bug">
+      <created>1496803047821</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1496803047821</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Business Solution DimensionTypes management feature">
+      <created>1498612953379</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1498612953379</updated>
+    </task>
+    <task id="LOCAL-00014" summary="FactType Definitions Management update alias name feature">
+      <created>1498615263577</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1498615263577</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Relation Type Definitions Management Feature">
+      <created>1498636245368</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1498636245368</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Custom Property Alias Name Definition Management Feature">
+      <created>1498657087782</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1498657087782</updated>
+    </task>
+    <task id="LOCAL-00017" summary="data relation mapping edit feature">
+      <created>1499011008051</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1499011008051</updated>
+    </task>
+    <task id="LOCAL-00018" summary="delete Common DataRelation Mapping Definition feature">
+      <created>1499096555564</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1499096555564</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Data And Date Dimension Mapping Definition feature">
+      <created>1499154850424</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1499154850424</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Data Properties Duplicate Mapping Definition Editor feature">
+      <created>1499179346934</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1499179346934</updated>
+    </task>
+    <task id="LOCAL-00021" summary="data delete usage check enhancement">
+      <created>1499225654026</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1499225654026</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Apply business solution UI logic">
+      <created>1499247207220</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1499247207220</updated>
+    </task>
+    <task id="LOCAL-00023" summary="apply business solution data feature">
+      <created>1499325331211</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1499325331211</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Modify solution data mapping rule edit logic">
+      <created>1499430154478</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1499430154478</updated>
+    </task>
+    <task id="LOCAL-00025" summary="update type and property delete check logic">
+      <created>1499435614495</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1499435614495</updated>
+    </task>
+    <task id="LOCAL-00026" summary="discoverspace data mapping configuration feature">
+      <created>1499497730780</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1499497730780</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Apply data mapping configuration feature update">
+      <created>1499504390375</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1499504390375</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Add target Data property value field for CommonDataRelationMapping number range logic">
+      <created>1500521835825</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1500521835825</updated>
+    </task>
+    <task id="LOCAL-00029" summary="import/export business solution template feature">
+      <created>1501118985578</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1501118985578</updated>
+    </task>
+    <task id="LOCAL-00030" summary="remove all metadata after delete a business solution template">
+      <created>1501125596084</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1501125596084</updated>
+    </task>
+    <task id="LOCAL-00031" summary="lib dependence change for rule engine">
+      <created>1501483359444</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1501483359444</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89822000" />
+    <option name="totallyTimeSpent" value="436527000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1247,78 +1147,43 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1053" extended-state="0" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32760474" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42456895" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30576307" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39941692" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32798833" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4500537" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31430095" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39870688" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265086" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265086" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24892704" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39941692" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32798833" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4500537" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31430095" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3265306" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="processedProjectFiles" value="true" />
+    <option name="version" value="1" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -1326,23 +1191,36 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="list rules and details" />
-    <MESSAGE value="create new rule" />
-    <MESSAGE value="update create new rule panel" />
-    <MESSAGE value="update rule list panel" />
-    <MESSAGE value="delete rule" />
-    <MESSAGE value="add ruleengine dependence jar" />
-    <MESSAGE value="allow to select multiple fact properties" />
     <MESSAGE value="support soft delete" />
     <MESSAGE value="implement execute rule" />
     <MESSAGE value="fix the bug" />
     <MESSAGE value="fix a bug" />
     <MESSAGE value="fix processing data list defect" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix processing data list defect" />
+    <MESSAGE value="fix a nullpoint exception bug" />
+    <MESSAGE value="Business Solution DimensionTypes management feature" />
+    <MESSAGE value="FactType Definitions Management update alias name feature" />
+    <MESSAGE value="Relation Type Definitions Management Feature" />
+    <MESSAGE value="Custom Property Alias Name Definition Management Feature" />
+    <MESSAGE value="data relation mapping edit feature" />
+    <MESSAGE value="delete Common DataRelation Mapping Definition feature" />
+    <MESSAGE value="Data And Date Dimension Mapping Definition feature" />
+    <MESSAGE value="Data Properties Duplicate Mapping Definition Editor feature" />
+    <MESSAGE value="data delete usage check enhancement" />
+    <MESSAGE value="Apply business solution UI logic" />
+    <MESSAGE value="apply business solution data feature" />
+    <MESSAGE value="Modify solution data mapping rule edit logic" />
+    <MESSAGE value="update type and property delete check logic" />
+    <MESSAGE value="discoverspace data mapping configuration feature" />
+    <MESSAGE value="Apply data mapping configuration feature update" />
+    <MESSAGE value="Add target Data property value field for CommonDataRelationMapping number range logic" />
+    <MESSAGE value="import/export business solution template feature" />
+    <MESSAGE value="remove all metadata after delete a business solution template" />
+    <MESSAGE value="lib dependence change for rule engine" />
+    <option name="LAST_COMMIT_MESSAGE" value="lib dependence change for rule engine" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="74" />
+      <option name="time" value="78" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1351,392 +1229,364 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/CreateInfoDiscoverSpacePanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/factTypeManagement/FactTypeDefinitionsManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-187">
-          <caret line="40" column="31" lean-forward="true" selection-start-line="37" selection-start-column="8" selection-end-line="40" selection-end-column="31" />
+        <state relative-caret-position="650">
+          <caret line="397" column="13" lean-forward="true" selection-start-line="368" selection-start-column="12" selection-end-line="397" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/blackboard-20161001.jar!/com/github/wolfie/blackboard/Blackboard.class">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/factManagement/FactTypesManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="115" column="16" lean-forward="false" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/runtimeInfo/InfoDiscoverSpaceRuntimeGeneralInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="25" column="65" lean-forward="false" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/factManagement/InfoDiscoverSpaceFactsInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1627">
-          <caret line="115" column="16" lean-forward="false" selection-start-line="115" selection-start-column="16" selection-end-line="115" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/server/Page.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="370" column="23" lean-forward="false" selection-start-line="370" selection-start-column="23" selection-end-line="370" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/InfoDiscoverSpaceDimensionsInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="115" column="65" lean-forward="false" selection-start-line="115" selection-start-column="65" selection-end-line="115" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/UserClientInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="29" column="22" lean-forward="false" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/event/DiscoverSpaceDeletedEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/event/DiscoverSpaceRemoveProcessingDataEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="34" column="21" lean-forward="false" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="21" />
+        <state relative-caret-position="320">
+          <caret line="507" column="129" lean-forward="false" selection-start-line="507" selection-start-column="129" selection-end-line="507" selection-end-column="129" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpacesDetailPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        <state relative-caret-position="-405">
+          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/common/ElementStatusBar.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/runtimeInfo/InfoDiscoverSpaceRuntimeGeneralInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="91">
-          <caret line="36" column="16" lean-forward="false" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
+        <state relative-caret-position="468">
+          <caret line="225" column="83" lean-forward="false" selection-start-line="225" selection-start-column="83" selection-end-line="225" selection-end-column="83" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleEngineManagementPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/vo/PropertyTypeVO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="27" column="21" lean-forward="false" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        <state relative-caret-position="90">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleEngineBrowser.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/SolutionTypePropertyTypeDefinitionVO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="58" column="30" lean-forward="false" selection-start-line="58" selection-start-column="30" selection-end-line="58" selection-end-column="30" />
+        <state relative-caret-position="810">
+          <caret line="73" column="0" lean-forward="true" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/manager/database/RuleEngineFactManager.class">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/DataMappingDefinitionVO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="55" column="27" lean-forward="false" selection-start-line="55" selection-start-column="27" selection-end-line="55" selection-end-column="27" />
+        <state relative-caret-position="90">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateRulePanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/common/PropertyMappingConfigurationItem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-119">
-          <caret line="234" column="41" lean-forward="false" selection-start-line="234" selection-start-column="41" selection-end-line="234" selection-end-column="41" />
-          <folding>
-            <element signature="e#9817#9818#0" expanded="false" />
-            <element signature="e#9880#9881#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="698">
+          <caret line="182" column="24" lean-forward="false" selection-start-line="182" selection-start-column="24" selection-end-line="182" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        <state relative-caret-position="413">
+          <caret line="521" column="88" lean-forward="false" selection-start-line="521" selection-start-column="88" selection-end-line="521" selection-end-column="88" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RulesDetailPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/CommonDataRelationMappingDefinitionEditor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="72" column="49" lean-forward="false" selection-start-line="72" selection-start-column="49" selection-end-line="72" selection-end-column="49" />
+        <state relative-caret-position="3853">
+          <caret line="545" column="109" lean-forward="true" selection-start-line="545" selection-start-column="109" selection-end-line="545" selection-end-column="109" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineDeletedEvent.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/CommonDataRelationMappingDefinitionEditPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="35" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/event/ListenerMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3706">
-          <caret line="232" column="0" lean-forward="false" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="2592">
+          <caret line="169" column="53" lean-forward="false" selection-start-line="169" selection-start-column="53" selection-end-line="169" selection-end-column="53" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2160">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RulesList.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="37" column="26" lean-forward="true" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleGeneralInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1022">
-          <caret line="75" column="56" lean-forward="true" selection-start-line="75" selection-start-column="56" selection-end-line="75" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/plugins/propertymapping/sample/SampleRuleConstants.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="16" column="31" lean-forward="false" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/event/RuleEngineExecutedEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/plugins/propertymapping/PropertyMappingRuleEngineImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="188" column="0" lean-forward="false" selection-start-line="188" selection-start-column="0" selection-end-line="188" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/infoDiscoverBureauImpl/OrientDBInfoDiscoverSpaceImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="591" column="0" lean-forward="false" selection-start-line="591" selection-start-column="0" selection-end-line="591" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/RuleEngine_InfoDiscover-1.0.0-SNAPSHOT-jar-with-dependencies.jar!/com/info/discover/ruleengine/manager/database/RelationManager.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="84" column="23" lean-forward="false" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/AdminCenterApplicationUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1116">
-          <caret line="85" column="45" lean-forward="false" selection-start-line="85" selection-start-column="45" selection-end-line="85" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceManagementPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="29" column="69" lean-forward="false" selection-start-line="29" selection-start-column="69" selection-end-line="29" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpacesList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="36" column="5" lean-forward="false" selection-start-line="35" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/out/artifacts/AdminCenter_InfoDiscover_war_exploded/WEB-INF/classes/AdminCenterCfg.properties" />
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/AdminCenterCfg.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="54" lean-forward="true" selection-start-line="1" selection-start-column="54" selection-end-line="1" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/AdminCenterPropertyHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="19" column="61" lean-forward="false" selection-start-line="19" selection-start-column="49" selection-end-line="19" selection-end-column="61" />
-          <folding />
+        <state relative-caret-position="181">
+          <caret line="192" column="140" lean-forward="false" selection-start-line="192" selection-start-column="140" selection-end-line="192" selection-end-column="140" />
         </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/util/exception/InfoDiscoveryEngineException.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
+        <state relative-caret-position="136">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/RuleEngineOperationUtil.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/builder/SolutionGenerator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="194">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/DimensionsRuntimeGeneralInfoPanel.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/builder/SolutionTemplateBuilder.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="71" column="87" lean-forward="false" selection-start-line="71" selection-start-column="87" selection-end-line="71" selection-end-column="87" />
-          <folding />
+        <state relative-caret-position="194">
+          <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ApplicationContent.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/dataWarehouseImpl/OrientDBInformationExplorerImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="40" column="73" lean-forward="false" selection-start-line="40" selection-start-column="47" selection-end-line="40" selection-end-column="73" />
-          <folding />
+        <state relative-caret-position="177">
+          <caret line="756" column="0" lean-forward="false" selection-start-line="756" selection-start-column="0" selection-end-line="756" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/visualizationAnalyzeElement/VisualizationAnalyzePanel.java">
+    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/server/FileDownloader.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="132">
+          <caret line="29" column="39" lean-forward="false" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/relationManagement/CreateRelationPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CustomPropertyAliasNameManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1204">
-          <caret line="36" column="69" lean-forward="false" selection-start-line="36" selection-start-column="41" selection-end-line="36" selection-end-column="69" />
-          <folding />
+        <state relative-caret-position="1598">
+          <caret line="128" column="5" lean-forward="true" selection-start-line="128" selection-start-column="5" selection-end-line="128" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/RuleDetail.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionsManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="50" column="9" lean-forward="false" selection-start-line="50" selection-start-column="9" selection-end-line="50" selection-end-column="9" />
-          <folding />
+        <state relative-caret-position="126">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/ProcessingDataOperationPanel.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionDetail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-144">
-          <caret line="24" column="34" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="41" />
-          <folding />
+        <state relative-caret-position="-684">
+          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/event/BusinessSolutionExportEvent.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionsDetailPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceBrowser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-614">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/ui/VerticalLayout.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="9" column="44" lean-forward="false" selection-start-line="9" selection-start-column="44" selection-end-line="9" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/ui/AbstractLayout.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="13" column="22" lean-forward="false" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Local_Application/Dev_labs/vaadin/vaadin-all-7.7.3/vaadin-server-7.7.3.jar!/com/vaadin/ui/AbstractOrderedLayout.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="28" column="57" lean-forward="false" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/AdminCenterApplicationUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1062">
+          <caret line="79" column="0" lean-forward="false" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/commonUseElement/BusinessSolutionOperationsBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="75" column="43" lean-forward="false" selection-start-line="75" selection-start-column="20" selection-end-line="75" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/CreateBusinessSolutionPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="97" column="103" lean-forward="true" selection-start-line="96" selection-start-column="19" selection-end-line="97" selection-end-column="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionsList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="31" column="17" lean-forward="false" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/BusinessSolutionBrowser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="412">
+          <caret line="52" column="67" lean-forward="true" selection-start-line="52" selection-start-column="47" selection-end-line="52" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/ImportCustomPropertyAliasNamesPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="716">
+          <caret line="169" column="9" lean-forward="true" selection-start-line="155" selection-start-column="8" selection-end-line="169" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/ImportBusinessSolutionPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-432">
+          <caret line="48" column="96" lean-forward="false" selection-start-line="48" selection-start-column="96" selection-end-line="48" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/ExportBusinessSolutionPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="53" column="60" lean-forward="false" selection-start-line="53" selection-start-column="60" selection-end-line="53" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/vo/RelationTypeDefinitionVO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="187" column="12" lean-forward="false" selection-start-line="187" selection-start-column="12" selection-end-line="187" selection-end-column="12" />
+        <state relative-caret-position="414">
+          <caret line="137" column="97" lean-forward="false" selection-start-line="137" selection-start-column="97" selection-end-line="137" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/businessSolutionManagement/BusinessSolutionOperationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="111" column="66" lean-forward="false" selection-start-line="111" selection-start-column="66" selection-end-line="111" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/ApplicationConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/util/InfoDiscoverEngineConstant.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="35" column="49" lean-forward="false" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/ProcessingDataList.java">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/vo/PropertyValueVO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="32" column="22" lean-forward="false" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="29" />
-          <folding />
+        <state relative-caret-position="124">
+          <caret line="8" column="32" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/visualizationAnalyzeElement/ProcessingDataAnalyzePanel.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/RelationMapping.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="437" column="0" lean-forward="false" selection-start-line="437" selection-start-column="0" selection-end-line="437" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="116">
+          <caret line="40" column="99" lean-forward="false" selection-start-line="40" selection-start-column="74" selection-end-line="40" selection-end-column="99" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/RelationableRelationsList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="285" column="54" lean-forward="true" selection-start-line="285" selection-start-column="54" selection-end-line="285" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/TypeDataInstancePropertiesEditorPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2183">
-          <caret line="48" column="48" lean-forward="false" selection-start-line="48" selection-start-column="11" selection-end-line="48" selection-end-column="48" />
-          <folding>
-            <marker date="1493258732448" expanded="false" signature="31199:31216" ph="&lt;~&gt;" />
-            <marker date="1493258732448" expanded="false" signature="33979:33990" ph=" { " />
-            <marker date="1493258732448" expanded="false" signature="34013:34019" ph=" }" />
-            <marker date="1493258732448" expanded="false" signature="34079:34090" ph=" { " />
-            <marker date="1493258732448" expanded="false" signature="34129:34135" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/commonUseElement/TypeDataInstanceDetailPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="43" column="22" lean-forward="false" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/ApplicationResourceInitializer.java">
+    <entry file="file://$PROJECT_DIR$/InfoDiscoverEngineCfg.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="49" lean-forward="false" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="49" />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="15" lean-forward="false" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/infoDiscoverEngine/util/config/PropertyHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="15" column="81" lean-forward="false" selection-start-line="15" selection-start-column="81" selection-end-line="15" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTypePropertyInfoVO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/ruleEngineManagement/CreateRulePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4608">
+          <caret line="281" column="36" lean-forward="false" selection-start-line="281" selection-start-column="36" selection-end-line="281" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="96" lean-forward="false" selection-start-line="6" selection-start-column="96" selection-end-line="6" selection-end-column="96" />
+        <state relative-caret-position="396">
+          <caret line="22" column="5" lean-forward="false" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/DataImporter.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="2075" column="9" lean-forward="false" selection-start-line="2075" selection-start-column="9" selection-end-line="2075" selection-end-column="9" />
+        <state relative-caret-position="3114">
+          <caret line="209" column="73" lean-forward="false" selection-start-line="209" selection-start-column="69" selection-end-line="209" selection-end-column="73" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="649">
+          <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
