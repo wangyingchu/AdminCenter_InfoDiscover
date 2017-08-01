@@ -96,22 +96,24 @@ public class DataTransferUtil {
 
     public static void main(String[] args){
         List<DataTypePropertyInfoVO> propertyList=new ArrayList<>();
-       // propertyList.add(new DataTypePropertyInfoVO("fact001p2",new Boolean(false)));
+        propertyList.add(new DataTypePropertyInfoVO("fact001p2",new Boolean(false)));
 
-        propertyList.add(new DataTypePropertyInfoVO("fact001p2",new Date()));
-
+        //propertyList.add(new DataTypePropertyInfoVO("fact001p2",new Date()));
         propertyList.add(new DataTypePropertyInfoVO("fact003p1",new Float(223399)));
-        propertyList.add(new DataTypePropertyInfoVO("sourceStr","ASDF"));
-
-        //importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"dupsource",propertyList)
-        //
-        //
-        // strprop;
-
+        propertyList.add(new DataTypePropertyInfoVO("sourceStr","AAA"));
         propertyList.add(new DataTypePropertyInfoVO("strprop",new Long(2233)));
 
-        importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"fact001",propertyList);
+        propertyList.add(new DataTypePropertyInfoVO("date01",new Date()));
 
+       // importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"fact001",propertyList);
+
+        importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"dupsource",propertyList);
+
+
+        //importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,"dim001",propertyList);
+
+
+        //importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"fact001shouldwroing11",propertyList);
 
     }
 }
