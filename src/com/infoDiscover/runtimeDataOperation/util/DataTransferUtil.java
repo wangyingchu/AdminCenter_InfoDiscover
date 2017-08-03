@@ -78,6 +78,9 @@ public class DataTransferUtil {
         if(propertyValue instanceof Date){
             return "Date";
         }
+        if(propertyValue instanceof Short){
+            return "Short";
+        }
         return null;
     }
 
