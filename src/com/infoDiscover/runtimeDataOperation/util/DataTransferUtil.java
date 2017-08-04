@@ -121,13 +121,19 @@ public class DataTransferUtil {
         //propertyList.add(new DataTypePropertyInfoVO("booleanMatchKey",new Boolean(true)));
         //propertyList.add(new DataTypePropertyInfoVO("doubleMatchKey",new Double(150)));
         //propertyList.add(new DataTypePropertyInfoVO("floatMatchKey",new Float(150)));
-        //propertyList.add(new DataTypePropertyInfoVO("shortMatchKey",(short)10));
+        propertyList.add(new DataTypePropertyInfoVO("shortMatchKey",(short)10));
         propertyList.add(new DataTypePropertyInfoVO("dateProp",new Date()));
 
-        importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,"relSourceDimension",propertyList);
 
         //importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_FACT,"relSourceFact",propertyList);
 
+
+        for(int i=0;i<500;i++){
+            importTypeDate("testApply",InfoDiscoverSpaceOperationUtil.TYPEKIND_DIMENSION,"relSourceDimension",propertyList);
+
+
+
+        }
 
     }
 }
