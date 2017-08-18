@@ -2,7 +2,7 @@ title: Admincenter infodiscover
 description: High value density information discovery system basedon graph database(application management user interface)
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-midnight
+theme: jekyll-theme-architect
 
 gems:
   - jekyll-mentions
