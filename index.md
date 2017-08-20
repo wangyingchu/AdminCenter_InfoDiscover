@@ -104,31 +104,20 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 
 
 
-
-
-
- [using GitHub Flavored Markdown](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/pic/%E6%95%B0%E6%8D%AE%E4%BB%B7%E5%80%BC%E5%AF%86%E5%BA%A6%E5%88%86%E5%B8%83%E5%AD%98%E5%82%A8.png)
-
-
- [using GitHub Flavored Markdown](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/documents/paper.pdf)
-
-
-
-提供了传统的基于关系型数据库的存储系统能够提供的所有数据查询功能。用户可以使用传统信息系统的数据检索方式从Arch Info Discover系统中获取数据。
-提供了新式的基于维度与关系的数据检索方式，系统可以定义无限数量、无限继承层级的维度与关系类型。从而满足各种复杂场景下的业务数据模型定义。
-用户可以从自身主观意愿出发，从任意的角度以单独或者关联的方式来查询数据，从而最大可能的发掘出知识的价值（例如对某一特定数据执行探索型知识发现、对若干数据进行关联分析警示或从指定的多个维度查找相似的数据等）。
-
-
-
-
 #### ➜ 系统子功能模块与参考资料
 
+**子功能模块项目**
 
+[数据管理与知识分析系统](https://github.com/wangyingchu/AdminCenter_InfoDiscover)
+[数据分析与报表服务系统](https://github.com/wangyingchu/InfoAnalyseService_InfoDiscover)
+[知识型数据存储引擎](https://github.com/wangyingchu/DiscoverEngine_InfoDiscover)
+[数据关联关系管理规则引擎](https://github.com/wangyingchu/RuleEngine_InfoDiscover)
 
+**参考资料**
 
-
-
-
+[高价值密度知识获取系统设计概述](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/documents/brief.pdf)
+[Info Discover 高价值密度知识分析系统架构详细设计结构图](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/pic/%E9%AB%98%E4%BB%B7%E5%80%BC%E5%AF%86%E5%BA%A6%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F.png)
+[Knowledge Management in Construction - the framework of high value density knowledge discovery with graph database-ICCAE2016](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/documents/paper.pdf)
 
 
 
