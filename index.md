@@ -109,14 +109,19 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 **子功能模块项目**
 
 [数据管理与知识分析系统](https://github.com/wangyingchu/AdminCenter_InfoDiscover)
+
 [数据分析与报表服务系统](https://github.com/wangyingchu/InfoAnalyseService_InfoDiscover)
+
 [知识型数据存储引擎](https://github.com/wangyingchu/DiscoverEngine_InfoDiscover)
+
 [数据关联关系管理规则引擎](https://github.com/wangyingchu/RuleEngine_InfoDiscover)
 
 **参考资料**
 
 [高价值密度知识获取系统设计概述](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/documents/brief.pdf)
+
 [Info Discover 高价值密度知识分析系统架构详细设计结构图](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/pic/%E9%AB%98%E4%BB%B7%E5%80%BC%E5%AF%86%E5%BA%A6%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F.png)
+
 [Knowledge Management in Construction - the framework of high value density knowledge discovery with graph database-ICCAE2016](https://github.com/wangyingchu/AdminCenter_InfoDiscover/blob/gh-pages/documents/paper.pdf)
 
 
