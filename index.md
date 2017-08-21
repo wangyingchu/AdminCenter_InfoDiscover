@@ -171,7 +171,14 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 
 
 
+### 系统外部数据调用接口
 
+Info Discover高价值密度知识分析系统提供 ***REST WebService***形式的调用接口向外部应用系统提供数据支持。同时所有内建的图表功能可以以***Web浏览器URL***调用的形式供外部Web 应用程序直接调用。通过使用系统核心知识型数据存储的***Java SDK***，外部应用也可以使用Java技术直接通过API使用系统的各类数据接口。
+
+
+### 软件许可证
+
+Info Discover高价值密度知识分析系统 使用 Apache V2 许可证分发 (http://www.apache.org/licenses/LICENSE-2.0.html)。
 
 
 
