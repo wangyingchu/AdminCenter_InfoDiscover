@@ -100,7 +100,51 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 
 **数据管理功能**
 
+通过使用数据管理终端，用户可以创建，维护，删除Info Discover高价值密度知识分析系统中的顶级信息发现空间;监控事实，维度以及关系类型的实时数据存储;管理各类数据类型的数据元数据定义以及维护供数据关联关系自动创建所用的规则定义。
+
+下图为顶级信息发现空间管理界面：
+![数据处理流程](pic/Screenshot1.png)
+
+下图为空间关系类型数据分布统计界面：
+![数据处理流程](pic/Screenshot2.png)
+
+下图为空间事实类型定义管理界面：
+![数据处理流程](pic/Screenshot3.png)
+
+
+
+![数据处理流程](pic/Screenshot17.png)
+![数据处理流程](pic/Screenshot18.png)
+
+
+
 **知识分析功能**
+
+
+
+
+
+
+
+![数据处理流程](pic/Screenshot4.png)
+![数据处理流程](pic/Screenshot5.png)
+![数据处理流程](pic/Screenshot6.png)
+![数据处理流程](pic/Screenshot7.png)
+![数据处理流程](pic/Screenshot8.png)
+![数据处理流程](pic/Screenshot9.png)
+![数据处理流程](pic/Screenshot10.png)
+![数据处理流程](pic/Screenshot11.png)
+
+![数据处理流程](pic/Screenshot13.png)
+![数据处理流程](pic/Screenshot14.png)
+![数据处理流程](pic/Screenshot15.png)
+![数据处理流程](pic/Screenshot16.png)
+
+
+
+
+
+
 
 
 
