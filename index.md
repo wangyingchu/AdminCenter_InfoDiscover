@@ -100,27 +100,30 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 
 **数据管理功能**
 
-通过使用数据管理终端，用户可以创建，维护，删除Info Discover高价值密度知识分析系统中的顶级信息发现空间;监控事实，维度以及关系类型的实时数据存储;管理各类数据类型的数据元数据定义以及维护供数据关联关系自动创建所用的规则定义。
+通过使用操作终端的数据管理功能，用户可以创建，维护，删除Info Discover高价值密度知识分析系统中的顶级信息发现空间;监控事实，维度以及关系类型的实时数据存储;管理各类数据类型的数据元数据定义以及维护供数据关联关系自动创建所用的规则定义。
 
-下图为顶级信息发现空间管理界面：
+◼︎ 下图为顶级信息发现空间管理界面，通过使用信息发现空间管理功能，用户可以针对特定的知识分析业务目标设定独立的信息发现空间，并在该空间中设定所需的各类元数据定义（如事实，维度，关系类型的定义以及设定数据关联规则等），并在该空间中存储所有的知识数据。
 ![数据处理流程](pic/Screenshot1.png)
 
-下图为空间关系类型数据分布统计界面：
+◼︎ 下图为空间关系类型数据分布统计界面：
 ![数据处理流程](pic/Screenshot2.png)
 
-下图为空间事实类型定义管理界面：
+◼︎ 下图为空间事实类型定义管理界面：
 ![数据处理流程](pic/Screenshot3.png)
 
-
-
+◼︎ 下图为数据关联规则定义管理界面：
 ![数据处理流程](pic/Screenshot17.png)
-![数据处理流程](pic/Screenshot18.png)
 
+◼︎ 下图为创建事实数据界面：
+![数据处理流程](pic/Screenshot18.png)
 
 
 **知识分析功能**
 
+通过使用操作终端的知识分析功能，用户可以按照特定数据属性值查询批量获取知识数据的详细细节，宏观分析知识数据的统计性特征。或者通过微观分析特定的知识数据，以关联信息探索的方式获取该数据与其他数据间的关系关联，查找相似数据或者若干数据之间的相互关联。
 
+
+下图为顶级信息发现空间管理界面：
 
 
 
@@ -170,19 +173,3 @@ Info Discover　高价值密度知识分析系统内建有通过Web浏览器访�
 
 
 
-### Welcome to GitHub Pages.
-This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here [using GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/), select a template crafted by a designer, and publish. After your page is generated, you can check out the new `gh-pages` branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.
-
-
-
-### Designer Templates
-We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.
-
-### Creating pages manually
-If you prefer to not use the automatic generator, push a branch named `gh-pages` to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.
-
-### Authors and Contributors
-You can @mention a GitHub username to generate a link to their profile. The resulting `<a>` element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (@defunkt), PJ Hyett (@pjhyett), and Tom Preston-Werner (@mojombo) founded GitHub.
-
-### Support or Contact
-Having trouble with Pages? Check out our [documentation](https://help.github.com/pages) or [contact support](https://github.com/contact) and we’ll help you sort it out.
