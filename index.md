@@ -178,9 +178,7 @@ Info Discover高价值密度知识分析系统提供 ***REST WebService***形式
 
 ### 软件许可证
 
-Info Discover高价值密度知识分析系统 使用 Apache V2 许可证分发 (http://www.apache.org/licenses/LICENSE-2.0.html)。
-
-
+Info Discover高价值密度知识分析系统 使用 Apache V2 许可证分发 [(http://www.apache.org/licenses/LICENSE-2.0.html)](http://www.apache.org/licenses/LICENSE-2.0.html)。
 
 
 
