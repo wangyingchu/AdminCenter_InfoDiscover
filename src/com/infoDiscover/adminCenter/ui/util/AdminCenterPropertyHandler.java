@@ -12,6 +12,8 @@ public class AdminCenterPropertyHandler {
     private static Properties _properties;
     public static String INFO_ANALYSE_SERVICE_ROOT_LOCATION="INFO_ANALYSE_SERVICE_ROOT_LOCATION";
     public static String META_CONFIG_DISCOVERSPACE="META_CONFIG_DISCOVERSPACE";
+    public static String BUILDIN_ADMINISTRATOR_ACCOUNTNAME="BUILDIN_ADMINISTRATOR_ACCOUNTNAME";
+    public static String BUILDIN_ADMINISTRATOR_ACCOUNTPWD="BUILDIN_ADMINISTRATOR_ACCOUNTPWD";
     private static String web_inf_Path=AdminCenterPropertyHandler.class.getResource("/").getPath();
 
     public static String getPropertyValue(String resourceFileName){

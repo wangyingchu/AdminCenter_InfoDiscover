@@ -6,6 +6,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.*;
+import com.infoDiscover.adminCenter.ui.component.login.ApplicationLoginForm;
 import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
@@ -31,6 +32,8 @@ import java.util.Map;
 @Title("[ InfoDiscover ] - 高价值密度信息发现平台 系统管理")
 @PreserveOnRefresh
 public class AdminCenterApplicationUI extends UI {
+
+    private String loginUserId;
 
     @VaadinServletConfiguration(productionMode = false, ui = AdminCenterApplicationUI.class)
     public static class Servlet extends VaadinServlet {
@@ -101,19 +104,38 @@ public class AdminCenterApplicationUI extends UI {
         }
         Responsive.makeResponsive(this);
 
+        renderLoginUI(currentUserClientInfo);
+    }
+
+    public void renderLoginUI(UserClientInfo userClientInfo){
+        ApplicationLoginForm loginForm=new ApplicationLoginForm(userClientInfo);
+        loginForm.setContainerApplicationUI(this);
+        setContent(loginForm);
+    }
+
+    public void renderOperationUI(UserClientInfo userClientInfo){
         VerticalLayout rootLayout = new VerticalLayout();
         // sure it's 100% sized, and remove unwanted margins
         rootLayout.setSizeFull();
         rootLayout.setMargin(false);
 
-        ApplicationBanner applicationBanner=new ApplicationBanner(currentUserClientInfo);
+        ApplicationBanner applicationBanner=new ApplicationBanner(userClientInfo);
         rootLayout.addComponent(applicationBanner);
+        applicationBanner.setContainerApplicationUI(this);
 
-        ApplicationContent applicationContent=new ApplicationContent(currentUserClientInfo);
+        ApplicationContent applicationContent=new ApplicationContent(userClientInfo);
         rootLayout.addComponent(applicationContent);
         rootLayout.setExpandRatio(applicationContent, 1.0F);
 
         setContent(rootLayout);
+    }
+
+    public String getLoginUserId() {
+        return loginUserId;
+    }
+
+    public void setLoginUserId(String loginUserId) {
+        this.loginUserId = loginUserId;
     }
 
     private boolean browserCantRenderFontsConsistently() {

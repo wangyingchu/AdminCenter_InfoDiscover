@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.ui.component;
 
+import com.infoDiscover.adminCenter.ui.AdminCenterApplicationUI;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
@@ -11,7 +12,11 @@ import com.vaadin.ui.*;
  * Created by wangychu on 9/28/16.
  */
 public class ApplicationBanner extends HorizontalLayout {
+
     private UserClientInfo currentUserClientInfo;
+    private AdminCenterApplicationUI containerApplicationUI;
+    private  Label loginUserName;
+
     public ApplicationBanner(UserClientInfo currentUserClientInfo){
         this.currentUserClientInfo=currentUserClientInfo;
         setHeight("55px");
@@ -34,7 +39,7 @@ public class ApplicationBanner extends HorizontalLayout {
         applicationTitle.addStyleName("ui_appTitle");
         leftElementContainer. addComponent(applicationTitle);
 
-        Label loginUserName = new Label( FontAwesome.MALE.getHtml() + " 登陆用户id", ContentMode.HTML);
+        loginUserName = new Label( FontAwesome.MALE.getHtml() + " 登陆用户id", ContentMode.HTML);
         rightElementContainer. addComponent(loginUserName);
         rightElementContainer.setComponentAlignment(loginUserName, Alignment.MIDDLE_CENTER);
 
@@ -46,7 +51,11 @@ public class ApplicationBanner extends HorizontalLayout {
         signOutButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(final Button.ClickEvent event) {
+                if(getContainerApplicationUI()!=null){
+                    getContainerApplicationUI().renderLoginUI(currentUserClientInfo);
+                }
                 UI.getCurrent().getSession().close();
+                UI.getCurrent().getPage().reload();
             }
         });
 
@@ -74,6 +83,20 @@ public class ApplicationBanner extends HorizontalLayout {
         });
         Label supportLabel2=new Label(" ");
         rightElementContainer. addComponent(supportLabel2);
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        loginUserName.setValue(FontAwesome.USER.getHtml() +" "+ getContainerApplicationUI().getLoginUserId());
+    }
+
+    public AdminCenterApplicationUI getContainerApplicationUI() {
+        return containerApplicationUI;
+    }
+
+    public void setContainerApplicationUI(AdminCenterApplicationUI containerApplicationUI) {
+        this.containerApplicationUI = containerApplicationUI;
     }
 }
 
