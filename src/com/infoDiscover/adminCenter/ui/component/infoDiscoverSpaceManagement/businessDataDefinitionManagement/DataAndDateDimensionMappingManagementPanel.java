@@ -25,6 +25,7 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
     private String discoverSpaceName;
     private TreeTable dataRelationMappingDefinitionsTable;
     private Button removeRelationMappingRuleButton;
+    private Button executeRelationMappingRuleButton;
     private Item currentSelectedDefinitionItem;
 
     public DataAndDateDimensionMappingManagementPanel(UserClientInfo currentUserClientInfo){
@@ -62,6 +63,17 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
             }
         });
 
+        Label spaceDivLabel0=new Label("|");
+        actionButtonPlacementLayout. addComponent(spaceDivLabel0);
+
+        this.executeRelationMappingRuleButton=new Button("执行关联映射规则");
+        this.executeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setIcon(FontAwesome.PLAY);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.executeRelationMappingRuleButton.addStyleName("ui_appElementBottomSpacing");
+        actionButtonPlacementLayout.addComponent(this.executeRelationMappingRuleButton);
+
         Label spaceDivLabel1=new Label("|");
         actionButtonPlacementLayout. addComponent(spaceDivLabel1);
 
@@ -97,6 +109,7 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
             public void itemClick(ItemClickEvent itemClickEvent) {
                 currentSelectedDefinitionItem=itemClickEvent.getItem();
                 removeRelationMappingRuleButton.setEnabled(true);
+                executeRelationMappingRuleButton.setEnabled(true);
             }
         });
         this.addComponent(this.dataRelationMappingDefinitionsTable);
@@ -113,6 +126,7 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
 
     public void renderDataAndDateDimensionMappingInfo(){
         this.removeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setEnabled(false);
         this.dataRelationMappingDefinitionsTable.removeAllItems();
         this.currentSelectedDefinitionItem=null;
         List<DataMappingDefinitionVO> dataMappingDefinitionsList= InfoDiscoverSpaceOperationUtil.getDataDateDimensionMappingDefinitionList(discoverSpaceName);

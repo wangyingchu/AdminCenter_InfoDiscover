@@ -25,6 +25,7 @@ public class DataPropertiesDuplicateMappingManagementPanel extends VerticalLayou
     private String discoverSpaceName;
     private TreeTable dataRelationMappingDefinitionsTable;
     private Button removeRelationMappingRuleButton;
+    private Button executeRelationMappingRuleButton;
     private Item currentSelectedDefinitionItem;
 
     public DataPropertiesDuplicateMappingManagementPanel(UserClientInfo currentUserClientInfo){
@@ -61,6 +62,17 @@ public class DataPropertiesDuplicateMappingManagementPanel extends VerticalLayou
                 executeCreateDataMappingRuleOperation();
             }
         });
+
+        Label spaceDivLabel0=new Label("|");
+        actionButtonPlacementLayout. addComponent(spaceDivLabel0);
+
+        this.executeRelationMappingRuleButton=new Button("执行关联映射规则");
+        this.executeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setIcon(FontAwesome.PLAY);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.executeRelationMappingRuleButton.addStyleName("ui_appElementBottomSpacing");
+        actionButtonPlacementLayout.addComponent(this.executeRelationMappingRuleButton);
 
         Label spaceDivLabel1=new Label("|");
         actionButtonPlacementLayout. addComponent(spaceDivLabel1);
@@ -99,6 +111,7 @@ public class DataPropertiesDuplicateMappingManagementPanel extends VerticalLayou
             public void itemClick(ItemClickEvent itemClickEvent) {
                 currentSelectedDefinitionItem=itemClickEvent.getItem();
                 removeRelationMappingRuleButton.setEnabled(true);
+                executeRelationMappingRuleButton.setEnabled(true);
             }
         });
         this.addComponent(this.dataRelationMappingDefinitionsTable);
@@ -115,6 +128,7 @@ public class DataPropertiesDuplicateMappingManagementPanel extends VerticalLayou
 
     public void renderDataPropertiesDuplicateMappingInfo(){
         this.removeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setEnabled(false);
         this.dataRelationMappingDefinitionsTable.removeAllItems();
         this.currentSelectedDefinitionItem=null;
         List<DataMappingDefinitionVO> dataMappingDefinitionsList= InfoDiscoverSpaceOperationUtil.getDataPropertiesDuplicateMappingDefinitionList(this.discoverSpaceName);

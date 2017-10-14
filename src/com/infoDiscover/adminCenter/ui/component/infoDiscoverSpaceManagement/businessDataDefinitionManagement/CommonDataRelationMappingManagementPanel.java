@@ -26,6 +26,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
 
     private TreeTable dataRelationMappingDefinitionsTable;
     private Button removeRelationMappingRuleButton;
+    private Button executeRelationMappingRuleButton;
     private Item currentSelectedDefinitionItem;
 
     public CommonDataRelationMappingManagementPanel(UserClientInfo currentUserClientInfo){
@@ -62,6 +63,17 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
                 executeCreateDataMappingRuleOperation();
             }
         });
+
+        Label spaceDivLabel0=new Label("|");
+        actionButtonPlacementLayout. addComponent(spaceDivLabel0);
+
+        this.executeRelationMappingRuleButton=new Button("执行关联映射规则");
+        this.executeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setIcon(FontAwesome.PLAY);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
+        this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
+        this.executeRelationMappingRuleButton.addStyleName("ui_appElementBottomSpacing");
+        actionButtonPlacementLayout.addComponent(this.executeRelationMappingRuleButton);
 
         Label spaceDivLabel1=new Label("|");
         actionButtonPlacementLayout. addComponent(spaceDivLabel1);
@@ -109,6 +121,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
             public void itemClick(ItemClickEvent itemClickEvent) {
                 currentSelectedDefinitionItem=itemClickEvent.getItem();
                 removeRelationMappingRuleButton.setEnabled(true);
+                executeRelationMappingRuleButton.setEnabled(true);
             }
         });
         this.addComponent(this.dataRelationMappingDefinitionsTable);
@@ -124,6 +137,7 @@ public class CommonDataRelationMappingManagementPanel extends VerticalLayout {
 
     public void renderCommonDataRelationMappingInfo(){
         this.removeRelationMappingRuleButton.setEnabled(false);
+        this.executeRelationMappingRuleButton.setEnabled(false);
         this.dataRelationMappingDefinitionsTable.removeAllItems();
         this.currentSelectedDefinitionItem=null;
         List<DataMappingDefinitionVO> dataMappingDefinitionsList= InfoDiscoverSpaceOperationUtil.getCommonDataRelationMappingDefinitionList(this.discoverSpaceName);
