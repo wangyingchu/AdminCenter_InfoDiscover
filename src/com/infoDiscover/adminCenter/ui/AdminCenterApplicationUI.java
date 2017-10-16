@@ -10,11 +10,9 @@ import com.infoDiscover.adminCenter.ui.component.login.ApplicationLoginForm;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
-import com.vaadin.annotations.PreserveOnRefresh;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
-import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.*;
 import com.vaadin.server.*;
+import com.vaadin.shared.ui.ui.Transport;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -30,6 +28,8 @@ import java.util.Map;
 //@Title("High Value Density Information Discovery Platform Administration")
 @Title("[ InfoDiscover ] - 高价值密度信息发现平台 系统管理")
 @PreserveOnRefresh
+// set Transport to long polling to avoid a server side console web socket error message with tomcat 8
+@Push(transport= Transport.LONG_POLLING)
 public class AdminCenterApplicationUI extends UI {
 
     private String loginUserId;

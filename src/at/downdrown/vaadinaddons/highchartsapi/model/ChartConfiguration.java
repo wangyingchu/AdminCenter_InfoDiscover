@@ -13,10 +13,11 @@ import at.downdrown.vaadinaddons.highchartsapi.model.plotoptions.*;
 import at.downdrown.vaadinaddons.highchartsapi.model.series.HighChartsSeries;
 import com.vaadin.shared.ui.colorpicker.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartConfiguration {
+public class ChartConfiguration implements Serializable{
 
     private ChartType chartType = null;
     private Color backgroundColor = null;

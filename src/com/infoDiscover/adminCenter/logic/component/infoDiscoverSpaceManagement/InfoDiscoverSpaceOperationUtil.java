@@ -1,5 +1,6 @@
 package com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement;
 
+import com.infoDiscover.adminCenter.logic.common.SystemConfigUtil;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.BusinessSolutionOperationUtil;
 import com.infoDiscover.adminCenter.logic.component.businessSolutionManagement.vo.*;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.*;
@@ -23,10 +24,8 @@ import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.shared.Position;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Label;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -3941,7 +3940,27 @@ public class InfoDiscoverSpaceOperationUtil {
                 try {
                     Thread.sleep(5000);
                     //Call run definition job in background thread
-                    showServerMessage();
+                    Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
+                            "   <b style='color:#333333;'>数据属性关联映射规则运行结束</b>。</span>"+
+                            "<br/>处理数据数量: "+
+                            "<br/>完成时间: "+new Date().toString()+
+                            "<br/><br/>规则定义信息"+
+                            "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
+                            "<br/>源类型名称:"+definition.getSourceDataTypeName()+
+                            "<br/>源属性名称:"+definition.getSourceDataPropertyName()+
+                            "<br/>源属性数据类型:"+definition.getSourceDataPropertyType()+
+                            "<br/>源属性最小值:"+definition.getMinValue()+
+                            "<br/>源属性最大值:"+definition.getMaxValue()+
+                            "<br/>目标属性值:"+definition.getRangeResult()+
+                            "<br/>关联关系类型:"+definition.getRelationTypeName()+
+                            "<br/>数据关联方向:"+definition.getRelationDirection()+
+                            "<br/>不存在映射处理策略:"+definition.getMappingNotExistHandleMethod()+
+                            "<br/>目标数据类型:"+definition.getTargetDataTypeKind()+
+                            "<br/>目标类型名称:"+definition.getTargetDataTypeName()+
+                            "<br/>目标属性名称:"+definition.getTargetDataPropertyName()+
+                            "<br/>目标属性数据类型:"+definition.getTargetDataPropertyType()
+                            , ContentMode.HTML);
+                    SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -3953,25 +3972,68 @@ public class InfoDiscoverSpaceOperationUtil {
         return true;
     }
 
-
     public static boolean runDataDateDimensionMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
-        return true;
-    }
-    public static boolean runDataPropertiesDuplicateMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
-        return true;
-    }
-
-
-    public static void showServerMessage(){
-        UI.getCurrent().access(new Runnable() {
+        Runnable runRuleDefinitionRunnable=new Runnable() {
             @Override
             public void run() {
-                Notification resultNotification = new Notification("XXXXXXXXXXX",
-                        "启动运行选定的数据与时间维度关联定义规则成功", Notification.Type.WARNING_MESSAGE);
-                resultNotification.setPosition(Position.TOP_RIGHT);
-                resultNotification.setIcon(FontAwesome.INFO);
-                resultNotification.show(Page.getCurrent());
+                try {
+                    Thread.sleep(5000);
+                    //Call run definition job in background thread
+                    Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
+                            "   <b style='color:#333333;'>数据与时间维度关联定义规则运行结束</b>。</span>"+
+                            "<br/>处理数据数量: "+
+                            "<br/>完成时间: "+new Date().toString()+
+                            "<br/><br/>规则定义信息"+
+                            "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
+                            "<br/>源类型名称:"+definition.getSourceDataTypeName()+
+                            "<br/>源属性名称:"+definition.getSourceDataPropertyName()+
+                            "<br/>关联关系类型:"+definition.getRelationTypeName()+
+                            "<br/>数据关联方向:"+definition.getRelationDirection()+
+                            "<br/>时间维度类型前缀:"+definition.getDateDimensionTypePrefix()
+                            , ContentMode.HTML);
+                    SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+        };
+        Thread backgroundThread = new Thread(runRuleDefinitionRunnable);
+        backgroundThread.setDaemon(true);  //设为后台线程
+        backgroundThread.start();
+        return true;
+    }
+
+    public static boolean runDataPropertiesDuplicateMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
+        Runnable runRuleDefinitionRunnable=new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    //Call run definition job in background thread and show result message dialog
+
+                    Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
+                            "   <b style='color:#333333;'>数据属性复制规则运行结束</b>。</span>"+
+                            "<br/>处理数据数量: "+
+                            "<br/>完成时间: "+new Date().toString()+
+                            "<br/><br/>规则定义信息"+
+                            "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
+                            "<br/>源类型名称:"+definition.getSourceDataTypeName()+
+                            "<br/>数据匹配外键属性:"+definition.getSourceDataPropertyName()+
+                            "<br/>源属性数据类型:"+definition.getSourceDataPropertyType()+
+                            "<br/>已存在属性处理策略:"+definition.getExistingPropertyHandleMethod()+
+                            "<br/>目标事实类型名称:"+definition.getTargetDataTypeName()+
+                            "<br/>数据匹配主键属性:"+definition.getTargetDataPropertyName()+
+                            "<br/>目标属性数据类型:"+definition.getTargetDataPropertyType()
+                            , ContentMode.HTML);
+                    SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread backgroundThread = new Thread(runRuleDefinitionRunnable);
+        backgroundThread.setDaemon(true);  //设为后台线程
+        backgroundThread.start();
+        return true;
     }
 }
