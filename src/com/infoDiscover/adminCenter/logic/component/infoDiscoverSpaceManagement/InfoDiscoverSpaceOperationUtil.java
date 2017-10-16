@@ -3928,4 +3928,15 @@ public class InfoDiscoverSpaceOperationUtil {
         }
         return false;
     }
+
+    public static boolean runCommonDataRelationMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
+        return true;
+    }
+    public static boolean runDataDateDimensionMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
+        return true;
+    }
+    public static boolean runDataPropertiesDuplicateMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
+        return true;
+    }
+
 }

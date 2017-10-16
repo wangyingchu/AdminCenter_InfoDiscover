@@ -73,6 +73,12 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
         this.executeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
         this.executeRelationMappingRuleButton.addStyleName("ui_appElementBottomSpacing");
         actionButtonPlacementLayout.addComponent(this.executeRelationMappingRuleButton);
+        this.executeRelationMappingRuleButton.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                executeRunRelationMappingDefinitionOperation();
+            }
+        });
 
         Label spaceDivLabel1=new Label("|");
         actionButtonPlacementLayout. addComponent(spaceDivLabel1);
@@ -83,7 +89,7 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
         this.removeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         this.removeRelationMappingRuleButton.addStyleName(ValoTheme.BUTTON_TINY);
         this.removeRelationMappingRuleButton.addStyleName("ui_appElementBottomSpacing");
-        actionButtonPlacementLayout.addComponent(removeRelationMappingRuleButton);
+        actionButtonPlacementLayout.addComponent(this.removeRelationMappingRuleButton);
         this.removeRelationMappingRuleButton.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent clickEvent) {
@@ -198,6 +204,47 @@ public class DataAndDateDimensionMappingManagementPanel extends VerticalLayout {
             };
             deleteDefinitionConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
             UI.getCurrent().addWindow(deleteDefinitionConfirmDialog);
+        }
+    }
+
+    private void executeRunRelationMappingDefinitionOperation(){
+        if(this.currentSelectedDefinitionItem!=null){
+            Label confirmMessage= new Label(FontAwesome.INFO.getHtml()+
+                    " 请确认是否运行选定的数据与时间维度关联定义规则.", ContentMode.HTML);
+            final ConfirmDialog runDefinitionConfirmDialog = new ConfirmDialog();
+            runDefinitionConfirmDialog.setConfirmMessage(confirmMessage);
+            Button.ClickListener confirmButtonClickListener = new Button.ClickListener() {
+                @Override
+                public void buttonClick(final Button.ClickEvent event) {
+                    //close confirm dialog
+                    runDefinitionConfirmDialog.close();
+
+                    DataMappingDefinitionVO definitionToRun=new DataMappingDefinitionVO();
+                    definitionToRun.setSolutionName(getDiscoverSpaceName());
+                    definitionToRun.setSourceDataPropertyName(currentSelectedDefinitionItem.getItemProperty("源属性名称").getValue().toString());
+                    definitionToRun.setSourceDataTypeKind(currentSelectedDefinitionItem.getItemProperty("源数据类型").getValue().toString());
+                    definitionToRun.setSourceDataTypeName(currentSelectedDefinitionItem.getItemProperty("源类型名称").getValue().toString());
+                    definitionToRun.setRelationDirection(currentSelectedDefinitionItem.getItemProperty("数据关联方向").getValue().toString());
+                    definitionToRun.setRelationTypeName(currentSelectedDefinitionItem.getItemProperty("关联关系类型").getValue().toString());
+                    definitionToRun.setDateDimensionTypePrefix(currentSelectedDefinitionItem.getItemProperty("时间维度类型前缀").getValue().toString());
+                    boolean runDefinitionResult=InfoDiscoverSpaceOperationUtil.runDataDateDimensionMappingDefinition(getDiscoverSpaceName(),definitionToRun);
+                    if(runDefinitionResult){
+                        Notification resultNotification = new Notification("启动运行规则成功",
+                                "启动运行选定的数据与时间维度关联定义规则成功", Notification.Type.HUMANIZED_MESSAGE);
+                        resultNotification.setPosition(Position.MIDDLE_CENTER);
+                        resultNotification.setIcon(FontAwesome.INFO_CIRCLE);
+                        resultNotification.show(Page.getCurrent());
+                    }else{
+                        Notification errorNotification = new Notification("启动运行数据与时间维度关联定义规则错误",
+                                "发生服务器端错误", Notification.Type.ERROR_MESSAGE);
+                        errorNotification.setPosition(Position.MIDDLE_CENTER);
+                        errorNotification.show(Page.getCurrent());
+                        errorNotification.setIcon(FontAwesome.WARNING);
+                    }
+                }
+            };
+            runDefinitionConfirmDialog.setConfirmButtonClickListener(confirmButtonClickListener);
+            UI.getCurrent().addWindow(runDefinitionConfirmDialog);
         }
     }
 }
