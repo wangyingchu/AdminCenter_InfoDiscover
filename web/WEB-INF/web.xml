@@ -13,6 +13,12 @@
             <param-name>UI</param-name>
             <param-value>com.infoDiscover.adminCenter.ui.AdminCenterApplicationUI</param-value>
         </init-param>
+        <!-- Enable server push -->
+        <init-param>
+            <param-name>pushmode</param-name>
+            <param-value>automatic</param-value>
+        </init-param>
+        <async-supported>true</async-supported>
     </servlet>
 
     <servlet-mapping>

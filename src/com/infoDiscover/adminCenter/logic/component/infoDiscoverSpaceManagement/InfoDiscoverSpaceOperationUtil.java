@@ -22,6 +22,11 @@ import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentF
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.shared.Position;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -3930,8 +3935,25 @@ public class InfoDiscoverSpaceOperationUtil {
     }
 
     public static boolean runCommonDataRelationMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
+        Runnable runRuleDefinitionRunnable=new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    //Call run definition job in background thread
+                    showServerMessage();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread backgroundThread = new Thread(runRuleDefinitionRunnable);
+        backgroundThread.setDaemon(true);  //设为后台线程
+        backgroundThread.start();
         return true;
     }
+
+
     public static boolean runDataDateDimensionMappingDefinition(String discoverSpaceName,DataMappingDefinitionVO definition){
         return true;
     }
@@ -3939,4 +3961,17 @@ public class InfoDiscoverSpaceOperationUtil {
         return true;
     }
 
+
+    public static void showServerMessage(){
+        UI.getCurrent().access(new Runnable() {
+            @Override
+            public void run() {
+                Notification resultNotification = new Notification("XXXXXXXXXXX",
+                        "启动运行选定的数据与时间维度关联定义规则成功", Notification.Type.WARNING_MESSAGE);
+                resultNotification.setPosition(Position.TOP_RIGHT);
+                resultNotification.setIcon(FontAwesome.INFO);
+                resultNotification.show(Page.getCurrent());
+            }
+        });
+    }
 }

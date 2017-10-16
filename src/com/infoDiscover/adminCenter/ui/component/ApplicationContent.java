@@ -3,8 +3,6 @@ package com.infoDiscover.adminCenter.ui.component;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.BusinessSolutionsManagementPanel;
 import com.infoDiscover.adminCenter.ui.component.dataCollectionBusManagement.DataCollectionBusManagementPanel;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceManagementPanel;
-
-import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.RuleEngineManagementPanel;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
@@ -42,16 +40,7 @@ public class ApplicationContent extends HorizontalLayout {
         dataCollectionBusManagementTab.setIcon(FontAwesome.SITEMAP);
         dataCollectionBusManagementTab.setClosable(false);
         dataCollectionBusManagementTab.setEnabled(true);
-/*
-        // rule engine
-        RuleEngineManagementPanel ruleEngineManagementPanel=new
-                RuleEngineManagementPanel(this.currentUserClientInfo);
-        TabSheet.Tab ruleEngineManagementTab = applicationContentTabSheet.addTab
-                (ruleEngineManagementPanel, "规则引擎管理");
-        ruleEngineManagementTab.setIcon(FontAwesome.CUBES);
-        ruleEngineManagementTab.setClosable(false);
-        ruleEngineManagementTab.setEnabled(true);
-*/
+
         applicationContentTabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
             @Override
             public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {

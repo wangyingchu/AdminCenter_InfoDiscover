@@ -7,7 +7,6 @@ import com.infoDiscover.adminCenter.ui.component.ApplicationBanner;
 import com.infoDiscover.adminCenter.ui.component.ApplicationContent;
 import com.infoDiscover.adminCenter.ui.component.businessSolutionsManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.login.ApplicationLoginForm;
-import com.infoDiscover.adminCenter.ui.component.ruleEngineManagement.event.*;
 import com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement.event.*;
 import com.infoDiscover.adminCenter.ui.util.RuntimeWindowsRepository;
 import com.infoDiscover.adminCenter.ui.util.UserClientInfo;
@@ -82,16 +81,6 @@ public class AdminCenterApplicationUI extends UI {
                 BusinessSolutionComponentSelectedEvent.class);
 
         currentUserClientInfo.setEventBlackBoard(BLACKBOARD);
-
-         // rule engine
-        BLACKBOARD.register(RuleEngineComponentSelectedEvent.RuleEngineComponentSelectedListener
-                .class,RuleEngineComponentSelectedEvent.class);
-        BLACKBOARD.register(RuleEngineDeletedEvent.RuleEngineDeletedListener.class,
-                RuleEngineDeletedEvent.class);
-        BLACKBOARD.register(RuleEngineCreatedEvent.RuleEngineCreatedListener.class,
-                RuleEngineCreatedEvent.class);
-        BLACKBOARD.register(RuleEngineExecutedEvent.RuleEngineExecutedListener.class,
-                RuleEngineExecutedEvent.class);
 
         Map<String,ProcessingDataListVO> discoverSpacesProcessingDataMap=new HashMap<String,ProcessingDataListVO>();
         currentUserClientInfo.setDiscoverSpacesProcessingDataMap(discoverSpacesProcessingDataMap);
