@@ -7,6 +7,7 @@ import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.
 import com.infoDiscover.adminCenter.ui.util.AdminCenterPropertyHandler;
 import com.infoDiscover.adminCenter.ui.util.ApplicationConstant;
 import com.infoDiscover.adminCenter.ui.util.RuntimeEnvironmentUtil;
+import com.infoDiscover.adminCenter.ui.util.StringUnicodeSerializer;
 import com.infoDiscover.infoDiscoverEngine.dataMart.*;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.ExploreParameters;
 import com.infoDiscover.infoDiscoverEngine.dataWarehouse.InformationExplorer;
@@ -29,6 +30,8 @@ import com.vaadin.ui.Label;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
+import org.codehaus.jackson.map.ser.CustomSerializerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -2879,6 +2882,13 @@ public class InfoDiscoverSpaceOperationUtil {
         File customPropertyAliasNamesFile=new File(tempFileDir+discoverSpaceName+"_"+"CustomPropertyAliasNames.json");
         List<CustomPropertyAliasNameVO> aliasNamesList=queryCustomPropertyAliasNames(discoverSpaceName);
         ObjectMapper mapper = new ObjectMapper();
+        //当找不到对应的序列化器时 忽略此字段
+        mapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
+        //使Jackson JSON支持Unicode编码非ASCII字符
+        CustomSerializerFactory serializerFactory= new CustomSerializerFactory();
+        serializerFactory.addSpecificMapping(String.class, new StringUnicodeSerializer());
+        mapper.setSerializerFactory(serializerFactory);
+        //支持结束
         String json = null;
         try {
             json = mapper.writeValueAsString(aliasNamesList);
