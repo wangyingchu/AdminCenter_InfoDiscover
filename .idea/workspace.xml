@@ -9,9 +9,8 @@
     <list default="true" id="9615d0b3-7f05-4ac2-94d0-8ff5aa983a96" name="Default" comment="fix a bug">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/2017-07/ruleengine-2017-07-31-1.log.gz" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/ruleengine.log" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/StringUnicodeSerializer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,43 +36,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="InfoDiscoverSpaceOperationUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+      <file leaf-file-name="ApplicationLoginForm.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/login/ApplicationLoginForm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="43095">
-              <caret line="2907" column="26" lean-forward="false" selection-start-line="2907" selection-start-column="26" selection-end-line="2907" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StringUnicodeSerializer.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/StringUnicodeSerializer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="647">
+              <caret line="135" column="17" lean-forward="false" selection-start-line="125" selection-start-column="16" selection-end-line="135" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InfoDiscoverSpaceDetail.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java">
+      <file leaf-file-name="SystemConfigUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/SystemConfigUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1890">
-              <caret line="152" column="17" lean-forward="false" selection-start-line="152" selection-start-column="17" selection-end-line="152" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataTransferUtil.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/runtimeDataOperation/util/DataTransferUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+            <state relative-caret-position="270">
+              <caret line="25" column="5" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="25" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -230,6 +207,8 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -270,7 +249,7 @@
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
               <item name="adminCenter" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="logic" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
@@ -279,45 +258,33 @@
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
               <item name="adminCenter" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="component" type="462c0819:PsiDirectoryNode" />
+              <item name="logic" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="adminCenter" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="component" type="462c0819:PsiDirectoryNode" />
-              <item name="infoDiscoverSpaceManagement" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="adminCenter" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="infoDiscover" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
@@ -327,15 +294,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../InfoAnalyseService_InfoDiscover" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -972,7 +937,8 @@
       <workItem from="1508204317330" duration="2664000" />
       <workItem from="1508312445077" duration="1199000" />
       <workItem from="1508329442552" duration="2100000" />
-      <workItem from="1508415075119" duration="15000" />
+      <workItem from="1508415075119" duration="1934000" />
+      <workItem from="1508559200672" duration="64000" />
     </task>
     <task id="LOCAL-00001" summary="list rules and details">
       <created>1492093648117</created>
@@ -1247,11 +1213,18 @@
       <option name="project" value="LOCAL" />
       <updated>1508165849224</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="add json export UTF-8 encoding support">
+      <created>1508415159890</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1508415159890</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="503513000" />
+    <option name="totallyTimeSpent" value="505496000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1309,7 +1282,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Relation Type Definitions Management Feature" />
     <MESSAGE value="Custom Property Alias Name Definition Management Feature" />
     <MESSAGE value="data relation mapping edit feature" />
     <MESSAGE value="delete Common DataRelation Mapping Definition feature" />
@@ -1334,7 +1306,8 @@
     <MESSAGE value="support run mapping definition rules from UI" />
     <MESSAGE value="update code for server side message push and unused codes clean up" />
     <MESSAGE value="run Mapping Definitions UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="run Mapping Definitions UI" />
+    <MESSAGE value="add json export UTF-8 encoding support" />
+    <option name="LAST_COMMIT_MESSAGE" value="add json export UTF-8 encoding support" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1454,24 +1427,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/VAADIN/themes/viewfunction/imgs/loginPic.jpg" />
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/login/ApplicationLoginForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1343">
-          <caret line="22" column="59" lean-forward="false" selection-start-line="22" selection-start-column="59" selection-end-line="22" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/CommonDataRelationMappingDefinitionEditPanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="79" column="11" lean-forward="true" selection-start-line="79" selection-start-column="11" selection-end-line="79" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/AdminCenterCfg.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1582,13 +1541,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/SystemConfigUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="45" column="77" lean-forward="false" selection-start-line="45" selection-start-column="77" selection-end-line="45" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataAndDateDimensionMappingManagementPanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3000">
@@ -1610,13 +1562,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/InfoDiscoverEngineCfg.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -1628,7 +1573,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1890">
           <caret line="152" column="17" lean-forward="false" selection-start-line="152" selection-start-column="17" selection-end-line="152" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1636,24 +1580,49 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
           <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+    <entry file="file://$PROJECT_DIR$/InfoDiscoverEngineCfg.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43095">
-          <caret line="2907" column="26" lean-forward="false" selection-start-line="2907" selection-start-column="26" selection-end-line="2907" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/StringUnicodeSerializer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="601">
+          <caret line="51" column="49" lean-forward="true" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="2907" column="26" lean-forward="false" selection-start-line="2907" selection-start-column="26" selection-end-line="2907" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/AdminCenterCfg.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/SystemConfigUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="25" column="5" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="25" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/login/ApplicationLoginForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="647">
+          <caret line="135" column="17" lean-forward="false" selection-start-line="125" selection-start-column="16" selection-end-line="135" selection-end-column="17" />
           <folding />
         </state>
       </provider>
