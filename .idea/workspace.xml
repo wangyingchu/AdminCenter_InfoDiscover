@@ -10,7 +10,6 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/2017-07/ruleengine-2017-07-31-1.log.gz" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/ruleengine.log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -997,7 +996,7 @@
       <workItem from="1509804113631" duration="131000" />
       <workItem from="1509804252678" duration="1351000" />
       <workItem from="1509931777118" duration="5726000" />
-      <workItem from="1509954433293" duration="9172000" />
+      <workItem from="1509954433293" duration="9806000" />
     </task>
     <task id="LOCAL-00001" summary="list rules and details">
       <created>1492093648117</created>
@@ -1300,11 +1299,18 @@
       <option name="project" value="LOCAL" />
       <updated>1509972293706</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="fix a bug">
+      <created>1509972338460</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1509972338461</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="547445000" />
+    <option name="totallyTimeSpent" value="548079000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1335,10 +1341,10 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32760474" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27370688" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38038793" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23869611" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26093918" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26093918" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1362,7 +1368,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Data And Date Dimension Mapping Definition feature" />
     <MESSAGE value="Data Properties Duplicate Mapping Definition Editor feature" />
     <MESSAGE value="data delete usage check enhancement" />
     <MESSAGE value="Apply business solution UI logic" />
@@ -1387,7 +1392,8 @@
     <MESSAGE value="update background service jar" />
     <MESSAGE value="support REST client feature and add refresh discover space meta info cache in data analyse service application" />
     <MESSAGE value="remove orientdb-jdbc jar and put it in tomcat lib to avoid memory leak" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove orientdb-jdbc jar and put it in tomcat lib to avoid memory leak" />
+    <MESSAGE value="fix a bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix a bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
