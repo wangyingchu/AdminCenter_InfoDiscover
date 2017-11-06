@@ -13,8 +13,8 @@ public class InfoDiscoverSpaceRESTFulUtil {
         if(webClient==null){
             webClient = WebClient.create(dataAnalyzeApplicationBaseAddress);
             webClient.path("systemManagementService/refreshDiscoverSpaceDataMetaInfo/"+discoverSpaceName+"/");
+            webClient.type("application/xml").accept("application/xml");
         }
-        webClient.type("application/xml").accept("application/xml");
         webClient.get();
     }
 }

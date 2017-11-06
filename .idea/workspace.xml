@@ -9,7 +9,6 @@
     <list default="true" id="9615d0b3-7f05-4ac2-94d0-8ff5aa983a96" name="Default" comment="fix a bug">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/2017-07/ruleengine-2017-07-31-1.log.gz" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/ruleengine.log" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/web/WEB-INF/lib/orientdb-jdbc-2.2.13-all.jar" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" />
     </list>
@@ -50,8 +49,8 @@
       <file leaf-file-name="InfoDiscoverSpaceRESTFulUtil.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+            <state relative-caret-position="240">
+              <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -998,7 +997,7 @@
       <workItem from="1509804113631" duration="131000" />
       <workItem from="1509804252678" duration="1351000" />
       <workItem from="1509931777118" duration="5726000" />
-      <workItem from="1509954433293" duration="9112000" />
+      <workItem from="1509954433293" duration="9172000" />
     </task>
     <task id="LOCAL-00001" summary="list rules and details">
       <created>1492093648117</created>
@@ -1294,11 +1293,18 @@
       <option name="project" value="LOCAL" />
       <updated>1509955094382</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="remove orientdb-jdbc jar and put it in tomcat lib to avoid memory leak">
+      <created>1509972293706</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1509972293706</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="547385000" />
+    <option name="totallyTimeSpent" value="547445000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1332,7 +1338,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27370688" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23869611" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26093918" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26093918" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1356,7 +1362,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="delete Common DataRelation Mapping Definition feature" />
     <MESSAGE value="Data And Date Dimension Mapping Definition feature" />
     <MESSAGE value="Data Properties Duplicate Mapping Definition Editor feature" />
     <MESSAGE value="data delete usage check enhancement" />
@@ -1381,7 +1386,8 @@
     <MESSAGE value="add json export UTF-8 encoding support" />
     <MESSAGE value="update background service jar" />
     <MESSAGE value="support REST client feature and add refresh discover space meta info cache in data analyse service application" />
-    <option name="LAST_COMMIT_MESSAGE" value="support REST client feature and add refresh discover space meta info cache in data analyse service application" />
+    <MESSAGE value="remove orientdb-jdbc jar and put it in tomcat lib to avoid memory leak" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove orientdb-jdbc jar and put it in tomcat lib to avoid memory leak" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1684,8 +1690,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+        <state relative-caret-position="240">
+          <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
