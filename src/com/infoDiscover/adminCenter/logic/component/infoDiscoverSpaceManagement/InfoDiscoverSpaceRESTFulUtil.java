@@ -7,11 +7,14 @@ import org.apache.cxf.jaxrs.client.WebClient;
 public class InfoDiscoverSpaceRESTFulUtil {
 
     private static String dataAnalyzeApplicationBaseAddress= AdminCenterPropertyHandler.getPropertyValue(AdminCenterPropertyHandler.INFO_ANALYSE_SERVICE_ROOT_LOCATION)+"ws/";
+    private static WebClient webClient;
 
     public static void refreshDataAnalyzeApplicationDiscoverSpaceMetaInfo(String discoverSpaceName){
-        WebClient client = WebClient.create(dataAnalyzeApplicationBaseAddress);
-        client.path("systemManagementService/refreshDiscoverSpaceDataMetaInfo/"+discoverSpaceName+"/");
-        client.type("application/xml").accept("application/xml");
-        client.get();
+        if(webClient==null){
+            webClient = WebClient.create(dataAnalyzeApplicationBaseAddress);
+            webClient.path("systemManagementService/refreshDiscoverSpaceDataMetaInfo/"+discoverSpaceName+"/");
+        }
+        webClient.type("application/xml").accept("application/xml");
+        webClient.get();
     }
 }
