@@ -1,6 +1,7 @@
 package com.infoDiscover.adminCenter.ui.component.infoDiscoverSpaceManagement;
 
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceOperationUtil;
+import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.InfoDiscoverSpaceRESTFulUtil;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataListVO;
 import com.infoDiscover.adminCenter.logic.component.infoDiscoverSpaceManagement.vo.ProcessingDataVO;
 import com.infoDiscover.adminCenter.ui.component.common.RiskActionConfirmDialog;
@@ -121,6 +122,8 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
 
         this.infoDiscoverSpaceBusinessDataDefinitionsInfo.setDiscoverSpaceName(this.discoverSpaceName);
         this.infoDiscoverSpaceBusinessDataDefinitionsInfo.renderBusinessDataDefinitionsInfo();
+
+        InfoDiscoverSpaceRESTFulUtil.refreshDataAnalyzeApplicationDiscoverSpaceMetaInfo(this.discoverSpaceName);
     }
 
     public void deleteCurrentDiscoverSpace(){
