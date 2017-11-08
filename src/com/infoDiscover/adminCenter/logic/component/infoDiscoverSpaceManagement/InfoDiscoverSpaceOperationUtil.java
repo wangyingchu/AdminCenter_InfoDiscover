@@ -24,6 +24,8 @@ import com.infoDiscover.infoDiscoverEngine.util.factory.DiscoverEngineComponentF
 import com.infoDiscover.infoDiscoverEngine.util.helper.DataTypeStatisticMetrics;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticHelper;
 import com.infoDiscover.infoDiscoverEngine.util.helper.DiscoverSpaceStatisticMetrics;
+import com.infoDiscover.solution.builder.SolutionConstants;
+import com.infoDiscover.solution.template.BatchExecution;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
@@ -32,6 +34,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.ser.CustomSerializerFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.io.*;
 import java.util.*;
@@ -3948,11 +3951,52 @@ public class InfoDiscoverSpaceOperationUtil {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
                     //Call run definition job in background thread
+                    Map<String, Object> dataMap = new HashMap<String, Object>();
+                    ObjectMapper mapper=new ObjectMapper();
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.FACT_TYPE)){
+                        if(definition.getTargetDataTypeKind().equals(SolutionConstants.FACT_TYPE)){
+                            dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_FACT_MAPPING);
+                        }
+                        if(definition.getTargetDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
+                            dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_DATE_DIMENSION_MAPPING);
+                        }
+                    }
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
+                        if(definition.getTargetDataTypeKind().equals(SolutionConstants.FACT_TYPE)){
+                            dataMap.put("mappingType",SolutionConstants.JSON_DIMENSION_TO_FACT_MAPPING);
+                        }
+                        if(definition.getTargetDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
+                            dataMap.put("mappingType",SolutionConstants.JSON_DIMENSION_TO_DIMENSION_MAPPING);
+                        }
+                    }
+                    dataMap.put("sourceDataTypeName",definition.getSourceDataTypeName());
+                    dataMap.put("sourceDataTypeKind",definition.getSourceDataTypeKind());
+                    dataMap.put("sourceDataPropertyType",definition.getSourceDataPropertyType());
+                    dataMap.put("sourceDataPropertyName",definition.getSourceDataPropertyName());
+                    if(definition.getMinValue()!=null&&!definition.getMinValue().equals("")){
+                        dataMap.put("minValue",definition.getMinValue());
+                    }
+                    if(definition.getMaxValue()!=null&&!definition.getMaxValue().equals("")){
+                        dataMap.put("maxValue",definition.getMaxValue());
+                    }
+                    if(definition.getRangeResult()!=null&&!definition.getRangeResult().equals("")){
+                        dataMap.put("targetDataPropertyValue",definition.getRangeResult());
+                    }
+                    dataMap.put("relationTypeName",definition.getRelationTypeName());
+                    dataMap.put("relationDirection",definition.getRelationDirection());
+                    dataMap.put("mappingNotExistHandleMethod",definition.getMappingNotExistHandleMethod());
+                    dataMap.put("targetDataTypeKind",definition.getTargetDataTypeKind());
+                    dataMap.put("targetDataTypeName",definition.getTargetDataTypeName());
+                    dataMap.put("targetDataPropertyName",definition.getTargetDataPropertyName());
+                    dataMap.put("targetDataPropertyType",definition.getTargetDataPropertyType());
+
+                    String jsonString=mapper.writeValueAsString(dataMap);
+                    BatchExecution batchExecuteImportor = new BatchExecution(discoverSpaceName);
+                    String batchOperationHandledDataCount=batchExecuteImportor.batchUpdateWithRule(jsonString);
                     Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
                             "   <b style='color:#333333;'>数据属性关联映射规则运行结束</b>。</span>"+
-                            "<br/>处理数据数量: "+
+                            "<br/>处理数据数量: "+batchOperationHandledDataCount+
                             "<br/>完成时间: "+new Date().toString()+
                             "<br/><br/>规则定义信息"+
                             "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
@@ -3973,6 +4017,10 @@ public class InfoDiscoverSpaceOperationUtil {
                     SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch(JsonProcessingException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -3987,11 +4035,28 @@ public class InfoDiscoverSpaceOperationUtil {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
                     //Call run definition job in background thread
+                    Map<String, Object> dataMap = new HashMap<String, Object>();
+                    ObjectMapper mapper=new ObjectMapper();
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.FACT_TYPE)){
+                        dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_DATE_DIMENSION_MAPPING);
+                    }
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
+                        dataMap.put("mappingType",SolutionConstants.JSON_DIMENSION_TO_DATE_DIMENSION_MAPPING);
+                    }
+                    dataMap.put("sourceDataTypeName",definition.getSourceDataTypeName());
+                    dataMap.put("sourceDataTypeKind",definition.getSourceDataTypeKind());
+                    dataMap.put("sourceDataPropertyName",definition.getSourceDataPropertyName());
+                    dataMap.put("relationTypeName",definition.getRelationTypeName());
+                    dataMap.put("relationDirection",definition.getRelationDirection());
+                    dataMap.put("dateDimensionTypePrefix",definition.getDateDimensionTypePrefix());
+                    String jsonString=mapper.writeValueAsString(dataMap);
+
+                    BatchExecution batchExecuteImportor = new BatchExecution(discoverSpaceName);
+                    String batchOperationHandledDataCount=batchExecuteImportor.batchUpdateWithRule(jsonString);
                     Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
                             "   <b style='color:#333333;'>数据与时间维度关联定义规则运行结束</b>。</span>"+
-                            "<br/>处理数据数量: "+
+                            "<br/>处理数据数量: "+ batchOperationHandledDataCount+
                             "<br/>完成时间: "+new Date().toString()+
                             "<br/><br/>规则定义信息"+
                             "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
@@ -4003,6 +4068,10 @@ public class InfoDiscoverSpaceOperationUtil {
                             , ContentMode.HTML);
                     SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch(JsonProcessingException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -4018,12 +4087,30 @@ public class InfoDiscoverSpaceOperationUtil {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(5000);
                     //Call run definition job in background thread and show result message dialog
+                    Map<String, Object> dataMap = new HashMap<String, Object>();
+                    ObjectMapper mapper=new ObjectMapper();
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.FACT_TYPE)){
+                        dataMap.put("mappingType",SolutionConstants.JSON_FACT_DUPLICATE_COPY_MAPPING);
+                    }
+                    if(definition.getSourceDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
+                        dataMap.put("mappingType",SolutionConstants.JSON_DIMENSION_DUPLICATE_COPY_MAPPING);
+                    }
+                    dataMap.put("sourceDataTypeName",definition.getSourceDataTypeName());
+                    dataMap.put("sourceDataTypeKind",definition.getSourceDataTypeKind());
+                    dataMap.put("sourceDataPropertyType",definition.getSourceDataPropertyType());
+                    dataMap.put("sourceDataPropertyName",definition.getSourceDataPropertyName());
+                    dataMap.put("targetDataTypeName",definition.getTargetDataTypeName());
+                    dataMap.put("targetDataPropertyName",definition.getTargetDataPropertyName());
+                    dataMap.put("targetDataPropertyType",definition.getTargetDataPropertyType());
+                    dataMap.put("existingPropertyHandleMethod",definition.getExistingPropertyHandleMethod());
 
+                    String jsonString=mapper.writeValueAsString(dataMap);
+                    BatchExecution batchExecuteImportor = new BatchExecution(discoverSpaceName);
+                    String batchOperationHandledDataCount=batchExecuteImportor.batchUpdateWithRule(jsonString);
                     Label confirmMessage=new Label("<span style='font-weight:bold;'>"+ FontAwesome.INFO.getHtml()+
                             "   <b style='color:#333333;'>数据属性复制规则运行结束</b>。</span>"+
-                            "<br/>处理数据数量: "+
+                            "<br/>处理数据数量: "+batchOperationHandledDataCount+
                             "<br/>完成时间: "+new Date().toString()+
                             "<br/><br/>规则定义信息"+
                             "<br/>源数据类型:"+definition.getSourceDataTypeKind()+
@@ -4037,6 +4124,10 @@ public class InfoDiscoverSpaceOperationUtil {
                             , ContentMode.HTML);
                     SystemConfigUtil.showServerPushConfirmDialog(confirmMessage);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch(JsonProcessingException e){
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

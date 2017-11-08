@@ -123,7 +123,7 @@ public class InfoDiscoverSpaceDetail extends VerticalLayout implements View,
         this.infoDiscoverSpaceBusinessDataDefinitionsInfo.setDiscoverSpaceName(this.discoverSpaceName);
         this.infoDiscoverSpaceBusinessDataDefinitionsInfo.renderBusinessDataDefinitionsInfo();
 
-        InfoDiscoverSpaceRESTFulUtil.refreshDataAnalyzeApplicationDiscoverSpaceMetaInfo(this.discoverSpaceName);
+        InfoDiscoverSpaceRESTFulUtil.refreshDataAnalyzeApplicationDiscoverSpacesCacheInfo();
     }
 
     public void deleteCurrentDiscoverSpace(){

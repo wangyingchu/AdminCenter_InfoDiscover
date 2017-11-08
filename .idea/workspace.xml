@@ -9,7 +9,11 @@
     <list default="true" id="9615d0b3-7f05-4ac2-94d0-8ff5aa983a96" name="Default" comment="fix a bug">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/2017-07/ruleengine-2017-07-31-1.log.gz" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/${env:INFODISCOVER_HOME}/logs/ruleengine.log" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java" afterPath="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,21 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="InfoDiscoverSpaceOperationUtil.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="InfoDiscoverSpaceOperationUtil.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="41" column="25" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InfoDiscoverSpaceRESTFulUtil.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+            <state relative-caret-position="225">
+              <caret line="4042" column="18" lean-forward="false" selection-start-line="4042" selection-start-column="18" selection-end-line="4042" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -57,12 +51,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InfoDiscoverSpaceDimensionsInfo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/InfoDiscoverSpaceDimensionsInfo.java">
+      <file leaf-file-name="DiscoverEngineComponentFactory.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/util/factory/DiscoverEngineComponentFactory.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1215">
-              <caret line="91" column="61" lean-forward="false" selection-start-line="91" selection-start-column="61" selection-end-line="91" selection-end-column="61" />
+            <state relative-caret-position="166">
+              <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommonDataRelationMappingManagementPanel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingManagementPanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3795">
+              <caret line="277" column="54" lean-forward="false" selection-start-line="277" selection-start-column="40" selection-end-line="277" selection-end-column="54" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InfoDiscoverSpaceRESTFulUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="81" lean-forward="false" selection-start-line="0" selection-start-column="81" selection-end-line="0" selection-end-column="81" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,38 +86,20 @@
       <file leaf-file-name="InfoDiscoverSpaceDetail.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="128" column="45" lean-forward="false" selection-start-line="128" selection-start-column="45" selection-end-line="128" selection-end-column="45" />
-              <folding />
+            <state relative-caret-position="848">
+              <caret line="125" column="90" lean-forward="false" selection-start-line="125" selection-start-column="90" selection-end-line="125" selection-end-column="90" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="InfoDiscoverEngineCfg.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties">
+      <file leaf-file-name="BatchExecution.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/BatchExecution.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdminCenterCfg.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/AdminCenterCfg.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AdminCenterPropertyHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/AdminCenterPropertyHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="12" column="46" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="59" />
+            <state relative-caret-position="166">
+              <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -118,8 +116,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>DataType</find>
-      <find>DataTypeK</find>
       <find>DataTypeKibd</find>
       <find>DataTypeKib</find>
       <find>DataTypeKi</find>
@@ -148,6 +144,8 @@
       <find>File</find>
       <find>ObjectMapper</find>
       <find>刷新</find>
+      <find>添加属性别名</find>
+      <find>导出属性别名</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -168,7 +166,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/DataPropertiesDuplicateMappingDefinitionEditor.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/vo/TypeSummaryVO.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataAndDateDimensionMappingDefinitionEditor.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/businessSolutionsManagement/dataMappingManagement/DataAndDateDimensionMappingDefinitionEditPanel.java" />
@@ -216,9 +213,10 @@
         <option value="$PROJECT_DIR$/src/at/downdrown/vaadinaddons/highchartsapi/model/ChartConfiguration.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/common/SystemConfigUtil.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/StringUnicodeSerializer.java" />
-        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CreateCustomPropertyAliasNamePanel.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java" />
         <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java" />
+        <option value="$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java" />
       </list>
     </option>
   </component>
@@ -239,8 +237,9 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
-    <option name="height" value="1053" />
+    <option name="y" value="3" />
+    <option name="width" value="1910" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -257,8 +256,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -275,6 +274,12 @@
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
@@ -328,20 +333,38 @@
             </path>
             <path>
               <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
+              <item name="AdminCenter_InfoDiscover" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="AdminCenter_InfoDiscover" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DiscoverEngine_InfoDiscover" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -996,7 +1019,13 @@
       <workItem from="1509804113631" duration="131000" />
       <workItem from="1509804252678" duration="1351000" />
       <workItem from="1509931777118" duration="5726000" />
-      <workItem from="1509954433293" duration="9806000" />
+      <workItem from="1509954433293" duration="11169000" />
+      <workItem from="1510017179234" duration="1910000" />
+      <workItem from="1510033985518" duration="4500000" />
+      <workItem from="1510040854238" duration="1832000" />
+      <workItem from="1510056449916" duration="4216000" />
+      <workItem from="1510105413643" duration="1501000" />
+      <workItem from="1510106933223" duration="2889000" />
     </task>
     <task id="LOCAL-00001" summary="list rules and details">
       <created>1492093648117</created>
@@ -1306,11 +1335,18 @@
       <option name="project" value="LOCAL" />
       <updated>1509972338461</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="fix a bug">
+      <created>1509973198535</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1509973198535</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="548079000" />
+    <option name="totallyTimeSpent" value="566290000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1341,10 +1377,10 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32760474" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38038793" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43426725" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23869611" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297414" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26093918" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2614728" sideWeight="0.49223948" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26067746" sideWeight="0.5077605" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1356,7 +1392,7 @@
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34375" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34375" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1406,10 +1442,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/ruleEngineManagement/vo/RuleContent.java" />
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/DataImporter.class" />
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/infoDiscoverEngine/infoDiscoverBureauImpl/OrientDBInfoDiscoverAdminSpaceImpl.java" />
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/infoDiscoverEngine/infoDiscoverBureauImpl/OrientDBInfoDiscoverSpaceImpl.java" />
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/infoDiscoverEngine/util/factory/DiscoverEngineComponentFactory.java" />
     <entry file="file://$PROJECT_DIR$/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
@@ -1552,13 +1584,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingManagementPanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="213" column="140" lean-forward="false" selection-start-line="203" selection-start-column="18" selection-end-line="213" selection-end-column="140" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/util/StringUnicodeSerializer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="601">
@@ -1620,7 +1645,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="41" lean-forward="false" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1628,7 +1652,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
           <caret line="49" column="13" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1643,7 +1666,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="12" column="46" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="59" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1651,23 +1673,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="41" column="25" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/InfoDiscoverSpaceDimensionsInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1215">
-          <caret line="91" column="61" lean-forward="false" selection-start-line="91" selection-start-column="61" selection-end-line="91" selection-end-column="61" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1678,26 +1683,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java">
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="128" column="45" lean-forward="false" selection-start-line="128" selection-start-column="45" selection-end-line="128" selection-end-column="45" />
+        <state relative-caret-position="105">
+          <caret line="7" column="54" lean-forward="true" selection-start-line="7" selection-start-column="54" selection-end-line="7" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/dimensionManagement/InfoDiscoverSpaceDimensionsInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="32" column="65" lean-forward="false" selection-start-line="32" selection-start-column="65" selection-end-line="32" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CustomPropertyAliasNameManagementPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="83" column="57" lean-forward="false" selection-start-line="83" selection-start-column="57" selection-end-line="83" selection-end-column="57" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/classes/InfoDiscoverEngineCfg.properties">
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CreateCustomPropertyAliasNamePanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
+        <state relative-caret-position="-7">
+          <caret line="150" column="67" lean-forward="true" selection-start-line="150" selection-start-column="67" selection-end-line="150" selection-end-column="67" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceRESTFulUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="9" lean-forward="false" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="9" />
+        <state relative-caret-position="0">
+          <caret line="0" column="81" lean-forward="false" selection-start-line="0" selection-start-column="81" selection-end-line="0" selection-end-column="81" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/businessDataDefinitionManagement/CommonDataRelationMappingManagementPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3795">
+          <caret line="277" column="54" lean-forward="false" selection-start-line="277" selection-start-column="40" selection-end-line="277" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/ui/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceDetail.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="848">
+          <caret line="125" column="90" lean-forward="false" selection-start-line="125" selection-start-column="90" selection-end-line="125" selection-end-column="90" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/solution/template/BatchExecution.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/DiscoverEngine_InfoDiscover-1.0.0.jar!/com/infoDiscover/infoDiscoverEngine/util/factory/DiscoverEngineComponentFactory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/infoDiscover/adminCenter/logic/component/infoDiscoverSpaceManagement/InfoDiscoverSpaceOperationUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="4042" column="18" lean-forward="false" selection-start-line="4042" selection-start-column="18" selection-end-line="4042" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
