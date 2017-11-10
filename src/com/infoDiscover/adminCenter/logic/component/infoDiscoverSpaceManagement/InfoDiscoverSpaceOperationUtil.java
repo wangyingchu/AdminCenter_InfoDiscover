@@ -3959,7 +3959,7 @@ public class InfoDiscoverSpaceOperationUtil {
                             dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_FACT_MAPPING);
                         }
                         if(definition.getTargetDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
-                            dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_DATE_DIMENSION_MAPPING);
+                            dataMap.put("mappingType",SolutionConstants.JSON_FACT_TO_DIMENSION_MAPPING);
                         }
                     }
                     if(definition.getSourceDataTypeKind().equals(SolutionConstants.DIMENSION_TYPE)){
