@@ -14,9 +14,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -30,6 +28,7 @@ public class ImportBusinessSolutionPanel extends VerticalLayout implements Uploa
 
     private String tempSolutionFileName;
     private String tempFileDir = RuntimeEnvironmentUtil.getBinaryTempFileDirLocation();
+    private FileOutputStream fos;
 
     public ImportBusinessSolutionPanel(UserClientInfo userClientInfo){
         this.currentUserClientInfo=userClientInfo;
@@ -95,7 +94,7 @@ public class ImportBusinessSolutionPanel extends VerticalLayout implements Uploa
     @Override
     public OutputStream receiveUpload(String fileName, String fileMIMEType) {
         tempSolutionFileName=tempFileDir+new Date().getTime()+fileName;
-        FileOutputStream fos = null;
+        fos = null;
         // Output stream to write to
         File file = new File(tempSolutionFileName);
         try {
@@ -127,6 +126,17 @@ public class ImportBusinessSolutionPanel extends VerticalLayout implements Uploa
             errorNotification.setPosition(Position.MIDDLE_CENTER);
             errorNotification.show(Page.getCurrent());
             errorNotification.setIcon(FontAwesome.WARNING);
+        }
+    }
+
+    protected void finalize() {
+        try {
+            super.finalize();
+            if(fos!=null) {
+                fos.close();
+            }
+        } catch (Throwable exception) {
+            exception.printStackTrace();
         }
     }
 }
